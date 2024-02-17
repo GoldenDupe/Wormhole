@@ -1,0 +1,198 @@
+#
+# This file contains all the messages used for commands (excluding debug ones)
+# This file contains the command information for all commands
+#
+
+#
+# This part is required in every message file don't remove it
+#
+placeholders:
+  - name: prefix
+    value: "<gold><bold>Golden<white><bold>Dupe<reset>"
+  - name: prefix_short
+    value: "<gold><bold>G<white><bold>D<reset>"
+  - name: rules_discord
+    value: "\n<gray><italic>Confused? <reset><italic>Create a ticket!<reset> <dark_gray>[<dark_aqua><underlined>Discord<reset><dark_gray>]<aqua><underlined>https://discord.gg/uh6h7faR9p\n<red><italic>Click here to copy the discord link."
+  - name: discord
+    value: "https://discord.gg/uh6h7faR9p"
+#
+# Default values
+#
+message-permission: "%prefix_short% <red>You do not have permissions to use this command!"
+message-cannot-use-command: "%prefix_short% <red>Only <white> %type% <red>can use this!"
+message-cooldown: "%prefix_short% <red>You're on cooldown for this command!"
+
+default-command-cooldown: 0
+
+
+#
+# /Dupe
+#
+
+dupe:
+  cooldown: 0
+  # TODO implement
+  message-combat-undupable: "%prefix_short% <white>Your item is not dupable while in combat."
+
+  message-undupable: "%prefix_short% <white>Your item is not dupable in this server."
+  message-undupable-bundle: "%prefix_short% <white>Your bundle is/contains some undupable item(s)."
+  message-undupable-shulker: "%prefix_short% <white>Your shulker box is/contains some undupable item(s)."
+  message-too-large: "%prefix_short% <white>You can only dupe 8 times at time."
+  message-too-small: "%prefix_short% <white>Maybe try duping the item and not deleting it."
+  message-super-dupe: "%prefix_short% <aqua>Super Duped! <white>Duped your item <yellow>%super-duper% <white>times!"
+
+undupable:
+  cooldown: 0
+
+  message-air: "%prefix_short% <white>You cannot make air undupable..."
+  message-already-undupable: "%prefix_short% <white>Your item is already undupable."
+  message-success: "%prefix_short% <white>Your item is now undupable."
+
+dupable:
+  message-air: "%prefix_short% <white>You cannot make air dupable..."
+  message-already-undupable: "%prefix_short% <white>Your item is already dupable."
+  message-success: "%prefix_short% <white>Your item is now dupable."
+
+
+spawn:
+  cooldown: 250
+  teleport-time: # Teleport times
+    default: 2500
+    donator: 1500
+    staff: 1000
+    admin: 1000
+    owner: 0
+
+  message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
+  message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
+  message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
+  message-teleporting: "%prefix_short% <white>Teleporting to <green>%new%<white> soon.."
+  message-moved: "%prefix_short% <white>You moved! Teleportation canceled!"
+
+nether:
+  cooldown: 250
+  teleport-time: # Teleport times
+    default: 2500
+    donator: 1500
+    staff: 1000
+    admin: 1000
+    owner: 0
+
+  message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
+  message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
+  message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
+  message-teleporting: "%prefix_short% <white>Teleporting to <green>%new%<white> soon.."
+  message-moved: "%prefix_short% <white>You moved! Teleportation canceled!"
+
+end:
+  cooldown: 250
+  teleport-time: # Teleport times
+    default: 2500
+    donator: 1500
+    staff: 1000
+    admin: 1000
+    owner: 0
+
+  message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
+  message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
+  message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
+  message-teleporting: "%prefix_short% <white>Teleporting to <green>%new%<white> soon.."
+  message-moved: "%prefix_short% <white>You moved! Teleportation canceled!"
+
+setspawn:
+  cooldown: 0
+
+  message-unknown-spawn: "%prefix_short% <white>Unknown spawn for name <red>%spawn%<white>."
+  message-spawn-set: "%prefix_short% <white>Set the spawn location for <red>%spawn% <white>to you."
+
+staffchat:
+  cooldown: 0
+
+  message-toggle-on: "%prefix_short% <white>Toggled staff chat to <green>true<white>."
+  message-toggle-off: "%prefix_short% <white>Toggled staff chat to <red>false<white>."
+  # Other messages handled in messages.yml
+
+adminchat:
+  cooldown: 0
+
+  message-toggle-on: "%prefix_short% <white>Toggled admin chat to <green>true<white>."
+  message-toggle-off: "%prefix_short% <white>Toggled admin chat to <red>false<white>."
+  # Other messages handled in messages.yml
+
+uwu:
+  cooldown: 300000
+
+clearchat:
+  cooldown: 200
+
+  message-chat-cleared: "%prefix_short% <white>The chat has been cleared by <green>%who%<white>!"
+
+clearmychat:
+  cooldown: 1000
+
+  message-chat-cleared: "%prefix_short% <white>Spammed you ton of messages from your order-"
+
+
+clear:
+  cooldown: 150
+
+  message-auto-confirm-disable: "%prefix_short% <red>Disabled <white>auto confirm for clear inventory."
+  message-auto-confirm-enable: "%prefix_short% <green>Enabled <white>auto confirm for clear inventory."
+  message-canceled: "%prefix_short% <white>Canceled clearing your inventory."
+  message-cleared: "%prefix_short% <white>Cleared your inventory."
+
+playtime:
+  cooldown: 100
+
+  message-unknown-online-player: "%prefix_short% <white>No player with name <red>%player%<white> is online in the server."
+  message-unknown-offline-player: "%prefix_short% <white>No player with name <red>%player%<white> has played in the server."
+
+  message-playtime-self: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
+  message-playtime-other: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
+
+report:
+  cooldown: 1500
+  # Todo
+
+rules:
+  cooldown: 0
+
+#    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#4 No spawn killing or naked killing\n<white>This means you <red>cannot repeatedly<white> kill players <yellow>over and over and over again<white>. <gray>You cannot kill players without armor.\n%rules_discord%'><yellow>#4 <white>No spawn/naked killing"
+  message-rules:
+    - "%prefix%'s Rules"
+    - ""
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#1 Use Common Sense\n<white>This means that just because a rule is not shown here, <red>does not mean you cannot be punished<white> for it. If you are <red>doing something<white> that <yellow>might<white> be <red>punishable<white>, <green>don't do it!\n%rules_discord%'><yellow>#1 <white>Use common sense"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#2 Staff are always right\n<white>This means that if a staff member punishes you or some else, you <red>cannot argue with them unless it is inside a ticket<white>. Create a ticket and <green>prove<white> your point rather in <yellow>tickets<white> than in <red>DM<white>s.\n%rules_discord%'><yellow>#2 <white>Staff are always right"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#3 No unfair advantages\n<white>This means you <red>cannot use<yellow> <gray>\"<yellow>hacked<gray>\"<yellow> clients<gray>,<yellow> auto<gray>-<yellow>clickers<gray>, <yellow>etc. <white>on the server. <red>Anything<white> that may <yellow>cause you to gain<white> an <dark_red>unfair advantage<white> over other players <yellow>can and will<white> be punished for.\n<green>Command macros are allowed!\n%rules_discord%'><yellow>#3 <white>No unfair advantages"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#4 No blocking or flooding spawn\n<white>This means that you <red>cannot flood spawn with liquids<white> or <red>block spawn with obstructive block<white>.\n%rules_discord%'><yellow>#4 <white>No blocking/flooding spawn"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#5 No advertising\n<white>Whether it be a <yellow>server<gray>, <yellow>social media account<gray>, or <yellow>self-promotion<white>, you cannot post it here. <red>This can result in a <dark_red>permanent ban<white>.\n%rules_discord%'><yellow>#5 <white>No Advertising"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#6 No Spamming or flooding the chat\n<white>You cannot send too many messages or long messages to the chat. Not obeying can lead to a mute from 60 seconds to 1 day.\n%rules_discord%'><yellow>#6 <white>No abusing chat"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#7 No Harassment, No Racism, No homophobia\n<white>This covers all three rules. Breaking the rule can result in a day mute or even a permanent ban for those who are repeat offenders.\n%rules_discord%'><yellow>#7 No harassment, racism, homophobia<white>"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#8 No lag machines or lagging players intentionally\n<white>This means you cannot create a machine that may drag down the server's <yellow>TPS<gray>, <yellow> networking<white> or drive up<yellow>CPU usage<gray>,<yellow>RAM usage<gray> or <yellow>a player's ping<white>. Breaking this rule can and will lead to a <gray><italic>(possible permanent)<reset><white> ban.\n%rules_discord%'><yellow>#8 <white>No lagging server/players"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#9 No public alt accounts \n<white>You may <red>not use any form of public alt account <white>from distributors for free or reduced price of a premium Minecraft account.\n%rules_discord%'><yellow>#9 <white>No <dark_red>public alt accounts"
+    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#10 Follow minehut TOS\n<white>Any rule that is broken that is in <aqua>Minehut's TOS<white> <gray><italic>(<aqua><underlined>https://minehut.com/terms-of-service<reset><gray><italic>) <white>will result in a punishment.\n%rules_discord%'><yellow>#10 <white>Follow minehut TOS"
+    - ""
+    - "<red><italic>Hover over rules to gain more information about them. Confused? Join the discord!"
+    - "<dark_gray>[<dark_aqua><underlined>Discord<reset><dark_gray>] <aqua><underlined><click:copy_to_clipboard:%discord>%discord%"
+    - ""
+
+ship:
+  cooldown: 500
+
+  message-ship-2-same-things: "%prefix_short% <red>You cannot ship the same thing to the same thing..."
+  message-shipped:
+    - "<yellow><strikethrough>                                  "
+    - ""
+    - " <gray>Calculating <pink<%who% <gray>and <pink>%who-2%"
+    - "Are they the perfect couple? Let's find out!"
+    - ""
+    - "<gray>Personality: "
+    - "  <white>%personality_match%"
+    - "<gray>Passion: "
+    - "  <white>%passion_match%"
+    - "<gray>Friendship: "
+    - "  <white>%friendship_match%"
+    - "<gray>Chemistry: "
+    - "  <white>%chemistry_match%"
+    - ""
+    - "<yellow><strikethrough>                                  "
