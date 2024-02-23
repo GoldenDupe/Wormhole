@@ -1,10 +1,9 @@
 package xyz.goldendupe.command.defaults.spawn;
 
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.Season;
-import xyz.goldendupe.command.GDCommandInfo;
-import xyz.goldendupe.command.Permission;
-import xyz.goldendupe.command.Permissions;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import xyz.goldendupe.command.internal.Permission;
+import xyz.goldendupe.command.internal.Permissions;
 
 
 @Permissions(

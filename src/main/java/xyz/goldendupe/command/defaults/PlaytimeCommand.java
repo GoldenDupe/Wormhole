@@ -1,6 +1,7 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.utils.PlaceholderUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
@@ -8,8 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import xyz.goldendupe.messenger.GoldenMessenger;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,9 +32,10 @@ public class PlaytimeCommand extends GDCommand {
 		int playtime = sender.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20;
 		boolean self = true;
 
+		OfflinePlayer player = null;
 		if (hasArgs){
 			String other = args[0];
-			OfflinePlayer player = Bukkit.getPlayer(other);
+			player = Bukkit.getPlayer(other);
 			//noinspection ConstantValue
 			if (player == null && !sender.hasPermission("goldendupe.playtime.offline")){
 				commandMessenger.message(sender, "playtime.message-unknown-online-player", new Placeholder("%player%", other));
@@ -57,8 +60,14 @@ public class PlaytimeCommand extends GDCommand {
 		long SS = TimeUnit.SECONDS.toSeconds(playtime) % 60;
 		List<Placeholder> placeholders = new LinkedList<>(List.of(new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS)));
 		if (self) {
+			placeholders.addAll(GoldenMessenger.playerPlaceholders("player", sender));
 			commandMessenger.message(sender, "playtime.message-playtime-self", new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS));
 		} else {
+			if (player instanceof Player onlinePlayer){
+				placeholders.addAll(GoldenMessenger.playerPlaceholders("player", onlinePlayer));
+			} else {
+				placeholders.addAll(PlaceholderUtils.createPlaceholders("player", player));
+			}
 			commandMessenger.message(sender, "playtime.message-playtime-other", placeholders);
 		}
 	}

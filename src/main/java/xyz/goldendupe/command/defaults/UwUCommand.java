@@ -5,11 +5,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 
 import java.util.Collections;
 import java.util.List;
+
+import static org.bukkit.command.Command.broadcastCommandMessage;
 
 @GDCommandInfo.Command(
 		name = "uwu",

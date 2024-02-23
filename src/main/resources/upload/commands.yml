@@ -11,10 +11,19 @@ placeholders:
     value: "<gold><bold>Golden<white><bold>Dupe<reset>"
   - name: prefix_short
     value: "<gold><bold>G<white><bold>D<reset>"
+  - name: short_prefix
+    value: "<gold><bold>G<white><bold>D<reset>"
   - name: rules_discord
     value: "\n<gray><italic>Confused? <reset><italic>Create a ticket!<reset> <dark_gray>[<dark_aqua><underlined>Discord<reset><dark_gray>]<aqua><underlined>https://discord.gg/uh6h7faR9p\n<red><italic>Click here to copy the discord link."
   - name: discord
     value: "https://discord.gg/uh6h7faR9p"
+  - name: channels.donator
+    value: "<gold><bold>G<white><bold>D<reset> <gold><bold>Donor <white>"
+  - name: channels.staff
+    value: "<gold><bold>G<white><bold>D<reset> <aqua><bold>Staff <white>"
+  - name: channels.admin
+    value: "<gold><bold>G<white><bold>D<reset> <red><bold>Admin <white>"
+
 #
 # Default values
 #
@@ -31,24 +40,23 @@ default-command-cooldown: 0
 
 dupe:
   cooldown: 0
-  # TODO implement
   message-combat-undupable: "%prefix_short% <white>Your item is not dupable while in combat."
 
   message-undupable: "%prefix_short% <white>Your item is not dupable in this server."
   message-undupable-bundle: "%prefix_short% <white>Your bundle is/contains some undupable item(s)."
   message-undupable-shulker: "%prefix_short% <white>Your shulker box is/contains some undupable item(s)."
-  message-too-large: "%prefix_short% <white>You can only dupe 8 times at time."
-  message-too-small: "%prefix_short% <white>Maybe try duping the item and not deleting it."
-  message-super-dupe: "%prefix_short% <aqua>Super Duped! <white>Duped your item <yellow>%super-duper% <white>times!"
+  message-too-large: "%prefix_short% <white>You can only dupe between 1 and 8 times."
+  message-too-small: "%prefix_short% <white>You can only dupe between 1 and 8 times."
+  message-super-duper: "%prefix_short% <aqua>Super Duped! <white>Duped your item <yellow>%super-duper% <white>times!"
 
 undupable:
   cooldown: 0
-
   message-air: "%prefix_short% <white>You cannot make air undupable..."
   message-already-undupable: "%prefix_short% <white>Your item is already undupable."
   message-success: "%prefix_short% <white>Your item is now undupable."
 
 dupable:
+  cooldown: 0
   message-air: "%prefix_short% <white>You cannot make air dupable..."
   message-already-undupable: "%prefix_short% <white>Your item is already dupable."
   message-success: "%prefix_short% <white>Your item is now dupable."
@@ -62,7 +70,6 @@ spawn:
     staff: 1000
     admin: 1000
     owner: 0
-
   message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
   message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
   message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
@@ -77,7 +84,6 @@ nether:
     staff: 1000
     admin: 1000
     owner: 0
-
   message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
   message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
   message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
@@ -92,7 +98,6 @@ end:
     staff: 1000
     admin: 1000
     owner: 0
-
   message-no-teleport-permissions: "%prefix_short% <white>You do not have permissions to teleport to this spawn."
   message-already-teleporting: "%prefix_short% <white>Already teleporting to <green>%old%<white>."
   message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
@@ -101,41 +106,42 @@ end:
 
 setspawn:
   cooldown: 0
-
   message-unknown-spawn: "%prefix_short% <white>Unknown spawn for name <red>%spawn%<white>."
   message-spawn-set: "%prefix_short% <white>Set the spawn location for <red>%spawn% <white>to you."
 
 staffchat:
   cooldown: 0
-
   message-toggle-on: "%prefix_short% <white>Toggled staff chat to <green>true<white>."
   message-toggle-off: "%prefix_short% <white>Toggled staff chat to <red>false<white>."
-  # Other messages handled in messages.yml
+  message-chat: "%channels.staff%<yellow>%player_prefix_name%<gray>: <white>%message%"
+  message-chat-console: "%channels.staff%<yellow>SERVER-CONSOLE<gray>: <white>%message%"
 
 adminchat:
   cooldown: 0
-
   message-toggle-on: "%prefix_short% <white>Toggled admin chat to <green>true<white>."
   message-toggle-off: "%prefix_short% <white>Toggled admin chat to <red>false<white>."
-  # Other messages handled in messages.yml
+  message-chat: "%channels.admin%<yellow>%player_prefix_name%<gray>: <white>%message%"
+  message-chat-console: "%channels.admin%<yellow>SERVER-CONSOLE<gray>: <white>%message%"
 
-uwu:
-  cooldown: 300000
+donatorchat:
+  cooldown: 0
+  message-toggle-on: "%prefix_short% <white>Toggled donator chat to <green>true<white>."
+  message-toggle-off: "%prefix_short% <white>Toggled donator chat to <red>false<white>."
+  message-chat: "%channels.donator%<yellow>%player_prefix_name%<gray>: <white>%message%"
+  message-chat-console: "%channels.donator%<yellow>SERVER-CONSOLE<gray>: <white>%message%"
+
 
 clearchat:
   cooldown: 200
-
   message-chat-cleared: "%prefix_short% <white>The chat has been cleared by <green>%who%<white>!"
 
 clearmychat:
   cooldown: 1000
-
   message-chat-cleared: "%prefix_short% <white>Spammed you ton of messages from your order-"
 
 
 clear:
   cooldown: 150
-
   message-auto-confirm-disable: "%prefix_short% <red>Disabled <white>auto confirm for clear inventory."
   message-auto-confirm-enable: "%prefix_short% <green>Enabled <white>auto confirm for clear inventory."
   message-canceled: "%prefix_short% <white>Canceled clearing your inventory."
@@ -143,21 +149,14 @@ clear:
 
 playtime:
   cooldown: 100
-
   message-unknown-online-player: "%prefix_short% <white>No player with name <red>%player%<white> is online in the server."
   message-unknown-offline-player: "%prefix_short% <white>No player with name <red>%player%<white> has played in the server."
 
   message-playtime-self: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
   message-playtime-other: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
 
-report:
-  cooldown: 1500
-  # Todo
-
 rules:
   cooldown: 0
-
-#    - "<click:copy_to_clipboard:%discord%><hover:show_text:'<yellow>#4 No spawn killing or naked killing\n<white>This means you <red>cannot repeatedly<white> kill players <yellow>over and over and over again<white>. <gray>You cannot kill players without armor.\n%rules_discord%'><yellow>#4 <white>No spawn/naked killing"
   message-rules:
     - "%prefix%'s Rules"
     - ""
@@ -178,21 +177,104 @@ rules:
 
 ship:
   cooldown: 500
-
   message-ship-2-same-things: "%prefix_short% <red>You cannot ship the same thing to the same thing..."
   message-shipped:
-    - "<yellow><strikethrough>                                  "
     - ""
-    - " <gray>Calculating <pink<%who% <gray>and <pink>%who-2%"
-    - "Are they the perfect couple? Let's find out!"
+    - " <gray>Calculating <light_purple>%who% <gray>and <light_purple>%who-2%"
+    - "Are they the perfect %prefix% match? Let's find out!"
     - ""
-    - "<gray>Personality: "
+    - "<white>Personality %personality_int%/100"
     - "  <white>%personality_match%"
-    - "<gray>Passion: "
+    - "<white>Passion %passion_int%/100"
     - "  <white>%passion_match%"
-    - "<gray>Friendship: "
+    - "<white>Friendship %friendship_int%/100"
     - "  <white>%friendship_match%"
-    - "<gray>Chemistry: "
+    - "<white>Chemistry %chemistry_int%/100"
     - "  <white>%chemistry_match%"
     - ""
-    - "<yellow><strikethrough>                                  "
+
+report:
+  message-database-lookup-menu-loading: "%prefix_short% <white>Loading the menu..!"
+
+  lookup-menu:
+    main-info:
+      name: "<white>%player%"
+      lore:
+        - "<yellow>Reports Sent: <white>%reports_reports%"
+        - "<yellow> Player Reports: <white>%reports_player_reports%"
+        - "<yellow>  Banned: <white>%reports_player_reports_banned_color%"
+        - "<yellow> Bug Reports: <white>%reports_bug_reports%"
+        - "<yellow>  Banned: <white>%reports_bug_reports_banned_color%"
+
+    sent-player-reports:
+      name: "<yellow><bold>Player Sent Reports"
+      lore:
+        - "<yellow>Total: <white>%reports_player_reports%"
+        - "<yellow>Banned: <white>%reports_player_reports_banned_color%"
+        - "<yellow>True: <white>%reports_player_reports_true"
+        - "<yellow>False: <white>%reports_player_reports_false%"
+        - "<yellow>Non-Solved: <white>%reports_player_reports_not_solved%"
+        - "<yellow>Rate: <white>%reports_player_reports_success_rate%"
+    sent-bug-reports:
+      name: "<yellow><bold>Bug Sent Reports"
+      lore:
+        - "<yellow>Total: <white>%reports_bug_reports%"
+        - "<yellow>Known Abuser: <white>%reports_bug_reports_banned_color%"
+        - "<yellow>Banned: <white>%reports_bug_reports_banned_color%"
+        - "<yellow>True: <white>%reports_bug_reports_true"
+        - "<yellow>False: <white>%reports_bug_reports_false%"
+        - "<yellow>Non-Solved: <white>%reports_bug_reports_not_solved%"
+        - "<yellow>Rate: <white>%reports_bug_reports_success_rate%"
+
+    received-info:
+      name: "<yellow><bold>Received Reports"
+      lore:
+        - "<yellow>Total: <white>%player_player_reports%"
+        - "<yellow>True: <white>%reports_against_true"
+        - "<yellow>False: <white>%reports_against_false%"
+        - "<yellow>Rate: <white>%reports_against_success_rate%"
+
+    dealt-with:
+      name: "<yellow><bold>Reports Dealt With"
+      lore:
+        - "<yellow>Total: <white>"
+        - "<yellow>Success: <white>"
+        - "<yellow>Fail: <white>"
+        - "<yellow>Commented: <white>"
+
+  message-cannot-report-self: "%prefix_short% <white>You cannot report yourself."
+
+  message-reported-bug: "%prefix_short%<dark_red><bold>BUG REPORT <white>Your bug report has been forwarded to the staff team."
+  message-reported-bug-staff: "%channels.admin%<dark_red><bold>BUG REPORT <white>%player_prefix_name%<green> has reported a new bug. Description: <white>%reason%"
+  message-reported-bug-staff-known-abuser: "%channels.admin%<dark_red><bold>BUG REPORT <white>%player_prefix_name% <red>(KNOWN REPORT ABUSER) <green> has reported a new bug. Description: <white>%reason%"
+
+  message-reported-player: "%prefix_short% <white>Your report about <red>%who_prefix%%who_name%<white> has been forwarded to the staff team."
+  message-reported-player-staff: "%channels.staff%<white>%player_prefix_name%<green> has reported <red>%who_prefix%%who_name%<green>. Reason: <white>%reason%"
+  message-reported-player-staff-known-abuser: "%channels.staff%<white>%player_prefix_name% <red>(KNOWN REPORT ABUSER) <green> has reported <red>%who_prefix%%who_name%<green>. Reason: <white>%reason%"
+
+
+ping:
+  message-self: "%prefix_short% <white>Your ping is %ping_colored%"
+  message-other: "%prefix_short% <white>%player_prefix_name%'s ping is %ping_colored%"
+  message-self-unformat: "%prefix_short% <white>Your ping is %ping%"
+  message-other-unformat: "%prefix_short% <white>%player_prefix_name%'s ping is %ping%"
+
+toggle-drop:
+  message-enabled: "%prefix_short% <white>You can no longer drop items."
+  message-disabled: "%prefix_short% <white>You can now drop items."
+
+toggle-pickup:
+  message-enabled: "%prefix_short% <white>You can no longer pick up items."
+  message-disabled: "%prefix_short% <white>You can now pick up items."
+
+toggle-bottles:
+  message-enabled: "%prefix_short% <white>You will no longer receive bottles when drinking potions."
+  message-disabled: "%prefix_short% <white>You will now receive bottles when drinking potions."
+
+toggle-night-vision:
+  message-enabled: "%prefix_short% <white>You will now have infinite night vision."
+  message-disabled: "%prefix_short% <white>You will no longer have infinite night vision"
+
+toggle-random-items:
+    message-enabled: "%prefix_short% <whitew>You will now receive random items every 15 seconds"
+    message-disabled: "%prefix_short% <whitew>You will now receive random items every 15 seconds"

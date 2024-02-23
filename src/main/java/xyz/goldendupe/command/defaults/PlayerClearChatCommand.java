@@ -1,12 +1,13 @@
 package xyz.goldendupe.command.defaults;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,10 +28,10 @@ public class PlayerClearChatCommand extends GDCommand {
 			// Might just make a random string infront of the message to make it really clear
 
 
-			sender.sendMessage(Component.text("CC#"+i));
-			//Bukkit.broadcast(component, "goldendupe.staff.clearchat.receive");
+//			sender.sendMessage(Component.text("CC#"+i));
+			Bukkit.broadcast(component, "goldendupe.staff.clearchat.receive");
 		}
-		commandMessenger.message(sender, "clearmychat.chat-cleared");
+		commandMessenger.message(sender, "clearmychat.message.chat-cleared");
 	}
 
 	@Override

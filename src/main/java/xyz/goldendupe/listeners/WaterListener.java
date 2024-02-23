@@ -5,10 +5,15 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import xyz.goldendupe.GoldenDupe;
 
-public class WaterListener implements Listener {
+public class WaterListener implements GDListener {
+	private final GoldenDupe goldenDupe;
+	protected WaterListener(GoldenDupe goldenDupe){
+		this.goldenDupe = goldenDupe;
+	}
 	@EventHandler
-	public void onWaterPlace(BlockPlaceEvent event){
+	private void onWaterPlace(BlockPlaceEvent event){
 		if (event.getBlock().getType() == Material.WATER){
 			event.setCancelled(false);
 			event.setBuild(false);
@@ -16,5 +21,10 @@ public class WaterListener implements Listener {
 				event.getBlock().setType(Material.WATER);
 			}
 		}
+	}
+
+	@Override
+	public GoldenDupe goldenDupe() {
+		return goldenDupe;
 	}
 }

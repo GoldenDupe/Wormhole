@@ -1,6 +1,6 @@
 package xyz.goldendupe.command.defaults.spawn;
 
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -8,10 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
-import xyz.goldendupe.command.Permission;
-import xyz.goldendupe.command.Permissions;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
 

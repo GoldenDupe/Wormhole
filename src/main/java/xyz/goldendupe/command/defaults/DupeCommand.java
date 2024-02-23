@@ -1,16 +1,17 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.Season;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.utils.ContainerUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 @Season(added = 1, unlock = 1, alwaysUnlocked = true) // Always unlocked just helps,
@@ -43,23 +44,26 @@ public class DupeCommand extends GDCommand {
 	public void execute(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
 		ItemStack itemStack = sender.getInventory().getItemInMainHand();
 		if (!goldenDupe.canDupe(itemStack)){
-			commandMessenger.message(sender, "dupe.undupable");
+			commandMessenger.message(sender, "dupe.message-undupable");
 			return;
 		} else if (anyIllegals(itemStack)){
 			if (ContainerUtils.isShulkerBox(itemStack)){
-				commandMessenger.message(sender, "dupe.undupable-shulker");
+				commandMessenger.message(sender, "dupe.message-undupable-shulker");
 			} else if (ContainerUtils.isBundle(itemStack)){
-				commandMessenger.message(sender, "dupe.undupable-bundle");
+				commandMessenger.message(sender, "dupe.message-undupable-bundle");
 			} else {
-				commandMessenger.message(sender, "dupe.undupable");
+				commandMessenger.message(sender, "dupe.message-undupable");
 			}
 			return;
 		}
 
 		// TODO - Combat stuff
+
+
 		int dupeTimes = 1;
-		if (isInt(args, 1)){
-			dupeTimes = asInt(args, 1);
+		if (isInt(args, 0)){
+			dupeTimes = asInt(args, 0);
+			sender.sendMessage(""+dupeTimes);
 			if (dupeTimes>8){
 				commandMessenger.message(sender, "dupe.message-too-large");
 				return;
@@ -73,14 +77,14 @@ public class DupeCommand extends GDCommand {
 			return;
 		}
 		int duped = 0;
-		for (int i = 1; i < dupeTimes; i++){
+		for (int i = 0; i < dupeTimes; i++){
 			duped++;
 			if (!sender.getInventory().addItem(sender.getInventory().getItemInMainHand()).isEmpty()){
-				commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-dupe", duped));
+				commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", duped));
 				return;
 			}
 		}
-		commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-dupe", dupeTimes));
+		commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", dupeTimes));
 	}
 
 	@Override
@@ -90,6 +94,9 @@ public class DupeCommand extends GDCommand {
 
 	@Override
 	public List<String> tab(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-		return List.of("1", "2", "3", "4", "5", "6", "7", "8");
+		if (!hasArgs){
+			return List.of("1", "2", "3", "4", "5", "6", "7", "8");
+		}
+		return Collections.emptyList();
 	}
 }

@@ -1,6 +1,7 @@
 package xyz.goldendupe.models;
 
 import org.bukkit.entity.Player;
+import xyz.goldendupe.models.chatcolor.GDChatColor;
 
 public class GDPlayer {
 	private final Player player;
@@ -10,6 +11,12 @@ public class GDPlayer {
 	private long teleportSpawnCooldown;
 	private GDChat chat;
 	private boolean autoConfirmClearInv;
+	private GDChatColor color = GDChatColor.DEFAULT;
+	private boolean vanished;
+	private boolean isToggleDropItem = false;
+	private boolean isTogglePickupItem = false;
+	private boolean isToggleNightVision = true;
+	private boolean isTogglePotionBottles = false;
 
 	public GDPlayer(Player player){
 		this.player = player;
@@ -65,6 +72,60 @@ public class GDPlayer {
 
 	public GDPlayer setAutoConfirmClearInv(boolean autoConfirmClearInv) {
 		this.autoConfirmClearInv = autoConfirmClearInv;
+		return this;
+	}
+
+	public GDChatColor color() {
+		return color;
+	}
+
+	public GDPlayer setColor(GDChatColor color) {
+		this.color = color;
+		return this;
+	}
+
+	public boolean vanished() {
+		return vanished;
+	}
+
+	public GDPlayer setVanished(boolean vanished) {
+		this.vanished = vanished;
+		return this;
+	}
+
+	public boolean isToggleDropItem() {
+		return isToggleDropItem;
+	}
+
+	public GDPlayer setToggleDropItem(boolean toggleDropItem) {
+		isToggleDropItem = toggleDropItem;
+		return this;
+	}
+
+	public boolean isTogglePickupItem() {
+		return isTogglePickupItem;
+	}
+
+	public GDPlayer setTogglePickupItem(boolean togglePickupItem) {
+		isTogglePickupItem = togglePickupItem;
+		return this;
+	}
+
+	public boolean isToggleNightVision() {
+		return isToggleNightVision;
+	}
+
+	public GDPlayer setToggleNightVision(boolean toggleNightVision) {
+		isToggleNightVision = toggleNightVision;
+		return this;
+	}
+
+	public boolean isTogglePotionBottles() {
+		return isTogglePotionBottles;
+	}
+
+	public GDPlayer setTogglePotionBottles(boolean togglePotionBottles) {
+		isTogglePotionBottles = togglePotionBottles;
 		return this;
 	}
 }

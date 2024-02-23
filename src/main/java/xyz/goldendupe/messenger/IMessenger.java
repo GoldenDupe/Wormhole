@@ -1,7 +1,7 @@
-package bet.astral.goldenmessenger;
+package xyz.goldendupe.messenger;
 
-import bet.astral.messagemanager.permission.Permission;
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.permission.Permission;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
 

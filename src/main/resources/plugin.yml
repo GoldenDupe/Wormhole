@@ -1,14 +1,8 @@
-name: EarlyBirthdayGiftForYou
+name: GoldenDupe
 version: '${version}'
 main: xyz.goldendupe.GoldenDupe
 api-version: '1.20'
-prefix: GoldenDupe
-load: STARTUP
-depend: [Vault, Skript]
+depend: [Vault, LuckPerms]
 authors: [Antritus]
-description: Hello!
+description: GoldenDupe's new engine is here. Powering 80% of GoldenDupe hopefully without lag.
 website: goldendupe.xyz
-
-libraries:
-  - "org.reflections:reflections:0.10.2"
-  - "com.samjakob:SpiGUI:1.3.1"

@@ -1,21 +1,25 @@
 package xyz.goldendupe.utils;
 
 public class Pair<A, B> {
-	public final A a;
-	public final B b;
+	public final A first;
+	public final B second;
 
 
-	public Pair(A a, B b) {
-		this.a = a;
-		this.b = b;
+	public Pair(A first, B second) {
+		this.first = first;
+		this.second = second;
 	}
 
 
-	public A a() {
-		return a;
+	public A first() {
+		return first;
 	}
 
-	public B b() {
-		return b;
+	public B second() {
+		return second;
+	}
+
+	public static <A, B> Pair<A, B> of(A a, B b){
+		return new Pair<>(a, b);
 	}
 }

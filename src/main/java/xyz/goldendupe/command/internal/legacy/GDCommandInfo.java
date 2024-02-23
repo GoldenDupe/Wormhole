@@ -1,5 +1,6 @@
-package xyz.goldendupe.command;
+package xyz.goldendupe.command.internal.legacy;
 
+import bet.astral.messenger.permission.Permission;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated(forRemoval = true)
 @GDCommandInfo.DoNotReflect
 public class GDCommandInfo {
 	public static GDCommandInfo defaultValues(YamlConfiguration configuration){
@@ -186,6 +188,18 @@ public class GDCommandInfo {
 			}
 		}
 
+		public Permission messenger(){
+			return Permission.of("goldendupe.messenger."+type);
+		}
+
+		public Permission messengerOf(String permission){
+			return Permission.of("goldendupe."+type+"."+permission);
+		}
+
+		public org.incendo.cloud.permission.Permission cloudOf(String permission){
+			return org.incendo.cloud.permission.Permission.permission("goldendupe."+type+"."+permission);
+		}
+
 		private final String type;
 
 		MemberType(String type) {
@@ -194,6 +208,10 @@ public class GDCommandInfo {
 
 		public String permission(){
 			return "goldendupe.group."+type;
+		}
+
+		public String permissionOf(String permission){
+			return "goldendupe."+type+"."+permission;
 		}
 	}
 

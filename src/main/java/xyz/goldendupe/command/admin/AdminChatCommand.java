@@ -1,15 +1,15 @@
 package xyz.goldendupe.command.admin;
 
-import bet.astral.goldenmessenger.GoldenMessenger;
-import bet.astral.messagemanager.placeholder.LegacyPlaceholder;
-import bet.astral.messagemanager.placeholder.Placeholder;
+import xyz.goldendupe.messenger.GoldenMessenger;
+import bet.astral.messenger.placeholder.LegacyPlaceholder;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 
@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @GDCommandInfo.Command(
-		name = " adminchat",
+		name = "adminchat",
 		senderType = GDCommandInfo.SenderType.ALL,
 		memberType = GDCommandInfo.MemberType.ADMINISTRATOR,
 		aliases = {"achat"}
@@ -48,13 +48,11 @@ public class AdminChatCommand extends GDCommand {
 			if (sender instanceof Player player){
 				List<Placeholder> placeholders = new LinkedList<>(commandMessenger.createPlaceholders(player));
 				placeholders.add(new LegacyPlaceholder("message", message));
-				goldenDupe
-						.messenger()
-						.broadcast(GoldenMessenger.MessageChannel.ADMIN, "admin-chat", placeholders);
+				commandMessenger
+						.broadcast(GoldenMessenger.MessageChannel.ADMIN, "adminchat.message-chat", placeholders);
 			} else if (sender instanceof ConsoleCommandSender){
-				goldenDupe
-						.messenger()
-						.broadcast(GoldenMessenger.MessageChannel.ADMIN, "admin-chat-console", new LegacyPlaceholder("message", message));
+				commandMessenger
+						.broadcast(GoldenMessenger.MessageChannel.ADMIN, "adminchat.message-chat-console", new LegacyPlaceholder("message", message));
 			} else {
 				commandMessenger.message(sender, commandInfo.cannotUseMessageKey());
 			}

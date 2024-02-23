@@ -1,15 +1,15 @@
 package xyz.goldendupe.command.donator;
 
-import bet.astral.goldenmessenger.GoldenMessenger;
-import bet.astral.messagemanager.placeholder.LegacyPlaceholder;
-import bet.astral.messagemanager.placeholder.Placeholder;
+import xyz.goldendupe.messenger.GoldenMessenger;
+import bet.astral.messenger.placeholder.LegacyPlaceholder;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 
@@ -48,13 +48,11 @@ public class DonatorChatCommand extends GDCommand {
 			if (sender instanceof Player player){
 				List<Placeholder> placeholders = new LinkedList<>(commandMessenger.createPlaceholders(player));
 				placeholders.add(new LegacyPlaceholder("message", message));
-				goldenDupe
-						.messenger()
-						.broadcast(GoldenMessenger.MessageChannel.DONATOR, "donator-chat", placeholders);
-			} else if (sender instanceof ConsoleCommandSender console){
-				goldenDupe
-						.messenger()
-						.broadcast(GoldenMessenger.MessageChannel.DONATOR, "donator-chat-console", new LegacyPlaceholder("message", message));
+				commandMessenger
+						.broadcast(GoldenMessenger.MessageChannel.DONATOR, "donatorchat.message-chat", placeholders);
+			} else if (sender instanceof ConsoleCommandSender){
+				commandMessenger
+						.broadcast(GoldenMessenger.MessageChannel.DONATOR, "donatorchat.message-chat-console", new LegacyPlaceholder("message", message));
 			} else {
 				commandMessenger.message(sender, commandInfo.cannotUseMessageKey());
 			}

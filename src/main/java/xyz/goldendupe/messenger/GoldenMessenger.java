@@ -1,11 +1,14 @@
-package bet.astral.goldenmessenger;
+package xyz.goldendupe.messenger;
 
-import bet.astral.messagemanager.Message;
-import bet.astral.messagemanager.MessageManager;
-import bet.astral.messagemanager.permission.Permission;
-import bet.astral.messagemanager.placeholder.LegacyPlaceholder;
-import bet.astral.messagemanager.placeholder.MessagePlaceholder;
-import bet.astral.messagemanager.placeholder.Placeholder;
+
+import bet.astral.messenger.Message;
+import bet.astral.messenger.Messenger;
+import bet.astral.messenger.permission.Permission;
+import bet.astral.messenger.placeholder.LegacyPlaceholder;
+import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.utils.PlaceholderUtils;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
@@ -17,18 +20,22 @@ import java.time.Duration;
 import java.util.*;
 
 
-public class GoldenMessenger extends MessageManager<GoldenDupe> implements MessageLoader, IMessenger {
-	private final GoldenDupe gd;
+public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoader, IMessenger {
+	private static final GoldenDupe gd;
+	private static final boolean vaultExists;
+	private static final boolean luckPermsExists;
 	private final boolean isDebugMessenger;
-	private final boolean vaultExists;
-	public GoldenMessenger(GoldenDupe main, FileConfiguration messageConfig, boolean isDebugMessenger) {
-		this(main, messageConfig, new HashMap<>(), isDebugMessenger);
+	static  {
+		gd = GoldenDupe.getPlugin(GoldenDupe.class);
+		vaultExists = gd.vaultChat() != null;
+		luckPermsExists = gd.luckPerms() != null;
 	}
-	public GoldenMessenger(GoldenDupe main, FileConfiguration messageConfig, Map<String, Message> messageMap, boolean isDebugMessenger) {
-		super(main, messageConfig, messageMap, "placeholders");
-		this.gd = main;
+	public GoldenMessenger(FileConfiguration messageConfig, boolean isDebugMessenger) {
+		this(messageConfig, new HashMap<>(), isDebugMessenger);
+	}
+	public GoldenMessenger(FileConfiguration messageConfig, Map<String, Message> messageMap, boolean isDebugMessenger) {
+		super(gd, messageConfig, messageMap);
 		this.isDebugMessenger = isDebugMessenger;
-		this.vaultExists = gd.vaultChat() != null;
 	}
 
 	@Override
@@ -47,6 +54,58 @@ public class GoldenMessenger extends MessageManager<GoldenDupe> implements Messa
 	@Override
 	public List<Placeholder> createPlaceholders(String name, Player player) {
 		List<Placeholder> placeholders = new LinkedList<>(super.createPlaceholders(name, player));
+		placeholders.add(new LegacyPlaceholder(name+"_prefix", prefix(player)));
+		placeholders.add(new LegacyPlaceholder(name+"_suffix", suffix(player)));
+		placeholders.add(new Placeholder(name+"_prefix_name", prefixName(player)));
+		placeholders.add(new Placeholder(name+"_suffix_name", suffixName(player)));
+		placeholders.add(new Placeholder(name+"_prefix_suffix_name", prefixNameSuffix(player)));
+		return placeholders;
+	}
+
+	public static String prefix(Player player){
+		if (vaultExists && !luckPermsExists){
+			return gd.vaultChat().getPlayerPrefix(player);
+		} else if (luckPermsExists){
+			String prefix = gd.luckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrefix();
+			if (prefix == null) {
+				prefix = gd.luckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
+				prefix = gd.luckPerms().getGroupManager().getGroup(prefix).getCachedData().getMetaData().getPrefix();
+				if (prefix == null){
+					prefix = "";
+				}
+			}
+			return prefix;
+		}
+		return "";
+	}
+	public static Component prefixName(Player player){
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(prefix(player)+player.getName());
+	}
+	public static Component suffixName(Player player){
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(suffix(player)+player.getName());
+	}
+	public static Component prefixNameSuffix(Player player) {
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(prefix(player) + player.getName()+suffix(player));
+	}
+	public static String suffix(Player player){
+		if (vaultExists && !luckPermsExists){
+			return gd.vaultChat().getPlayerPrefix(player);
+		} else if (luckPermsExists){
+			String suffix = gd.luckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getSuffix();
+			if (suffix == null) {
+				suffix = gd.luckPerms().getUserManager().getUser(player.getUniqueId()).getCachedData().getMetaData().getPrimaryGroup();
+				suffix = gd.luckPerms().getGroupManager().getGroup(suffix).getCachedData().getMetaData().getSuffix();
+				if (suffix == null){
+					suffix = "";
+				}
+			}
+			return suffix;
+		}
+		return "";
+	}
+
+	public static List<Placeholder> playerPlaceholders(String name, Player player){
+		List<Placeholder> placeholders = new LinkedList<>(PlaceholderUtils.createPlaceholders(name, (LivingEntity) player));
 		if (vaultExists){
 			String prefix = gd.vaultChat().getPlayerPrefix(player);
 			placeholders.add(new LegacyPlaceholder(name+"_prefix", prefix));
@@ -67,16 +126,8 @@ public class GoldenMessenger extends MessageManager<GoldenDupe> implements Messa
 	}
 
 	public void broadcast(MessageChannel channel, String messageKey, int delay, List<Placeholder> placeholders){
-		MessagePlaceholder placeholder = placeholderMessage("message-channel-info", messageKey, Message.Type.CHAT);
-
-		Message message = getMessage(channel.key);
-		if (message == null){
-			broadcast(Permission.of(channel.permission), messageKey, delay, placeholders);
-			return;
-		}
 		placeholders = new LinkedList<>(placeholders);
-		placeholders.add(placeholder);
-		broadcast(Permission.of(channel.permission), channel.key, delay, placeholders);
+		broadcast(Permission.of(channel.permission), messageKey, delay, placeholders);
 	}
 	public void broadcast(MessageChannel channel, String messageKey, int delay, Placeholder... placeholders){
 		broadcast(channel, messageKey, delay, Arrays.stream(placeholders).toList());
@@ -117,12 +168,10 @@ public class GoldenMessenger extends MessageManager<GoldenDupe> implements Messa
 		super.send(to, message, type, delay, senderSpecificPlaceholders, placeholders);
 	}
 
-
-
 	public enum MessageChannel {
-		DONATOR("goldendupe.channel.donator", "channel.donator"),
-		STAFF("goldendupe.channel.staff", "channel.staff"),
-		ADMIN("goldendupe.channel.admin", "channel.admin"),
+		DONATOR("goldendupe.channel.donator", "channels.donator"),
+		STAFF("goldendupe.channel.staff", "channels.staff"),
+		ADMIN("goldendupe.channel.admin", "channels.admin"),
 		;
 
 		private final String permission;

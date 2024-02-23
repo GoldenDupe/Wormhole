@@ -1,7 +1,7 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.goldenmessenger.GoldenMessenger;
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.Placeholder;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,9 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Season(added = 1, unlock = 1, alwaysUnlocked = true)
-public class ConnectionListener extends GDListener{
-	public ConnectionListener(GoldenDupe goldenDupe) {
-		super(goldenDupe);
+public class ConnectionListener implements GDListener{
+	private final GoldenDupe goldenDupe;
+	protected ConnectionListener(GoldenDupe goldenDupe) {
+		this.goldenDupe = goldenDupe;
 	}
 
 
@@ -47,6 +48,11 @@ public class ConnectionListener extends GDListener{
 		placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
 
 		goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-kick-cause", 5, placeholders);
+	}
+
+	@Override
+	public GoldenDupe goldenDupe() {
+		return goldenDupe;
 	}
 }
 

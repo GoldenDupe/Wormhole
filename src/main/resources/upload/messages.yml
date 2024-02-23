@@ -3,18 +3,12 @@ placeholders:
     value: "<gold><bold>Golden<white><bold>Dupe<reset>"
   - name: prefix_short
     value: "<gold><bold>G<white><bold>D<reset>"
-
-channels:
-  donator: "%prefix_short% <gold><bold>[D] <white> %message-channel-info%"
-  staff: "%prefix_short% <aqua><bold>[S] <white> %message-channel-info%"
-  admin: "%prefix_short% <red><bold>[A] <white> %message-channel-info%"
-
-# Uses staff channels
-staff-chat: "<white>%prefix%%player%<gray>:<white> %message%"
-staff-chat-console: "<yellow>SERVER-CONSOLE<gray>:<white> %message%"
-# Could basically just merge both staff chat and admin chat in the code to remove messages here
-admin-chat: "<white>%prefix%%player%<gray>:<white> %message%"
-admin-chat-console: "<yellow>SERVER-CONSOLE<gray>:<white> %message%"
+  - name: channels.donator
+    value: "%prefix_short% <gold><bold>Donor <white> %message-channel-info% "
+  - name: channels.staff
+    value: "%prefix_short% <aqua><bold>Staff <white> %message-channel-info% "
+  - name: channels.admin
+    value: "%prefix_short% <red><bold>Admin <white> %message-channel-info% "
 
 # Sent to staff channel No need to set the prefix
 player-kick-cause: "<white>%player%<yellow> was kicked from the server! <gray>Cause: <white>%cause%<gray>, Whitelisted: <white>%player_is_whitelisted%<gray>, Banned: <white>%player_is_banned%<gray>, Brand: <white>%player_brand%"
@@ -22,3 +16,19 @@ player-join-brand: "<white>%player%<yellow> joined using <white>%player_brand%"
 
 
 cannot-place-illegal: "%prefix_short% <white>You cannot place <red>%block%<white>!"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

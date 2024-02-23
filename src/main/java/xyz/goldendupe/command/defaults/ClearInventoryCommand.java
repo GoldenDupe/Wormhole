@@ -1,6 +1,6 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.goldenmessenger.GoldenMessenger;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.menu.SGMenu;
 import net.kyori.adventure.text.Component;
@@ -15,8 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDPlayer;
 
 import java.util.Collections;
@@ -32,20 +32,20 @@ public class ClearInventoryCommand extends GDCommand {
 		menu = goldenDupe.spiGUI().create("Clear Inventory Confirmation", 3);
 		menu.setAutomaticPaginationEnabled(false);
 
-		ItemStack itemStackConfirm = new ItemStack(Material.GREEN_WOOL);
+		ItemStack itemStackConfirm = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
 		ItemMeta metaConfirm = itemStackConfirm.getItemMeta();
-		metaConfirm.displayName(Component.text("Confirm").decoration(TextDecoration.ITALIC, false));
-		metaConfirm.lore(List.of(Component.text("Click to clear inventory.", NamedTextColor.RED).append(Component.text("(No going back!)", NamedTextColor.DARK_RED)).decoration(TextDecoration.ITALIC, false)));
+		metaConfirm.displayName(Component.text("Confirm", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+		metaConfirm.lore(List.of(Component.text("Click to clear inventory.", NamedTextColor.RED).appendSpace().append(Component.text("(No going back!)", NamedTextColor.DARK_RED)).decoration(TextDecoration.ITALIC, false)));
 		itemStackConfirm.setItemMeta(metaConfirm);
 
-		ItemStack itemStackCancel = new ItemStack(Material.GREEN_WOOL);
+		ItemStack itemStackCancel = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 		ItemMeta metaCancel = itemStackConfirm.getItemMeta();
-		metaCancel.displayName(Component.text("Confirm").decoration(TextDecoration.ITALIC, false));
+		metaCancel.displayName(Component.text("Cancel", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
 		metaCancel.lore(List.of(Component.text("Click to cancel the clearing of inventory.", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false)));
 		itemStackCancel.setItemMeta(metaCancel);
 
 		SGButton buttonConfirm = new SGButton(itemStackConfirm);
-		SGButton buttonCancel = new SGButton(itemStackConfirm);
+		SGButton buttonCancel = new SGButton(itemStackCancel);
 
 		buttonConfirm.setListener(event -> {
 			HumanEntity entity = event.getWhoClicked();
@@ -110,20 +110,19 @@ public class ClearInventoryCommand extends GDCommand {
 				commandMessenger.message(sender, "clear.message-auto-confirm-disable");
 			}
 			player.setAutoConfirmClearInv(!player.autoConfirmClearInv());
-			return;
+		} else {
+			if (player.autoConfirmClearInv()) {
+				sender.getInventory().clear();
+				sender.getInventory().setHelmet(null);
+				sender.getInventory().setChestplate(null);
+				sender.getInventory().setLeggings(null);
+				sender.getInventory().setBoots(null);
+				sender.getInventory().setItemInOffHand(null);
+				commandMessenger.message(sender, "clear.message-cleared");
+				return;
+			}
+			sender.openInventory(menu.getInventory());
 		}
-		if (player.autoConfirmClearInv()){
-			sender.getInventory().clear();
-			sender.getInventory().setHelmet(null);
-			sender.getInventory().setChestplate(null);
-			sender.getInventory().setLeggings(null);
-			sender.getInventory().setBoots(null);
-			sender.getInventory().setItemInOffHand(null);
-			commandMessenger.message(sender, "clear.message-cleared");
-			return;
-		}
-
-		sender.openInventory(menu.getInventory());
 	}
 
 	@Override

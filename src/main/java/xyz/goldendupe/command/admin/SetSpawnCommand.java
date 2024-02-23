@@ -1,13 +1,13 @@
 package xyz.goldendupe.command.admin;
 
-import bet.astral.messagemanager.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.GDCommand;
-import xyz.goldendupe.command.GDCommandInfo;
+import xyz.goldendupe.command.internal.legacy.GDCommand;
+import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.command.defaults.spawn.AbstractSpawnCommand;
 import xyz.goldendupe.models.GDSpawn;
 
@@ -35,7 +35,7 @@ public class SetSpawnCommand extends GDCommand {
 			String permission = "";
 			if (args.length>1){
 				if (args[1].equalsIgnoreCase("-permission")){
-					permission = "goldendupe.spawn."+getName();
+					permission = "goldendupe.spawn."+commandInfo.name();
 				}
 			}
 			GDSpawn gdSpawn = new GDSpawn(spawn.toLowerCase(), location.getWorld().getName(), permission, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
