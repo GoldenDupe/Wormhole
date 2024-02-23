@@ -5,11 +5,14 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.command.internal.cloud.Cloud;
 import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
 import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDPlayer;
 
+@Cloud
 public class ToggleItemsCommand extends GDCloudCommand {
+	public static final int RANDOM_ITEM_TICKS = 20*15; // 20 ticks * 15 seconds
 	public ToggleItemsCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
 		commandManager.command(
@@ -22,13 +25,13 @@ public class ToggleItemsCommand extends GDCloudCommand {
 						.handler(context->{
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isToggleDropItem();
-							player.setToggleDropItem(!toggle);
+							boolean toggle = player.isToggled();
+							player.setToggled(!toggle);
 
 							if (!toggle){
-								commandMessenger.message(sender, "toggle-drop.message-enabled");
+								commandMessenger.message(sender, "toggle-random-items.message-enabled");
 							} else {
-								commandMessenger.message(sender, "toggle-drop.message-disabled");
+								commandMessenger.message(sender, "toggle-random-items.message-disabled");
 							}
 						})
 		);

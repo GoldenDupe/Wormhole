@@ -1,4 +1,4 @@
 package xyz.goldendupe.command.admin;
 
-public class MaintainceCommand {
+public class MaintenanceCommand {
 }

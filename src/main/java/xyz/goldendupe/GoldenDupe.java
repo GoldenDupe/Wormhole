@@ -6,11 +6,15 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.command.CommandFinder;
+import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.command.internal.Permission;
 import xyz.goldendupe.command.internal.Permissions;
 import xyz.goldendupe.command.internal.cloud.Cloud;
@@ -45,6 +49,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.goldendupe.listeners.GDListener;
+import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
 
 import java.io.File;
@@ -57,6 +62,7 @@ import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 
 public final class GoldenDupe extends JavaPlugin {
+    public static final Random random = new Random(System.nanoTime());
     public static final long FIRST_RELEASED = 1591254000L;
     public static final long NEW_RELEASE = 1591254000L;
     public static int season = 1;
@@ -129,6 +135,29 @@ public final class GoldenDupe extends JavaPlugin {
         playerDatabase = new PlayerDatabase(this);
         reportUserDatabase = new ReportUserDatabase(this);
         reportDatabase = new ReportDatabase(this);
+
+        getServer().getScheduler().runTaskTimer(this, ()->{
+            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
+            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 2, true, false, false, null);
+            for (Player player : getServer().getOnlinePlayers()){
+                GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
+                if (gdPlayer.isToggled()){
+                    ItemStack itemStack = randomItems.get(random.nextInt(randomItems.size()));
+                    player.getInventory().addItem(itemStack);
+                }
+                if (gdPlayer.isToggleSpeed()){
+                    PotionEffect speedPot = gdPlayer.player().getPotionEffect(PotionEffectType.SPEED);
+                    if (speedPot==null || speedPot.getAmplifier()==1 ){
+                        player.removePotionEffect(PotionEffectType.SPEED);
+                        speedEffect.apply(player);
+                    }
+                }
+                if (gdPlayer.isToggleNightVision()){
+                    player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    nightVisionEffect.apply(player);
+                }
+            }
+        }, 20, ToggleItemsCommand.RANDOM_ITEM_TICKS);
 
 
         getComponentLogger().info("GoldenDupe has enabled!");

@@ -11,28 +11,27 @@ import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDPlayer;
 
 @Cloud
-public class ToggleItemDropCommand extends GDCloudCommand {
-	public ToggleItemDropCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+public class ToggleBottlesCommand extends GDCloudCommand {
+	public ToggleBottlesCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
-
 		commandManager.command(
 				commandManager.commandBuilder(
-						"toggledrop",
-						Description.of("Allows a player to toggle dropping items to the ground."),
-						"toggledrops"
-				)
-						.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("toggle-drop"))
+								"togglebottles",
+								Description.of("Allows a player to toggle between receiving and not receiving potion bottles."),
+										"togglebottle"
+						)
+						.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("toggle-bottles"))
 						.senderType(Player.class)
-						.handler(context->{
+						.handler(context -> {
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isToggleDropItem();
-							player.setToggleDropItem(!toggle);
+							boolean toggle = player.isToggleNightVision();
+							player.setToggleNightVision(!toggle);
 
-							if (!toggle){
-								commandMessenger.message(sender, "toggle-drop.message-enabled");
+							if (!toggle) {
+								commandMessenger.message(sender, "toggle-bottles.message-enabled");
 							} else {
-								commandMessenger.message(sender, "toggle-drop.message-disabled");
+								commandMessenger.message(sender, "toggle-bottles.message-disabled");
 							}
 						})
 		);

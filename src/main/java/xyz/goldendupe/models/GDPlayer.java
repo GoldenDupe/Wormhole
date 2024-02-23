@@ -5,7 +5,6 @@ import xyz.goldendupe.models.chatcolor.GDChatColor;
 
 public class GDPlayer {
 	private final Player player;
-	private boolean isToggled = true;
 
 	private GDSpawn teleportingSpawn;
 	private long teleportSpawnCooldown;
@@ -13,10 +12,12 @@ public class GDPlayer {
 	private boolean autoConfirmClearInv;
 	private GDChatColor color = GDChatColor.DEFAULT;
 	private boolean vanished;
+	private boolean isToggled = true;
 	private boolean isToggleDropItem = false;
 	private boolean isTogglePickupItem = false;
 	private boolean isToggleNightVision = true;
 	private boolean isTogglePotionBottles = false;
+	private boolean isToggleSpeed = false;
 
 	public GDPlayer(Player player){
 		this.player = player;
@@ -126,6 +127,15 @@ public class GDPlayer {
 
 	public GDPlayer setTogglePotionBottles(boolean togglePotionBottles) {
 		isTogglePotionBottles = togglePotionBottles;
+		return this;
+	}
+
+	public boolean isToggleSpeed() {
+		return isToggleSpeed;
+	}
+
+	public GDPlayer setToggleSpeed(boolean toggleSpeed) {
+		isToggleSpeed = toggleSpeed;
 		return this;
 	}
 }

@@ -5,10 +5,12 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.command.internal.cloud.Cloud;
 import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
 import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDPlayer;
 
+@Cloud
 public class ToggleNightVisionCommand extends GDCloudCommand {
 	public ToggleNightVisionCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);

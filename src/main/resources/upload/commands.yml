@@ -260,21 +260,26 @@ ping:
   message-other-unformat: "%prefix_short% <white>%player_prefix_name%'s ping is %ping%"
 
 toggle-drop:
-  message-enabled: "%prefix_short% <white>You can no longer drop items."
-  message-disabled: "%prefix_short% <white>You can now drop items."
+  message-enabled: "%prefix_short% You can no longer drop items."
+  message-disabled: "%prefix_short% You can now drop items."
 
 toggle-pickup:
-  message-enabled: "%prefix_short% <white>You can no longer pick up items."
-  message-disabled: "%prefix_short% <white>You can now pick up items."
+  message-enabled: "%prefix_short% You can no longer pick up items."
+  message-disabled: "%prefix_short% You can now pick up items."
 
 toggle-bottles:
-  message-enabled: "%prefix_short% <white>You will no longer receive bottles when drinking potions."
-  message-disabled: "%prefix_short% <white>You will now receive bottles when drinking potions."
+  message-enabled: "%prefix_short% You will no longer receive bottles when drinking potions."
+  message-disabled: "%prefix_short% You will now receive bottles when drinking potions."
 
 toggle-night-vision:
-  message-enabled: "%prefix_short% <white>You will now have infinite night vision."
-  message-disabled: "%prefix_short% <white>You will no longer have infinite night vision"
+  message-enabled: "%prefix_short% You will now have infinite night vision."
+  message-disabled: "%prefix_short% You will no longer have infinite night vision"
 
 toggle-random-items:
-    message-enabled: "%prefix_short% <whitew>You will now receive random items every 15 seconds"
-    message-disabled: "%prefix_short% <whitew>You will now receive random items every 15 seconds"
+    message-enabled: "%prefix_short% You will now receive random items every 15 seconds"
+    message-disabled: "%prefix_short% You will now receive random items every 15 seconds"
+
+rename:
+  message-cannot-rename-air: "%prefix_short% Cannot rename air. Not capable to edit minecraft that much."
+  message-renamed: "%prefix_short% Renamed your item to %name% from %old_name%."
+
