@@ -19,6 +19,7 @@ public class ReportUserDatabase implements Listener {
 	private final GoldenDupe goldenDupe;
 	public ReportUserDatabase(GoldenDupe goldenDupe){
 		this.goldenDupe = goldenDupe;
+		this.goldenDupe.registerListener(this);
 	}
 	public RUser asUser(Player player){
 		if (users.get(player) == null){

@@ -26,6 +26,10 @@ public class MendingCommand extends GDCloudCommand {
 								commandMessenger.message(sender, "mending.message-cannot-something-air");
 								return;
 							}
+							if (!Enchantment.MENDING.canEnchantItem(sender.getInventory().getItemInMainHand())){
+								commandMessenger.message(sender, "mending.message-cannot-enchant");
+								return;
+							}
 							sender.getInventory().getItemInMainHand().addEnchantment(Enchantment.MENDING, 1);
 							commandMessenger.message(sender, "mending.message-enchanted");
 						})

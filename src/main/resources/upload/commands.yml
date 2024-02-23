@@ -283,3 +283,27 @@ rename:
   message-cannot-rename-air: "%prefix_short% Cannot rename air. Not capable to edit minecraft that much."
   message-renamed: "%prefix_short% Renamed your item to %name% from %old_name%."
 
+mending:
+  message-cannot-something-air: "%prefix_short% Cannot enchant air. Not capable to edit minecraft that much."
+  message-cannot-enchant: "%prefix_short% Your item does not support mending."
+  message-enchanted: "%prefix_air% Enchanted your item with mending."
+
+commandspy:
+  message-help:
+    - ""
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy toggle'><click:suggest_command:/commandspy toggle'><yellow>/commandspy toggle <gray>- <white>Enable/Disabled command spy"
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy block-player'><click:suggest_command:/commandspy block-player'><yellow>/commandspy block-player <gray>- <white>Block a player from non blocked players"
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy unblock-player'><click:suggest_command:/commandspy unblock-player'><yellow>/commandspy unblock-player <gray>- <white>Unblock a player from blocked players"
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy blocked-players'><click:suggest_command:/commandspy blocked-players'><yellow>/commandspy blocked-players <gray>- <white>Show all blocked players"
+
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy block-command'><click:suggest_command:/commandspy block-command'><yellow>/commandspy block-command <gray>- <white>Block a command from non blocked commands"
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy unblock-command'><click:suggest_command:/commandspy unblock-command'><yellow>/commandspy unblock-command <gray>- <white>Unblock a command from blocked commands"
+    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy blocked-commands'><click:suggest_command:/commandspy blocked-commands'><yellow>/commandspy blocked-commands <gray>- <white>Show all blocked commands"
+
+
+
+
+
+
+
+

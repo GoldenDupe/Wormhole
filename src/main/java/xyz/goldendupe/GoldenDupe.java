@@ -19,6 +19,7 @@ import xyz.goldendupe.command.internal.Permission;
 import xyz.goldendupe.command.internal.Permissions;
 import xyz.goldendupe.command.internal.cloud.Cloud;
 import xyz.goldendupe.command.internal.legacy.*;
+import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.messenger.GoldenMessenger;
@@ -51,6 +52,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
+import xyz.goldendupe.models.astronauts.Report;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,6 +86,7 @@ public final class GoldenDupe extends JavaPlugin {
     private PlayerDatabase playerDatabase;
     private ReportDatabase reportDatabase;
     private ReportUserDatabase reportUserDatabase;
+    private CommandSpyDatabase commandSpyDatabase;
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
@@ -135,6 +138,7 @@ public final class GoldenDupe extends JavaPlugin {
         playerDatabase = new PlayerDatabase(this);
         reportUserDatabase = new ReportUserDatabase(this);
         reportDatabase = new ReportDatabase(this);
+        commandSpyDatabase = new CommandSpyDatabase(this);
 
         getServer().getScheduler().runTaskTimer(this, ()->{
             PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
@@ -626,4 +630,7 @@ public final class GoldenDupe extends JavaPlugin {
         return luckPerms;
     }
 
+    public CommandSpyDatabase commandSpyDatabase() {
+        return commandSpyDatabase;
+    }
 }
