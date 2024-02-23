@@ -1,51 +1,36 @@
 package xyz.goldendupe.command.defaults;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import xyz.goldendupe.command.internal.cloud.Cloud;
+import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
 
-import java.util.Collections;
-import java.util.List;
+@Cloud
+public class PlayerClearChatCommand extends GDCloudCommand {
 
-@GDCommandInfo.Command(name = "clearmychat",
-		senderType = GDCommandInfo.SenderType.ALL,
-		memberType = GDCommandInfo.MemberType.MODERATOR,
-		aliases = {"mychatbanish!", "bleach"})
-public class PlayerClearChatCommand extends GDCommand {
-	protected PlayerClearChatCommand(GoldenDupe goldenDupe, GDCommandInfo commandInfo) {
-		super(goldenDupe, commandInfo);
+	public PlayerClearChatCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+		super(goldenDupe, commandManager);
+		commandManager.command(
+				commandManager.commandBuilder(
+								"clearmychat",
+								Description.of("Clears the player's chat."),
+								"mychatbanish!", "bleach"
+						)
+						.permission("goldendupe.all.clearchat.receive")
+						.senderType(Player.class)
+						.handler(context -> {
+							Player sender = context.sender();
+							Component component = Component.empty();
+							for (int i = 0; i < 275; i++){
+								sender.sendMessage(component);
+							}
+							commandMessenger.message(sender, "clearmychat.message.chat-cleared");
+						})
+		);
 	}
 
-	@Override
-	public void execute(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) {
-		Component component = Component.empty();
-		for (int i = 0; i < 275; i++){
-			// Might just make a random string infront of the message to make it really clear
-
-
-//			sender.sendMessage(Component.text("CC#"+i));
-			Bukkit.broadcast(component, "goldendupe.staff.clearchat.receive");
-		}
-		commandMessenger.message(sender, "clearmychat.message.chat-cleared");
-	}
-
-	@Override
-	public void execute(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-
-	}
-
-	@Override
-	public List<String> tab(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<String> tab(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-		return Collections.emptyList();
-	}
 }
