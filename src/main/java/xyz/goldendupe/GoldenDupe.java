@@ -3,6 +3,8 @@ package xyz.goldendupe;
 import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.placeholder.Placeholder;
+import lombok.AccessLevel;
+import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.command.CommandSender;
@@ -87,9 +89,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
     private PaperCommandManager<CommandSender> paperCommandManager;
+    @Getter(AccessLevel.PUBLIC) private long startTimeMillis;
 
     @Override
     public void onEnable() {
+        startTimeMillis = System.currentTimeMillis();
+
         uploadUploads();
         instance = this;
 

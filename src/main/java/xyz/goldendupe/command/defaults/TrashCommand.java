@@ -34,15 +34,14 @@ public class TrashCommand extends GDCloudCommand {
 	static {
 		trashNames.addAll(List.of(
 				"FlammableFlowMC", "Josh", "Antritus", "_Devourer", "BaguetteWithInternetAccess",
-				"Androdir", "Sowrd", "Bl1tzy", "2397", "Dream", "mini_mumbo", "MrEnderBroFTW",
-				"BluJay77", "SolarMedial", "Zoytax", "ToadAndYoshi", "PromanForever",
-				"TotemPopper69", "NotSirGeorge", "SlushFiend", "ToadAndYoshi", "CyberedCake",
-				"AgentPenguin", "SourceLeak", "PalePenguin", "JeffersonMBA", "Lynxdeer", "Prodeathmaster",
-				"lilcorgi_", "ycu", "nc_optical", "ItsIsolation", "t6b", "crewly", "zeroarmy27", "sxlace_", "z_conquest",
-				"catalystcx", "ImNotLying", "Kitkat2116", "Fate65", "bltck", "dev_ghosty - Scammed $100",
-				"Kazaretski",  "pl0ks", "frogiswoman", "brodaaa", "kaylinthedragon", "arielazi", "1crusty",
-				"unluckyl", "craftingtoty1000", "kgroom123", "alphaarmor", "circular_man", "keith__",
-				"jonahed", "notpetya", "cryptokian"
+				"Androdir", "Sowrd", "Bl1tzy", "2397", "Dream", "MrEnderBroFTW", "BluJay77",
+				"SolarMedial", "Zoytax", "ToadAndYoshi", "PromanForever", "TotemPopper69", "NotSirGeorge",
+				"SlushFiend", "ToadAndYoshi", "CyberedCake", "AgentPenguin", "SourceLeak", "PalePenguin",
+				"JeffersonMBA", "Lynxdeer", "Prodeathmaster", "lilcorgi_", "ycu", "nc_optical", "ItsIsolation",
+				"t6b", "crewly", "zeroarmy27", "sxlace_", "z_conquest", "catalystcx", "ImNotLying", "Kitkat2116",
+				"Fate65", "bltck", "dev_ghosty - Scammed $100", "Kazaretski",  "pl0ks", "frogiswoman", "brodaaa",
+				"kaylinthedragon", "arielazi", "1crusty", "unluckyl", "craftingtoty1000", "kgroom123", "alphaarmor",
+				"circular_man", "keith__", "jonahed", "notpetya", "cryptokian"
 		));
 
 		NamespacedKey key = new NamespacedKey(GoldenDupe.getPlugin(GoldenDupe.class), "random");

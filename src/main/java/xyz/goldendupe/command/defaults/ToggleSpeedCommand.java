@@ -17,7 +17,7 @@ public class ToggleSpeedCommand extends GDCloudCommand {
 		commandManager.command(
 				commandManager.commandBuilder(
 								"togglespeed",
-								Description.of("Allows a player to toggle night vision."),
+								Description.of("Allows a player to toggle speed."),
 						"speed"
 						)
 						.permission(MemberType.DEFAULT.cloudOf("toggle-speed"))
