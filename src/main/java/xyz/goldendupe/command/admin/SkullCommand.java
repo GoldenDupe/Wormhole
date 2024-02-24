@@ -1,8 +1,11 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.messenger.placeholder.Placeholder;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +17,9 @@ import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
+
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Cloud
 public class SkullCommand extends GDCloudCommand {
@@ -36,11 +42,13 @@ public class SkullCommand extends GDCloudCommand {
 
                             ItemStack stack = new ItemStack(Material.PLAYER_HEAD, 1);
                             SkullMeta meta = (SkullMeta) stack.getItemMeta();
-                            meta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
-                            stack.setItemMeta(meta);
-
-                            sender.getInventory().addItem(stack);
-                            commandMessenger.message(sender, "skull.skull-given", new Placeholder("player", name));
+                            goldenDupe.getServer().getScheduler().runTaskAsynchronously(goldenDupe, ()->{
+                                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
+                                meta.setOwningPlayer(offlinePlayer);
+	                            stack.setItemMeta(meta);
+	                            sender.getInventory().addItem(stack);
+	                            commandMessenger.message(sender, "skull.skull-given", new Placeholder("player", name));
+                            });
 
                         })
         );
