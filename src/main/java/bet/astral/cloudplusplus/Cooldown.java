@@ -1,8 +1,6 @@
-package xyz.goldendupe.command.internal.cloud;
+package bet.astral.cloudplusplus;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 
 public interface Cooldown {
 	void setCooldown(CommandSender sender);

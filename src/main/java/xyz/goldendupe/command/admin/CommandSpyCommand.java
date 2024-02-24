@@ -16,10 +16,10 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.astronauts.CSPYUser;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 						Description.of("Allows administrators to see the commands players execute"),
 								"cspy"
 				)
-				.permission(GDCommandInfo.MemberType.ADMINISTRATOR.cloudOf("commandspy"))
+				.permission(MemberType.ADMINISTRATOR.cloudOf("commandspy"))
 				.senderType(Player.class)
 				.handler(context->{
 					commandMessenger.message(context.sender(), "commandspy.message-help");

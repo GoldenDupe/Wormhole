@@ -14,11 +14,11 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.jetbrains.annotations.NotNull;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.ContainerUtils;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.*;
 
@@ -94,7 +94,7 @@ public class DupeCommand extends GDCloudCommand {
 				})
 		);
 		commandManager.command(dupe.literal("menu")
-				.permission(GDCommandInfo.MemberType.DONATOR.cloudOf("dupe-menu"))
+				.permission(MemberType.DONATOR.cloudOf("dupe-menu"))
 				.handler(context->{
 					Player sender = context.sender();
 					dupeInventories.putIfAbsent(sender.getUniqueId(), new DonatorDupeMenu());

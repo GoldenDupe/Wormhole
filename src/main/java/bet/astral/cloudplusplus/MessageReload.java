@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.internal.legacy;
+package bet.astral.cloudplusplus;
 
 
 public interface MessageReload {

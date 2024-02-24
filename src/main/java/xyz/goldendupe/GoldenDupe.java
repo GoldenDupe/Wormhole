@@ -1,5 +1,6 @@
 package xyz.goldendupe;
 
+import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.placeholder.Placeholder;
 import net.luckperms.api.LuckPerms;
@@ -14,12 +15,8 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
-import xyz.goldendupe.command.CommandFinder;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
-import xyz.goldendupe.command.defaults.spawn.AbstractSpawnCommand;
-import xyz.goldendupe.command.internal.Permission;
-import xyz.goldendupe.command.internal.Permissions;
-import xyz.goldendupe.command.internal.cloud.Cloud;
+import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
@@ -33,9 +30,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.DecoratedPot;
-import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -50,13 +45,12 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import xyz.goldendupe.command.internal.legacy.GDCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
-import xyz.goldendupe.command.internal.legacy.InternalGDCommand;
-import xyz.goldendupe.command.internal.legacy.MessageReload;
+import bet.astral.cloudplusplus.annotations.DoNotReflect;
+import bet.astral.cloudplusplus.MessageReload;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
+import xyz.goldendupe.utils.annotations.Season;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,7 +61,8 @@ import java.util.*;
 import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 
-public final class GoldenDupe extends JavaPlugin {
+public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<GoldenDupe> {
+    private static GoldenDupe instance;
     public static final Random random = new Random(System.nanoTime());
     public static final long FIRST_RELEASED = 1591254000L;
     public static final long NEW_RELEASE = 1591254000L;
@@ -77,12 +72,9 @@ public final class GoldenDupe extends JavaPlugin {
     private SpiGUI spiGUI;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     private final Map<String, GDSpawn> spawns = new HashMap<>();
-    private final Set<MessageReload> commands = new HashSet<>();
     private GoldenMessenger defaultMessenger;
     private GoldenMessenger commandMessenger;
     private GoldenMessenger debugMessenger;
-    private YamlConfiguration commandConfig;
-    private GDCommandInfo defaultCommandInfo;
     private List<Material> illegalDupe;
     private List<ItemStack> randomItems;
     private List<Material> illegalPlacement;
@@ -99,6 +91,7 @@ public final class GoldenDupe extends JavaPlugin {
     @Override
     public void onEnable() {
         uploadUploads();
+        instance = this;
 
         spiGUI = new SpiGUI(this);
         spiGUI.setBlockDefaultInteractions(true);
@@ -183,19 +176,18 @@ public final class GoldenDupe extends JavaPlugin {
         defaultMessenger = loadMessenger(false, "messages.yml");
         commandMessenger = loadMessenger(false, "commands.yml");
         debugMessenger = loadMessenger(true, "messages.yml");
-        for (MessageReload reload : commands){
-            reload.reloadMessengers();
-        }
+        CommandRegisterer.super.reloadMessengers();
     }
 
-    //idc if you don't like this
+    // Updated it with fewer reflections
     public static GoldenDupe instance() {
-        return getPlugin(GoldenDupe.class);
+        return instance;
     }
 
     //TEMP
-    public String[] getSpawnsAsNames() {
-        return AbstractSpawnCommand.spawns.toArray(String[]::new);
+
+    public Set<String> getSpawnsAsNames() {
+        return this.spawns.keySet();
     }
 
     public void addSpawn(GDSpawn spawn) {
@@ -206,6 +198,14 @@ public final class GoldenDupe extends JavaPlugin {
     public void removeSpawn(String spawnName) {
         this.spawns().remove(spawnName.toLowerCase());
         this.saveSpawns();
+    }
+
+    public void saveSpawns() {
+        // TODO
+    }
+
+    public GDSpawn getSpawn(String spawn){
+        return this.spawns().get(spawn.toLowerCase());
     }
 
     private GoldenMessenger loadMessenger(boolean debug, String name){
@@ -375,7 +375,6 @@ public final class GoldenDupe extends JavaPlugin {
             getLogger().warning("Couldn't initialize listener: "+ listener.getName() + " as it's not available in this season or the class is cannot be reflected!");
             return;
         }
-        registerPermissions(listener);
         Constructor<?> constructor;
         try {
             constructor = getConstructor(listener, GoldenDupe.class);
@@ -404,41 +403,19 @@ public final class GoldenDupe extends JavaPlugin {
         }
     }
 
-    private Constructor<?> getConstructor(Class<?> clazz, Class<?>... params) throws NoSuchMethodException {
-        try {
-            return clazz.getConstructor(params);
-        } catch (NoSuchMethodException ignore) {
-            return clazz.getDeclaredConstructor(params);
-        }
-    }
-
-    public void registerPermissions(Class<?> clazz){
-        if (clazz.isAnnotationPresent(Permissions.class)){
-            Permissions permissions = clazz.getAnnotation(Permissions.class);
-            if (permissions.value().length==0){
-                return;
-            }
-            for (Permission permission : permissions.value()){
-                org.bukkit.permissions.Permission bukkitPermission = new org.bukkit.permissions.Permission(permission.value());
-                if (getServer().getPluginManager().getPermission(permission.value())==null) {
-                    getServer().getPluginManager().addPermission(bukkitPermission);
-                }
-            }
-        }
-    }
     public void registerPermission(String name) {
         org.bukkit.permissions.Permission bukkitPermission = new org.bukkit.permissions.Permission(name);
         if (getServer().getPluginManager().getPermission(name)==null) {
             getServer().getPluginManager().addPermission(bukkitPermission);
         }
     }
-    private boolean cannotInject(Class<?> clazz){
-        GDCommandInfo.DoNotReflect doNotReflect = clazz.getAnnotation(GDCommandInfo.DoNotReflect.class);
+    public boolean cannotInject(Class<?> clazz){
+        DoNotReflect doNotReflect = clazz.getAnnotation(DoNotReflect.class);
         if (doNotReflect != null){
             return true;
         }
 
-        Season season = clazz   .getAnnotation(Season.class);
+        Season season = clazz.getAnnotation(Season.class);
         if (season != null){
             // Make season specific classes easier to manage
             // This command is not supposed to be unlocked in this season
@@ -448,9 +425,6 @@ public final class GoldenDupe extends JavaPlugin {
     }
 
     private void loadCommands(){
-        commandConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "commands.yml"));
-        defaultCommandInfo = GDCommandInfo.defaultValues(commandConfig);
-
         paperCommandManager = new PaperCommandManager<>(
                 this,
                 ExecutionCoordinator.asyncCoordinator(),
@@ -459,89 +433,16 @@ public final class GoldenDupe extends JavaPlugin {
         paperCommandManager.registerBrigadier();
         paperCommandManager.registerAsynchronousCompletions();
 
-        String pkg = CommandFinder.class.getPackage().getName();
-        String[] subPackages = new String[]{"admin", "defaults", "defaults.spawn", "donator", "staff"};
-        for (String subPackage : subPackages){
-            String packageName = pkg+"."+subPackage;
-            try (ScanResult scanResult = new ClassGraph()
-                    .enableAllInfo().acceptPackages(packageName).scan()) {
-                ClassInfoList classInfo = scanResult.getClassesImplementing(CommandFinder.class);
-                List<String> classes = classInfo.getNames();
-                for (String clazzName : classes){
-                    Class<?> clazz = Class.forName(clazzName);
-                    registerCommand(clazz);
-                }
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    public void registerCommand(Class<?> clazz){
-        if (cannotInject(clazz)){
-            getLogger().info("Reflection based implementation for "+ clazz.getName() + " is not allowed. Skipping!");
-            return;
-        }
-        getLogger().info(clazz.getName());
-        if (clazz.isAnnotationPresent(Cloud.class)){
-            getLogger().warning("Found a cloud command! " + clazz.getName());
-            /*
-             * This is the cloud command framework
-             */
-	        try {
-		        Constructor<?> constructor = getConstructor(clazz, GoldenDupe.class, PaperCommandManager.class);
-                constructor.setAccessible(true);
-                MessageReload reload = (MessageReload) constructor.newInstance(this, paperCommandManager);
-                commands.add(reload);
+        registerCommands(
+                List.of(
+                        "xyz.goldendupe.command.admin",
+                        "xyz.goldendupe.command.defaults",
+                        "xyz.goldendupe.command.donator",
+                        "xyz.goldendupe.command.staff"),
+                paperCommandManager
+        );
 
-                getLogger().info("Loaded cloud command: " + clazz.getName());
-
-	        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-	                 IllegalAccessException e) {
-                e.printStackTrace();
-	        }
-        } else {
-
-            /*
-             * This is the legacy command manager
-             */
-            Class<GDCommand> gdCommandClass;
-            try {
-                //noinspection unchecked
-                gdCommandClass = (Class<GDCommand>) clazz;
-            } catch (ClassCastException e){
-                return;
-            }
-            GDCommandInfo.Command command = clazz.getAnnotation(GDCommandInfo.Command.class);
-            MemorySection commandSection = (MemorySection) commandConfig.getConfigurationSection(command.name());
-
-            if (commandSection == null) {
-                getLogger().severe("Command will not be initialized! Couldn't find command section for command " + command.name().toUpperCase() + " in the COMMANDS.YML.");
-                return;
-            }
-            GDCommandInfo gdCommandInfo = new GDCommandInfo(defaultCommandInfo, commandSection, command);
-
-            try {
-                Constructor<?> goldenCommandConstructor = getConstructor(gdCommandClass, GoldenDupe.class, GDCommandInfo.class);
-                goldenCommandConstructor.setAccessible(true);
-                GDCommand goldenCommand = (GDCommand) goldenCommandConstructor.newInstance(this, gdCommandInfo);
-                CommandMap commandMap = getServer().getCommandMap();
-                InternalGDCommand internalGDCommand = new InternalGDCommand(goldenCommand);
-
-                // goldendupe-default
-                // goldendupe-donator
-                // goldendupe-staff
-                // goldendupe-admin
-                commandMap.register("goldendupe-" + command.memberType().name().toLowerCase(), internalGDCommand);
-                commands.add(goldenCommand);
-                getLogger().info("Registered command: goldendupe-" + command.memberType().name().toLowerCase() + ":" + internalGDCommand.getName());
-                registerPermissions(clazz);
-            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
-                     IllegalAccessException e) {
-                getLogger().severe("Command will not be initialized! Couldn't reflect command " + command.name().toUpperCase() + ". Because of this it will not be enabled!");
-                //noinspection CallToPrintStackTrace
-                e.printStackTrace();
-            }
-        }
+        reloadMessengers();
     }
 
     private void uploadUploads(){
@@ -619,6 +520,11 @@ public final class GoldenDupe extends JavaPlugin {
         return debugMessenger;
     }
 
+    @Override
+    public GoldenDupe plugin() {
+        return this;
+    }
+
     public GoldenMessenger commandMessenger() {
         return commandMessenger;
     }
@@ -627,9 +533,6 @@ public final class GoldenDupe extends JavaPlugin {
         return playerDatabase;
     }
 
-	public void saveSpawns() {
-        // TODO
-	}
 
     public Chat vaultChat() {
         return vaultChat;

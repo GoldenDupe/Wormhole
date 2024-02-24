@@ -14,9 +14,9 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,7 +27,7 @@ public class RenameCommand extends GDCloudCommand {
 		super(goldenDupe, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder("rename", Description.of("Allows player to rename their item to specified string."))
-						.permission(GDCommandInfo.MemberType.DONATOR.cloudOf("rename"))
+						.permission(MemberType.DONATOR.cloudOf("rename"))
 						.senderType(Player.class)
 						.argument(StringParser.stringComponent(StringParser.StringMode.GREEDY)
 								.name("name")

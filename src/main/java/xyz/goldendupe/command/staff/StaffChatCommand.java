@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.staff;
 
+import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.LegacyPlaceholder;
 import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
@@ -8,15 +9,16 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@Cloud
 public class StaffChatCommand extends GDCloudCommand {
 
 	//TODO: also add console support
@@ -30,7 +32,7 @@ public class StaffChatCommand extends GDCloudCommand {
 								"sc", "schat"
 						)
 						.optional(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("schat-text"))
-						.permission(GDCommandInfo.MemberType.MODERATOR.cloudOf("staffchat"))
+						.permission(MemberType.MODERATOR.cloudOf("staffchat"))
 						.senderType(Player.class)
 						.handler(context -> {
 

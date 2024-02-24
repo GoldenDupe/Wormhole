@@ -12,18 +12,24 @@ import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public class ChatUWUListener implements GDListener{
-	private final Random random = new Random(System.nanoTime()*321);
-	private final GoldenDupe goldenDupe;
-	private final List<Pattern> uwuPatterns = new ArrayList<>();
-	private final List<String> randomUwuStrings = new ArrayList<>();
-	protected ChatUWUListener(GoldenDupe goldenDupe) {
+public class ChatUwUListener implements GDListener{
+	private static final Random random = new Random(System.nanoTime()*321);
+	private static GoldenDupe goldenDupe;
+	private static List<Pattern> uwuPatterns = new ArrayList<>();
+	private static List<String> randomUwuStrings = new ArrayList<>();
+	protected ChatUwUListener(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
 		Configuration configuration = goldenDupe.getConfig();
 		for (String patternStr : configuration.getStringList("uwu-strings")){
 			uwuPatterns.add(Pattern.compile("(?i)("+patternStr+")"));
 			randomUwuStrings.add(patternStr);
 		}
+	}
+
+	public static Component uwuString() {
+		boolean reverse = random.nextInt(1, 2) == 1;
+		String newString = randomUwuStrings.get((randomUwuStrings.size()>2? random.nextInt(1, randomUwuStrings.size())-1 : 0));
+		return MiniMessage.miniMessage().deserialize("<rainbow:"+(reverse ? "!" : "") + random.nextInt(1, 7)+">"+newString+"</rainbow>");
 	}
 
 	@Override

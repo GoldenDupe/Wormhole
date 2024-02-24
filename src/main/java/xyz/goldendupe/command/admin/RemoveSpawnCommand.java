@@ -7,8 +7,8 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 
 @Cloud
 public class RemoveSpawnCommand extends GDCloudCommand {
@@ -28,15 +28,14 @@ public class RemoveSpawnCommand extends GDCloudCommand {
                             Player sender = context.sender();
                             String spawnName = context.get("removespawn-name");
 
-                            for (String str : goldenDupe.getSpawnsAsNames()) {
-                                if (spawnName.equalsIgnoreCase(str)) {
-                                    goldenDupe.removeSpawn(spawnName);
-                                    commandMessenger.message(sender, "removespawn.message-remove",
-                                            new Placeholder("spawn", spawnName));
-                                    break;
-                                }
+                            if (goldenDupe.getSpawnsAsNames().contains(spawnName.toLowerCase())) {
+                                goldenDupe.removeSpawn(spawnName);
+                                commandMessenger.message(sender, "removespawn.message-already-removed",
+                                        new Placeholder("spawn", spawnName));
+                                return;
                             }
-
+                            commandMessenger.message(sender, "setspawn.message-remove",
+                                    new Placeholder("spawn", spawnName));
                         })
         );
     }

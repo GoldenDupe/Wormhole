@@ -1,8 +1,8 @@
-package xyz.goldendupe.command.internal.cloud;
+package bet.astral.cloudplusplus.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cloud {
+public @interface DoNotReflect {
 }

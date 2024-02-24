@@ -1,4 +1,4 @@
-package xyz.goldendupe;
+package xyz.goldendupe.utils.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

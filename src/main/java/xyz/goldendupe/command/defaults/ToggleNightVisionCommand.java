@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ToggleNightVisionCommand extends GDCloudCommand {
@@ -19,7 +19,7 @@ public class ToggleNightVisionCommand extends GDCloudCommand {
 								"togglenightvision",
 								Description.of("Allows a player to toggle night vision.")
 						)
-						.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("toggle-night-vision"))
+						.permission(MemberType.DEFAULT.cloudOf("toggle-night-vision"))
 						.senderType(Player.class)
 						.handler(context -> {
 							Player sender = context.sender();

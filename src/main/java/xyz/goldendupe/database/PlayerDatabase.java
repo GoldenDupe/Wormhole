@@ -1,7 +1,8 @@
-package xyz.goldendupe;
+package xyz.goldendupe.database;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.GDPlayer;
 
 import java.util.HashMap;

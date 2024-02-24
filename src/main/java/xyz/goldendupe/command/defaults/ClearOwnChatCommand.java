@@ -6,13 +6,13 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 
 @Cloud
-public class PlayerClearChatCommand extends GDCloudCommand {
+public class ClearOwnChatCommand extends GDCloudCommand {
 
-	public PlayerClearChatCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+	public ClearOwnChatCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(

@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.admin;
 
+import bet.astral.cloudplusplus.annotations.Cloud;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -13,12 +14,14 @@ import org.bukkit.persistence.PersistentDataType;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.command.CloudPPCommand;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+@Cloud
 public class DupableCommand extends GDCloudCommand {
 
 	private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();

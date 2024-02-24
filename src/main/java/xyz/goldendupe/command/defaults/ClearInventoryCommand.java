@@ -17,8 +17,8 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.flag.CommandFlag;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class ClearInventoryCommand extends GDCloudCommand {
 					player.getInventory().setBoots(null);
 					player.getInventory().setItemInOffHand(null);
 					player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
-					GoldenDupe.getPlugin(GoldenDupe.class).commandMessenger().message(player, "spawn.message-cleared");
+					GoldenDupe.getPlugin(GoldenDupe.class).commandMessenger().message(player, "clear.message-cleared");
 				}).build();
 
 		Clickable deny = new ClickableBuilder(itemStackDeny).setAction(clickTypes, (clickable, i, player) -> {

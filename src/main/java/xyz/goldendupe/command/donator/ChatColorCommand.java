@@ -23,12 +23,12 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
+import xyz.goldendupe.utils.MemberType;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -95,25 +95,25 @@ public class ChatColorCommand extends GDCloudCommand {
 					preGeneratedButtons.add(clickable);
 					generatedButtonsByColor.put(color, clickable);
 
-					goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.single." + name));
-					goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.gradient." + name));
+					goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single." + name));
+					goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient." + name));
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(e);
 				}
 			}
 		}
 
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.gradient"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient"));
 
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.rainbow"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow"));
 
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.format"));
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.format.underlined"));
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"));
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.format.italic"));
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.format.bold"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.underlined"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"));
 
-		goldenDupe.registerPermission(GDCommandInfo.MemberType.DONATOR.permissionOf("chatcolor.single"));
+		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single"));
 
 		Command.Builder<Player> chatColorBuilder = commandManager.commandBuilder("chatcolor", Description.of("Allows donators to change their chat color."), "chatcolour", "chatformat")
 				.senderType(Player.class)

@@ -15,10 +15,10 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,7 +101,7 @@ public class TrashCommand extends GDCloudCommand {
 		commandManager.command(commandManager.commandBuilder("trash",
 						Description.of("Allows players to delete"),
 						"garbage", "josh", "disposal", "rubbish", "british")
-				.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("trash"))
+				.permission(MemberType.DEFAULT.cloudOf("trash"))
 				.senderType(Player.class)
 				.handler(context -> {
 					goldenDupe.getServer().getScheduler().runTask(goldenDupe, () -> {

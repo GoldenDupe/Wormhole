@@ -6,10 +6,10 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class ChatColorListener implements GDListener {
 		GDChatColor chatColor = gdPlayer.color();
 
 		String permission = "chatcolor-codes";
-		if (player.hasPermission(GDCommandInfo.MemberType.ADMINISTRATOR.permissionOf(permission))) {
+		if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 			String[] replacement = new String[]{message};
 			legacyToMini.forEach((key, val) -> replacement[0] = replacement[0].replaceAll("(?i)" + key, val));
 			message = replacement[0];
@@ -61,14 +61,14 @@ public class ChatColorListener implements GDListener {
 		switch (chatColor.mode()) {
 			case SINGLE -> {
 				String reset = "<color:" + chatColor.colors().get(0).asHex() + ">"+format;
-				if (player.hasPermission(GDCommandInfo.MemberType.ADMINISTRATOR.permissionOf(permission))) {
+				if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 					message = message.replace("<reset>", "<reset>" + reset);
 				}
 				return MiniMessage.miniMessage().deserialize(reset + message);
 			}
 			case RAINBOW -> {
 				String reset = "<rainbow:" + (chatColor.rainbowReversed() ? "!" : "") + (chatColor.rainbowMode() != -1 ? chatColor.rainbowMode() : "") + ">"+format;
-				if (player.hasPermission(GDCommandInfo.MemberType.ADMINISTRATOR.permissionOf(permission))) {
+				if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 					message = message.replace("<reset>", "<reset>" + reset);
 				}
 				return MiniMessage.miniMessage().deserialize(reset + message);
@@ -93,14 +93,14 @@ public class ChatColorListener implements GDListener {
 				} else {
 					reset = new StringBuilder("<color:#"+chatColor.colors().get(0).asHex()+">").append(format);
 				}
-				if (player.hasPermission(GDCommandInfo.MemberType.ADMINISTRATOR.permissionOf(permission))) {
+				if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 					message = message.replace("<reset>", "<reset>" + reset);
 				}
 				return MiniMessage.miniMessage().deserialize(reset+message);
 			}
 			case NONE -> {
 				String reset = "<color:" + GDChatColor.DEFAULT.colors().get(0).asHex() + ">"+format;
-				if (player.hasPermission(GDCommandInfo.MemberType.ADMINISTRATOR.permissionOf(permission))) {
+				if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 					message = message.replace("<reset>", "<reset>" + reset);
 				}
 				return MiniMessage.miniMessage().deserialize(reset + message);

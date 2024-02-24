@@ -9,8 +9,8 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.flag.CommandFlag;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDSpawn;
 
 @Cloud
@@ -37,12 +37,11 @@ public class SetSpawnCommand extends GDCloudCommand {
 							String permission = "goldendupe.spawn." + context.flags().get("permission");
 							if (!hasPermission) permission = "";
 
-							for (String str : goldenDupe.getSpawnsAsNames()) {
-								if (spawnName.equalsIgnoreCase(str)) {
-									commandMessenger.message(sender, "setspawn.message-already-set",
-											new Placeholder("spawn", spawnName));
-									return;
-								}
+
+							if (goldenDupe.getSpawnsAsNames().contains(spawnName.toLowerCase())){
+								commandMessenger.message(sender, "setspawn.message-already-set",
+										new Placeholder("spawn", spawnName));
+								return;
 							}
 
 							goldenDupe.addSpawn(

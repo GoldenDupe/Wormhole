@@ -5,10 +5,10 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ToggleItemsCommand extends GDCloudCommand {
@@ -20,7 +20,7 @@ public class ToggleItemsCommand extends GDCloudCommand {
 								"toggle",
 								Description.of("Allows a player to toggle dropping items to the ground"),
 								"toggleitems", "random", "randomitems", "togglerandomitems")
-						.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("toggle-drop"))
+						.permission(MemberType.DEFAULT.cloudOf("toggle-drop"))
 						.senderType(Player.class)
 						.handler(context->{
 							Player sender = context.sender();

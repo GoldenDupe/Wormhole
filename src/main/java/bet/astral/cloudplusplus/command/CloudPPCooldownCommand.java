@@ -1,25 +1,24 @@
-package xyz.goldendupe.command.internal.cloud;
+package bet.astral.cloudplusplus.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.Cooldown;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@GDCommandInfo.DoNotReflect
-public class GDCloudCooldownCommand extends GDCloudCommand implements Cooldown, Listener {
+public class CloudPPCooldownCommand<P extends JavaPlugin> extends CloudPPCommand<P> implements Cooldown, Listener {
 	private final Map<CommandSender, Long> cooldowns = new HashMap<>();
 	private final long cooldown;
 
-	public GDCloudCooldownCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager, long cooldown) {
-		super(goldenDupe, commandManager);
+	public CloudPPCooldownCommand(P plugin, PaperCommandManager<CommandSender> commandManager, long cooldown) {
+		super(plugin, commandManager);
 		this.cooldown = cooldown;
-		goldenDupe.getServer().getPluginManager().registerEvents(this, goldenDupe);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@Override

@@ -21,8 +21,8 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.permission.PredicatePermission;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCooldownCommand;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCooldownCommand;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.models.astronauts.RUser;
@@ -32,7 +32,8 @@ import xyz.goldendupe.messenger.GoldenMessenger;
 
 import java.util.*;
 
-import static xyz.goldendupe.command.internal.legacy.GDCommandInfo.MemberType.*;
+import static xyz.goldendupe.utils.MemberType.DEFAULT;
+import static xyz.goldendupe.utils.MemberType.MODERATOR;
 
 // TODO
 @Astronauts

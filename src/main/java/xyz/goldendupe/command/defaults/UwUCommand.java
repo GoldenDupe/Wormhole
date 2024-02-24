@@ -1,48 +1,38 @@
 package xyz.goldendupe.command.defaults;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.incendo.cloud.minecraft.extras.RichDescription;
+import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.listeners.ChatFormatListener;
+import xyz.goldendupe.listeners.ChatUwUListener;
+import xyz.goldendupe.models.chatcolor.Color;
 
-import java.util.Collections;
-import java.util.List;
-
-import static org.bukkit.command.Command.broadcastCommandMessage;
-
-@GDCommandInfo.Command(
-		name = "uwu",
-		senderType = GDCommandInfo.SenderType.ALL
-)
-public class UwUCommand extends GDCommand {
-	protected UwUCommand(GoldenDupe goldenDupe, GDCommandInfo commandInfo) {
-		super(goldenDupe, commandInfo);
-	}
-
-	@Override
-	public void execute(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) {
-		if (sender instanceof Player player) {
-			player.chat("I weally weally love GowdenDupe~");
-		} else {
-			broadcastCommandMessage(sender, Component.text("I weally weally love GowdenDupe~"));
-		}
-	}
-
-	@Override
-	public void execute(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-
-	}
-
-	@Override
-	public List<String> tab(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<String> tab(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-		return Collections.emptyList();
+@Cloud
+public class UwUCommand extends GDCloudCommand {
+	public UwUCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+		super(goldenDupe, commandManager);
+		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UWU?", Color.MINECOIN, TextDecoration.OBFUSCATED)))
+				.handler(context->{
+					CommandSender sender = context.sender();
+					Component uwu = ChatUwUListener.uwuString();
+					if (sender instanceof Player player){
+						for (Player audience : Bukkit.getOnlinePlayers()){
+							audience.sendMessage(ChatFormatListener.format(player, audience, uwu));
+						}
+						goldenDupe.getServer().getConsoleSender().sendMessage(
+								ChatFormatListener.format(player, goldenDupe.getServer().getConsoleSender(), uwu));
+					} else {
+						BukkitCommand.broadcastCommandMessage(sender, uwu);
+					}
+				})
+		);
 	}
 }

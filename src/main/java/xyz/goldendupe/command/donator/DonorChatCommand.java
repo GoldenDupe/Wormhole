@@ -1,22 +1,24 @@
 package xyz.goldendupe.command.donator;
 
+import bet.astral.cloudplusplus.annotations.Cloud;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import bet.astral.messenger.placeholder.LegacyPlaceholder;
 import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@Cloud
 public class DonorChatCommand extends GDCloudCommand {
 
 	//TODO make this work with console (im running out of time)
@@ -28,7 +30,7 @@ public class DonorChatCommand extends GDCloudCommand {
 								Description.of("Lets donors send messages only other donors can see."),
 								"donorchat", "dchat"
 						)
-						.permission(GDCommandInfo.MemberType.DONATOR.cloudOf("donatorchat"))
+						.permission(MemberType.DONATOR.cloudOf("donatorchat"))
 						.optional(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("dchat-text"))
 						.senderType(Player.class)
 						.handler(context -> {

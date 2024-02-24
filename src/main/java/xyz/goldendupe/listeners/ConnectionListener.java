@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.Season;
+import xyz.goldendupe.utils.annotations.Season;
 
 import java.util.ArrayList;
 import java.util.List;

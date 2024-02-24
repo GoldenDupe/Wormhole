@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.cloud.Cloud;
-import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class MendingCommand extends GDCloudCommand {
@@ -18,7 +18,7 @@ public class MendingCommand extends GDCloudCommand {
 		Command.Builder<Player> builder =
 				commandManager.commandBuilder("mending",
 						"parsing")
-						.permission(GDCommandInfo.MemberType.DEFAULT.cloudOf("mending"))
+						.permission(MemberType.DEFAULT.cloudOf("mending"))
 						.senderType(Player.class)
 						.handler(context->{
 							Player sender = context.sender();

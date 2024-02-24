@@ -1,5 +1,8 @@
 package xyz.goldendupe.models;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,4 +36,7 @@ public record GDSpawn(String name, String world, String permission, double x, do
 	}
 
 
+	public Location asLocation() {
+		return new Location(Bukkit.getWorld(world), x, y ,z, yaw, pitch);
+	}
 }

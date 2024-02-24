@@ -19,7 +19,7 @@ public class ChatFormatListener implements GDListener {
 	public static @NotNull Component format(Player player, Component component){
 		return format(player, player, component);
 	}
-	private static @NotNull Component format(Player player, Audience whoSees, Component message) {
+	public static @NotNull Component format(Player player, Audience whoSees, Component message) {
 		GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
 		Component name = GoldenMessenger.prefixNameSuffix(player);
 		Component component = Component.empty();

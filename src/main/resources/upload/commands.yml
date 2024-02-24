@@ -75,7 +75,8 @@ spawn:
   message-cancel-teleport-rewrite: "%prefix_short% <white>Canceled teleport to <red>%old% <white> and teleporting to <green>%new%<white>."
   message-teleporting: "%prefix_short% <white>Teleporting to <green>%new%<white> soon.."
   message-moved: "%prefix_short% <white>You moved! Teleportation canceled!"
-
+  message-teleported: "%prefix_short% <white>Teleported you to %new%."
+  message-admin-teleport: "%prefix_short% <white>Teleported %player% to %new%."
 nether:
   cooldown: 250
   teleport-time: # Teleport times
@@ -152,8 +153,8 @@ playtime:
   message-unknown-online-player: "%prefix_short% <white>No player with name <red>%player%<white> is online in the server."
   message-unknown-offline-player: "%prefix_short% <white>No player with name <red>%player%<white> has played in the server."
 
-  message-playtime-self: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
-  message-playtime-other: "%prefix_short% <yellow>Your playtime is <white>: %hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
+  message-playtime-self: "%prefix_short% <yellow>Your playtime is <white>%hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
+  message-playtime-other: "%prefix_short% <yellow>%who%'s playtime is <white>%hours%<gray>d, <white>%minutes%<gray>m, <white>%seconds%<gray>s"
 
 rules:
   cooldown: 0
@@ -180,7 +181,7 @@ ship:
   message-ship-2-same-things: "%prefix_short% <red>You cannot ship the same thing to the same thing..."
   message-shipped:
     - ""
-    - " <gray>Calculating <light_purple>%who% <gray>and <light_purple>%who-2%"
+    - " <gray>Calculating <light_purple>%who_prefix_name% <gray>and <light_purple>%who-2_prefix_name%"
     - "Are they the perfect %prefix% match? Let's find out!"
     - ""
     - "<white>Personality %personality_int%/100"
@@ -286,7 +287,7 @@ rename:
 mending:
   message-cannot-something-air: "%prefix_short% Cannot enchant air. Not capable to edit minecraft that much."
   message-cannot-enchant: "%prefix_short% Your item does not support mending."
-  message-enchanted: "%prefix_air% Enchanted your item with mending."
+  message-enchanted: "%prefix_short% Enchanted your item with mending."
 
 commandspy:
   message-help:
