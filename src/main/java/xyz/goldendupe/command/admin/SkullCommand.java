@@ -3,6 +3,10 @@ package xyz.goldendupe.command.admin;
 import bet.astral.messenger.placeholder.Placeholder;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -43,6 +47,8 @@ public class SkullCommand extends GDCloudCommand {
                             ItemStack stack = new ItemStack(Material.PLAYER_HEAD, 1);
                             SkullMeta meta = (SkullMeta) stack.getItemMeta();
                             goldenDupe.getServer().getScheduler().runTaskAsynchronously(goldenDupe, ()->{
+
+
                                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
                                 meta.setOwningPlayer(offlinePlayer);
 	                            stack.setItemMeta(meta);
