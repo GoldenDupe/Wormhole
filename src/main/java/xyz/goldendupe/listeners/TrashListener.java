@@ -23,8 +23,13 @@ public class TrashListener implements GDListener{
 				} else if (event.getSlot()==53){
 					event.getWhoClicked().openInventory(TrashCommand.trashCans.get(Math.min(inventory.forward, TrashCommand.trashCans.size()-1)).getInventory());
 				} else if (event.getSlot()==49){
-					for (int i = 0; i < 45; i++){
-						event.getInventory().setItem(i, null);
+					if (System.currentTimeMillis()< inventory.nextClearAllow) {
+						for (int i = 0; i < 45; i++){
+							event.getInventory().setItem(i, null);
+						}
+						inventory.nextClearAllow=System.currentTimeMillis()+TrashCommand.CLEAR_TIME;
+					} else {
+						event.getWhoClicked().sendRichMessage("<red>You need to wait " + ((System.currentTimeMillis()-inventory.nextClearAllow)/1000)+ "s until you can clear this inventory again.");
 					}
 				}
 			}

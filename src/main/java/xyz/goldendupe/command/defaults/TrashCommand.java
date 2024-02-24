@@ -115,7 +115,7 @@ public class TrashCommand extends GDCloudCommand {
 		private final Inventory inventory;
 		public final int forward;
 		public final int backward;
-		public long nextClearAllow = System.currentTimeMillis();
+		public long nextClearAllow = System.currentTimeMillis()+CLEAR_TIME;
 
 
 		public TrashInventory(int forward, int backward) {
