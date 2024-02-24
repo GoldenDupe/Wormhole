@@ -41,7 +41,10 @@ public class ChatColorCommand extends GDCloudCommand {
 	private final Clickable background;
 	private final Map<UUID, MenuProfile> profiles = new HashMap<>();
 	private final List<ClickableBuilder> preGeneratedButtons = new ArrayList<>();
+
+	@SuppressWarnings({"FieldCanBeLocal", "MismatchedQueryAndUpdateOfCollection"})
 	private final Map<Color, ClickableBuilder> generatedButtonsByColor = new HashMap<>();
+
 	// https://minecraft-heads.com/custom-heads/alphabet?page=36
 	// Declaring them here means the server will lag during players are online
 	private static final ItemStack ONE = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDliMzAzMDNmOTRlN2M3ODVhMzFlNTcyN2E5MzgxNTM1ZGFmNDc1MzQ0OWVhNDFkYjc0NmUxMjM0ZTlkZDJiNSJ9fX0=");

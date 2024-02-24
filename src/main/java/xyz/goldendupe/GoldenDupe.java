@@ -14,6 +14,16 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
+import xyz.goldendupe.command.CommandFinder;
+import xyz.goldendupe.command.defaults.ToggleItemsCommand;
+import xyz.goldendupe.command.defaults.spawn.AbstractSpawnCommand;
+import xyz.goldendupe.command.internal.Permission;
+import xyz.goldendupe.command.internal.Permissions;
+import xyz.goldendupe.command.internal.cloud.Cloud;
+import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
+import xyz.goldendupe.database.astronauts.ReportDatabase;
+import xyz.goldendupe.database.astronauts.ReportUserDatabase;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import com.samjakob.spigui.SpiGUI;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
@@ -187,6 +197,27 @@ public final class GoldenDupe extends JavaPlugin {
             reload.reloadMessengers();
         }
     }
+
+    //idc if you don't like this
+    public static GoldenDupe instance() {
+        return getPlugin(GoldenDupe.class);
+    }
+
+    //TEMP
+    public String[] getSpawnsAsNames() {
+        return AbstractSpawnCommand.spawns.toArray(String[]::new);
+    }
+
+    public void addSpawn(GDSpawn spawn) {
+        this.spawns().put(spawn.name().toLowerCase(), spawn);
+        this.saveSpawns();
+    }
+
+    public void removeSpawn(String spawnName) {
+        this.spawns().remove(spawnName.toLowerCase());
+        this.saveSpawns();
+    }
+
     private GoldenMessenger loadMessenger(boolean debug, String name){
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(new File(getDataFolder(), name));
         GoldenMessenger goldenMessenger = new GoldenMessenger(configuration, new HashMap<>(), debug);

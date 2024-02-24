@@ -4,60 +4,64 @@ import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.parser.flag.CommandFlag;
+import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.command.internal.legacy.GDCommand;
-import xyz.goldendupe.command.internal.legacy.GDCommandInfo;
-import xyz.goldendupe.command.defaults.spawn.AbstractSpawnCommand;
+import xyz.goldendupe.command.internal.cloud.Cloud;
+import xyz.goldendupe.command.internal.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDSpawn;
 
-import java.util.Collections;
-import java.util.List;
+@Cloud
+public class SetSpawnCommand extends GDCloudCommand {
 
-@GDCommandInfo.Command(name = "setspawn",
-		senderType = GDCommandInfo.SenderType.PLAYER,
-		minArgs = 1,
-		memberType = GDCommandInfo.MemberType.ADMINISTRATOR
-)
-public class SetSpawnCommand extends GDCommand {
-	protected SetSpawnCommand(GoldenDupe goldenDupe, GDCommandInfo commandInfo) {
-		super(goldenDupe, commandInfo);
+	//Not sure if I broke this or not but I changed some of the structure
+	public SetSpawnCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+		super(goldenDupe, commandManager);
+		commandManager.command(
+				commandManager.commandBuilder(
+								"setspawn",
+								Description.of("Adds a new spawn to the spawn database.")
+						)
+						.senderType(Player.class)
+						.permission("goldendupe.admin.setspawn")
+						.argument(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("setspawn-name"))
+						.flag(CommandFlag.builder("permission"))
+						.handler(context -> {
+
+							Player sender = context.sender();
+							Location location = sender.getLocation();
+							String spawnName = context.get("setspawn-name");
+							boolean hasPermission = context.flags().hasFlag("permission");
+							String permission = "goldendupe.spawn." + context.flags().get("permission");
+							if (!hasPermission) permission = "";
+
+							for (String str : goldenDupe.getSpawnsAsNames()) {
+								if (spawnName.equalsIgnoreCase(str)) {
+									commandMessenger.message(sender, "setspawn.message-already-set",
+											new Placeholder("spawn", spawnName));
+									return;
+								}
+							}
+
+							goldenDupe.addSpawn(
+									new GDSpawn(
+											spawnName.toLowerCase(),
+											location.getWorld().getName(),
+											permission,
+											location.getX(),
+											location.getY(),
+											location.getZ(),
+											location.getYaw(),
+											location.getPitch()
+									)
+							);
+
+							commandMessenger.message(sender, "setspawn.message-set",
+									new Placeholder("spawn", spawnName));
+						})
+		);
 	}
 
-	@Override
-	public void execute(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) { }
-
-	@Override
-	public void execute(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-		if (is(args, 0, AbstractSpawnCommand.spawns.toArray(String[]::new))){
-			String spawn = args[0];
-			Location location = sender.getLocation();
-			String permission = "";
-			if (args.length>1){
-				if (args[1].equalsIgnoreCase("-permission")){
-					permission = "goldendupe.spawn."+commandInfo.name();
-				}
-			}
-			GDSpawn gdSpawn = new GDSpawn(spawn.toLowerCase(), location.getWorld().getName(), permission, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-			goldenDupe.spawns().put(spawn.toLowerCase(), gdSpawn);
-			goldenDupe.saveSpawns();
-			commandMessenger.message(sender, "setspawn.message-set", new Placeholder("spawn", args[0]));
-		} else {
-			commandMessenger.message(sender, "setspawn.message-unknown-spawn", new Placeholder("spawn", args[0]));
-		}
-	}
-
-	@Override
-	public List<String> tab(@NotNull CommandSender sender, @NotNull String[] args, boolean hasArgs) { return null; }
-
-	@Override
-	public List<String> tab(@NotNull Player sender, @NotNull String[] args, boolean hasArgs) {
-		if (args.length == 0){
-			return AbstractSpawnCommand.spawns;
-		} else if (args.length == 1){
-			return List.of("-permission");
-		} else {
-			return Collections.emptyList();
-		}
-	}
 }

@@ -14,7 +14,7 @@ import xyz.goldendupe.command.internal.Permissions;
 @GDCommandInfo.Command(
 		name = "end",
 		senderType = GDCommandInfo.SenderType.PLAYER)
-public class SpawnEndCommand extends AbstractSpawnCommand{
+public class SpawnEndCommand extends AbstractSpawnCommand {
 	protected SpawnEndCommand(GoldenDupe goldenDupe, GDCommandInfo commandInfo) {
 		super(goldenDupe, commandInfo, "end");
 	}

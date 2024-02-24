@@ -12,6 +12,7 @@ import xyz.goldendupe.messenger.GoldenMessenger;
 @SuppressWarnings("removal")
 @GDCommandInfo.DoNotReflect
 public class GDCloudCommand implements CommandFinder, MessageReload {
+	//TODO: you should refactor non 'internal' packages into impl (im not gonna do it so i dont fuck your project)
 	protected final PaperCommandManager<CommandSender> commandManager;
 	protected final GoldenDupe goldenDupe;
 	protected GoldenMessenger commandMessenger;

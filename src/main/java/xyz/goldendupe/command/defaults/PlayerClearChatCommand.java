@@ -20,7 +20,7 @@ public class PlayerClearChatCommand extends GDCloudCommand {
 								Description.of("Clears the player's chat."),
 								"mychatbanish!", "bleach"
 						)
-						.permission("goldendupe.all.clearchat.receive")
+						.permission("goldendupe.all.clearchat")
 						.senderType(Player.class)
 						.handler(context -> {
 							Player sender = context.sender();
