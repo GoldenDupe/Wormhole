@@ -27,7 +27,7 @@ import java.util.Random;
 
 @Cloud
 public class TrashCommand extends GDCloudCommand {
-	public static final long CLEAR_TIME = 
+	public static final long CLEAR_TIME = 300000;
 	private static List<String> trashNames = new ArrayList<>();
 	public static List<TrashInventory> trashCans = new ArrayList<>();
 	private static List<ItemStack> bar = new ArrayList<>();
