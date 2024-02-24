@@ -75,6 +75,7 @@ public class SpawnCommand extends GDCloudCommand {
 							commandMessenger.message(sender, name + ".message-moved", new Placeholder("old", newSpawn.name()), new Placeholder("new", newSpawn.name()));
 							player.setTeleportSpawnCooldown(0);
 							player.setTeleportingSpawn(null);
+							task.cancel();
 							return;
 						}
 						GDSpawn spawnTo = player.teleportingSpawn();
