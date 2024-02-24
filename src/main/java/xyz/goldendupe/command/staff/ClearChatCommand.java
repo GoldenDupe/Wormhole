@@ -23,7 +23,7 @@ public class ClearChatCommand extends GDCloudCommand {
 								Description.of("Clears the chat globally."),
 								"chatclear"
 						)
-						.permission("goldendupe.staff.clearchat.receive")
+						.permission("goldendupe.staff.clearchat")
 						.senderType(Player.class)
 						.handler(context -> {
 							Player sender = context.sender();

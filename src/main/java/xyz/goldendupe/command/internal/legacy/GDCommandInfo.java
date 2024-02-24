@@ -167,7 +167,7 @@ public class GDCommandInfo {
 		}
 	}
 	public enum MemberType {
-		DEFAULT("default"),
+		DEFAULT("all"),
 		DONATOR("donator"),
 		MODERATOR("staff"),
 		ADMINISTRATOR("admin"),

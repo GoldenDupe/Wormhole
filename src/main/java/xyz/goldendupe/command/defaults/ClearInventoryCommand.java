@@ -60,7 +60,7 @@ public class ClearInventoryCommand extends GDCloudCommand {
 
 		Clickable deny = new ClickableBuilder(itemStackDeny).setAction(clickTypes, (clickable, i, player) -> {
 			player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
-			GoldenDupe.getPlugin(GoldenDupe.class).commandMessenger().message(player, "spawn.message-canceled");
+			GoldenDupe.getPlugin(GoldenDupe.class).commandMessenger().message(player, "clear.message-canceled");
 		}).build();
 
 		GUIBuilder builder = new GUIBuilder(3).name(Component.text("Clear Inventory Confirmation"));
@@ -111,7 +111,10 @@ public class ClearInventoryCommand extends GDCloudCommand {
 									commandMessenger.message(sender, "clear.message-cleared");
 									return;
 								}
-								clearMenu.generateInventory(sender);
+
+								goldenDupe.getServer().getScheduler().runTask(goldenDupe, ()->{
+									clearMenu.generateInventory(sender);
+								});
 							}
 						})
 		);

@@ -25,12 +25,11 @@ public class PlayerClearChatCommand extends GDCloudCommand {
 						.handler(context -> {
 							Player sender = context.sender();
 							Component component = Component.empty();
-							for (int i = 0; i < 275; i++){
+							for (int i = 0; i < 275; i++) {
 								sender.sendMessage(component);
 							}
-							commandMessenger.message(sender, "clearmychat.message.chat-cleared");
+							commandMessenger.message(sender, "clearmychat.message-chat-cleared");
 						})
 		);
 	}
-
 }

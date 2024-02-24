@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.donator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
@@ -23,7 +24,9 @@ public class EnderChestCommand extends GDCloudCommand {
                         .senderType(Player.class)
                         .handler(context -> {
                             Player sender = context.sender();
-                            sender.openInventory(sender.getEnderChest());
+                            goldenDupe.getServer().getScheduler().runTask(goldenDupe, ()->{
+                                sender.openInventory(sender.getEnderChest());
+                            });
                         })
         );
     }

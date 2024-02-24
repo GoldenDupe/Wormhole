@@ -277,7 +277,7 @@ toggle-night-vision:
 
 toggle-random-items:
     message-enabled: "%prefix_short% You will now receive random items every 15 seconds"
-    message-disabled: "%prefix_short% You will now receive random items every 15 seconds"
+    message-disabled: "%prefix_short% You will no longer received random items every 15 seconds"
 
 rename:
   message-cannot-rename-air: "%prefix_short% Cannot rename air. Not capable to edit minecraft that much."
@@ -294,16 +294,15 @@ commandspy:
     - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy toggle'><click:suggest_command:/commandspy toggle'><yellow>/commandspy toggle <gray>- <white>Enable/Disabled command spy"
     - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy block-player'><click:suggest_command:/commandspy block-player'><yellow>/commandspy block-player <gray>- <white>Block a player from non blocked players"
     - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy unblock-player'><click:suggest_command:/commandspy unblock-player'><yellow>/commandspy unblock-player <gray>- <white>Unblock a player from blocked players"
-    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy blocked-players'><click:suggest_command:/commandspy blocked-players'><yellow>/commandspy blocked-players <gray>- <white>Show all blocked players"
-
     - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy block-command'><click:suggest_command:/commandspy block-command'><yellow>/commandspy block-command <gray>- <white>Block a command from non blocked commands"
     - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy unblock-command'><click:suggest_command:/commandspy unblock-command'><yellow>/commandspy unblock-command <gray>- <white>Unblock a command from blocked commands"
-    - "<hover:show_text:'<gray>Click to suggest to chat prompt <yellow>/commandspy blocked-commands'><click:suggest_command:/commandspy blocked-commands'><yellow>/commandspy blocked-commands <gray>- <white>Show all blocked commands"
+  message-player-already-blocked: "%short_prefix% %player% <red>already is blocked from your commands."
+  message-player-already-unblocked: "%short_prefix% %player% <red>already is blocked from your commands."
+  message-player-blocked: "%short_prefix% %player% is now in your blocked players list."
+  message-player-unblocked: "%short_prefix% %player% is no longer in your blocked players list."
 
+  message-executed: "%short_prefix% <yellow>%player%<gray> executed command <white><hover:show_text:'<gray>Click to suggest command to your command prompt'>%command_suggest%"
+  message-executed-sign: "%short_prefix% <yellow>%player%<gray> executed sign command <white><hover:show_text:'<gray>Click to copy command to your prompt'>%command_suggest%"
 
-
-
-
-
-
-
+  message-toggle-true: "%prefix_short% Enabled your command spy."
+  message-toggle-false: "%prefix_short% Disabled your command spy."
