@@ -143,8 +143,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         commandSpyDatabase = new CommandSpyDatabase(this);
 
         getServer().getScheduler().runTaskTimer(this, ()->{
-            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
-            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 2, true, false, false, null);
+            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false, null);
+            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
             for (Player player : getServer().getOnlinePlayers()){
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
                 if (gdPlayer.isToggled()){
@@ -152,8 +152,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
                     player.getInventory().addItem(itemStack);
                 }
                 if (gdPlayer.isToggleSpeed()){
-                    PotionEffect speedPot = gdPlayer.player().getPotionEffect(PotionEffectType.SPEED);
-                    if (speedPot==null || speedPot.getAmplifier()==1 ){
+                    if (!player.hasPotionEffect(PotionEffectType.SPEED) && player.hasPotionEffect(PotionEffectType.SPEED) && player.getPotionEffect(PotionEffectType.SPEED).getAmplifier()<1){
                         player.removePotionEffect(PotionEffectType.SPEED);
                         speedEffect.apply(player);
                     }
