@@ -11,7 +11,6 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 
@@ -25,7 +24,8 @@ public class CustomChatCommand extends GDCloudCommand {
         super(plugin, commandManager);
 
         for (GDChat chat : GDChat.values()) {
-            if (chat == GDChat.GLOBAL || chat == GDChat.CLAN) continue;
+            if (chat.asMessageChannel() == null) return;
+            if (chat.asMemberType()==null) return;
             abstractChatCommand(chat);
         }
 
@@ -40,10 +40,11 @@ public class CustomChatCommand extends GDCloudCommand {
                 commandManager.commandBuilder(
                                 st + "chat",
                                 Description.of("Lets " + name + " send messages only other " + name + " can see."),
-                                st.charAt(0) + "chat"
+                                st.charAt(0) + "chat",
+                                st.charAt(0)+"c"
                         )
                         .optional(StringParser.stringComponent(StringParser.StringMode.GREEDY).name("chat-text"))
-                        .permission("goldendupe." + st + "." + st + "chat")
+                        .permission(type.asMemberType().cloudOf(st+"chat"))
                         .handler(context -> {
 
                             CommandSender sender = context.sender();
@@ -72,12 +73,12 @@ public class CustomChatCommand extends GDCloudCommand {
                                     List<Placeholder> placeholders = new LinkedList<>(commandMessenger.createPlaceholders(player));
                                     placeholders.add(new LegacyPlaceholder("message", message));
                                     commandMessenger
-                                            .broadcast(getMessageChannelFromGDChat(type),
+                                            .broadcast(type.asMessageChannel(),
                                                     st + "chat.message-chat", placeholders);
                                 }
                             } else if (hasArgs && sender instanceof ConsoleCommandSender) {
                                 commandMessenger
-                                        .broadcast(getMessageChannelFromGDChat(type),
+                                        .broadcast(type.asMessageChannel(),
                                                 st + "chat.message-chat-console",
                                                 new LegacyPlaceholder("message", message));
                             }
@@ -85,15 +86,6 @@ public class CustomChatCommand extends GDCloudCommand {
                         })
         );
 
-    }
-
-    GoldenMessenger.MessageChannel getMessageChannelFromGDChat(GDChat chat) {
-        return switch (chat) {
-            case ADMIN -> GoldenMessenger.MessageChannel.ADMIN;
-            case STAFF -> GoldenMessenger.MessageChannel.STAFF;
-            case DONATOR -> GoldenMessenger.MessageChannel.DONATOR;
-            default -> null;
-        };
     }
 
 }

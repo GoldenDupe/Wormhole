@@ -2,14 +2,17 @@ package xyz.goldendupe.utils;
 
 import bet.astral.messenger.permission.Permission;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
+import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.models.GDChat;
 
 public enum MemberType {
-	DEFAULT("all"),
-	DONATOR("donator"),
-	MODERATOR("staff"),
-	ADMINISTRATOR("admin"),
-	OWNER("owner"),
-	OG("og")
+	DEFAULT("all", null, GDChat.GLOBAL),
+	DONATOR("donator", GoldenMessenger.MessageChannel.DONATOR, GDChat.DONATOR),
+	MODERATOR("staff", GoldenMessenger.MessageChannel.STAFF, GDChat.STAFF),
+	ADMINISTRATOR("admin", GoldenMessenger.MessageChannel.ADMIN, GDChat.ADMIN),
+	OWNER("owner", GoldenMessenger.MessageChannel.ADMIN, GDChat.ADMIN),
+	OG("og", GoldenMessenger.MessageChannel.OG, GDChat.OG)
 	;
 
 	public static MemberType of(Player player){
@@ -38,12 +41,24 @@ public enum MemberType {
 		return org.incendo.cloud.permission.Permission.permission("goldendupe."+type+"."+permission);
 	}
 
+	private final GoldenMessenger.MessageChannel channel;
+	private final GDChat chat;
 	private final String type;
 
-	MemberType(String type) {
+	MemberType(String type, GoldenMessenger.MessageChannel channel, GDChat chat) {
 		this.type = type;
+		this.channel = channel;
+		this.chat = chat;
 	}
 
+	@Nullable
+	public GoldenMessenger.MessageChannel asChannel(){
+		return channel;
+	}
+	@Nullable
+	public GDChat asChat(){
+		return chat;
+	}
 	public String permission(){
 		return "goldendupe.group."+type;
 	}
