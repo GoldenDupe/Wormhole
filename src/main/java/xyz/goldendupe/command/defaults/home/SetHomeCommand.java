@@ -32,22 +32,22 @@ public class SetHomeCommand extends GDCloudCommand {
 
                             Player sender = context.sender();
                             Location location = sender.getLocation();
-                            String homeName = context.get("sethome-name");
+                            String homeName = context.get("sethome-name").toString().toLowerCase();
 
                             GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
 
-                            if (player.getHomes().containsKey(homeName)){
+                            if (goldenDupe.getHomes(player).containsKey(homeName)){
                                 commandMessenger.message(sender, "sethome.message-already-exists",
                                         new Placeholder("home", homeName));
                                 return;
-                            } else if (player.getHomes().size() >= player.getMaxHomes()) {
+                            } else if (goldenDupe.getHomes(player).size() >= player.getMaxHomes()) {
                                 commandMessenger.message(sender, "sethome.message-too-many-homes",
                                         new Placeholder("max-homes", player.getMaxHomes()),
-                                        new Placeholder("homes", player.getHomes().size()));
+                                        new Placeholder("homes", goldenDupe.getHomes(player).size()));
                                 return;
                             }
 
-                            player.getHomes().put(homeName,
+                            goldenDupe.requestSaveHome(player,
                                     new GDHome(
                                             homeName,
                                             location.getWorld().getName(),

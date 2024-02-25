@@ -9,17 +9,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.security.Permission;
 
-public record GDSpawn(String name, String world, String permission, double x, double y, double z, float pitch, float yaw) {
+public record GDSpawn(String name, String world, String permission, double x, double y, double z, float yaw, float pitch) {
 
-	public GDSpawn(@NotNull String name, @NotNull String world, @Nullable String permission, double x, double y, double z, float pitch, float yaw) {
+	public GDSpawn(@NotNull String name, @NotNull String world, @Nullable String permission,
+				   double x, double y, double z, float yaw, float pitch) {
 		this.name = name;
 		this.world = world;
 		this.permission = permission != null ? permission : "";
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.pitch = pitch;
 		this.yaw = yaw;
+		this.pitch = pitch;
 	}
 
 	@Contract(pure = true)

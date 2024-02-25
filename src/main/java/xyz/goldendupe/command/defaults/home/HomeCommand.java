@@ -31,15 +31,15 @@ public class HomeCommand extends GDCloudCommand {
 
                             Player sender = context.sender();
                             GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-                            String homeName = context.get("home-name");
+                            String homeName = context.get("home-name").toString().toLowerCase();
 
-                            if (!player.getHomes().containsKey(homeName)){
+                            if (!goldenDupe.getHomes(player).containsKey(homeName)){
                                 commandMessenger.message(sender, "home.message-doesnt-exist",
                                         new Placeholder("home", homeName));
                                 return;
                             }
 
-                            GDHome home = player.getHomes().get(homeName);
+                            GDHome home = goldenDupe.getHomes(player).get(homeName);
 
                             new TimedTeleport(commandMessenger, "home",
                                     sender, home.asLocation(), false, 100).accept();

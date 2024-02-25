@@ -2,7 +2,6 @@ package xyz.goldendupe.command.defaults.home;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.Placeholder;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
@@ -11,7 +10,6 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.joml.Vector3d;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
 
 @Cloud
@@ -31,17 +29,17 @@ public class DelHomeCommand extends GDCloudCommand {
                         .handler(context -> {
 
                             Player sender = context.sender();
-                            String homeName = context.get("delhome-name");
+                            String homeName = context.get("delhome-name").toString().toLowerCase();
 
                             GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
 
-                            if (!player.getHomes().containsKey(homeName)){
+                            if (!goldenDupe.getHomes(player).containsKey(homeName)){
                                 commandMessenger.message(sender, "delhome.message-doesnt-exist",
                                         new Placeholder("home", homeName));
                                 return;
                             }
 
-                            player.getHomes().remove(homeName);
+                            goldenDupe.requestDeleteHome(player, homeName);
 
                             commandMessenger.message(sender, "delhome.message-del",
                                     new Placeholder("home", homeName),

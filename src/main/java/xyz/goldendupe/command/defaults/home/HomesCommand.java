@@ -28,7 +28,7 @@ public class HomesCommand extends GDCloudCommand {
                             Player sender = context.sender();
                             GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
 
-                            player.getHomes().forEach((name, home) ->
+                            goldenDupe.getHomes(player).forEach((name, home) ->
                                     commandMessenger.message(sender, "homes.message-list",
                                         new Placeholder("home", name),
                                         new Placeholder("xyz", new Vector3d(home.x(), home.y(), home.z())),
