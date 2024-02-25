@@ -48,8 +48,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import bet.astral.cloudplusplus.annotations.DoNotReflect;
-import bet.astral.cloudplusplus.MessageReload;
 import xyz.goldendupe.listeners.GDListener;
+import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
 import xyz.goldendupe.utils.annotations.Season;
@@ -208,6 +208,18 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         // TODO
     }
 
+    public void requestSaveHome(GDPlayer player, GDHome home) {
+        getHomes(player).put(home.name(), home);
+    }
+
+    public void requestDeleteHome(GDPlayer player, String homeName) {
+        getHomes(player).remove(homeName);
+    }
+
+    public Map<String, GDHome> getHomes(GDPlayer player) {
+        return player.getHomes();
+    }
+
     public GDSpawn getSpawn(String spawn){
         return this.spawns().get(spawn.toLowerCase());
     }
@@ -336,6 +348,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         }
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean canDupe(ItemStack itemStack){
         if (itemStack.hasItemMeta()){
             ItemMeta meta = itemStack.getItemMeta();

@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public record GDHome(@NotNull String name, @NotNull String world, @NotNull String uuid,
-                     double x, double y, double z, float pitch, float yaw) {
+                     double x, double y, double z, float yaw, float pitch) {
 
-    public GDHome(@NotNull String name, @NotNull String world, double x, double y, double z, float pitch, float yaw) {
-        this(name, world, UUID.randomUUID().toString(), x, y, z, pitch, yaw);
+    public GDHome(@NotNull String name, @NotNull String world, double x, double y, double z, float yaw, float pitch) {
+        this(name, world, UUID.randomUUID().toString(), x, y, z, yaw, pitch);
     }
 
     @Contract(pure = true)
