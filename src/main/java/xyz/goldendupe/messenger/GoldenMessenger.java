@@ -172,6 +172,7 @@ public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoa
 		DONATOR("goldendupe.channel.donator", "channels.donator"),
 		STAFF("goldendupe.channel.staff", "channels.staff"),
 		ADMIN("goldendupe.channel.admin", "channels.admin"),
+		OG("goldendupe.channel.og", "channels.og")
 		;
 
 		private final String permission;

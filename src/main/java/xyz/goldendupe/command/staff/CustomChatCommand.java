@@ -42,7 +42,7 @@ public class CustomChatCommand extends GDCloudCommand {
                                 Description.of("Lets " + name + " send messages only other " + name + " can see."),
                                 st.charAt(0) + "chat"
                         )
-                        .optional(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("chat-text"))
+                        .optional(StringParser.stringComponent(StringParser.StringMode.GREEDY).name("chat-text"))
                         .permission("goldendupe." + st + "." + st + "chat")
                         .handler(context -> {
 

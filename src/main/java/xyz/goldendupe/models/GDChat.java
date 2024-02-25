@@ -4,6 +4,7 @@ public enum GDChat {
 	GLOBAL,
 	STAFF,
 	ADMIN,
+	OG,
 
 	@Deprecated
 	CLAN, // Maybe??

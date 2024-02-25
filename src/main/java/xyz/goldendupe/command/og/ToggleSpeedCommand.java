@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.defaults;
+package xyz.goldendupe.command.og;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,28 +11,27 @@ import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
-public class ToggleItemDropCommand extends GDCloudCommand {
-	public ToggleItemDropCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+public class ToggleSpeedCommand extends GDCloudCommand {
+	public ToggleSpeedCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
-
 		commandManager.command(
 				commandManager.commandBuilder(
-						"toggledrop",
-						Description.of("Allows a player to toggle dropping items to the ground."),
-						"toggledrops"
-				)
-						.permission(MemberType.DEFAULT.cloudOf("toggle-drop"))
+								"togglespeed",
+								Description.of("Allows a player to toggle speed."),
+						"speed"
+						)
+						.permission(MemberType.OG.cloudOf("toggle-speed"))
 						.senderType(Player.class)
-						.handler(context->{
+						.handler(context -> {
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isToggleDropItem();
-							player.setToggleDropItem(!toggle);
+							boolean toggle = player.isToggleSpeed();
+							player.setToggleSpeed(!toggle);
 
-							if (!toggle){
-								commandMessenger.message(sender, "toggle-drop.message-enabled");
+							if (!toggle) {
+								commandMessenger.message(sender, "toggle-speed.message-enabled");
 							} else {
-								commandMessenger.message(sender, "toggle-drop.message-disabled");
+								commandMessenger.message(sender, "toggle-speed.message-disabled");
 							}
 						})
 		);

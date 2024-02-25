@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.admin;
+package xyz.goldendupe.command.admin.spawn;
 
 import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;

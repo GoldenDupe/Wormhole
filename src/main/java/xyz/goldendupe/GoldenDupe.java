@@ -443,7 +443,9 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
                         "xyz.goldendupe.command.admin",
                         "xyz.goldendupe.command.defaults",
                         "xyz.goldendupe.command.donator",
-                        "xyz.goldendupe.command.staff"),
+                        "xyz.goldendupe.command.staff",
+                        "xyz.goldendupe.command.og"
+                ),
                 paperCommandManager
         );
 

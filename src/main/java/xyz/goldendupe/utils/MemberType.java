@@ -8,7 +8,8 @@ public enum MemberType {
 	DONATOR("donator"),
 	MODERATOR("staff"),
 	ADMINISTRATOR("admin"),
-	OWNER("owner")
+	OWNER("owner"),
+	OG("og")
 	;
 
 	public static MemberType of(Player player){

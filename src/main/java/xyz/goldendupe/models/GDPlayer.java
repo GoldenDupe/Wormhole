@@ -1,10 +1,18 @@
 package xyz.goldendupe.models;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class GDPlayer {
-	private final Player player;
+	@NotNull private final Player player;
 
 	private GDSpawn teleportingSpawn;
 	private long teleportSpawnCooldown;
@@ -18,8 +26,9 @@ public class GDPlayer {
 	private boolean isToggleNightVision = true;
 	private boolean isTogglePotionBottles = false;
 	private boolean isToggleSpeed = false;
+	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
 
-	public GDPlayer(Player player){
+	public GDPlayer(@NotNull Player player){
 		this.player = player;
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
@@ -138,4 +147,16 @@ public class GDPlayer {
 		isToggleSpeed = toggleSpeed;
 		return this;
 	}
+
+	public int getMaxHomes() {
+		//noinspection DataFlowIssue
+		return LuckPermsProvider.get()
+				.getUserManager()
+				.getUser(player.getUniqueId())
+				.getCachedData()
+				.getMetaData()
+				.getMetaValue("homes", Integer::parseInt)
+				.orElse(3);
+	}
+
 }

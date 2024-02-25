@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.defaults;
+package xyz.goldendupe.command.donator;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,27 +11,27 @@ import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
-public class ToggleItemPickupCommand extends GDCloudCommand {
-	public ToggleItemPickupCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
+public class ToggleBottlesCommand extends GDCloudCommand {
+	public ToggleBottlesCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
-								"togglepickup",
-								Description.of("Allows a player to toggle picking up items from the ground."),
-								"toggleitempickup"
+								"togglebottles",
+								Description.of("Allows a player to toggle between receiving and not receiving potion bottles."),
+										"togglebottle"
 						)
-						.permission(MemberType.DEFAULT.cloudOf("toggle-pickup"))
+						.permission(MemberType.DONATOR.cloudOf("toggle-bottles"))
 						.senderType(Player.class)
 						.handler(context -> {
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isTogglePickupItem();
-							player.setTogglePickupItem(!toggle);
+							boolean toggle = player.isToggleNightVision();
+							player.setToggleNightVision(!toggle);
 
 							if (!toggle) {
-								commandMessenger.message(sender, "toggle-pickup.message-enabled");
+								commandMessenger.message(sender, "toggle-bottles.message-enabled");
 							} else {
-								commandMessenger.message(sender, "toggle-pickup.message-disabled");
+								commandMessenger.message(sender, "toggle-bottles.message-disabled");
 							}
 						})
 		);

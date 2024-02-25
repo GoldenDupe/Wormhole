@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.security.Permission;
 
 public record GDSpawn(String name, String world, String permission, double x, double y, double z, float pitch, float yaw) {
+
 	public GDSpawn(@NotNull String name, @NotNull String world, @Nullable String permission, double x, double y, double z, float pitch, float yaw) {
 		this.name = name;
 		this.world = world;

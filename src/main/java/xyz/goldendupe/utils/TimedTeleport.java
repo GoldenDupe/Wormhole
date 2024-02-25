@@ -38,7 +38,7 @@ public class TimedTeleport {
 		this.ticksLeft = ticksToTeleport;
 	}
 
-	public void accept(){
+	public TimedTeleport accept(){
 		Bukkit.getScheduler().runTaskTimer(GoldenDupe.instance(), task->{
 			if (TimedTeleport.this.task == null){
 				TimedTeleport.this.task = new AtomicReference<>(task);
@@ -66,7 +66,7 @@ public class TimedTeleport {
 				for (Entity entity : entitiesToTeleport) {
 					entity.teleportAsync(to);
 					if (entity instanceof Player player) {
-						messenger.message(player, messagePrefix + ".message-teleport-canceled-moved");
+						messenger.message(player, messagePrefix + ".message-teleported");
 					}
 				}
 
@@ -76,19 +76,22 @@ public class TimedTeleport {
 
 			ticksLeft--;
 		}, 1, 1);
+		return this;
 	}
 
-	public void cancel(){
+	public TimedTeleport cancel(){
 		if (task != null && task.get() != null && !task.get().isCancelled()){
 			task.get().cancel();
 		}
+		return this;
 	}
 
-	public void removeEntity(Entity entity){
+	public TimedTeleport removeEntity(Entity entity){
 		entitiesToTeleport.remove(entity);
 		if (entitiesToTeleport.isEmpty()){
 			cancel();
 		}
+		return this;
 	}
 
 	private Location neutralize(Location location) {
