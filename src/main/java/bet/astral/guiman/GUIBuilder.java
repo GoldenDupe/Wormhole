@@ -1,8 +1,10 @@
 package bet.astral.guiman;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,18 +53,57 @@ public class GUIBuilder {
 		this.background = background;
 		return this;
 	}
-
-	public GUIBuilder setSlotClickable(int slot, List<Clickable> clickable){
+	public GUIBuilder setBackground(@Nullable ClickableBuilder background) {
+		if (background == null){
+			this.background = null;
+			return this;
+		}
+		this.background = background.build();
+		return this;
+	}
+	public GUIBuilder setSlotClickable(int slot, @NotNull List<@NotNull Clickable> clickable){
 		this.clickable.put(slot, clickable);
+		return this;
+	}
+	public GUIBuilder setSlotClickableBuilders(int slot, @NotNull List<@NotNull ClickableBuilder> clickable){
+		List<Clickable> clickables = new ArrayList<>();
+		for (ClickableBuilder b : clickable){
+			clickables.add(b.createClickable());
+		}
+		this.clickable.put(slot, clickables);
 		return this;
 	}
 	public GUIBuilder setSlotClickable(int slot, Clickable clickable){
 		this.clickable.put(slot, List.of(clickable));
 		return this;
 	}
+	public GUIBuilder setSlotClickable(int slot, ClickableBuilder clickable){
+		this.clickable.put(slot, List.of(clickable.build()));
+		return this;
+	}
 	public GUIBuilder addSlotClickable(int slot, Clickable clickable){
 		List<Clickable> clickables = this.clickable.get(slot) != null ? new ArrayList<>(this.clickable.get(slot)) : new ArrayList<>();
 		clickables.add(clickable);
+		this.clickable.put(slot, clickables);
+		return this;
+	}
+	public GUIBuilder addSlotClickable(int slot, ClickableBuilder clickable){
+		List<Clickable> clickables = this.clickable.get(slot) != null ? new ArrayList<>(this.clickable.get(slot)) : new ArrayList<>();
+		clickables.add(clickable.build());
+		this.clickable.put(slot, clickables);
+		return this;
+	}
+
+
+	public GUIBuilder addSlotEmpty(int slot, Material material){
+		List<Clickable> clickables = this.clickable.get(slot) != null ? new ArrayList<>(this.clickable.get(slot)) : new ArrayList<>();
+		clickables.add(Clickable.empty(new ItemStack(material)));
+		this.clickable.put(slot, clickables);
+		return this;
+	}
+	public GUIBuilder addSlotEmpty(int slot, ItemStack itemstack){
+		List<Clickable> clickables = this.clickable.get(slot) != null ? new ArrayList<>(this.clickable.get(slot)) : new ArrayList<>();
+		clickables.add(Clickable.empty(itemstack));
 		this.clickable.put(slot, clickables);
 		return this;
 	}

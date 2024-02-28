@@ -12,6 +12,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class ClickableBuilder implements Cloneable {
+	private static final ClickType[] clickClickTypes = {
+			ClickType.SHIFT_LEFT,
+			ClickType.SHIFT_RIGHT,
+			ClickType.LEFT,
+			ClickType.RIGHT
+	};
 	private int priority = 0;
 	private @NotNull ItemStack itemStack;
 	private @Nullable Permission permission;
@@ -90,6 +96,25 @@ public class ClickableBuilder implements Cloneable {
 			this.actions = new HashMap<>();
 		}
 		for (ClickType clickType : type){
+			this.actions.put(clickType, action);
+		}
+		return this;
+	}
+
+	public ClickableBuilder setAllAction(@NotNull TriConsumer<Clickable, ItemStack, Player> action){
+		if (this.actions == null){
+			this.actions = new HashMap<>();
+		}
+		for (ClickType clickType : ClickType.values()){
+			this.actions.put(clickType, action);
+		}
+		return this;
+	}
+	public ClickableBuilder setGeneralAction(@NotNull TriConsumer<Clickable, ItemStack, Player> action){
+		if (this.actions == null){
+			this.actions = new HashMap<>();
+		}
+		for (ClickType clickType : clickClickTypes){
 			this.actions.put(clickType, action);
 		}
 		return this;

@@ -26,7 +26,7 @@ public final class Clickable implements Comparable<Clickable>{
 	static final NamespacedKey item_key = new NamespacedKey("guiman", "guiman_inventory_item");
 	public static final Random random = new Random(System.nanoTime());
 	public static final Permission none = new Permission("");
-	public static final Clickable empty_air = new ClickableBuilder(Material.AIR).setPriority(0).setItemStack(new ItemStack(Material.AIR)).setPermission(none).setDisplayIfNoPermissions(true).setActions(Collections.emptyMap()).createClickable();
+	public static final Clickable empty_air = new ClickableBuilder(Material.AIR).setPriority(0).setPermission(none).setDisplayIfNoPermissions(true).createClickable();
 	public static final Component permissionMessage = Component.text("Sorry, but you do not have permissions to use this", NamedTextColor.RED);
 	private final int priority;
 	@NotNull
@@ -92,6 +92,14 @@ public final class Clickable implements Comparable<Clickable>{
 		return new ClickableBuilder(itemStack).setPriority(priority).setPermission(permission).setDisplayIfNoPermissions(displayIfNoPermissions).setActions(consumerMap).createClickable();
 	}
 
+	public static Clickable empty(ItemStack itemstack) {
+		return new ClickableBuilder(itemstack).setPermission(none).setDisplayIfNoPermissions(true).createClickable();
+	}
+
+	public static Clickable general(ItemStack itemStack, TriConsumer<Clickable, ItemStack, Player> action){
+		return new ClickableBuilder(itemStack).setGeneralAction(action).build();
+	}
+
 	public Clickable(int priority, @NotNull ItemStack itemStack, @NotNull Permission permission, boolean displayIfNoPermissions, @NotNull Map<ClickType, TriConsumer<Clickable, ItemStack, Player>> actions) {
 		this.priority = priority;
 		this.actions = actions;
@@ -109,6 +117,8 @@ public final class Clickable implements Comparable<Clickable>{
 		this.permission = none;
 		generateIds();
 	}
+
+
 	private void generateIds(){
 		if (itemStack.getType()==Material.AIR){
 			return;
