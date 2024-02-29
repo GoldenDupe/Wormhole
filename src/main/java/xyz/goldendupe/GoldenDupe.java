@@ -453,7 +453,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     private void uploadUploads(){
         String[] files = new String[]{
-                "commands|yml",
                 "config|yml",
                 "illegals|yml",
                 "messages|yml",

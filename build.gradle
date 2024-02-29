@@ -28,7 +28,11 @@ repositories {
     }
     maven { url 'https://jitpack.io' } // Vault
 
+    maven {
+        url "https://libraries.minecraft.net"
+    }
 }
+
 
 dependencies {
     implementation 'bet.astral:Messenger:1.5.1' // Messenger
@@ -39,10 +43,14 @@ dependencies {
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     implementation 'io.github.classgraph:classgraph:4.8.165'
 
+
+    compileOnly 'com.mojang:brigadier:1.0.18'
     // Easier commands using this framework
-    implementation 'org.incendo:cloud-core:2.0.0-beta.2'
-    implementation 'org.incendo:cloud-paper:2.0.0-beta.2'
-    implementation 'org.incendo:cloud-minecraft-extras:2.0.0-beta.2'
+    var cloudVersion = "2.0.0-beta.4";
+    implementation 'org.incendo:cloud-core:'+cloudVersion
+    implementation 'org.incendo:cloud-paper:'+cloudVersion
+    implementation 'org.incendo:cloud-brigadier:'+cloudVersion
+    implementation 'org.incendo:cloud-minecraft-extras:'+cloudVersion
 
     implementation 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -52,7 +60,6 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
     compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT" // Paper MC
-
 
 }
 
@@ -87,7 +94,7 @@ jar {
 }
 
 shadowJar {
-    archiveClassifier = ""
+    archiveClassifier = null
 
     relocate 'bet.astral.messenger', 'xyz.goldendupe.libs.bet.astral.messenger'
 
