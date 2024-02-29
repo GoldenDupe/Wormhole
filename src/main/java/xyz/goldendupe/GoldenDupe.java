@@ -43,6 +43,7 @@ import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
+import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.database.PlayerDatabase;
@@ -65,8 +66,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public static final Random random = new Random(System.nanoTime());
     public static final long FIRST_RELEASED = 1591254000L;
     public static final long NEW_RELEASE = 1591254000L;
-    public static int season = 1;
-    public static final long SEASON_1 = 1591254000L;
+    public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = false;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     private final Map<String, GDSpawn> spawns = new HashMap<>();
@@ -96,7 +96,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         startTimeMillis = System.currentTimeMillis();
         fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
 
-//        FluffyCombat
         uploadUploads();
         instance = this;
 
@@ -245,7 +244,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
         setIfNotSet(config, "season", 1, Integer.class);
 
-        season = config.getInt("season");
+        SEASON = Seasons.fromInt(config.getInt("season"));
         isDebug = config.getBoolean("debug");
     }
 
@@ -423,7 +422,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         if (season != null){
             // Make season specific classes easier to manage
             // This command is not supposed to be unlocked in this season
-            return Arrays.stream(season.unlock()).noneMatch(val -> val == GoldenDupe.season) && !season.alwaysUnlocked();
+            return Arrays.stream(season.unlock()).noneMatch(val -> val == GoldenDupe.SEASON.asInt()) && !season.alwaysUnlocked();
         }
         return false;
     }
