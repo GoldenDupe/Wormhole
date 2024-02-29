@@ -12,7 +12,8 @@ public enum MemberType {
 	MODERATOR("staff", GoldenMessenger.MessageChannel.STAFF, GDChat.STAFF),
 	ADMINISTRATOR("admin", GoldenMessenger.MessageChannel.ADMIN, GDChat.ADMIN),
 	OWNER("owner", GoldenMessenger.MessageChannel.ADMIN, GDChat.ADMIN),
-	OG("og", GoldenMessenger.MessageChannel.OG, GDChat.OG)
+	OG("og", GoldenMessenger.MessageChannel.OG, GDChat.OG),
+	BOOSTER("booster", GoldenMessenger.MessageChannel.BOOSTER, GDChat.BOOSTER)
 	;
 
 	public static MemberType of(Player player){

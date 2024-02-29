@@ -10,7 +10,7 @@ public enum GDChat {
 	ADMIN(GoldenMessenger.MessageChannel.ADMIN, MemberType.ADMINISTRATOR),
 	OG(GoldenMessenger.MessageChannel.OG, MemberType.OG),
 	DONATOR(GoldenMessenger.MessageChannel.DONATOR, MemberType.DONATOR),
-
+	BOOSTER(GoldenMessenger.MessageChannel.BOOSTER, MemberType.BOOSTER),
 	@Deprecated
 	CLAN(null, null), // Maybe??
 

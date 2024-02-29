@@ -88,13 +88,15 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
+    @SuppressWarnings("FieldCanBeLocal")
     private PaperCommandManager<CommandSender> paperCommandManager;
     @Getter(AccessLevel.PUBLIC) private long startTimeMillis;
+//    @Getter(AccessLevel.PUBLIC) private Fluffy
 
     @Override
     public void onEnable() {
         startTimeMillis = System.currentTimeMillis();
-
+//        FluffyCombat
         uploadUploads();
         instance = this;
 

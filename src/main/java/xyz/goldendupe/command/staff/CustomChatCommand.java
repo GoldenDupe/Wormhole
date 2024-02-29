@@ -24,8 +24,7 @@ public class CustomChatCommand extends GDCloudCommand {
         super(plugin, commandManager);
 
         for (GDChat chat : GDChat.values()) {
-            if (chat.asMessageChannel() == null) return;
-            if (chat.asMemberType()==null) return;
+            if (chat.asMessageChannel() == null || chat.asMemberType() == null) return;
             abstractChatCommand(chat);
         }
 
