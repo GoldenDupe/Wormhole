@@ -74,7 +74,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private SpiGUI spiGUI;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     private final Map<String, GDSpawn> spawns = new HashMap<>();
-    private GoldenMessenger defaultMessenger;
     private GoldenMessenger commandMessenger;
     private GoldenMessenger debugMessenger;
     private List<Material> illegalDupe;
@@ -126,7 +125,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         reloadConfig();
         // illegals.yml
         reloadIllegals();
-        // commands.yml
+        // messages.yml
         getLogger().info("Loading commands..!");
         loadCommands();
         getLogger().info("Loaded commands!");
@@ -179,9 +178,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
 
     public void reloadMessengers(){
-        defaultMessenger = loadMessenger(false, "messages.yml");
-        commandMessenger = loadMessenger(false, "commands.yml");
-        debugMessenger = loadMessenger(true, "messages.yml");
+        commandMessenger = loadMessenger(false, "messages.yml");
+        debugMessenger = loadMessenger(true, "debug-messages.yml");
         CommandRegisterer.super.reloadMessengers();
     }
 
@@ -534,7 +532,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     }
 
     public GoldenMessenger messenger() {
-        return defaultMessenger;
+        return commandMessenger;
     }
 
     public GoldenMessenger debugMessenger() {
