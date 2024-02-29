@@ -1,12 +1,9 @@
 package xyz.goldendupe.command.defaults;
 
 import bet.astral.astronauts.goldendupe.Astronauts;
-import bet.astral.messenger.Message;
 import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.messenger.utils.PlaceholderUtils;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.samjakob.spigui.menu.SGMenu;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -38,10 +35,8 @@ import static xyz.goldendupe.utils.MemberType.MODERATOR;
 // TODO
 @Astronauts
 @Cloud
+@Deprecated(forRemoval = true)
 public class ReportCommand extends GDCloudCooldownCommand {
-	private final Map<UUID, SGMenu> lookupMainMenus = new HashMap<>();
-	private final Map<UUID, SGMenu> lookupSentMenus = new HashMap<>();
-	private final Map<UUID, SGMenu> lookupReceivedMenus = new HashMap<>();
 	private ReportCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager, 250);
 		Command.Builder<CommandSender> reportBuilder =
@@ -233,29 +228,6 @@ public class ReportCommand extends GDCloudCooldownCommand {
 
 		playerHead.setItemMeta(skullMeta);
 		return playerHead;
-	}
-
-	private void openLookupMainMenu(Player to, OfflinePlayer player) {
-		SGMenu menu = lookupMainMenus.get(player.getUniqueId());
-		if (menu == null) {
-			menu = goldenDupe.spiGUI().create("Reports > " + player.getName(), 3);
-			lookupMainMenus.put(player.getUniqueId(), menu);
-		}
-		goldenDupe.reportUserDatabase().load(player)
-				.thenAccept(user -> {
-							List<Placeholder> placeholders = new ArrayList<>();
-							placeholders.addAll(PlaceholderUtils.createPlaceholders("player", player));
-							placeholders.addAll(AstronautPlaceholders.userReportPlaceholders("report", user));
-
-							ItemStack mainHead = skull(player);
-							SkullMeta mainHeadMeta = (SkullMeta) mainHead.getItemMeta();
-							List<Component> mainHeadLore = new ArrayList<>(commandMessenger.parseAsList("report.lookup-menu.main-info.lore", placeholders));
-							mainHeadMeta.lore(mainHeadLore);
-							mainHeadMeta.displayName(commandMessenger.parse(commandMessenger.getMessage("report.lookup-menu.main-info.name"), Message.Type.CHAT, placeholders));
-
-
-						}
-				);
 	}
 
 	private void openLookupSentMenu(Player to, OfflinePlayer player){

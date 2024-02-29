@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.defaults;
 
+import bet.astral.cloudplusplus.annotations.Cloud;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
@@ -9,10 +10,11 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
-import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.listeners.ChatFormatListener;
 import xyz.goldendupe.listeners.ChatUwUListener;
+import xyz.goldendupe.models.GDChat;
+import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
 
 @Cloud
@@ -24,11 +26,13 @@ public class UwUCommand extends GDCloudCommand {
 					CommandSender sender = context.sender();
 					Component uwu = ChatUwUListener.uwuString();
 					if (sender instanceof Player player){
+						GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+						GDChat chat = gdPlayer.chat();
 						for (Player audience : Bukkit.getOnlinePlayers()){
-							audience.sendMessage(ChatFormatListener.format(player, audience, uwu));
+							audience.sendMessage(ChatFormatListener.format(player, audience, chat, uwu));
 						}
 						goldenDupe.getServer().getConsoleSender().sendMessage(
-								ChatFormatListener.format(player, goldenDupe.getServer().getConsoleSender(), uwu));
+								ChatFormatListener.format(player, goldenDupe.getServer().getConsoleSender(), chat, uwu));
 					} else {
 						BukkitCommand.broadcastCommandMessage(sender, uwu);
 					}

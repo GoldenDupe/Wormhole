@@ -1,8 +1,0 @@
-name: GoldenDupe
-version: '${version}'
-main: xyz.goldendupe.GoldenDupe
-api-version: '1.20'
-depend: [Vault, LuckPerms]
-authors: [Antritus]
-description: GoldenDupe's new engine is here. Powering 80% of GoldenDupe hopefully without lag.
-website: goldendupe.xyz

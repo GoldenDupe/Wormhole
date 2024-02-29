@@ -1,6 +1,8 @@
 package xyz.goldendupe;
 
 import bet.astral.cloudplusplus.CommandRegisterer;
+import bet.astral.cloudplusplus.annotations.DoNotReflect;
+import bet.astral.fluffy.FluffyCombat;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.placeholder.Placeholder;
 import lombok.AccessLevel;
@@ -17,13 +19,6 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
-import xyz.goldendupe.command.defaults.ToggleItemsCommand;
-import xyz.goldendupe.database.PlayerDatabase;
-import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
-import xyz.goldendupe.database.astronauts.ReportDatabase;
-import xyz.goldendupe.database.astronauts.ReportUserDatabase;
-import xyz.goldendupe.messenger.GoldenMessenger;
-import com.samjakob.spigui.SpiGUI;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
@@ -41,18 +36,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.GDSpawn;
 import xyz.goldendupe.utils.annotations.Season;
+import xyz.goldendupe.command.defaults.ToggleItemsCommand;
+import xyz.goldendupe.database.PlayerDatabase;
+import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
+import xyz.goldendupe.database.astronauts.ReportDatabase;
+import xyz.goldendupe.database.astronauts.ReportUserDatabase;
+import xyz.goldendupe.messenger.GoldenMessenger;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,14 +68,16 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public static int season = 1;
     public static final long SEASON_1 = 1591254000L;
     private boolean isDebug = false;
-    private SpiGUI spiGUI;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     private final Map<String, GDSpawn> spawns = new HashMap<>();
     private GoldenMessenger commandMessenger;
     private GoldenMessenger debugMessenger;
-    private List<Material> illegalDupe;
+    @Getter
+    private Set<Material> illegalDupeCombat;
+    @Getter
+    private Set<Material> illegalDupe;
     private List<ItemStack> randomItems;
-    private List<Material> illegalPlacement;
+    private Set<Material> illegalPlacement;
     private YamlConfiguration config;
     private PlayerDatabase playerDatabase;
     private ReportDatabase reportDatabase;
@@ -90,19 +89,16 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     @SuppressWarnings("FieldCanBeLocal")
     private PaperCommandManager<CommandSender> paperCommandManager;
     @Getter(AccessLevel.PUBLIC) private long startTimeMillis;
-//    @Getter(AccessLevel.PUBLIC) private Fluffy
+    @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
 
     @Override
     public void onEnable() {
         startTimeMillis = System.currentTimeMillis();
+        fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
+
 //        FluffyCombat
         uploadUploads();
         instance = this;
-
-        spiGUI = new SpiGUI(this);
-        spiGUI.setBlockDefaultInteractions(true);
-        spiGUI.setDefaultToolbarBuilder(null);
-        spiGUI.setEnableAutomaticPagination(false);
 
         if (getServer().getPluginManager().getPlugin("Vault") != null){
 
@@ -286,14 +282,17 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         File file = new File(getDataFolder(), "illegals.yml");
         YamlConfiguration illegalConfig = YamlConfiguration.loadConfiguration(file);
 
-        illegalDupe = new LinkedList<>();
+        illegalDupe = new HashSet<>();
+        illegalDupeCombat = new HashSet<>();
         randomItems = new LinkedList<>();
-        illegalPlacement = new LinkedList<>();
+        illegalPlacement = new HashSet<>();
 
 
-        addMaterials(illegalDupe, illegalConfig.getStringList("placement"));
+        addMaterials(illegalDupe, illegalConfig.getStringList("dupe.illegals"));
         illegalDupe.add(Material.AIR);
-        addMaterials(illegalPlacement, illegalConfig.getStringList("dupe"));
+        addMaterials(illegalDupeCombat, illegalConfig.getStringList("dupe.combat"));
+
+        addMaterials(illegalPlacement, illegalConfig.getStringList("placement"));
 
         List<String> randomIllegals = illegalConfig.getStringList("random.illegals");
         for (Material material : Material.values()){
@@ -348,24 +347,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         }
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public boolean canDupe(ItemStack itemStack){
-        if (itemStack.hasItemMeta()){
-            ItemMeta meta = itemStack.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            if (container.has(KEY_UNDUPABLE) && Boolean.TRUE.equals(container.get(KEY_UNDUPABLE, PersistentDataType.BOOLEAN))){
-                return false;
-            }
-        }
-        return !(illegalDupe.contains(itemStack.getType()));
-    }
-
     public boolean canBePlaced(Block block) {
         return !illegalPlacement.contains(block.getType());
     }
 
 
-    private void addMaterials(List<Material> materials, List<String> mats){
+    private void addMaterials(Collection<Material> materials, List<String> mats){
         for (String mat : mats){
             try {
                 Material material = Material.valueOf(mat);
@@ -559,10 +546,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     public Economy vaultEconomy() {
         return vaultEconomy;
-    }
-
-    public SpiGUI spiGUI() {
-        return spiGUI;
     }
 
     public ReportDatabase reportDatabase() {

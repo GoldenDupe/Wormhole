@@ -43,6 +43,7 @@ dupe:
   message-combat-undupable: "%prefix_short% <white>Your item is not dupable while in combat."
 
   message-undupable: "%prefix_short% <white>Your item is not dupable in this server."
+  message-undupable-combat: "%prefix_short% <white>Your item is not dupable while in combat."
   message-undupable-bundle: "%prefix_short% <white>Your bundle is/contains some undupable item(s)."
   message-undupable-shulker: "%prefix_short% <white>Your shulker box is/contains some undupable item(s)."
   message-too-large: "%prefix_short% <white>You can only dupe between 1 and 8 times."
