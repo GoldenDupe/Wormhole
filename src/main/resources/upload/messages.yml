@@ -33,6 +33,18 @@ player-join-brand: "<white>%player%<yellow> joined using <white>%player_brand%"
 cannot-place-illegal: "%prefix_short% <white>You cannot place <red>%block%<white>!"
 
 
+loop:
+  message-already-looping: "%prefix_short% You are already running a loop! Please wait!"
+  message-executing: "%prefix_short% Executing..."
+  message-executed: "%prefix_short% Executed!"
+
+  message-canceled: "%prefix% Canceled the previous loop command."
+  message-canceled-already: "%prefix% You do not have any running loop commands."
+
+nickname:
+  message-too-long: "%prefix_short% %nickname% <white>is longer than allowed."
+  message-illegal: "%prefix_short% %nickname% is not allowed in our server."
+  message-changed: "%prefix_short% Changed your nickname to %nickname%."
 
 #
 # /Dupe

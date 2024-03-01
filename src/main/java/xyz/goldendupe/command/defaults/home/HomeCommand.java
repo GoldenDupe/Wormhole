@@ -41,6 +41,8 @@ public class HomeCommand extends GDCloudCommand {
 
                             GDHome home = goldenDupe.getHomes(player).get(homeName);
 
+                            commandMessenger.message(sender, "home.message-teleporting",
+                                    new Placeholder("home", homeName));
                             new TimedTeleport(commandMessenger, "home",
                                     sender, home.asLocation(), false, 100).accept();
 

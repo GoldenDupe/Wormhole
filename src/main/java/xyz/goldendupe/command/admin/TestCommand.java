@@ -15,13 +15,16 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
+import org.jetbrains.annotations.ApiStatus;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@ApiStatus.Internal
 @Cloud
 public class TestCommand extends GDCloudCommand {
 	public TestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
@@ -64,6 +67,7 @@ public class TestCommand extends GDCloudCommand {
 										}
 								).name("hello")
 						)
+						.permission(MemberType.OWNER.cloudOf("brigadier-test"))
 						.handler(context->{
 							context.sender().sendMessage("Hi!");
 						})
