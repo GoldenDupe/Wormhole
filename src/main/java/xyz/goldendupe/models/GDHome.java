@@ -4,9 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 
 import java.util.UUID;
 
+@RequireSave
 public record GDHome(@NotNull String name, @NotNull String world, @NotNull String uuid,
                      double x, double y, double z, float yaw, float pitch) {
 

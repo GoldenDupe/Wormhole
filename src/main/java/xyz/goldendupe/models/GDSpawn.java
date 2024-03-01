@@ -2,13 +2,12 @@ package xyz.goldendupe.models;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 
-import java.security.Permission;
-
+@RequireSave
 public record GDSpawn(String name, String world, String permission, double x, double y, double z, float yaw, float pitch) {
 
 	public GDSpawn(@NotNull String name, @NotNull String world, @Nullable String permission,

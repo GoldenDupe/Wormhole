@@ -25,24 +25,17 @@ import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.DecoratedPot;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.goldendupe.listeners.GDListener;
+import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
-import xyz.goldendupe.models.GDSpawn;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
@@ -69,20 +62,15 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = false;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
-    private final Map<String, GDSpawn> spawns = new HashMap<>();
     private GoldenMessenger commandMessenger;
     private GoldenMessenger debugMessenger;
-    @Getter
-    private Set<Material> illegalDupeCombat;
-    @Getter
-    private Set<Material> illegalDupe;
-    private List<ItemStack> randomItems;
-    private Set<Material> illegalPlacement;
     private YamlConfiguration config;
     private PlayerDatabase playerDatabase;
     private ReportDatabase reportDatabase;
     private ReportUserDatabase reportUserDatabase;
     private CommandSpyDatabase commandSpyDatabase;
+    @Getter
+    private GDGlobalData globalData = new GDGlobalData(this);
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
@@ -118,8 +106,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
         // config.yml
         reloadConfig();
-        // illegals.yml
-        reloadIllegals();
+        // global data inc. illegals
+        globalData.reload();
         // messages.yml
         getLogger().info("Loading commands..!");
         loadCommands();
@@ -144,7 +132,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
             for (Player player : getServer().getOnlinePlayers()){
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
                 if (gdPlayer.isToggled()){
-                    ItemStack itemStack = randomItems.get(random.nextInt(randomItems.size()));
+                    ItemStack itemStack = globalData.getRandomItems().get(random.nextInt(globalData.getRandomItems().size()));
                     player.getInventory().addItem(itemStack);
                 }
                 if (gdPlayer.isToggleSpeed()){
@@ -183,26 +171,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         return instance;
     }
 
-    //TEMP
-
-    public Set<String> getSpawnsAsNames() {
-        return this.spawns.keySet();
-    }
-
-    public void addSpawn(GDSpawn spawn) {
-        this.spawns().put(spawn.name().toLowerCase(), spawn);
-        this.saveSpawns();
-    }
-
-    public void removeSpawn(String spawnName) {
-        this.spawns().remove(spawnName.toLowerCase());
-        this.saveSpawns();
-    }
-
-    public void saveSpawns() {
-        // TODO
-    }
-
     public void requestSaveHome(GDPlayer player, GDHome home) {
         getHomes(player).put(home.name(), home);
     }
@@ -213,10 +181,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     public Map<String, GDHome> getHomes(GDPlayer player) {
         return player.getHomes();
-    }
-
-    public GDSpawn getSpawn(String spawn){
-        return this.spawns().get(spawn.toLowerCase());
     }
 
     private GoldenMessenger loadMessenger(boolean debug, String name){
@@ -273,92 +237,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
             List<Class<?>> classes = classInfo.loadClasses();
             for (Class<?> clazz : classes) {
                 registerListener(clazz);
-            }
-        }
-    }
-
-    public void reloadIllegals() {
-        File file = new File(getDataFolder(), "illegals.yml");
-        YamlConfiguration illegalConfig = YamlConfiguration.loadConfiguration(file);
-
-        illegalDupe = new HashSet<>();
-        illegalDupeCombat = new HashSet<>();
-        randomItems = new LinkedList<>();
-        illegalPlacement = new HashSet<>();
-
-
-        addMaterials(illegalDupe, illegalConfig.getStringList("dupe.illegals"));
-        illegalDupe.add(Material.AIR);
-        addMaterials(illegalDupeCombat, illegalConfig.getStringList("dupe.combat"));
-
-        addMaterials(illegalPlacement, illegalConfig.getStringList("placement"));
-
-        List<String> randomIllegals = illegalConfig.getStringList("random.illegals");
-        for (Material material : Material.values()){
-            if (randomIllegals.contains(material.name())){
-                continue;
-            }
-            randomItems.add(new ItemStack(material));
-        }
-        if (illegalConfig.getBoolean("random.all-goat-horns", false)){
-            for (MusicInstrument instrument : Registry.INSTRUMENT){
-                ItemStack itemStack = new ItemStack(Material.GOAT_HORN);
-                MusicInstrumentMeta meta = (MusicInstrumentMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.GOAT_HORN));
-                meta.setInstrument(instrument);
-                itemStack.setItemMeta(meta);
-                randomItems.add(itemStack);
-            }
-        }
-        if (illegalConfig.getBoolean("random.full-decorated-potteries", false)){
-            for (Material material : Tag.ITEMS_BREAKS_DECORATED_POTS.getValues()){
-                ItemStack itemStack = new ItemStack(Material.DECORATED_POT);
-                BlockStateMeta meta = (BlockStateMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.DECORATED_POT));
-                DecoratedPot decoratedPot = (DecoratedPot) meta.getBlockState();
-                decoratedPot.setSherd(DecoratedPot.Side.BACK, material);
-                decoratedPot.setSherd(DecoratedPot.Side.FRONT, material);
-                decoratedPot.setSherd(DecoratedPot.Side.LEFT, material);
-                decoratedPot.setSherd(DecoratedPot.Side.RIGHT, material);
-                meta.setBlockState(decoratedPot);
-                itemStack.setItemMeta(meta);
-                randomItems.add(itemStack);
-            }
-        }
-        if (illegalConfig.getBoolean("random.all-enchanted-books", true)){
-            for (Enchantment enchantment : Registry.ENCHANTMENT){
-                if (enchantment == Enchantment.MENDING){
-                    // FUCK MENDING
-                    continue;
-                }
-                for (int i = 0; i < enchantment.getMaxLevel(); i++){
-                    ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
-                    EnchantmentStorageMeta meta = (EnchantmentStorageMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.ENCHANTED_BOOK));
-                    meta.addStoredEnchant(enchantment, i, false);
-                    itemStack.setItemMeta(meta);
-                    randomItems.add(itemStack);
-                }
-            }
-        }
-        for (int i = 0; i < illegalConfig.getInt("random.random-firework-boost", 0); i++){
-            ItemStack itemStack = new ItemStack(Material.FIREWORK_ROCKET);
-            FireworkMeta meta = (FireworkMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET));
-            meta.setPower(i);
-            itemStack.setItemMeta(meta);
-        }
-    }
-
-    public boolean canBePlaced(Block block) {
-        return !illegalPlacement.contains(block.getType());
-    }
-
-
-    private void addMaterials(Collection<Material> materials, List<String> mats){
-        for (String mat : mats){
-            try {
-                Material material = Material.valueOf(mat);
-                if (!materials.contains(material)) {
-                    materials.add(material);
-                }
-            } catch (IllegalStateException ignore){
             }
         }
     }
@@ -504,10 +382,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    public Map<String, GDSpawn> spawns() {
-        return spawns;
-    }
-
     public void setDebug(boolean debug){
         this.isDebug = debug;
     }
@@ -561,4 +435,5 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public CommandSpyDatabase commandSpyDatabase() {
         return commandSpyDatabase;
     }
+
 }

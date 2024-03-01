@@ -38,13 +38,13 @@ public class SetSpawnCommand extends GDCloudCommand {
 							if (!hasPermission) permission = "";
 
 
-							if (goldenDupe.getSpawnsAsNames().contains(spawnName.toLowerCase())){
+							if (goldenDupe.getGlobalData().getSpawns().containsKey(spawnName.toLowerCase())){
 								commandMessenger.message(sender, "setspawn.message-already-set",
 										new Placeholder("spawn", spawnName));
 								return;
 							}
 
-							goldenDupe.addSpawn(
+							goldenDupe.getGlobalData().addSpawn(
 									new GDSpawn(
 											spawnName.toLowerCase(),
 											location.getWorld().getName(),

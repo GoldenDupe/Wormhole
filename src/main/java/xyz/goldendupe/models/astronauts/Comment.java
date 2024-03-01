@@ -1,7 +1,10 @@
 package xyz.goldendupe.models.astronauts;
 
+import xyz.goldendupe.utils.annotations.temporal.RequireSave;
+
 import java.util.UUID;
 
+@RequireSave
 public class Comment {
 	private final UUID id;
 	private final UUID who;

@@ -42,7 +42,7 @@ public class LoopCommand extends GDCloudCommand {
 						"aloop")
 						.senderType(Player.class)
 						.permission(MemberType.ADMINISTRATOR.cloudOf("loop"))
-						.optional(EnumParser.enumComponent(TimeUnit.class).name("timeunit").optional(DefaultValue.constant(TimeUnit.MILLISECONDS)))
+						.argument(EnumParser.enumComponent(TimeUnit.class).name("timeunit").optional(DefaultValue.constant(TimeUnit.MILLISECONDS)))
 						.argument(IntegerParser.integerComponent()
 										.name("times")
 								.suggestionProvider(IntegerParser.integerParser(0, 30).parser().suggestionProvider()))

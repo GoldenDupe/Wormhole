@@ -20,7 +20,7 @@ public class IllegalListener implements GDListener {
 	@EventHandler(priority = EventPriority.HIGH)
 	private void onBlockPlace(BlockPlaceEvent event){
 		Block block = event.getBlock();
-		if (!goldenDupe.canBePlaced(block)){
+		if (!goldenDupe.getGlobalData().getIllegalPlacement().contains(block.getType())){
 			event.setCancelled(true);
 			event.setBuild(false);
 			goldenDupe.messenger().message(event.getPlayer(), "cannot-place-illegal", new Placeholder("block", StringUtils.properCase(block.getType().name())));

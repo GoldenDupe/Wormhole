@@ -1,5 +1,7 @@
 package xyz.goldendupe.models.chatcolor;
 
+import xyz.goldendupe.utils.annotations.temporal.RequireSave;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Map;
 
 import static xyz.goldendupe.models.chatcolor.GDChatColor.Mode.SINGLE;
 
+@RequireSave
 public class GDChatColor {
 	public static GDChatColor DEFAULT = new GDChatColor(
 			SINGLE, Color.GRAY);

@@ -2,11 +2,13 @@ package xyz.goldendupe.models.astronauts;
 
 import bet.astral.astronauts.goldendupe.Astronauts;
 import org.jetbrains.annotations.Nullable;
+import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@RequireSave
 @Astronauts
 public class Report {
 	private final UUID id;

@@ -10,6 +10,7 @@ import xyz.goldendupe.GoldenDupe;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public class TimedTeleport {
 	private final String messagePrefix;
@@ -20,6 +21,10 @@ public class TimedTeleport {
 	private final Set<Entity> entitiesToTeleport;
 	private int ticksLeft;
 	private AtomicReference<BukkitTask> task;
+	private Consumer<Entity> startConsumer = null;
+	private Consumer<Entity> moveConsumer = null;
+	private Consumer<Entity> teleportConsumer = null;
+
 	public TimedTeleport(Messenger<?> messenger, String messagePrefix, List<Entity> entities, Location to,  boolean allowMoving, int ticksToTeleport){
 		this.messagePrefix = messagePrefix;
 		this.messenger = messenger;
@@ -44,6 +49,8 @@ public class TimedTeleport {
 				TimedTeleport.this.task = new AtomicReference<>(task);
 				for (Entity entity : entitiesToTeleport){
 					locationMap.put(entity, neutralize(entity.getLocation()));
+					if (startConsumer != null)
+						startConsumer.accept(entity);
 				}
 			}
 			if (!allowMoving) {
@@ -54,6 +61,8 @@ public class TimedTeleport {
 						if (entity instanceof Player player) {
 							messenger.message(player, messagePrefix + ".message-teleport-canceled-moved");
 						}
+						if (moveConsumer != null)
+							moveConsumer.accept(entity);
 					}
 				}
 				if (entitiesToTeleport.isEmpty()) {
@@ -68,6 +77,8 @@ public class TimedTeleport {
 					if (entity instanceof Player player) {
 						messenger.message(player, messagePrefix + ".message-teleported");
 					}
+					if (teleportConsumer != null)
+						teleportConsumer.accept(entity);
 				}
 
 				task.cancel();
@@ -99,5 +110,20 @@ public class TimedTeleport {
 		loc.setYaw(0);
 		loc.setPitch(0);
 		return loc;
+	}
+
+	public TimedTeleport setStartConsumer(Consumer<Entity> startConsumer) {
+		this.startConsumer = startConsumer;
+		return this;
+	}
+
+	public TimedTeleport setMoveConsumer(Consumer<Entity> moveConsumer) {
+		this.moveConsumer = moveConsumer;
+		return this;
+	}
+
+	public TimedTeleport setTeleportConsumer(Consumer<Entity> teleportConsumer) {
+		this.teleportConsumer = teleportConsumer;
+		return this;
 	}
 }

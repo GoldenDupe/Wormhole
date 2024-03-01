@@ -77,5 +77,14 @@ public class SuggestionTestCommand extends GDCloudCommand {
 							context.sender().sendMessage("Hi!");
 						})
 		);
+		command(
+				commandBuilder(
+						"particle-test"
+				)
+						.permission(MemberType.OWNER.cloudOf("particle-test"))
+						.handler(context->{
+
+						})
+		);
 	}
 }

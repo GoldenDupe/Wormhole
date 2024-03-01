@@ -1,6 +1,22 @@
 season: 1
 debug: true
 
+maintenance:
+  enabled: true
+  announce-kicked: true
+  announce-failed-login: true
+  kick-non-whitelisted: true
+  # Antritus
+  # Astraverse (antritus)
+  # _devourer
+  # ycu
+  whitelisted:
+    - "42749f9b-cc7a-4990-926a-acf787664c99"
+    - "7df88625-91ef-4e6f-bce0-cae3b8fbe7d1"
+    - "4e1e8200-8c25-4030-9cfe-3c2f15f97870"
+    - "241e9f03-e36d-4591-8f4a-257e96221c61"
+
+
 uwu-strings:
   - "I weally weally love GowdenDupe~"
   - "I weally weally wuv gowdendewp~"

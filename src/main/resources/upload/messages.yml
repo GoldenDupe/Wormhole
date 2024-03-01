@@ -10,6 +10,10 @@ placeholders:
     value: "<gold><bold>Golden<white><bold>Dupe<reset>"
   - name: prefix_short
     value: "<gold><bold>G<white><bold>D<reset>"
+  - name: prefix_mntc
+    value: "<gold><bold>Golden<white><bold>Dupe<light_purple><bold>Maintenance<reset>"
+  - name: prefix_mntc_short
+    value: "<gold><bold>G<white><bold>D<light_purple><bold>M<reset>"
   - name: short_prefix
     value: "<gold><bold>G<white><bold>D<reset>"
   - name: rules_discord
@@ -32,6 +36,21 @@ player-join-brand: "<white>%player%<yellow> joined using <white>%player_brand%"
 
 cannot-place-illegal: "%prefix_short% <white>You cannot place <red>%block%<white>!"
 
+
+maintenance:
+  message-help:
+    - ""
+    - "%prefix_mntc% Maintenance is %maintenance_state%"
+    - ""
+    - "%prefix_mntc_short% <click:suggest_command:/maintenance %maintenance_state_opposite_low%><hover:show_text:'<gray>Click to suggest <white>/maintenance %maintenance_state_opposite_low%<gray> to your chat prompt.'><gold>/maintenance %maintenance_state_opposite_low% <gray>- %maintenance_state_opposite% maintenance"
+    - "%prefix_mntc_short% <click:suggest_command:/maintenance add ><hover:show_text:'<gray>Click to suggest <white>/maintenance add<gray> to your chat prompt.'><gold>/maintenance add <player> <gray>- Add player to maintenance"
+    - "%prefix_mntc_short% <click:suggest_command:/maintenance remove ><hover:show_text:'<gray>Click to suggest <white>/maintenance remove<gray> to your chat prompt.'><gold>/maintenance remove <player> <gray>- Remove player from maintenance"
+    - "%prefix_mntc_short% <click:suggest_command:/maintenance list><hover:show_text:'<gray>Click to suggest <white>/maintenance list<gray> to your chat prompt.'><gold>/maintenance list <gray>- Show whitelisted players"
+    - "%prefix_mntc_short% <click:suggest_command:/maintenance reload><hover:show_text:'<gray>Click to suggest <white>/maintenance reload<gray> to your chat prompt.'><gold>/maintenance reload <gray>- Reload the maintenance"
+    - ""
+  broadcast-added: "%prefix_mntc% Added %player% to the maintenance."
+  broadcast-remove: "%prefix_mntc% Added %player% to the maintenance."
+  broadcast-tried-to-join: "%prefix_mntc% %player% tried to join while in maintenance"
 
 loop:
   message-already-looping: "%prefix_short% You are already running a loop! Please wait!"
