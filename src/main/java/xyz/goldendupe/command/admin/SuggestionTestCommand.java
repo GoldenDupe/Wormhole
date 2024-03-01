@@ -2,6 +2,7 @@ package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import com.mojang.brigadier.LiteralMessage;
+import io.papermc.paper.adventure.AdventureComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -18,6 +19,7 @@ import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.ApiStatus;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
 
 import java.util.LinkedList;
@@ -26,8 +28,8 @@ import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
 @Cloud
-public class TestCommand extends GDCloudCommand {
-	public TestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
+public class SuggestionTestCommand extends GDCloudCommand {
+	public SuggestionTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
 
 		commandManager.command(
@@ -60,6 +62,9 @@ public class TestCommand extends GDCloudCommand {
 																	"Translatable?",
 																	new LiteralMessage(GsonComponentSerializer.gson().serialize(Component.translatable(Material.DIAMOND_SWORD.translationKey())))));
 													// Looked at cloud, and they are not done implementing component-based tooltips
+
+													suggestions.add(
+															TooltipSuggestion.tooltipSuggestion("NMS Component?", new AdventureComponent(Component.text("This is a NMS component", Color.SHIT))));
 													return suggestions;
 												});
 
