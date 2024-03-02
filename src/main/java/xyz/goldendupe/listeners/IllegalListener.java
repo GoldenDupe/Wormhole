@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.utils.StringUtils;
 
@@ -20,7 +21,10 @@ public class IllegalListener implements GDListener {
 	@EventHandler(priority = EventPriority.HIGH)
 	private void onBlockPlace(BlockPlaceEvent event){
 		Block block = event.getBlock();
-		if (!goldenDupe.getGlobalData().getIllegalPlacement().contains(block.getType())){
+		if (goldenDupe.getGlobalData().getIllegalPlacement().contains(block.getType())){
+			if (!event.getPlayer().hasPermission(MemberType.ADMINISTRATOR.permissionOf("bypass-illegal-build"))){
+				return;
+			}
 			event.setCancelled(true);
 			event.setBuild(false);
 			goldenDupe.messenger().message(event.getPlayer(), "cannot-place-illegal", new Placeholder("block", StringUtils.properCase(block.getType().name())));
@@ -29,6 +33,6 @@ public class IllegalListener implements GDListener {
 
 	@Override
 	public GoldenDupe goldenDupe() {
-		return null;
+		return goldenDupe;
 	}
 }

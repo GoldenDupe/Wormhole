@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.brigadier.suggestion.TooltipSuggestion;
-import org.incendo.cloud.component.DefaultValue;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 import org.incendo.cloud.description.Description;
@@ -42,7 +41,7 @@ public class LoopCommand extends GDCloudCommand {
 						"aloop")
 						.senderType(Player.class)
 						.permission(MemberType.ADMINISTRATOR.cloudOf("loop"))
-						.argument(EnumParser.enumComponent(TimeUnit.class).name("timeunit").optional(DefaultValue.constant(TimeUnit.MILLISECONDS)))
+						.argument(EnumParser.enumComponent(TimeUnit.class).name("timeunit"))
 						.argument(IntegerParser.integerComponent()
 										.name("times")
 								.suggestionProvider(IntegerParser.integerParser(0, 30).parser().suggestionProvider()))
@@ -69,7 +68,7 @@ public class LoopCommand extends GDCloudCommand {
 								}
 							}
 
-							TimeUnit timeUnit = (TimeUnit) context.optional("timeunit").orElse(TimeUnit.SECONDS);
+							TimeUnit timeUnit = context.get("timeunit");
 							int times = context.get("times");
 							int timeSpan = context.get("timespan");
 							String executing = context.get("executable");

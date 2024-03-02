@@ -12,6 +12,8 @@ plugins {
 
     id("io.papermc.paperweight.userdev") version "1.5.10"
 
+    id("xyz.jpenilla.run-paper") version "2.2.2"
+
 }
 
 group = 'xyz.goldendupe'
@@ -57,6 +59,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
 
+    implementation 'org.apache.commons:commons-math3:3.6.1'
 
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"  // Vault
     compileOnly 'net.luckperms:api:5.4' // Luckperms
@@ -104,4 +107,11 @@ shadowJar {
     relocate 'io.github.classgraph', "xyz.goldendupe.libs.io.github.classgraph"
     relocate 'com.samjakob', 'xyz.goldendupe.libs.com.samjakob.spigui'
     relocate 'org.incendo.cloud', 'xyz.goldendupe.libs.org.incendo.cloud'
+    relocate 'org.apache.commons', 'xyz.goldendupe.libs.org.apache.commons'
+}
+
+tasks {
+    runServer {
+        minecraftVersion("1.20.4")
+    }
 }

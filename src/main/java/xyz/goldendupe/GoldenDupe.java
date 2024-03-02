@@ -3,6 +3,7 @@ package xyz.goldendupe;
 import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.fluffy.FluffyCombat;
+import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.placeholder.Placeholder;
 import lombok.AccessLevel;
@@ -62,6 +63,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = false;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
+    @Getter
+    private final FusionFlare fusionFlare = new FusionFlare(this);
     private GoldenMessenger commandMessenger;
     private GoldenMessenger debugMessenger;
     private YamlConfiguration config;
@@ -147,6 +150,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
                 }
             }
         }, 20, ToggleItemsCommand.RANDOM_ITEM_TICKS);
+
+        fusionFlare.ready();
 
 
         getComponentLogger().info("GoldenDupe has enabled!");

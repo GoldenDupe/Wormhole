@@ -1,18 +1,28 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.fusionflare.FusionFlare;
+import bet.astral.fusionflare.models.CubeModel;
+import bet.astral.fusionflare.models.FFModel;
+import bet.astral.fusionflare.particles.AnimatedParticle;
+import bet.astral.fusionflare.particles.FFParticle;
 import com.mojang.brigadier.LiteralMessage;
 import io.papermc.paper.adventure.AdventureComponent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.brigadier.suggestion.TooltipSuggestion;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.incendo.cloud.parser.standard.DoubleParser;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
@@ -28,13 +38,13 @@ import java.util.concurrent.CompletableFuture;
 
 @ApiStatus.Internal
 @Cloud
-public class SuggestionTestCommand extends GDCloudCommand {
-	public SuggestionTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
+public class AdminTestCommand extends GDCloudCommand {
+	public AdminTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
 
 		commandManager.command(
 				commandManager.commandBuilder("brigadiertest",
-						"bt"
+								"bt"
 						)
 						.argument(
 								StringParser.stringComponent(
@@ -65,6 +75,8 @@ public class SuggestionTestCommand extends GDCloudCommand {
 
 													suggestions.add(
 															TooltipSuggestion.tooltipSuggestion("NMS Component?", new AdventureComponent(Component.text("This is a NMS component", Color.SHIT))));
+													suggestions.add(
+															TooltipSuggestion.tooltipSuggestion("NMS Component? w/new line?", new AdventureComponent(Component.text("Checking for new line", Color.DIAMOND).appendNewline().append(Component.text("If it works it works.", Color.REDSTONE)))));
 													return suggestions;
 												});
 
@@ -73,7 +85,7 @@ public class SuggestionTestCommand extends GDCloudCommand {
 								).name("hello")
 						)
 						.permission(MemberType.OWNER.cloudOf("brigadier-test"))
-						.handler(context->{
+						.handler(context -> {
 							context.sender().sendMessage("Hi!");
 						})
 		);
@@ -82,8 +94,38 @@ public class SuggestionTestCommand extends GDCloudCommand {
 						"particle-test"
 				)
 						.permission(MemberType.OWNER.cloudOf("particle-test"))
-						.handler(context->{
+						.senderType(Player.class)
+						.argument(DoubleParser.doubleComponent().name("height"))
+						.argument(DoubleParser.doubleComponent().name("size"))
+						.argument(DoubleParser.doubleComponent().name("between"))
+//						.argument(IntegerParser.integerComponent().name("amount"))
+//						.argument(IntegerParser.integerComponent().name("layers"))
+						.handler(context -> {
+							Player sender = context.sender();
 
+							FusionFlare fusionFlare = plugin.getFusionFlare();
+							FFParticle<?> particle = new AnimatedParticle<>(List.of(Particle.WAX_ON, Particle.WAX_OFF));
+							//FFParticle<?> particle = new LiteralParticle<>(Particle.DRIP_LAVA);
+
+							Location location = sender.getEyeLocation();
+							Block block = sender.getTargetBlockExact(50);
+							if (block == null){
+								sender.sendMessage("No target block found.");
+								return;
+							}
+							Location location2 = block.getLocation().add(0.5, 0.5, 0.5);
+							double between = context.get("between");
+							double size = context.get("size");
+//							int layers = context.get("layers");
+
+							FFModel model = /*new SingleModel(fusionFlare, particle, location, 50);*/
+									/*new LineModel(fusionFlare, particle, location, location2, 20, size);*/
+									new CubeModel(fusionFlare, particle, location2, -1, 5, between, size);
+
+							sender.sendMessage("Should be showing!");
+							model.addReceiver(sender);
+
+							fusionFlare.run(model);
 						})
 		);
 	}
