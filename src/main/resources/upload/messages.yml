@@ -36,6 +36,41 @@ player-join-brand: "<white>%player%<yellow> joined using <white>%player_brand%"
 
 cannot-place-illegal: "%prefix_short% <white>You cannot place <red>%block%<white>!"
 
+amivanished:
+  message-vanished: "%prefix_short% <red>You are vanished!"
+  message-not-vanished: "%prefix_short% <yellow>You are not vanished!"
+vanish:
+  message-vanished:
+  message-unvanished:
+creative:
+  message-already-same: "%prefix_short% You are already in creative."
+  message-admin-already-same: "%prefix_short% %player_prefix_name% is already in creative."
+  message-enabled: "%prefix_short% Switched your gamemode to creative."
+  message-admin-enabled: "%prefix_short% %player_prefix_name% is now in creative."
+
+survival:
+  message-already-same: "%prefix_short% You are already in survival."
+  message-admin-already-same: "%prefix_short% %player_prefix_name% is already in survival."
+  message-enabled: "%prefix_short% Switched your gamemode to survival."
+  message-admin-enabled: "%prefix_short% %player_prefix_name% is now in survival."
+
+adventure:
+  message-already-same: "%prefix_short% You are already in adventure."
+  message-admin-already-same: "%prefix_short% %player_prefix_name% is already in adventure."
+  message-enabled: "%prefix_short% Switched your gamemode to survival."
+  message-admin-enabled: "%prefix_short% %player_prefix_name% is now in adventure."
+
+spectator:
+  message-already-same: "%prefix_short% You are already in spectator."
+  message-admin-already-same: "%prefix_short% %player_prefix_name% is already in spectator."
+  message-enabled: "%prefix_short% Switched your gamemode to spectator."
+  message-admin-enabled: "%prefix_short% %player_prefix_name% is now in spectator."
+
+fly:
+  message-enabled: "%prefix_short% Toggled flight to true."
+  message-disabled: "%prefix_short% Toggled flight to false."
+  message-admin-enabled: "%prefix_short% Toggled flight of %player_prefix_name% to true."
+  message-admin-disabled: "%prefix_short% Toggled flight of %player_prefix_name% to false."
 
 maintenance:
   message-help:
