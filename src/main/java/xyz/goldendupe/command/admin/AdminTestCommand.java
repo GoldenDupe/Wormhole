@@ -42,6 +42,17 @@ public class AdminTestCommand extends GDCloudCommand {
 	public AdminTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
 
+		command(
+				commandBuilder("rolltest")
+						.senderType(Player.class)
+						.handler(context->{
+							Player player = context.sender();
+							context.sender().sendMessage("Current Yaw: "+ player.getYaw());
+							context.sender().sendMessage("Current Pitch: "+ player.getPitch());
+							context.sender().sendMessage("Current Roll: 0");
+						})
+		);
+
 		commandManager.command(
 				commandManager.commandBuilder("brigadiertest",
 								"bt"
