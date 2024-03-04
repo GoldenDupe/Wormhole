@@ -5,20 +5,23 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
+import xyz.goldendupe.utils.flaggable.Flag;
+import xyz.goldendupe.utils.flaggable.FlagImpl;
+import xyz.goldendupe.utils.flaggable.Flaggable;
+import xyz.goldendupe.utils.reference.PlayerReference;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @RequireSave
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public class GDPlayer {
-	@NotNull private final Player player;
+public class GDPlayer implements Flaggable, PlayerReference {
+	@NotNull private final UUID uniqueId;
 
 	private GDSpawn teleportingSpawn;
 	private GDChat chat;
@@ -44,9 +47,11 @@ public class GDPlayer {
 	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
 	@Getter
 	private final Map<UUID, GDMessageGroup> messagegroups = new HashMap<>();
+	@NotNull
+	private final Map<NamespacedKey, Flag<?>> flags = new HashMap<>();
 
 	public GDPlayer(@NotNull Player player){
-		this.player = player;
+		this.uniqueId = player.getUniqueId();
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
 		this.autoConfirmClearInv = false;
@@ -61,9 +66,6 @@ public class GDPlayer {
 		return this;
 	}
 
-	public Player player() {
-		return player;
-	}
 
 	public GDSpawn teleportingSpawn() {
 		return teleportingSpawn;
@@ -159,11 +161,56 @@ public class GDPlayer {
 		//noinspection DataFlowIssue
 		return LuckPermsProvider.get()
 				.getUserManager()
-				.getUser(player.getUniqueId())
+				.getUser(uniqueId)
 				.getCachedData()
 				.getMetaData()
 				.getMetaValue("homes", Integer::parseInt)
 				.orElse(3);
 	}
 
+	@Override
+	public <V> void addFlag(@NotNull Flag<V> flag) {
+		flags.put(flag.getKey(), flag);
+	}
+
+	@Override
+	public <V> void editFlag(@NotNull NamespacedKey key, @Nullable V newValue) throws IllegalStateException {
+		if (flags.get(key) != null){
+			//noinspection unchecked
+			Flag<V> flag = (Flag<V>) flags.get(key);
+			assert newValue != null;
+			flag.setValue(newValue);
+		}
+		throw new IllegalStateException("Couldn't edit a flag which is not set!");
+	}
+
+	@Override
+	public <V> void setIfAbsent(@NotNull Flag<V> flag) {
+		flags.putIfAbsent(flag.getKey(), flag);
+	}
+
+	@Override
+	public <V> void setIfAbsent(@NotNull NamespacedKey key, @Nullable V defaultValue) {
+		flags.putIfAbsent(key, new FlagImpl<>(key, defaultValue, defaultValue));
+	}
+
+	@Override
+	public <V> void setIfAbsent(@NotNull NamespacedKey key, @Nullable V defaultValue, @Nullable V currentValue) {
+		flags.putIfAbsent(key, new FlagImpl<>(key, defaultValue, currentValue));
+	}
+
+	@Override
+	public @NotNull <V> Flag<V> getFlag(@NotNull NamespacedKey key, @NotNull Flag<V> defaultFlag) {
+		return getFlag(key) != null ? Objects.requireNonNull(getFlag(key)) : defaultFlag;
+	}
+
+	@Override
+	public @Nullable <V> Flag<V> getFlag(@NotNull NamespacedKey key) {
+		//noinspection unchecked
+		return (Flag<V>) flags.get(key);
+	}
+	@Override
+	public java.util.@NotNull UUID uuid() {
+		return uniqueId;
+	}
 }
