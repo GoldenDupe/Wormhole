@@ -7,6 +7,7 @@ import bet.astral.messenger.permission.Permission;
 import bet.astral.messenger.placeholder.LegacyPlaceholder;
 import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.messenger.utils.PlaceholderUtils;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
@@ -20,7 +21,7 @@ import java.time.Duration;
 import java.util.*;
 
 
-public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoader, IMessenger {
+public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoader {
 	private static final GoldenDupe gd;
 	private static final boolean vaultExists;
 	private static final boolean luckPermsExists;
@@ -155,14 +156,14 @@ public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoa
 	}
 
 	@Override
-	protected void send(@NotNull CommandSender to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, Placeholder... placeholders) {
+	protected void send(@NotNull Audience to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, Placeholder... placeholders) {
 		if (isDebugMessenger && !plugin().isDebug())
 			return;
 		super.send(to, message, type, delay, senderSpecificPlaceholders, placeholders);
 	}
 
 	@Override
-	protected void send(@NotNull CommandSender to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, List<Placeholder> placeholders) {
+	protected void send(@NotNull Audience to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, List<Placeholder> placeholders) {
 		if (isDebugMessenger && !plugin().isDebug())
 			return;
 		super.send(to, message, type, delay, senderSpecificPlaceholders, placeholders);
