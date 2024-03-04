@@ -47,15 +47,15 @@ public class RebootCommand extends GDCloudCommand {
 
                         if (stage <= 0) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
                             stage++;
                         } else if (stage == 1 && rebootTimer.hasReached(timeForRestart / 3)) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
                             stage++;
                         } else if (stage == 2 && rebootTimer.hasReached(timeForRestart / 2)) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
                             stage++;
                         } else if (rebootTimer.hasReached(timeForRestart)) {
                             Bukkit.broadcast(Component.text("Server Restarting!"));
