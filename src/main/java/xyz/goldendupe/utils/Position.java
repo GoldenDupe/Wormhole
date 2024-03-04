@@ -59,6 +59,26 @@ public class Position implements Identity {
 		this.world = world.getName();
 	}
 
+	public Position(String name, double x, double y, double z, float pitch, @NotNull String worldName) {
+		this.name = name;
+		this.uniqueId = java.util.UUID.randomUUID();
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.pitch = pitch;
+		this.world = worldName;
+	}
+	public Position(String name, double x, double y, double z, float pitch, @NotNull World world) {
+		this.name = name;
+		this.uniqueId = java.util.UUID.randomUUID();
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.pitch = pitch;
+		this.world = world.getName();
+	}
+
+
 	public Position(String name, UUID uniqueId, Location location){
 		this.name = name;
 		this.uniqueId = uniqueId;
@@ -69,7 +89,15 @@ public class Position implements Identity {
 		this.world = location.getWorld().getName();
 	}
 
-
+	public Position(String name, Location location){
+		this.name = name;
+		this.uniqueId = java.util.UUID.randomUUID();
+		this.x = location.getX();
+		this.y = location.getY();
+		this.z = location.getZ();
+		this.pitch = location.getPitch();
+		this.world = location.getWorld().getName();
+	}
 	public void update(Location location){
 		this.x = location.getX();
 		this.y = location.getY();
