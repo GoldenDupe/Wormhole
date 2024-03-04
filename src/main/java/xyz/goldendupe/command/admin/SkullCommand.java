@@ -1,12 +1,7 @@
 package xyz.goldendupe.command.admin;
 
+import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.Placeholder;
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.cacheddata.CachedMetaData;
-import net.luckperms.api.model.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -18,12 +13,8 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
-import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
-
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Cloud
 public class SkullCommand extends GDCloudCommand {

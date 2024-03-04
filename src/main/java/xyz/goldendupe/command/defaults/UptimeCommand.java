@@ -25,7 +25,7 @@ public class UptimeCommand extends GDCloudCommand {
                         )
                         .senderType(Player.class)
                         .handler(context -> {
-                            long runtimeMillis = System.currentTimeMillis() - goldenDupe.getStartTimeMillis();
+                            long runtimeMillis = goldenDupe.getStartTimer().get();
 
                             commandMessenger.message(context.sender(), "uptime.message-uptime",
                                     new Placeholder("time", convertMillisToTimeString(runtimeMillis)));
@@ -34,7 +34,7 @@ public class UptimeCommand extends GDCloudCommand {
 
     }
 
-    @NotNull String convertMillisToTimeString(@Range(from = 0, to = Long.MAX_VALUE) long millis) {
+    public static @NotNull String convertMillisToTimeString(@Range(from = 0, to = Long.MAX_VALUE) long millis) {
         millis = Math.abs(millis);
 
         final long seconds = millis / 1000;

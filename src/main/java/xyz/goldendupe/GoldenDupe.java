@@ -45,6 +45,7 @@ import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.utils.Timer;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,12 +80,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private LuckPerms luckPerms = null;
     @SuppressWarnings("FieldCanBeLocal")
     private PaperCommandManager<CommandSender> paperCommandManager;
-    @Getter(AccessLevel.PUBLIC) private long startTimeMillis;
+    // Do NOT reset
+    @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
 
     @Override
     public void onEnable() {
-        startTimeMillis = System.currentTimeMillis();
         fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
 
         uploadUploads();
@@ -155,6 +156,10 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
 
         getComponentLogger().info("GoldenDupe has enabled!");
+    }
+
+    public void onRestart() {
+        // idk if you need this for anything
     }
 
     @Override
