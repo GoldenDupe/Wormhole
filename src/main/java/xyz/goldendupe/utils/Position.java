@@ -26,7 +26,7 @@ public class Position implements Identity {
 	@Expose
 	private double z;
 	@Expose
-	private float pitch;
+	private float yaw;
 	@Expose
 	private String world;
 
@@ -36,45 +36,45 @@ public class Position implements Identity {
 		this.x = 0;
 		this.y = 0;
 		this.z = 0;
-		this.pitch = 0;
+		this.yaw = 0;
 		this.world = null;
 	}
 
-	public Position(String name, UUID uniqueId, double x, double y, double z, float pitch, @NotNull String worldName) {
+	public Position(String name, UUID uniqueId, double x, double y, double z, float yaw, @NotNull String worldName) {
 		this.name = name;
 		this.uniqueId = uniqueId;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.pitch = pitch;
+		this.yaw = yaw;
 		this.world = worldName;
 	}
-	public Position(String name, UUID uniqueId, double x, double y, double z, float pitch, @NotNull World world) {
+	public Position(String name, UUID uniqueId, double x, double y, double z, float yaw, @NotNull World world) {
 		this.name = name;
 		this.uniqueId = uniqueId;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.pitch = pitch;
+		this.yaw = yaw;
 		this.world = world.getName();
 	}
 
-	public Position(String name, double x, double y, double z, float pitch, @NotNull String worldName) {
+	public Position(String name, double x, double y, double z, float yaw, @NotNull String worldName) {
 		this.name = name;
 		this.uniqueId = java.util.UUID.randomUUID();
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.pitch = pitch;
+		this.yaw = yaw;
 		this.world = worldName;
 	}
-	public Position(String name, double x, double y, double z, float pitch, @NotNull World world) {
+	public Position(String name, double x, double y, double z, float yaw, @NotNull World world) {
 		this.name = name;
 		this.uniqueId = java.util.UUID.randomUUID();
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		this.pitch = pitch;
+		this.yaw = yaw;
 		this.world = world.getName();
 	}
 
@@ -85,7 +85,7 @@ public class Position implements Identity {
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.pitch = location.getPitch();
+		this.yaw = location.getPitch();
 		this.world = location.getWorld().getName();
 	}
 
@@ -95,19 +95,19 @@ public class Position implements Identity {
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.pitch = location.getPitch();
+		this.yaw = location.getPitch();
 		this.world = location.getWorld().getName();
 	}
 	public void update(Location location){
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.pitch = location.getPitch();
+		this.yaw = location.getPitch();
 		this.world = location.getWorld().getName();
 	}
 
 	public Location asLocation(){
-		return new Location(Bukkit.getWorld(world), x, y, z, pitch, 90);
+		return new Location(Bukkit.getWorld(world), x, y, z, yaw, 90);
 
 	}
 

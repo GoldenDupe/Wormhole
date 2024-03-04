@@ -35,8 +35,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDGlobalData;
-import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
@@ -176,15 +176,15 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         return instance;
     }
 
-    public void requestSaveHome(GDPlayer player, GDHome home) {
-        getHomes(player).put(home.name(), home);
+    public void requestSaveHome(GDPlayer player, Position home) {
+        getHomes(player).put(home.getName(), home);
     }
 
     public void requestDeleteHome(GDPlayer player, String homeName) {
         getHomes(player).remove(homeName);
     }
 
-    public Map<String, GDHome> getHomes(GDPlayer player) {
+    public Map<String, Position> getHomes(GDPlayer player) {
         return player.getHomes();
     }
 

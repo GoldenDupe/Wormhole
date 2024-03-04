@@ -9,8 +9,8 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.TimedTeleport;
 
 @Cloud
@@ -39,7 +39,7 @@ public class HomeCommand extends GDCloudCommand {
                                 return;
                             }
 
-                            GDHome home = goldenDupe.getHomes(player).get(homeName);
+                            Position home = goldenDupe.getHomes(player).get(homeName);
 
                             commandMessenger.message(sender, "home.message-teleporting",
                                     new Placeholder("home", homeName));

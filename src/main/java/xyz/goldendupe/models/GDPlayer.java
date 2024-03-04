@@ -1,19 +1,19 @@
 package xyz.goldendupe.models;
 
-import it.unimi.dsi.fastutil.chars.CharHeapSemiIndirectPriorityQueue;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
+import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
+import xyz.goldendupe.utils.impl.SpawnPosition;
 import xyz.goldendupe.utils.reference.PlayerReference;
 
 import java.util.*;
@@ -23,7 +23,7 @@ import java.util.*;
 public class GDPlayer implements Flaggable, PlayerReference {
 	@NotNull private final UUID uniqueId;
 
-	private GDSpawn teleportingSpawn;
+	private SpawnPosition teleportingSpawn;
 	private GDChat chat;
 	@RequireSave
 	private boolean autoConfirmClearInv;
@@ -44,7 +44,7 @@ public class GDPlayer implements Flaggable, PlayerReference {
 	@RequireSave
 	private boolean isToggleSpeed = false;
 	@RequireSave
-	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
+	@Getter(AccessLevel.PUBLIC) private final Map<String, Position> homes = new HashMap<>();
 	@Getter
 	private final Map<UUID, GDMessageGroup> messagegroups = new HashMap<>();
 	@NotNull
@@ -67,11 +67,11 @@ public class GDPlayer implements Flaggable, PlayerReference {
 	}
 
 
-	public GDSpawn teleportingSpawn() {
+	public SpawnPosition teleportingSpawn() {
 		return teleportingSpawn;
 	}
 
-	public GDPlayer setTeleportingSpawn(GDSpawn teleportingSpawn) {
+	public GDPlayer setTeleportingSpawn(SpawnPosition teleportingSpawn) {
 		this.teleportingSpawn = teleportingSpawn;
 		return this;
 	}

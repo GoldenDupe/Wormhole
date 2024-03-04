@@ -11,8 +11,8 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.joml.Vector3d;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.models.GDHome;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.Position;
 
 @Cloud
 public class SetHomeCommand extends GDCloudCommand {
@@ -48,14 +48,13 @@ public class SetHomeCommand extends GDCloudCommand {
                             }
 
                             goldenDupe.requestSaveHome(player,
-                                    new GDHome(
+                                    new Position(
                                             homeName,
-                                            location.getWorld().getName(),
                                             location.getX(),
                                             location.getY(),
                                             location.getZ(),
                                             location.getYaw(),
-                                            location.getPitch()
+                                            location.getWorld().getName()
                                     )
                             );
 

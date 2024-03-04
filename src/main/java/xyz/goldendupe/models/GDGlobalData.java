@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.utils.impl.SpawnPosition;
 
 import java.io.File;
 import java.util.*;
@@ -19,7 +20,7 @@ import java.util.*;
 public class GDGlobalData {
 	private final GoldenDupe goldenDupe;
 	private final Map<UUID, GDMessageGroup> messageGroups = new HashMap<>();
-	private final Map<String, GDSpawn> spawns = new HashMap<>();
+	private final Map<String, SpawnPosition> spawns = new HashMap<>();
 	private Set<Material> illegalDupeCombat;
 	private Set<Material> illegalDupe;
 	private List<ItemStack> randomItems;
@@ -126,11 +127,11 @@ public class GDGlobalData {
 
 	public void requestSpawnSaves(){
 	}
-	public void requestSpawnRemove(GDSpawn spawn){
+	public void requestSpawnRemove(SpawnPosition spawn){
 
 	}
-	public void addSpawn(GDSpawn spawn) {
-		this.spawns.put(spawn.name().toLowerCase(), spawn);
+	public void addSpawn(SpawnPosition spawn) {
+		this.spawns.put(spawn.getName().toLowerCase(), spawn);
 		this.requestSpawnSaves();
 	}
 

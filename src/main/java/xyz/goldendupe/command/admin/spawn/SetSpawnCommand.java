@@ -11,7 +11,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.models.GDSpawn;
+import xyz.goldendupe.utils.impl.SpawnPosition;
 
 @Cloud
 public class SetSpawnCommand extends GDCloudCommand {
@@ -45,15 +45,14 @@ public class SetSpawnCommand extends GDCloudCommand {
 							}
 
 							goldenDupe.getGlobalData().addSpawn(
-									new GDSpawn(
+									new SpawnPosition(
 											spawnName.toLowerCase(),
 											location.getWorld().getName(),
 											permission,
 											location.getX(),
 											location.getY(),
 											location.getZ(),
-											location.getYaw(),
-											location.getPitch()
+											location.getYaw()
 									)
 							);
 
