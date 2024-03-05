@@ -30,7 +30,7 @@ public class RebootCommand extends GDCloudCommand {
                 .commandBuilder(
                         "reboot",
                         Description.of("Restarts the server."),
-                        "rb", "restart")
+                        "rb")
                 .permission(MemberType.ADMINISTRATOR.cloudOf("reboot"))
                 .handler(context -> {
 
@@ -42,22 +42,34 @@ public class RebootCommand extends GDCloudCommand {
                         return;
                     }
 
+                    commandMessenger.message(context.sender(), "reboot.server-restarting",
+                            new Placeholder("until-restart", UptimeCommand.convertMillisToTimeString(timeUntilRestart)));
+
+                    rebootTimer.reset();
+
                     //This shit is ugly I hope it works
                     task = Bukkit.getServer().getScheduler().runTaskTimer(plugin, () -> {
 
+                        Component comp = Component.text("Server Restarting in " +
+                                UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!");
+
                         if (stage <= 0) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString((timeForRestart + 1000) - rebootTimer.get()) + "!"));
                             stage++;
-                        } else if (stage == 1 && rebootTimer.hasReached(timeForRestart / 3)) {
+                        } else if (stage == 1 && rebootTimer.hasReached((timeForRestart + 1000) / 4)) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString((timeForRestart + 1000) - rebootTimer.get()) + "!"));
                             stage++;
-                        } else if (stage == 2 && rebootTimer.hasReached(timeForRestart / 2)) {
+                        } else if (stage == 2 && rebootTimer.hasReached((timeForRestart + 2000) / 2)) {
                             Bukkit.broadcast(Component.text("Server Restarting in " +
-                                    UptimeCommand.convertMillisToTimeString(timeForRestart - rebootTimer.get()) + "!"));
+                                    UptimeCommand.convertMillisToTimeString((timeForRestart + 2000) - rebootTimer.get()) + "!"));
                             stage++;
-                        } else if (rebootTimer.hasReached(timeForRestart)) {
+                        } else if (stage == 3 && rebootTimer.hasReached((long) ((timeForRestart + 2000) / 1.1f))) {
+                            Bukkit.broadcast(Component.text("Server Restarting in " +
+                                    UptimeCommand.convertMillisToTimeString((timeForRestart + 2000) - rebootTimer.get()) + "!"));
+                            stage++;
+                        } else if (rebootTimer.hasReached(timeForRestart + 3000)) {
                             Bukkit.broadcast(Component.text("Server Restarting!"));
                             rebootTimer.reset();
                             goldenDupe.onRestart();
@@ -65,9 +77,6 @@ public class RebootCommand extends GDCloudCommand {
                         }
 
                     }, 0, 20);
-
-                    commandMessenger.message(context.sender(), "reboot.server-restarting",
-                            new Placeholder("until-restart", UptimeCommand.convertMillisToTimeString(timeUntilRestart)));
 
                 });
 
@@ -84,6 +93,7 @@ public class RebootCommand extends GDCloudCommand {
 
                     stage = 0;
                     rebootTimer.reset();
+                    task.cancel();
                     task = null;
                     commandMessenger.message(context.sender(), "reboot.restart-aborted");
 

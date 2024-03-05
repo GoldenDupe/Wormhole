@@ -47,28 +47,25 @@ public class UptimeCommand extends GDCloudCommand {
         if (days > 0) {
             result.append(days).append(" day");
             if (days != 1) result.append("s");
-            result.append(", ");
+            if (hours % 24 > 0) result.append(", ");
         }
 
         if (hours % 24 > 0) {
             result.append(hours % 24).append(" hour");
             if (hours % 24 != 1) result.append("s");
-            result.append(", ");
+            if (minutes % 60 > 0) result.append(", ");
         }
 
         if (minutes % 60 > 0) {
             result.append(minutes % 60).append(" minute");
             if (minutes % 60 != 1) result.append("s");
-            result.append(" and ");
+            if (seconds % 60 > 0) result.append(" and ");
         }
 
         if (seconds % 60 > 0 || (millis < 1000 && millis > 0)) {
             result.append(seconds % 60).append(" second");
             if (seconds % 60 != 1) result.append("s");
-            result.append(" ");
         }
-
-        result.append("(").append(millis).append(" millis)");
 
         return result.toString();
     }
