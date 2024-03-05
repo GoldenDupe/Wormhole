@@ -85,7 +85,7 @@ public class Position implements Identity {
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.yaw = location.getPitch();
+		this.yaw = location.getYaw();
 		this.world = location.getWorld().getName();
 	}
 
@@ -95,14 +95,14 @@ public class Position implements Identity {
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.yaw = location.getPitch();
+		this.yaw = location.getYaw();
 		this.world = location.getWorld().getName();
 	}
 	public void update(Location location){
 		this.x = location.getX();
 		this.y = location.getY();
 		this.z = location.getZ();
-		this.yaw = location.getPitch();
+		this.yaw = location.getYaw();
 		this.world = location.getWorld().getName();
 	}
 
