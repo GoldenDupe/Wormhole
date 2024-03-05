@@ -40,6 +40,9 @@ public class CloudPPConfirmableCommand<P extends JavaPlugin, C> extends CloudPPC
 
 	@Override
 	public void requestConfirm(C sender, int ticks, Consumer<C> acceptedConsumer, Consumer<C> deniedConsumer, Consumer<C> timeRanOutConsumer) {
-		confirmable.put(sender, Triple.of(plugin.getServer().getScheduler().runTaskLater(plugin, ()-> timeRanOutConsumer.accept(sender), ticks), acceptedConsumer, deniedConsumer));
+		confirmable.put(sender, Triple.of(plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+			timeRanOutConsumer.accept(sender);
+			confirmable.remove(sender);
+		}, ticks), acceptedConsumer, deniedConsumer));
 	}
 }
