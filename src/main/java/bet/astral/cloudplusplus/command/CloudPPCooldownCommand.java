@@ -1,38 +1,37 @@
 package bet.astral.cloudplusplus.command;
 
-import org.bukkit.command.CommandSender;
+import bet.astral.cloudplusplus.Cooldown;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.paper.PaperCommandManager;
-import bet.astral.cloudplusplus.Cooldown;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CloudPPCooldownCommand<P extends JavaPlugin> extends CloudPPCommand<P> implements Cooldown, Listener {
-	private final Map<CommandSender, Long> cooldowns = new HashMap<>();
+public class CloudPPCooldownCommand<P extends JavaPlugin, C> extends CloudPPCommand<P, C> implements Cooldown<C>, Listener {
+	private final Map<C, Long> cooldowns = new HashMap<>();
 	private final long cooldown;
 
-	public CloudPPCooldownCommand(P plugin, PaperCommandManager<CommandSender> commandManager, long cooldown) {
+	public CloudPPCooldownCommand(P plugin, PaperCommandManager<C> commandManager, long cooldown) {
 		super(plugin, commandManager);
 		this.cooldown = cooldown;
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
 	@Override
-	public void setCooldown(CommandSender sender) {
+	public void setCooldown(C sender) {
 		cooldowns.put(sender, System.currentTimeMillis()+cooldown);
 	}
 
 	@Override
-	public void resetCooldown(CommandSender sender) {
+	public void resetCooldown(C sender) {
 		cooldowns.remove(sender);
 	}
 
 	@Override
-	public long getCooldownLeft(CommandSender sender) {
+	public long getCooldownLeft(C sender) {
 		long left = (cooldowns.get(sender) != null ? cooldowns.get(sender) : 0) - System.currentTimeMillis();
 		if (left<0){
 			left = 0;
@@ -44,7 +43,7 @@ public class CloudPPCooldownCommand<P extends JavaPlugin> extends CloudPPCommand
 	}
 
 	@Override
-	public boolean hasCooldown(CommandSender sender) {
+	public boolean hasCooldown(C sender) {
 		return getCooldownLeft(sender)>0;
 	}
 

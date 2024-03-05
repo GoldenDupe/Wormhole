@@ -1,5 +1,6 @@
 package bet.astral.cloudplusplus;
 
+
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.cloudplusplus.command.CloudPPCommand;
@@ -17,10 +18,10 @@ import java.util.List;
 
 
 public interface CommandRegisterer<P extends JavaPlugin> extends MessageReload {
-	ArrayList<CloudPPCommand<?>> commands = new ArrayList<>();
+	ArrayList<CloudPPCommand<?, ?>> commands = new ArrayList<>();
 	P plugin();
 	Messenger<P> commandMessenger();
-	Messenger<?> debugMessenger();
+	Messenger<P> debugMessenger();
 
 
 	default void registerCommands(List<String> packages, PaperCommandManager<?> commandManager){
@@ -51,17 +52,27 @@ public interface CommandRegisterer<P extends JavaPlugin> extends MessageReload {
 		/*
 		 * This is the cloud command framework
 		 */
+		Constructor<?> constructor = null;
 		try {
-			Constructor<?> constructor = getConstructor(clazz, plugin().getClass(), PaperCommandManager.class);
+			constructor = getConstructor(clazz, plugin().getClass(), PaperCommandManager.class);
+		} catch (NoSuchMethodException ignore) {
+			try {
+				constructor = getConstructor(clazz, plugin().getClass(), this.getClass(), getClass());
+			} catch (NoSuchMethodException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		try {
 			constructor.setAccessible(true);
-			CloudPPCommand<?> reload = (CloudPPCommand<?>) constructor.newInstance(this, commandManager);
+			CloudPPCommand<?, ?> reload = (CloudPPCommand<?, ?>) constructor.newInstance(this, commandManager);
 			commands.add(reload);
 			plugin().getLogger().info("Loaded cloud command: " + clazz.getName());
-		} catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+		} catch (InvocationTargetException | InstantiationException |
 		         IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
+
 
 	default Constructor<?> getConstructor(Class<?> clazz, Class<?>... params) throws NoSuchMethodException {
 		try {

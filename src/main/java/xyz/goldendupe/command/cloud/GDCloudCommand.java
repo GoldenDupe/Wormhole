@@ -8,7 +8,7 @@ import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.messenger.GoldenMessenger;
 
 @DoNotReflect
-public class GDCloudCommand extends CloudPPCommand<GoldenDupe> {
+public class GDCloudCommand extends CloudPPCommand<GoldenDupe, CommandSender> {
 	protected final GoldenDupe goldenDupe;
 	protected GoldenMessenger commandMessenger;
 	protected GoldenMessenger debugMessenger;
