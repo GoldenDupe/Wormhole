@@ -2,10 +2,10 @@ package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.fusionflare.FusionFlare;
-import bet.astral.fusionflare.models.CubeModel;
-import bet.astral.fusionflare.models.FFModel;
+import bet.astral.fusionflare.models.CircleModel;
 import bet.astral.fusionflare.particles.AnimatedParticle;
 import bet.astral.fusionflare.particles.FFParticle;
+import bet.astral.fusionflare.utils.Rotation;
 import com.mojang.brigadier.LiteralMessage;
 import io.papermc.paper.adventure.AdventureComponent;
 import net.kyori.adventure.text.Component;
@@ -45,10 +45,10 @@ public class AdminTestCommand extends GDCloudCommand {
 		command(
 				commandBuilder("rolltest")
 						.senderType(Player.class)
-						.handler(context->{
+						.handler(context -> {
 							Player player = context.sender();
-							context.sender().sendMessage("Current Yaw: "+ player.getYaw());
-							context.sender().sendMessage("Current Pitch: "+ player.getPitch());
+							context.sender().sendMessage("Current Yaw: " + player.getYaw());
+							context.sender().sendMessage("Current Pitch: " + player.getPitch());
 							context.sender().sendMessage("Current Roll: 0");
 						})
 		);
@@ -120,7 +120,7 @@ public class AdminTestCommand extends GDCloudCommand {
 
 							Location location = sender.getEyeLocation();
 							Block block = sender.getTargetBlockExact(50);
-							if (block == null){
+							if (block == null) {
 								sender.sendMessage("No target block found.");
 								return;
 							}
@@ -129,14 +129,42 @@ public class AdminTestCommand extends GDCloudCommand {
 							double size = context.get("size");
 //							int layers = context.get("layers");
 
-							FFModel model = /*new SingleModel(fusionFlare, particle, location, 50);*/
+							Rotation rotation = new Rotation(0, 0, 0);
+							Rotation rotation2 = new Rotation(0, 0, -1);
+							CircleModel model = /*new SingleModel(fusionFlare, particle, location, 50);*/
 									/*new LineModel(fusionFlare, particle, location, location2, 20, size);*/
-									new CubeModel(fusionFlare, particle, location2, -1, 5, between, size);
+									/*new CubeModel(fusionFlare, particle, location2, -1, 5, between, size);*/
+									new CircleModel(fusionFlare, particle, location2, 1, size, rotation, (float) between);
+							CircleModel model2 = new CircleModel(fusionFlare, particle, location2, 1, -size, rotation, (float) between);
+							final boolean[] goingDown = {false};
+							plugin.getServer().getScheduler().runTaskTimer(plugin,
+									() -> {
+										double currentSize = model.getSize();
+										double sizeDiff;
+										if (goingDown[0]) {
+											sizeDiff = -0.05;
+											if (currentSize + sizeDiff < -5) {
+												goingDown[0] = false;
+											}
+										} else {
+											sizeDiff = 0.05;
+											if (currentSize + sizeDiff > 5) {
+												goingDown[0] = true;
+											}
+										}
+
+										model.expand(sizeDiff);
+										model2.expand(-sizeDiff);
+									},
+									0, 2);
 
 							sender.sendMessage("Should be showing!");
+
 							model.addReceiver(sender);
+							model2.addReceiver(sender);
 
 							fusionFlare.run(model);
+							fusionFlare.run(model2);
 						})
 		);
 	}

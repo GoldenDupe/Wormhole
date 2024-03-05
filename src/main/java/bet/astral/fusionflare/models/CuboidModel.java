@@ -5,6 +5,7 @@ import bet.astral.fusionflare.particles.FFParticle;
 import bet.astral.fusionflare.utils.LocationUtils;
 import org.bukkit.Location;
 import org.bukkit.util.NumberConversions;
+import org.bukkit.util.Vector;
 
 public class CuboidModel extends FFModel{
 	private double[][][] locations;
@@ -28,6 +29,24 @@ public class CuboidModel extends FFModel{
 		corners[5] = northEastCornerDown;
 		corners[6] = southWestCornerDown;
 		corners[7] = southEastCornerDown;
+		this.betweenEach = betweenEach;
+	}
+	public CuboidModel(FusionFlare fusionFlare, FFParticle<?> particle, Location location, int timeBetweenTicks, int timeBetweenDraws, double betweenEach, Vector northWestCornerUp, Vector northEastCornerUp, Vector southWestCornerUp, Vector southEastCornerUp, Vector northWestCornerDown, Vector northEastCornerDown, Vector southWestCornerDown, Vector southEastCornerDown) {
+		super(fusionFlare, particle, location, timeBetweenTicks, timeBetweenDraws);
+		this.corners = new double[8][];
+		//
+		// DownSouthWest -> UpSouthWest -> UpSouthEast -> DownSouthEast -> DownSouthWest -> DownNorthWest -> DownNorth
+		//
+		//
+		corners[0] = LocationUtils.toDoubleArray(northWestCornerUp);
+		corners[1] = LocationUtils.toDoubleArray(northEastCornerUp);
+		corners[2] = LocationUtils.toDoubleArray(southWestCornerUp);
+		corners[3] = LocationUtils.toDoubleArray(southEastCornerUp);
+
+		corners[4] = LocationUtils.toDoubleArray(northWestCornerDown);
+		corners[5] = LocationUtils.toDoubleArray(northEastCornerDown);
+		corners[6] = LocationUtils.toDoubleArray(southWestCornerDown);
+		corners[7] = LocationUtils.toDoubleArray(southEastCornerDown);
 		this.betweenEach = betweenEach;
 	}
 	protected CuboidModel(FusionFlare fusionFlare, FFParticle<?> particle, Location location, int timeBetweenTicks, int timeBetweenDraws, double betweenEach, double[][] corners) {
