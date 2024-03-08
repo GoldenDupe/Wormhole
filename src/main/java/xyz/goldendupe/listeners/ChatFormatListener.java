@@ -76,6 +76,11 @@ public class ChatFormatListener implements GDListener {
 				}
 			}
 			format = format.appendSpace();
+		} else {
+			Faction faction = gdPlayer.getFaction();
+			if (faction != null) {
+				format = format.append(faction.getDisplayname()).appendSpace();
+			}
 		}
 		//noinspection UnnecessaryUnicodeEscape
 		format = format.append(name)
