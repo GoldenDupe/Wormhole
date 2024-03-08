@@ -35,7 +35,7 @@ public class GamemodeCommand extends GDCloudCommand {
 		abstractCommand(GameMode.CREATIVE, "gmc");
 		abstractCommand(GameMode.SPECTATOR, "gmsp");
 		abstractCommand(GameMode.ADVENTURE, "gma");
-		command(
+		commandPlayer(
 				commandBuilder("gamemode", Description.of("Allows admin to switch their gamemode to other gamemodes."),
 						"gm")
 						.permission(MemberType.ADMINISTRATOR.cloudOf("gamemode"))
@@ -152,7 +152,7 @@ public class GamemodeCommand extends GDCloudCommand {
 								}
 							});
 						});
-		command(builder);
+		commandPlayer(builder);
 	}
 
 	private Component gamemodeSwitch(GameMode gameMode){

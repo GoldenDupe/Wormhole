@@ -18,7 +18,7 @@ import xyz.goldendupe.models.chatcolor.Color;
 public class WelcomeCommand extends GDCloudCommand {
 	public WelcomeCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
-		command(commandBuilder("welcome")
+		commandPlayer(commandBuilder("welcome")
 				.argument(PlayerParser.playerComponent().name("who"))
 				.senderType(Player.class)
 				.handler(context -> {

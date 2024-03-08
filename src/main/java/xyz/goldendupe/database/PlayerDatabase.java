@@ -19,7 +19,7 @@ public class PlayerDatabase {
 	}
 
 	public CompletableFuture<GDPlayer> load(Player player){
-		return CompletableFuture.supplyAsync(()-> new GDPlayer(player));
+		return CompletableFuture.supplyAsync(()-> new GDPlayer(goldenDupe, player));
 	}
 
 	public void unload(Player player){

@@ -55,6 +55,6 @@ public class VanishCommand extends GDCloudCommand {
 								"vanish.broadcast-staff-unvanished", commandMessenger.createPlaceholders(sender));
 					}
 				});
-		command(builder);
+		commandPlayer(builder);
 	}
 }

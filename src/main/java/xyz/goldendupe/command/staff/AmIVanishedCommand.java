@@ -13,7 +13,7 @@ import xyz.goldendupe.utils.MemberType;
 public class AmIVanishedCommand extends GDCloudCommand {
 	public AmIVanishedCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
-		command(
+		commandPlayer(
 				commandBuilder("amivanished",
 						Description.of("Allows player to see if they are vanished."))
 						.permission(MemberType.MODERATOR.cloudOf("am-i-vanished"))

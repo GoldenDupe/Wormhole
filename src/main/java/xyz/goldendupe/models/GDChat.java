@@ -5,14 +5,16 @@ import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.utils.MemberType;
 
 public enum GDChat {
+	UNKNOWN(null, null),
 	GLOBAL(null, MemberType.DEFAULT),
 	STAFF(GoldenMessenger.MessageChannel.STAFF, MemberType.MODERATOR),
 	ADMIN(GoldenMessenger.MessageChannel.ADMIN, MemberType.ADMINISTRATOR),
 	OG(GoldenMessenger.MessageChannel.OG, MemberType.OG),
 	DONATOR(GoldenMessenger.MessageChannel.DONATOR, MemberType.DONATOR),
 	BOOSTER(GoldenMessenger.MessageChannel.BOOSTER, MemberType.BOOSTER),
-	@Deprecated
-	CLAN(null, null), // Maybe??
+	CLAN(null, null),
+	CLAN_ALLY(null, null),
+
 
 	;
 	private final GoldenMessenger.MessageChannel channel;

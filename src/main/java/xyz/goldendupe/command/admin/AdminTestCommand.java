@@ -42,7 +42,7 @@ public class AdminTestCommand extends GDCloudCommand {
 	public AdminTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
 
-		command(
+		commandPlayer(
 				commandBuilder("rolltest")
 						.senderType(Player.class)
 						.handler(context -> {
@@ -100,7 +100,7 @@ public class AdminTestCommand extends GDCloudCommand {
 							context.sender().sendMessage("Hi!");
 						})
 		);
-		command(
+		commandPlayer(
 				commandBuilder(
 						"particle-test"
 				)

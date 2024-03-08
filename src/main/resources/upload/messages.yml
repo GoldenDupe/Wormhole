@@ -29,6 +29,11 @@ placeholders:
   - name: channels.booster
     value: "<gold><bold>G<white><bold>D<reset> <color:#f47fff><bold>Booster <white>"
 
+  - name: channels.clan
+    value: "<gold><bold>G<white><bold>D<reset> <yellow>%faction_name% <white>%player_prefix_name%<gray>: <white>%message%"
+  - name: channels.clan-ally
+    value: "<gold><bold>G<white><bold>D<reset> <yellow>%faction_name% <white>%player_prefix_name%<gray>: <white>%message%"
+
 # Sent to staff channel No need to set the prefix
 player-kick-cause: "<white>%player%<yellow> was kicked from the server! <gray>Cause: <white>%cause%<gray>, Whitelisted: <white>%player_is_whitelisted%<gray>, Banned: <white>%player_is_banned%<gray>, Brand: <white>%player_brand%"
 player-join-brand: "<white>%player%<yellow> joined using <white>%player_brand%"
