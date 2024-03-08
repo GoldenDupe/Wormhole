@@ -20,3 +20,7 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+    Unity:
+      load: BEFORE
+      required: true
+      join-classpath: true

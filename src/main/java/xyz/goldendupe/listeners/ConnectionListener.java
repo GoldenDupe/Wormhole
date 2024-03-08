@@ -16,12 +16,10 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.chatcolor.Color;
-import xyz.goldendupe.utils.annotations.Season;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Season(added = 1, unlock = 1, alwaysUnlocked = true)
 public class ConnectionListener implements GDListener{
 	private final GoldenDupe goldenDupe;
 	protected ConnectionListener(GoldenDupe goldenDupe) {

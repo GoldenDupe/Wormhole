@@ -6,6 +6,7 @@ import bet.astral.fluffy.FluffyCombat;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.unity.Factions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
@@ -59,8 +60,6 @@ import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<GoldenDupe> {
     private static GoldenDupe instance;
     public static final Random random = new Random(System.nanoTime());
-    public static final long FIRST_RELEASED = 1591254000L;
-    public static final long NEW_RELEASE = 1591254000L;
     public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = false;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
@@ -83,10 +82,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     // Do NOT reset
     @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
+    @Getter(AccessLevel.PUBLIC) private Factions factions;
 
     @Override
     public void onEnable() {
         fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
+        factions = Factions.getPlugin(Factions.class);
 
         uploadUploads();
         instance = this;
@@ -302,17 +303,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     }
     public boolean cannotInject(Class<?> clazz){
         DoNotReflect doNotReflect = clazz.getAnnotation(DoNotReflect.class);
-        if (doNotReflect != null){
-            return true;
-        }
-
-        Season season = clazz.getAnnotation(Season.class);
-        if (season != null){
-            // Make season specific classes easier to manage
-            // This command is not supposed to be unlocked in this season
-            return Arrays.stream(season.unlock()).noneMatch(val -> val == GoldenDupe.SEASON.asInt()) && !season.alwaysUnlocked();
-        }
-        return false;
+	    return doNotReflect != null;
     }
 
     private void loadCommands(){

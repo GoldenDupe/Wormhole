@@ -43,6 +43,8 @@ dependencies {
 
     // have it as compile only as it needs to run as it's own plugin
     compileOnly 'bet.astral:Fluffy:1.0' // Fluffy (Combat System)
+    // Factions/Clans
+    compileOnly 'bet.astral:Unity:1.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     implementation 'io.github.classgraph:classgraph:4.8.165'

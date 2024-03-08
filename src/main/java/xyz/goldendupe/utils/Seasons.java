@@ -5,15 +5,16 @@ import lombok.Getter;
 
 public enum Seasons {
 
+    OG(15912540000000L, -1),
     NONE(0, 0),
-    SEASON_1(1591254000L, 1)
+    SEASON_1(17175132000000L, 1),
     ;
 
-    @Getter(AccessLevel.PUBLIC) private final long unix;
+    @Getter(AccessLevel.PUBLIC) private final long released;
     private final int asInt;
 
-    Seasons(long unix, int asInt) {
-        this.unix = unix;
+    Seasons(long released, int asInt) {
+        this.released = released;
         this.asInt = asInt;
     }
 

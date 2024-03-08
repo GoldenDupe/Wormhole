@@ -7,10 +7,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockPlaceEvent;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.utils.MemberType;
-import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.utils.StringUtils;
 
-@Season(added = 1, unlock = 1, alwaysUnlocked = true)
 public class IllegalListener implements GDListener {
 	private final GoldenDupe goldenDupe;
 	protected IllegalListener(GoldenDupe goldenDupe) {
