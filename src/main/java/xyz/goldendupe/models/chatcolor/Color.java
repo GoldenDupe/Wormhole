@@ -8,6 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.regex.Pattern;
 
 public class Color implements Cloneable, TextColor {
+	public static Color CLAN_RED = Color.ofHex("#962121");
+	public static Color CLAN_ALLY_BLUE = Color.ofHex("#219096");
 	/*
 	 * RED
 	 */

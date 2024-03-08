@@ -23,9 +23,12 @@ public class ChatToggleListener implements GDListener{
 		GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
 
 		GDChat chat = gdPlayer.chat();
-		if (chat== GDChat.GLOBAL || chat==GDChat.CLAN){
+
+		/* None of these have a message channel, so it can be ignored.
+		if (chat== GDChat.GLOBAL || chat == GDChat.CLAN || chat == GDChat.CLAN_ALLY || chat == GDChat.UNKNOWN){
 			return;
 		}
+		 */
 
 		if (chat.asMessageChannel() == null){
 			return;
