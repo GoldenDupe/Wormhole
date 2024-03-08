@@ -1,5 +1,6 @@
 package xyz.goldendupe.models;
 
+import bet.astral.unity.Factions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPermsProvider;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.events.GDChatChangeEvent;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
@@ -15,13 +17,14 @@ import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 import xyz.goldendupe.utils.impl.SpawnPosition;
+import xyz.goldendupe.utils.reference.FactionPlayerReference;
 import xyz.goldendupe.utils.reference.PlayerReference;
 
 import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 @RequireSave
-public class GDPlayer implements Flaggable, PlayerReference {
+public class GDPlayer implements Flaggable, FactionPlayerReference, PlayerReference {
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
 	private SpawnPosition teleportingSpawn;
@@ -83,6 +86,8 @@ public class GDPlayer implements Flaggable, PlayerReference {
 	}
 
 	public GDPlayer setChat(GDChat chat) {
+		GDChatChangeEvent event = new GDChatChangeEvent(player(), this.chat, chat);
+		event.callEvent();
 		this.chat = chat;
 		return this;
 	}
@@ -217,4 +222,13 @@ public class GDPlayer implements Flaggable, PlayerReference {
 		return uniqueId;
 	}
 
+	@Override
+	public @NotNull Factions getFactions() {
+		return goldenDupe.getFactions();
+	}
+
+	@Override
+	public @NotNull GoldenDupe getGoldenDupe() {
+		return goldenDupe;
+	}
 }

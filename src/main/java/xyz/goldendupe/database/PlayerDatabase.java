@@ -1,5 +1,6 @@
 package xyz.goldendupe.database;
 
+import bet.astral.unity.utils.refrence.PlayerReference;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
@@ -36,5 +37,9 @@ public class PlayerDatabase {
 	@NotNull
 	public GDPlayer fromPlayer(Player player){
 		return players.get(player.getUniqueId());
+	}
+
+	public GDPlayer fromPlayer(PlayerReference player){
+		return players.get(player.uuid());
 	}
 }

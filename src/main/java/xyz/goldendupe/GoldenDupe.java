@@ -39,7 +39,6 @@ import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.Seasons;
-import xyz.goldendupe.utils.annotations.Season;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
