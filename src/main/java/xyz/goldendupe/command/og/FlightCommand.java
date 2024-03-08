@@ -40,8 +40,8 @@ public class FlightCommand extends GDCloudCommand {
 					sender.setFlying(sender.getAllowFlight());
 					commandMessenger.message(sender, "fly." + (sender.isFlying() ? "message-enabled" : "message-disabled"));
 				});
-		command(builder);
-		command(builder
+		commandPlayer(builder);
+		commandPlayer(builder
 				.permission(MemberType.ADMINISTRATOR.cloudOf("fly.others"))
 				.argument(PlayerParser.playerComponent().name("who-to-switch")
 						.suggestionProvider(

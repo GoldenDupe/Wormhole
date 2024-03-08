@@ -1,5 +1,7 @@
 package xyz.goldendupe.models;
 
+import bet.astral.unity.model.FPlayer;
+import bet.astral.unity.model.Faction;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPermsProvider;
@@ -7,22 +9,24 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.utils.Position;
+import xyz.goldendupe.utils.annotations.RequiresOnlinePlayer;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 import xyz.goldendupe.utils.impl.SpawnPosition;
-import xyz.goldendupe.utils.reference.PlayerReference;
+import xyz.goldendupe.utils.reference.FactionPlayerReference;
 
 import java.util.*;
 
-@RequireSave
 @SuppressWarnings({"UnusedReturnValue", "unused"})
-public class GDPlayer implements Flaggable, PlayerReference {
+@RequireSave
+public class GDPlayer implements Flaggable, FactionPlayerReference {
+	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
-
 	private SpawnPosition teleportingSpawn;
 	private GDChat chat;
 	@RequireSave
@@ -50,7 +54,8 @@ public class GDPlayer implements Flaggable, PlayerReference {
 	@NotNull
 	private final Map<NamespacedKey, Flag<?>> flags = new HashMap<>();
 
-	public GDPlayer(@NotNull Player player){
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, @NotNull Player player){
+		this.goldenDupe = goldenDupe;
 		this.uniqueId = player.getUniqueId();
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
@@ -180,6 +185,7 @@ public class GDPlayer implements Flaggable, PlayerReference {
 			Flag<V> flag = (Flag<V>) flags.get(key);
 			assert newValue != null;
 			flag.setValue(newValue);
+			return;
 		}
 		throw new IllegalStateException("Couldn't edit a flag which is not set!");
 	}
@@ -212,5 +218,24 @@ public class GDPlayer implements Flaggable, PlayerReference {
 	@Override
 	public java.util.@NotNull UUID uuid() {
 		return uniqueId;
+	}
+
+	@Override
+	@RequiresOnlinePlayer
+	public @NotNull FPlayer factionPlayer() {
+		return goldenDupe.getFactions().getPlayerManager().convert(player());
+	}
+
+	@Nullable
+	@RequiresOnlinePlayer
+	@Override
+	public java.util.UUID factionId() {
+		return factionPlayer().getFactionId();
+	}
+
+	@Override
+	@RequiresOnlinePlayer
+	public @Nullable Faction faction() {
+		return goldenDupe.getFactions().getFactionManager().get(factionPlayer().getFactionId());
 	}
 }
