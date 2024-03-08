@@ -1,11 +1,9 @@
 package xyz.goldendupe.database;
 
-import bet.astral.unity.utils.refrence.PlayerReference;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.GDPlayer;
-import xyz.goldendupe.utils.annotations.RequiresOnlinePlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +36,5 @@ public class PlayerDatabase {
 	@NotNull
 	public GDPlayer fromPlayer(Player player){
 		return players.get(player.getUniqueId());
-	}
-	@NotNull
-	@RequiresOnlinePlayer
-	public GDPlayer fromPlayer(@NotNull PlayerReference playerReference){
-		return players.get(playerReference.player());
 	}
 }

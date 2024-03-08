@@ -88,13 +88,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public void onEnable() {
         fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
 
-        factions.registerAllyChatHandler((fPlayer, faction, ally, component) -> {
-
-        });
-        factions.registerAllyChatHandler((fPlayer, faction, ally, component) -> {
-
-        });
-
         uploadUploads();
         instance = this;
 

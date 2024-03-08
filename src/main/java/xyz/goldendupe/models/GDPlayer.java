@@ -1,7 +1,5 @@
 package xyz.goldendupe.models;
 
-import bet.astral.unity.model.FPlayer;
-import bet.astral.unity.model.Faction;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPermsProvider;
@@ -12,19 +10,18 @@ import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.utils.Position;
-import xyz.goldendupe.utils.annotations.RequiresOnlinePlayer;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 import xyz.goldendupe.utils.impl.SpawnPosition;
-import xyz.goldendupe.utils.reference.FactionPlayerReference;
+import xyz.goldendupe.utils.reference.PlayerReference;
 
 import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 @RequireSave
-public class GDPlayer implements Flaggable, FactionPlayerReference {
+public class GDPlayer implements Flaggable, PlayerReference {
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
 	private SpawnPosition teleportingSpawn;
@@ -220,22 +217,4 @@ public class GDPlayer implements Flaggable, FactionPlayerReference {
 		return uniqueId;
 	}
 
-	@Override
-	@RequiresOnlinePlayer
-	public @NotNull FPlayer factionPlayer() {
-		return goldenDupe.getFactions().getPlayerManager().convert(player());
-	}
-
-	@Nullable
-	@RequiresOnlinePlayer
-	@Override
-	public java.util.UUID factionId() {
-		return factionPlayer().getFactionId();
-	}
-
-	@Override
-	@RequiresOnlinePlayer
-	public @Nullable Faction faction() {
-		return goldenDupe.getFactions().getFactionManager().get(factionPlayer().getFactionId());
-	}
 }
