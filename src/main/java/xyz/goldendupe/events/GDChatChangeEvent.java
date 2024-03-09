@@ -22,7 +22,7 @@ public class GDChatChangeEvent extends PlayerEvent {
 	}
 
 
-	public HandlerList getHandlerList(){
+	public static HandlerList getHandlerList(){
 		return HANDLER_LIST;
 	}
 

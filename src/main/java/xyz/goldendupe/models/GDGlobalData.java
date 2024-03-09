@@ -60,7 +60,10 @@ public class GDGlobalData {
 			if (randomIllegals.contains(material.name())){
 				continue;
 			}
-			randomItems.add(new ItemStack(material));
+			World world = Bukkit.getWorlds().get(0);
+			if (material.isEnabledByFeature(world)){
+				randomItems.add(new ItemStack(material));
+			}
 		}
 		if (illegalConfig.getBoolean("random.all-goat-horns", false)){
 			for (MusicInstrument instrument : Registry.INSTRUMENT){

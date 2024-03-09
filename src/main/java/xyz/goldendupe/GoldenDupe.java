@@ -272,8 +272,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
             try {
                 constructor.setAccessible(true);
                 Listener eventListener = (Listener) constructor.newInstance(this);
+                if (isDebug)
+                    getLogger().info("Registering listener: "+ listener.getName());
+
                 getServer().getPluginManager().registerEvents(eventListener, this);
-                getLogger().info("Registered listener: "+ listener.getName());
+                if (isDebug)
+                    getLogger().info("Registered listener: "+ listener.getName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException("Failed to initialize event constructor with params GoldenDupe.class", e);
             }
@@ -283,8 +287,11 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
                 try {
                     constructor.setAccessible(true);
                     Listener eventListener = (Listener) constructor.newInstance();
+                    if (isDebug)
+                        getLogger().info("Registering listener: "+ listener.getName());
                     getServer().getPluginManager().registerEvents(eventListener, this);
-                    getLogger().info("Registered listener: "+ listener.getName());
+                    if (isDebug)
+                        getLogger().info("Registered listener: "+ listener.getName());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException("Failed to initialize event constructor no params", e);
                 }
@@ -394,6 +401,12 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         return commandMessenger;
     }
 
+    @Override
+    public GoldenMessenger commandMessenger() {
+        return commandMessenger;
+    }
+
+    @Override
     public GoldenMessenger debugMessenger() {
         return debugMessenger;
     }
@@ -401,10 +414,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     @Override
     public GoldenDupe plugin() {
         return this;
-    }
-
-    public GoldenMessenger commandMessenger() {
-        return commandMessenger;
     }
 
     public PlayerDatabase playerDatabase() {
@@ -435,5 +444,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public CommandSpyDatabase commandSpyDatabase() {
         return commandSpyDatabase;
     }
+
 
 }
