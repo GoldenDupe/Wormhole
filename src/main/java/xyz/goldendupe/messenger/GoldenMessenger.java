@@ -142,13 +142,6 @@ public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoa
 
 
 	@Override
-	protected void sendConsole(@NotNull CommandSender to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, Placeholder... placeholders) {
-		if (isDebugMessenger && !plugin().isDebug())
-			return;
-		super.sendConsole(to, message, type, delay, senderSpecificPlaceholders, placeholders);
-	}
-
-	@Override
 	protected void sendConsole(@NotNull CommandSender to, @NotNull Message message, Message.@NotNull Type type, int delay, boolean senderSpecificPlaceholders, List<Placeholder> placeholders) {
 		if (isDebugMessenger && !plugin().isDebug())
 			return;
