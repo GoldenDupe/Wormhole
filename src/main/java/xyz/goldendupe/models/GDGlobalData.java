@@ -56,13 +56,19 @@ public class GDGlobalData {
 		addMaterials(illegalPlacement, illegalConfig.getStringList("placement"));
 
 		List<String> randomIllegals = illegalConfig.getStringList("random.illegals");
-		for (Material material : Material.values()){
+		randomItems = new LinkedList<>();
+		for (Material material : Registry.MATERIAL){
+//		for (Material material : Material.values()){
 			if (randomIllegals.contains(material.name())){
 				continue;
 			}
 			World world = Bukkit.getWorlds().get(0);
-			if (material.isEnabledByFeature(world)){
-				randomItems.add(new ItemStack(material));
+			try {
+				if (material.isEnabledByFeature(world)) {
+					randomItems.add(new ItemStack(material));
+				}
+			} catch (NullPointerException e){
+				getGoldenDupe().getLogger().severe("Couldn't check if material "+ material.key().namespace()+":"+ material.key().value()+ " is a data pack only item!");
 			}
 		}
 		if (illegalConfig.getBoolean("random.all-goat-horns", false)){
