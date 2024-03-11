@@ -9,7 +9,7 @@ import org.bukkit.util.Vector;
 
 public class CuboidModel extends FFModel{
 	private double[][][] locations;
-	private final double[][] corners;
+	private double[][] corners;
 	private final double betweenEach;
 	private boolean calculating = false;
 
@@ -128,6 +128,11 @@ public class CuboidModel extends FFModel{
 		LocationUtils.fromDoubleArray(to, beforeLast);
 
 		return locations;
+	}
+
+	protected void resize(double[][] newSize){
+		this.locations = null;
+		this.corners = newSize;
 	}
 
 	@Override

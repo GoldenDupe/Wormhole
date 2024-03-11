@@ -3,6 +3,7 @@ package xyz.goldendupe.command.admin;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.fusionflare.models.CircleModel;
+import bet.astral.fusionflare.models.CubeModel;
 import bet.astral.fusionflare.particles.AnimatedParticle;
 import bet.astral.fusionflare.particles.FFParticle;
 import bet.astral.fusionflare.utils.Rotation;
@@ -135,7 +136,7 @@ public class AdminTestCommand extends GDCloudCommand {
 									/*new LineModel(fusionFlare, particle, location, location2, 20, size);*/
 									/*new CubeModel(fusionFlare, particle, location2, -1, 5, between, size);*/
 									new CircleModel(fusionFlare, particle, location2, 1, size, rotation, (float) between);
-							CircleModel model2 = new CircleModel(fusionFlare, particle, location2, 1, -size, rotation, (float) between);
+							CubeModel model2 = new CubeModel(fusionFlare, particle, location2, 1, 4, between, size);
 							final boolean[] goingDown = {false};
 							plugin.getServer().getScheduler().runTaskTimer(plugin,
 									() -> {
@@ -154,7 +155,7 @@ public class AdminTestCommand extends GDCloudCommand {
 										}
 
 										model.expand(sizeDiff);
-										model2.expand(-sizeDiff);
+										model2.expand(-sizeDiff*3);
 									},
 									0, 2);
 

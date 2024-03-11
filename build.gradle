@@ -71,6 +71,13 @@ dependencies {
     paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
 }
 
+// Some shit is importing 1.13 bukkit api and not 1.20.1 api
+configurations.compileOnly {
+    exclude group: 'org.spigotmc', module: 'spigot'
+    exclude group: 'org.spigotmc', module: 'spigot-api'
+    exclude group: 'org.bukkit', module: 'bukkit'
+}
+
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)

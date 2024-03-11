@@ -65,13 +65,13 @@ public class ChatFormatListener implements GDListener {
 					if (!receiver.getFactionID().equals(sender.getFactionID())){
 						throw new RuntimeException("Couldn't message "+ receiver.offlinePlayer().getName() + " ("+receiver.uuid()+") as they are not in the same clan as "+ sender.offlinePlayer().getName() + " ("+sender.offlinePlayer().getUniqueId()+"). The GDChat type is set to CLAN and not CLAN_ALLY!");
 					}
-					format = format.append(Component.text("CLAN ", Color.CLAN_RED, TextDecoration.UNDERLINED).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed only displayed to your clan.", Color.CLAN_RED)))));
+					format = format.append(Component.text("CLAN", Color.CLAN_RED, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed only displayed to your clan.", Color.CLAN_RED)))));
 				}
 				case CLAN_ALLY -> {
 					if (!receiver.getFactionID().equals(sender.getFactionID())){
-						format = format.append(Component.text("ALLY ", Color.CLAN_ALLY_BLUE, TextDecoration.UNDERLINED).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan's ally.", Color.WHITE).appendNewline().append(Component.text("This message is displayed from an ally of your faction.", Color.CLAN_ALLY_BLUE)))));
+						format = format.append(Component.text("ALLY", Color.CLAN_ALLY_BLUE, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan's ally.", Color.WHITE).appendNewline().append(Component.text("This message is displayed from an ally of your faction.", Color.CLAN_ALLY_BLUE)))));
 					} else {
-						format = format.append(Component.text("CLAN ", Color.CLAN_ALLY_BLUE, TextDecoration.UNDERLINED).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed to all allies of the faction.", Color.CLAN_ALLY_BLUE)))));
+						format = format.append(Component.text("CLAN", Color.CLAN_ALLY_BLUE, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed to all allies of the faction.", Color.CLAN_ALLY_BLUE)))));
 					}
 				}
 			}
