@@ -12,7 +12,7 @@ import static xyz.goldendupe.models.chatcolor.GDChatColor.Mode.SINGLE;
 @RequireSave
 public class GDChatColor {
 	public static GDChatColor DEFAULT = new GDChatColor(
-			SINGLE, Color.GRAY);
+			SINGLE, Color.WHITE);
 
 	private Map<Integer, Color> colors;
 	private Mode mode;

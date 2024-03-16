@@ -2,6 +2,8 @@ package xyz.goldendupe.listeners;
 
 import bet.astral.messenger.Message;
 import bet.astral.messenger.placeholder.PlaceholderList;
+import bet.astral.unity.model.FPrefix;
+import bet.astral.unity.model.FRole;
 import bet.astral.unity.model.Faction;
 import bet.astral.unity.utils.refrence.FactionReferenceImpl;
 import io.papermc.paper.chat.ChatRenderer;
@@ -65,7 +67,10 @@ public class ChatFormatListener implements GDListener {
 					if (!receiver.getFactionID().equals(sender.getFactionID())){
 						throw new RuntimeException("Couldn't message "+ receiver.offlinePlayer().getName() + " ("+receiver.uuid()+") as they are not in the same clan as "+ sender.offlinePlayer().getName() + " ("+sender.offlinePlayer().getUniqueId()+"). The GDChat type is set to CLAN and not CLAN_ALLY!");
 					}
-					format = format.append(Component.text("CLAN", Color.CLAN_RED, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed only displayed to your clan.", Color.CLAN_RED)))));
+					format = format.append(Component.text("CLAN", Color.CLAN_RED, TextDecoration.BOLD)
+							.hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE)
+									.appendNewline()
+									.append(Component.text("This message is displayed only displayed to your clan.", Color.CLAN_RED)))));
 				}
 				case CLAN_ALLY -> {
 					if (!receiver.getFactionID().equals(sender.getFactionID())){
@@ -75,11 +80,24 @@ public class ChatFormatListener implements GDListener {
 					}
 				}
 			}
-			format = format.appendSpace();
+			Faction faction = gdPlayer.getFaction();
+			assert faction != null;
+			FPrefix prefix = faction.getPrivatePrefix(player);
+			format = format
+					.appendSpace()
+					.append(prefix.format(player))
+					.appendSpace()
+					.append(Component.text("\u00BB", NamedTextColor.GRAY))
+					.appendSpace()
+					.append(message);
+			return format;
 		} else {
 			Faction faction = gdPlayer.getFaction();
 			if (faction != null) {
-				format = format.append(faction.getDisplayname()).appendSpace();
+				FRole role = faction.getRole(player);
+				FPrefix prefix = faction.getPublicPrefix(role);
+				format = format.append(prefix.format(faction)).appendSpace();
+//              format = format.append(faction.getDisplayname()).appendSpace();
 			}
 		}
 		//noinspection UnnecessaryUnicodeEscape

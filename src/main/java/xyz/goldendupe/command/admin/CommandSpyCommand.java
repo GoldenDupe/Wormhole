@@ -72,7 +72,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 													List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 													players.removeIf(p -> user.blockedUsers().contains(p.getUniqueId()));
 
-													return players.stream().map(Player::getName).map(Suggestion::simple).collect(Collectors.toSet());
+													return players.stream().map(Player::getName).map(Suggestion::suggestion).collect(Collectors.toSet());
 												});
 											}
 										}
@@ -106,7 +106,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 													List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 													players.removeIf(p -> !user.blockedUsers().contains(p.getUniqueId()));
 
-													return players.stream().map(Player::getName).map(Suggestion::simple).collect(Collectors.toSet());
+													return players.stream().map(Player::getName).map(Suggestion::suggestion).collect(Collectors.toSet());
 												});
 											}
 										}
@@ -148,7 +148,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 														commands.add("/"+command);
 													}
 
-													return commands.stream().map(Suggestion::simple).collect(Collectors.toSet());
+													return commands.stream().map(Suggestion::suggestion).collect(Collectors.toSet());
 												});
 											}
 										}
@@ -188,7 +188,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 														commands.add("/"+command);
 													}
 
-													return commands.stream().map(Suggestion::simple).collect(Collectors.toSet());
+													return commands.stream().map(Suggestion::suggestion).collect(Collectors.toSet());
 												});
 											}
 										}

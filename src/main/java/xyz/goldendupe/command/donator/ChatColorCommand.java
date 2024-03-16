@@ -166,7 +166,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					.setBackground(background)
 					.build();
 
-			mainMenu.shared = true;
+			mainMenu.shared = false;
 		}
 		mainMenu.generateInventory(player);
 	}
@@ -221,7 +221,7 @@ public class ChatColorCommand extends GDCloudCommand {
 				.setBackground(background)
 				.build();
 
-		profile.gradientPositionMenu.shared = true;
+		profile.gradientPositionMenu.shared = false;
 		profile.gradientPositionMenu.generateInventory(player);
 	}
 

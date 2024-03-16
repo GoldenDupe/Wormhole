@@ -34,7 +34,7 @@ public class RenameCommand extends GDCloudCommand {
 								.suggestionProvider(new SuggestionProvider<>() {
 									@Override
 									public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
-										return CompletableFuture.completedFuture(List.of(Suggestion.simple(context.sender() instanceof Player player ? LegacyComponentSerializer.legacyAmpersand().serialize(player.getInventory().getItemInMainHand().displayName()) : "")));
+										return CompletableFuture.completedFuture(List.of(Suggestion.suggestion(context.sender() instanceof Player player ? LegacyComponentSerializer.legacyAmpersand().serialize(player.getInventory().getItemInMainHand().displayName()) : "")));
 									}
 								})
 						)
