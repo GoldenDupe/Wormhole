@@ -18,13 +18,11 @@ import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 import xyz.goldendupe.utils.impl.SpawnPosition;
 import xyz.goldendupe.utils.reference.FactionPlayerReference;
-import xyz.goldendupe.utils.reference.PlayerReference;
-
 import java.util.*;
 
 @SuppressWarnings({"UnusedReturnValue", "unused"})
 @RequireSave
-public class GDPlayer implements Flaggable, FactionPlayerReference, PlayerReference {
+public class GDPlayer implements Flaggable, FactionPlayerReference {
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
 	private SpawnPosition teleportingSpawn;
@@ -227,8 +225,12 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, PlayerRefere
 		return goldenDupe.getFactions();
 	}
 
-	@Override
 	public @NotNull GoldenDupe getGoldenDupe() {
 		return goldenDupe;
+	}
+
+	@Override
+	public java.util.@Nullable UUID getFactionId() {
+		return getFactionID();
 	}
 }
