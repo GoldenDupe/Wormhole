@@ -105,6 +105,9 @@ nickname:
   message-illegal: "%prefix_short% %nickname% is not allowed in our server."
   message-changed: "%prefix_short% Changed your nickname to %nickname%."
 
+uptime:
+  message-uptime: "%prefix% <yellow>The server has been up for <white>%time%<yellow>!"
+
 #
 # /Dupe
 #
