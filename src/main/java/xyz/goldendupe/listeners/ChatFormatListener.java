@@ -45,10 +45,8 @@ public class ChatFormatListener implements GDListener {
 		if (roleOptional.isPresent()){
 			OriginalMemberType originalMemberType = roleOptional.get();
 			name = name.hoverEvent(HoverEvent.showText(Component
-					.text("Original role ", Color.MINECOIN)
-					.append(Component.text(originalMemberType.name(),
-							Color.YELLOW
-							))
+					.text("Previously known as ", Color.GREEN)
+					.append(originalMemberType.displayname(player))
 			));
 		}
 

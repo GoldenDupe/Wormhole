@@ -30,8 +30,8 @@ public class MarkAsOGCommand extends GDCloudCommand {
 										.name("who")
 						)
 						.required(
-								EnumParser.enumComponent(MemberType.class)
-										.name("old-role")
+								EnumParser.enumComponent(OriginalMemberType.class)
+										.name(OG_ROLE_KEY)
 						)
 						.handler(context->{
 							CommandSender sender = context.sender();
@@ -45,7 +45,8 @@ public class MarkAsOGCommand extends GDCloudCommand {
 								sender.sendMessage("Couldn't find luck perms user for "+ who.getName());
 								return;
 							}
-							MetaNode roleNode = MetaNode.builder("original-role", originalMemberType.name()).build();
+							user.data().clear((node)->node.getKey().equalsIgnoreCase(OG_ROLE_KEY));
+							MetaNode roleNode = MetaNode.builder(OG_ROLE_KEY, originalMemberType.name()).build();
 							user.data().add(roleNode);
 							luckPerms.getUserManager().saveUser(user);
 
