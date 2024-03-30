@@ -47,7 +47,7 @@ public class GamemodeCommand extends GDCloudCommand {
 											@Override
 											public @NonNull CompletableFuture<? extends @NonNull Iterable<? extends @NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> Bukkit.getOnlinePlayers().stream().map(player ->
-														TooltipSuggestion.tooltipSuggestion(player.getName(),
+														TooltipSuggestion.suggestion(player.getName(),
 																new AdventureComponent(
 																		player.name().appendSpace().append(Component.text("|", Color.DARK_GRAY))
 																				.appendSpace()
@@ -107,7 +107,7 @@ public class GamemodeCommand extends GDCloudCommand {
 											@Override
 											public @NonNull CompletableFuture<? extends @NonNull Iterable<? extends @NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> Bukkit.getOnlinePlayers().stream().map(player ->
-														TooltipSuggestion.tooltipSuggestion(player.getName(),
+														TooltipSuggestion.suggestion(player.getName(),
 																new AdventureComponent(
 																		player.name().appendSpace().append(Component.text("|", Color.DARK_GRAY))
 																				.appendSpace()

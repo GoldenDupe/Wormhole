@@ -22,6 +22,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.brigadier.suggestion.TooltipSuggestion;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.minecraft.extras.suggestion.ComponentTooltipSuggestion;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.DoubleParser;
 import org.incendo.cloud.parser.standard.StringParser;
@@ -68,27 +69,31 @@ public class AdminTestCommand extends GDCloudCommand {
 												return CompletableFuture.supplyAsync(() -> {
 													List<Suggestion> suggestions = new LinkedList<>();
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion(
+															TooltipSuggestion.suggestion(
 																	"Hello!",
 																	new LiteralMessage("Bye!")));
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion(
+															TooltipSuggestion.suggestion(
 																	"Hopefully-new-line!",
 																	new LiteralMessage("New\nLine")));
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion(
+															TooltipSuggestion.suggestion(
 																	"Do components work?!",
 																	new LiteralMessage(GsonComponentSerializer.gson().serialize(Component.text("Hello", NamedTextColor.RED)))));
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion(
+															TooltipSuggestion.suggestion(
 																	"Translatable?",
 																	new LiteralMessage(GsonComponentSerializer.gson().serialize(Component.translatable(Material.DIAMOND_SWORD.translationKey())))));
+
+													suggestions.add(
+															ComponentTooltipSuggestion
+																	.suggestion("Cloud update added component tool tips.", Component.text("Tooltip suggestions in cloud minecraft extras")));
 													// Looked at cloud, and they are not done implementing component-based tooltips
 
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion("NMS Component?", new AdventureComponent(Component.text("This is a NMS component", Color.SHIT))));
+															TooltipSuggestion.suggestion("NMS Component?", new AdventureComponent(Component.text("This is a NMS component", Color.SHIT))));
 													suggestions.add(
-															TooltipSuggestion.tooltipSuggestion("NMS Component? w/new line?", new AdventureComponent(Component.text("Checking for new line", Color.DIAMOND).appendNewline().append(Component.text("If it works it works.", Color.REDSTONE)))));
+															TooltipSuggestion.suggestion("NMS Component? w/new line?", new AdventureComponent(Component.text("Checking for new line", Color.DIAMOND).appendNewline().append(Component.text("If it works it works.", Color.REDSTONE)))));
 													return suggestions;
 												});
 

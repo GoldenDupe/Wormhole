@@ -83,6 +83,11 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
     @Getter(AccessLevel.PUBLIC) private Factions factions;
 
+    public GoldenDupe(GoldenDupeBoostrap boostrap){}
+    private GoldenDupe() {
+        throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
+    }
+
     @Override
     public void onEnable() {
         fluffy = FluffyCombat.getPlugin(FluffyCombat.class);

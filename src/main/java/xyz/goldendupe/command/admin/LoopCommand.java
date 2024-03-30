@@ -54,7 +54,7 @@ public class LoopCommand extends GDCloudCommand {
 										new SuggestionProvider<>() {
 											@Override
 											public @NonNull CompletableFuture<? extends @NonNull Iterable<? extends @NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
-												return CompletableFuture.supplyAsync(()->Bukkit.getCommandMap().getKnownCommands().values().stream().map(command-> TooltipSuggestion.tooltipSuggestion(command.getName(), new LiteralMessage(command.getDescription()))).collect(Collectors.toList()));
+												return CompletableFuture.supplyAsync(()->Bukkit.getCommandMap().getKnownCommands().values().stream().map(command-> TooltipSuggestion.suggestion(command.getName(), new LiteralMessage(command.getDescription()))).collect(Collectors.toList()));
 											}
 										}
 								)
