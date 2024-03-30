@@ -152,10 +152,10 @@ public class ChatColorCommand extends GDCloudCommand {
 			});
 
 			List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-			Clickable gradientBuilder = new ClickableBuilder(gradient).setAction(clickTypes, (clickable, item, playerCon)-> createGradientMenu(player)).setPermission("goldendupe.donator.chatcolor.gradient").build();
-			Clickable singleBuilder = new ClickableBuilder(single).setAction(clickTypes, (clickable, item, playerCon)-> createSingleMenu(player)).setPermission("goldendupe.donator.chatcolor.gradient").build();
-			Clickable rainbowBuilder = new ClickableBuilder(rainbow).setAction(clickTypes, (clickable, item, playerCon)-> createRainbowMenu(player)).setPermission("goldendupe.donator.chatcolor.gradient").build();
-			Clickable formatBuilder = new ClickableBuilder(format).setAction(clickTypes, (clickable, item, playerCon)-> createFormatMenu(player)).setPermission("goldendupe.donator.chatcolor.gradient").build();
+			Clickable gradientBuilder = new ClickableBuilder(gradient).setAction(clickTypes, (clickable, item, playerCon)-> createGradientMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient")).build();
+			Clickable singleBuilder = new ClickableBuilder(single).setAction(clickTypes, (clickable, item, playerCon)-> createSingleMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.color")).build();
+			Clickable rainbowBuilder = new ClickableBuilder(rainbow).setAction(clickTypes, (clickable, item, playerCon)-> createRainbowMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow")).build();
+			Clickable formatBuilder = new ClickableBuilder(format).setAction(clickTypes, (clickable, item, playerCon)-> createFormatMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.format")).build();
 
 			mainMenu = new GUIBuilder(1)
 					.name(Component.text("Chat Color"))
@@ -198,15 +198,15 @@ public class ChatColorCommand extends GDCloudCommand {
 		nineDefault.editMeta(meta->meta.displayName(Component.text("Set gradient position 9 color", MINECOIN).decoration(TextDecoration.ITALIC, false).compact()));
 
 		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-		Clickable one = new ClickableBuilder(oneDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 0)).setPermission("goldendupe.donator.chatcolor.gradient.position.1").build();
-		Clickable two = new ClickableBuilder(twoDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 1)).setPermission("goldendupe.donator.chatcolor.gradient.position.2").build();
-		Clickable three = new ClickableBuilder(threeDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 2)).setPermission("goldendupe.donator.chatcolor.gradient.position.3").build();
-		Clickable four = new ClickableBuilder(fourDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 3)).setPermission("goldendupe.donator.chatcolor.gradient.position.4").build();
-		Clickable five = new ClickableBuilder(fiveDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 4)).setPermission("goldendupe.donator.chatcolor.gradient.position.5").build();
-		Clickable six = new ClickableBuilder(sixDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 5)).setPermission("goldendupe.donator.chatcolor.gradient.position.6").build();
-		Clickable seven = new ClickableBuilder(sevenDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 6)).setPermission("goldendupe.donator.chatcolor.gradient.position.7").build();
-		Clickable eight = new ClickableBuilder(eightDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 7)).setPermission("goldendupe.donator.chatcolor.gradient.position.8").build();
-		Clickable nine = new ClickableBuilder(nineDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 8)).setPermission("goldendupe.donator.chatcolor.gradient.position.9").build();
+		Clickable one = new ClickableBuilder(oneDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 0)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.1")).build();
+		Clickable two = new ClickableBuilder(twoDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 1)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.2")).build();
+		Clickable three = new ClickableBuilder(threeDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 2)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.3")).build();
+		Clickable four = new ClickableBuilder(fourDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 3)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.4")).build();
+		Clickable five = new ClickableBuilder(fiveDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 4)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.5")).build();
+		Clickable six = new ClickableBuilder(sixDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 5)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.6")).build();
+		Clickable seven = new ClickableBuilder(sevenDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 6)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.7")).build();
+		Clickable eight = new ClickableBuilder(eightDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 7)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.8")).build();
+		Clickable nine = new ClickableBuilder(nineDefault).setAction(clickTypes, (clickable, item, p)->createGradientSelect(player, 8)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position.9")).build();
 		profile.gradientPositionMenu = new GUIBuilder(1)
 				.name(Component.text("Chat Color > Gradient"))
 				.addSlotClickable(0, one)
@@ -314,7 +314,7 @@ public class ChatColorCommand extends GDCloudCommand {
 			gdPlayer.setColor(chatColor);
 			player.sendMessage(Component.text("Set rainbow start position to " + slot, MINECOIN));
 		}).setDisplayIfNoPermissions(true)
-				.setPermission("goldendupe.donator.chatcolor.rainbow.position."+slot)
+				.setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow.position."+slot))
 				.build();
 	}
 
@@ -344,7 +344,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					player.sendMessage(Component.text("Set rainbow type to " + (reverse ? "reserved" : "forward"), MINECOIN));
 				})
 				.setDisplayIfNoPermissions(true)
-				.setPermission("goldendupe.donator.chatcolor.rainbow."+(reverse?"reverse":"forward"))
+				.setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow."+(reverse?"reverse":"forward")))
 				.build();
 	}
 
@@ -456,7 +456,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					player.sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " underlined messages in chat messages.", MINECOIN));
 					createFormatMenu(player);
 				})
-						.setPermission("goldendupe.donator.chatcolor.format.underlined")
+						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.underlined"))
 						.build())
 				.addSlotClickable(2, new ClickableBuilder(strike).setAction(clickTypes, (clickable, item, p)->{
 					GDChatColor chatColor = gdPlayer.color();
@@ -473,7 +473,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					player.sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " strikethrough messages in chat messages.", MINECOIN));
 					createFormatMenu(player);
 				})
-						.setPermission("goldendupe.donator.chatcolor.format.strikethrough")
+						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
 						.build())
 				.addSlotClickable(6, new ClickableBuilder(italic).setAction(clickTypes, (clickable, item, p)->{
 					GDChatColor chatColor = gdPlayer.color();
@@ -490,7 +490,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					player.sendMessage(Component.text(((enabled) ? "Disabled" : "Enabled") + " italic messages in chat messages.", MINECOIN));
 					createFormatMenu(player);
 				})
-						.setPermission("goldendupe.donator.chatcolor.format.italic")
+						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"))
 						.build())
 				.addSlotClickable(8, new ClickableBuilder(bold).setAction(clickTypes, (clickable, item, p)->{
 					GDChatColor chatColor = gdPlayer.color();
@@ -506,7 +506,7 @@ public class ChatColorCommand extends GDCloudCommand {
 					});
 					player.sendMessage(Component.text(((enabled) ? "Disabled" : "Enabled") + " bold messages in chat messages.", MINECOIN));
 					createFormatMenu(player);
-				})						.setPermission("goldendupe.donator.chatcolor.format.bold")
+				})						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"))
 
 						.build())
 				.addSlotClickable(4, new ClickableBuilder(reset)
@@ -525,7 +525,7 @@ public class ChatColorCommand extends GDCloudCommand {
 							player.sendMessage(Component.text("Reset all chat formatting choices.", MINECOIN));
 							createFormatMenu(player);
 						})
-						.setPermission("goldendupe.donator.chatcolor.format.reset")
+						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.reset"))
 						.build()
 				)
 
