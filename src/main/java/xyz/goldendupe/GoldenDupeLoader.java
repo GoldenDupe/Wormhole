@@ -15,8 +15,7 @@ public class GoldenDupeLoader implements PluginLoader {
 		MavenLibraryResolver resolver = new MavenLibraryResolver();
 
 		// Sonatype
-
-		resolver.addRepository(new RemoteRepository.Builder("sonatype", "snapshots", "https://oss.sonatype.org/content/repositories/snapshots/").build());
+		resolver.addRepository(new RemoteRepository.Builder("sonatype", "default", "https://oss.sonatype.org/content/repositories/snapshots/").build());
 
 		// Cloud
 		String cloudFramework = "2.0.0-SNAPSHOT";
@@ -24,16 +23,21 @@ public class GoldenDupeLoader implements PluginLoader {
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:"+cloudFramework), null));
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-brigadier:"+cloudFramework), null));
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-minecraft-extras:"+cloudFramework), null));
+		pluginClasspathBuilder.addLibrary(resolver);
 
+		resolver = new MavenLibraryResolver();
+
+
+
+
+		// Maven Central
+		resolver.addRepository(new RemoteRepository.Builder("central", "default", "https://repo1.maven.org/maven2/").build());
 
 		// Classgraph for reflections
 		resolver.addDependency(new Dependency(new DefaultArtifact("io.github.classgraph:classgraph:4.8.165"), null));
 
 		// Database stuff (mysql)
 		resolver.addDependency(new Dependency(new DefaultArtifact("com.zaxxer:HikariCP:5.1.0"), null));
-
-//		resolver.addDependency(new Dependency(new DefaultArtifact()));
-
 		pluginClasspathBuilder.addLibrary(resolver);
 	}
 }

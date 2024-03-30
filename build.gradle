@@ -122,10 +122,6 @@ shadowJar {
     archiveClassifier = null
 
     relocate 'bet.astral.messenger', 'xyz.goldendupe.libs.bet.astral.messenger'
-
-    relocate 'io.github.classgraph', "xyz.goldendupe.libs.io.github.classgraph"
-    relocate 'org.incendo.cloud', 'xyz.goldendupe.libs.org.incendo.cloud'
-    relocate 'org.apache.commons', 'xyz.goldendupe.libs.org.apache.commons'
 }
 
 tasks {
