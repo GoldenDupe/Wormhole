@@ -13,14 +13,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.luckperms.api.LuckPerms;
+import net.luckperms.api.cacheddata.CachedMetaData;
+import net.luckperms.api.model.user.User;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.command.admin.MarkAsOGCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
+import xyz.goldendupe.utils.OriginalMemberType;
+
+import java.util.Optional;
 
 public class ChatFormatListener implements GDListener {
 	private static GoldenDupe goldenDupe;
@@ -30,6 +37,20 @@ public class ChatFormatListener implements GDListener {
 	}
 	public static @NotNull Component format(Player player, Audience whoSees, GDChat chat, Component message) {
 		Component name = GoldenMessenger.prefixNameSuffix(player);
+
+		LuckPerms luckPerms = goldenDupe.luckPerms();
+		User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
+		CachedMetaData originalRoleNode = user.getCachedData().getMetaData();
+		Optional<OriginalMemberType> roleOptional = originalRoleNode.getMetaValue(MarkAsOGCommand.OG_ROLE_KEY, OriginalMemberType::valueOf);
+		if (roleOptional.isPresent()){
+			OriginalMemberType originalMemberType = roleOptional.get();
+			name = name.hoverEvent(HoverEvent.showText(Component
+					.text("Original role ", Color.MINECOIN)
+					.append(Component.text(originalMemberType.name(),
+							Color.YELLOW
+							))
+			));
+		}
 
 		Component format = Component.empty();
 		GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
