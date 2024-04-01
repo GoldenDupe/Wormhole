@@ -133,16 +133,16 @@ public class DupeCommand extends GDCloudCommand {
 		}, 20, DUPE_GUI_TICKS);
 	}
 
-	public boolean canDupe(ItemStack itemStack){
-		if (itemStack.hasItemMeta()){
+	public boolean canDupe(ItemStack itemStack) {
+		if (itemStack.hasItemMeta()) {
 			ItemMeta meta = itemStack.getItemMeta();
 			PersistentDataContainer container = meta.getPersistentDataContainer();
-			if (container.has(goldenDupe.KEY_UNDUPABLE) && Boolean.TRUE.equals(container.get(goldenDupe.KEY_UNDUPABLE, PersistentDataType.BOOLEAN))){
+			if (container.has(goldenDupe.KEY_UNDUPABLE) && Boolean.TRUE.equals(container.get(goldenDupe.KEY_UNDUPABLE, PersistentDataType.BOOLEAN))) {
 				return false;
 			}
 		}
-		for (Material material : goldenDupe.getGlobalData().getIllegalDupe()){
-			if (material==itemStack.getType()){
+		for (Material material : goldenDupe.getGlobalData().getIllegalDupe()) {
+			if (material == itemStack.getType()) {
 				return false;
 			}
 		}
