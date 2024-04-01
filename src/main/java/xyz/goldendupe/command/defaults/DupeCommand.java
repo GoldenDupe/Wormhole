@@ -99,11 +99,11 @@ public class DupeCommand extends GDCloudCommand {
 						if (sender.getInventory().addItem(itemStack).isEmpty()){
 							continue;
 						}
-						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug));
+						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug+1));
 						return;
 					}
 					if (debug>1){
-						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug));
+						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug+1));
 					}
 				})
 		);
