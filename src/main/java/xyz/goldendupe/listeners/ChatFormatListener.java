@@ -42,12 +42,14 @@ public class ChatFormatListener implements GDListener {
 		User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
 		CachedMetaData originalRoleNode = user.getCachedData().getMetaData();
 		Optional<OriginalMemberType> roleOptional = originalRoleNode.getMetaValue(MarkAsOGCommand.OG_ROLE_KEY, OriginalMemberType::valueOf);
-		if (roleOptional.isPresent()){
+		if (roleOptional.isPresent()) {
 			OriginalMemberType originalMemberType = roleOptional.get();
 			name = name.hoverEvent(HoverEvent.showText(Component
-					.text("Previously known as ", Color.GREEN)
-					.append(originalMemberType.displayname(player))
-			));
+					.text("OG Player", NamedTextColor.GOLD, TextDecoration.BOLD)
+					.append(Component
+							.text("Previously ranked as ", Color.GREEN)
+							.append(originalMemberType.displayname(player))
+					)));
 		}
 
 		Component format = Component.empty();
