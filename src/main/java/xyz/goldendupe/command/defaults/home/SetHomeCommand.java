@@ -2,6 +2,7 @@ package xyz.goldendupe.command.defaults.home;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.placeholder.PlaceholderList;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.joml.Vector3d;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.utils.Position;
 
 @Cloud
@@ -48,20 +50,24 @@ public class SetHomeCommand extends GDCloudCommand {
                             }
 
                             goldenDupe.requestSaveHome(player,
-                                    new Position(
+                                    new GDHome(
                                             homeName,
                                             location.getX(),
                                             location.getY(),
                                             location.getZ(),
                                             location.getYaw(),
-                                            location.getWorld().getName()
+                                            location.getWorld()
                                     )
                             );
 
+                            GDHome home = goldenDupe.getHomes(player).get(homeName.toLowerCase());
+                            PlaceholderList placeholders = new PlaceholderList(home.asPlaceholder("home"));
+                            placeholders.add(new Placeholder("home", homeName));
+                            placeholders.add(new Placeholder("xyz", new Vector3d(location.getX(), location.getY(), location.getZ())));
+                            placeholders.add(new Placeholder("world", location.getWorld().getName()));
+
                             commandMessenger.message(sender, "sethome.message-set",
-                                    new Placeholder("home", homeName),
-                                    new Placeholder("xyz", new Vector3d(location.getX(), location.getY(), location.getZ())),
-                                    new Placeholder("world", location.getWorld().getName()));
+                                    placeholders);
                         })
         );
 

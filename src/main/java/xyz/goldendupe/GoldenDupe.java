@@ -11,9 +11,17 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.incendo.cloud.SenderMapper;
@@ -26,18 +34,10 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.*;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDPlayer;
-import xyz.goldendupe.utils.Position;
+import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.database.PlayerDatabase;
@@ -169,8 +169,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     @Override
     public void onDisable() {
-
-
         getComponentLogger().info("GoldenDupe has disabled!");
     }
 
@@ -186,15 +184,15 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         return instance;
     }
 
-    public void requestSaveHome(GDPlayer player, Position home) {
-        getHomes(player).put(home.getName(), home);
+    public void requestSaveHome(GDPlayer player, GDHome home) {
+        getHomes(player).put(home.getName().toLowerCase(), home);
     }
 
     public void requestDeleteHome(GDPlayer player, String homeName) {
-        getHomes(player).remove(homeName);
+        getHomes(player).remove(homeName.toLowerCase());
     }
 
-    public Map<String, Position> getHomes(GDPlayer player) {
+    public Map<String, GDHome> getHomes(GDPlayer player) {
         return player.getHomes();
     }
 

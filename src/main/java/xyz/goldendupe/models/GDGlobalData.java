@@ -1,6 +1,7 @@
 package xyz.goldendupe.models;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.*;
 import org.bukkit.block.DecoratedPot;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,6 +26,10 @@ public class GDGlobalData {
 	private Set<Material> illegalDupe;
 	private List<ItemStack> randomItems;
 	private Set<Material> illegalPlacement;
+	@Setter
+	private long timesDuped;
+	@Setter
+	private long itemsDuped;
 
 	public GDGlobalData(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;

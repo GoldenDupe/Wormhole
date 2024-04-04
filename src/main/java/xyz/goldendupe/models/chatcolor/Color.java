@@ -173,4 +173,12 @@ public class Color implements Cloneable, TextColor {
 	public int hashCode() {
 		return value();
 	}
+
+	@Override
+	public boolean equals(Object object){
+		if (object instanceof Color color){
+			return color.asHex().equals(asHex());
+		}
+		return false;
+	}
 }

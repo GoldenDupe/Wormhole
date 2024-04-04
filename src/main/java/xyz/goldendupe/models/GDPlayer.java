@@ -1,8 +1,10 @@
 package xyz.goldendupe.models;
 
 import bet.astral.unity.Factions;
+import com.google.gson.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -11,42 +13,47 @@ import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.events.GDChatChangeEvent;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
-import xyz.goldendupe.utils.Position;
-import xyz.goldendupe.utils.annotations.temporal.RequireSave;
+import xyz.goldendupe.models.impl.GDHome;
+import xyz.goldendupe.models.savable.Savable;
+import xyz.goldendupe.models.serializer.ChatColorSerializer;
+import xyz.goldendupe.models.serializer.HomeSerializer;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 import xyz.goldendupe.utils.impl.SpawnPosition;
 import xyz.goldendupe.utils.reference.FactionPlayerReference;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
-@SuppressWarnings({"UnusedReturnValue", "unused"})
-@RequireSave
-public class GDPlayer implements Flaggable, FactionPlayerReference {
+public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID> {
+	public static final Gson GSON = new GsonBuilder()
+			.registerTypeAdapter(GDChatColor.class, new ChatColorSerializer())
+			.registerTypeAdapter(GDHome.class, new HomeSerializer())
+			.create();
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
 	private SpawnPosition teleportingSpawn;
 	private GDChat chat;
-	@RequireSave
 	private boolean autoConfirmClearInv;
-	@RequireSave
 	private GDChatColor color = GDChatColor.DEFAULT;
-	@RequireSave
 	private boolean vanished;
-	@RequireSave
 	private boolean isToggled = true;
-	@RequireSave
 	private boolean isToggleDropItem = false;
-	@RequireSave
 	private boolean isTogglePickupItem = false;
-	@RequireSave
 	private boolean isToggleNightVision = true;
-	@RequireSave
 	private boolean isTogglePotionBottles = false;
-	@RequireSave
 	private boolean isToggleSpeed = false;
-	@RequireSave
-	@Getter(AccessLevel.PUBLIC) private final Map<String, Position> homes = new HashMap<>();
+	@Getter
+	@Setter
+	private int timesDuped;
+	@Getter
+	@Setter
+	private int itemsDuped;
+	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
 	@Getter
 	private final Map<UUID, GDMessageGroup> messagegroups = new HashMap<>();
 	@NotNull
@@ -58,6 +65,28 @@ public class GDPlayer implements Flaggable, FactionPlayerReference {
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
 		this.autoConfirmClearInv = false;
+	}
+
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, boolean autoConfirmClearInv, boolean vanished, boolean isToggled, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
+		this.goldenDupe = goldenDupe;
+		this.uniqueId = uniqueId;
+		this.chat = chat;
+		if (!homes.isEmpty()) {
+			homes.forEach(home -> {
+				this.homes.put(home.getName().toLowerCase(), home);
+			});
+		}
+		this.autoConfirmClearInv = autoConfirmClearInv;
+		this.color = color;
+		this.timesDuped = timesDuped;
+		this.itemsDuped = itemsDuped;
+		this.vanished = vanished;
+		this.isToggled = isToggled;
+		this.isToggleDropItem = isToggleDropItem;
+		this.isTogglePickupItem = isTogglePickupItem;
+		this.isToggleNightVision = isToggleNightVision;
+		this.isTogglePotionBottles = isTogglePotionBottles;
+		this.isToggleSpeed = isToggleSpeed;
 	}
 
 	public boolean isToggled() {
@@ -232,5 +261,145 @@ public class GDPlayer implements Flaggable, FactionPlayerReference {
 	@Override
 	public java.util.@Nullable UUID getFactionId() {
 		return getFactionID();
+	}
+
+
+	public static PreparedStatement createTable(Connection connection) throws SQLException {
+		return connection.prepareStatement("CREATE TABLE IF NOT EXISTS gd_players (uniqueId VARCHAR(36), " +
+				"chat VARCHAR(15), " +
+				"chatColor JSON, " +
+				"clearInvConfirm BOOLEAN, " +
+				"homes JSON"+
+				"vanished BOOLEAN ," +
+				"toggleItems BOOLEAN, " +
+				"toggleDrop BOOLEAN, " +
+				"togglePickup BOOLEAN, " +
+				"toggleNightVision BOOLEAN, " +
+				"toggleBottles BOOLEAN, " +
+				"toggleSpeed BOOLEAN" +
+				"PRIMARY KEY (uniqueId));"
+		);
+	}
+	public static PreparedStatement fetch(Connection connection,  Object key) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("GET * FROM gd_players WHERE uniqueId = ?");
+		statement.setString(1, key.toString());
+		return statement;
+	}
+	public static GDPlayer load(ResultSet resultSet) throws SQLException {
+		java.util.UUID uniqueId = java.util.UUID.fromString(resultSet.getString("uniqueId"));
+		GDChat chat = GDChat.valueOf(resultSet.getString("chat"));
+		GDChatColor color = GSON.fromJson(resultSet.getString("chatColor"), GDChatColor.class);
+		List<GDHome> homes = JsonParser.parseString(resultSet.getString("homes")).getAsJsonArray().asList().stream()
+				.filter(home->!home.isJsonNull())
+				.map(home->GSON.fromJson(home, GDHome.class))
+				.toList();
+
+		int itemsDuped = resultSet.getInt("timesDuped");
+		int timesDuped = resultSet.getInt("itemsDuped");
+
+		boolean vanished = resultSet.getBoolean("vanished");
+		boolean invConfirm = resultSet.getBoolean("clearInvConfirm");
+		boolean toggleItems = resultSet.getBoolean("toggleItems");
+		boolean toggleDrop = resultSet.getBoolean("toggleDrop");
+		boolean togglePickup = resultSet.getBoolean("togglePickup");
+		boolean toggleNightVision = resultSet.getBoolean("toggleNightVision");
+		boolean toggleBottles = resultSet.getBoolean("toggleBottles");
+		boolean toggleSpeed = resultSet.getBoolean("toggleSpeed");
+
+		return new GDPlayer(
+				GoldenDupe.instance(),
+				uniqueId,
+				chat,
+				color,
+				homes,
+				itemsDuped,
+				timesDuped,
+				invConfirm,
+				vanished,
+				toggleItems,
+				toggleDrop,
+				togglePickup,
+				toggleNightVision,
+				toggleBottles,
+				toggleSpeed
+		);
+	}
+
+	@Override
+	public @NotNull PreparedStatement insertStatement(@NotNull Connection connection) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO gd_players (" +
+				"uniqueId," +
+				"chat," +
+				"chatColor," +
+				"homes, "+
+				"timesDuped, "+
+				"itemsDuped, "+
+				"clearInvConfirm," +
+				"vanished," +
+				"toggleItems," +
+				"toggleDrop," +
+				"togglePickup," +
+				"toggleNightVision," +
+				"toggleBottles, " +
+				"toggleSpeed" +
+				") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+		);
+		statement.setString(1, uniqueId.toString());
+		statement.setString(2, chat.name());
+		statement.setString(3, GSON.toJson(color));
+		statement.setString(4, GSON.toJson(homes.values().stream().toList()));
+		statement.setInt(5, timesDuped);
+		statement.setInt(6, itemsDuped);
+		statement.setBoolean(7, autoConfirmClearInv);
+		statement.setBoolean(8, vanished);
+		statement.setBoolean(9, isToggled);
+		statement.setBoolean(10, isToggleDropItem);
+		statement.setBoolean(11, isTogglePickupItem);
+		statement.setBoolean(12, isToggleNightVision);
+		statement.setBoolean(13, isTogglePotionBottles);
+		statement.setBoolean(14, isToggleSpeed);
+		return statement;
+	}
+
+	@Override
+	public PreparedStatement updateStatement(@NotNull Connection connection) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("UPDATE gd_players SET ("+
+				"chat = ?, " +
+				"chatColor = ?, " +
+				"homes = ?, " +
+				"itemsDuped = ?, "+
+				"timesDuped = ?, "+
+				"clearInvConfirm = ?, " +
+				"vanished = ?, " +
+				"toggleItems = ?, " +
+				"toggleDrop = ?, " +
+				"togglePickup = ?, " +
+				"toggleNightVision = ?, " +
+				"toggleBottles = ?, " +
+				"toggleSpeed = ?" +
+				") WHERE uniqueId = ?");
+
+		statement.setString(1, chat.name());
+		statement.setString(2, GSON.toJson(color));
+		statement.setString(3, GSON.toJson(homes.values().stream().toList()));
+		statement.setInt(4, timesDuped);
+		statement.setInt(5, itemsDuped);
+		statement.setBoolean(6, autoConfirmClearInv);
+		statement.setBoolean(7, vanished);
+		statement.setBoolean(8, isToggled);
+		statement.setBoolean(9, isToggleDropItem);
+		statement.setBoolean(10, isTogglePickupItem);
+		statement.setBoolean(11, isToggleNightVision);
+		statement.setBoolean(12, isTogglePotionBottles);
+		statement.setBoolean(13, isToggleSpeed);
+		statement.setString(14, uniqueId.toString());
+		return statement;
+	}
+
+	@Override
+	public PreparedStatement getStatement(@NotNull Connection connection, java.util.UUID uuid) throws SQLException {
+		PreparedStatement statement = connection.prepareStatement("SELECT * FROM gd_players WHERE uniqueId = ?");
+		statement.setString(1, uuid.toString());
+		return statement;
 	}
 }

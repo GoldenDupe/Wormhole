@@ -25,6 +25,8 @@ import org.incendo.cloud.parser.standard.IntegerParser;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.models.GDGlobalData;
+import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.ContainerUtils;
 import xyz.goldendupe.utils.MemberType;
 
@@ -62,6 +64,13 @@ public class DupeCommand extends GDCloudCommand {
 						return;
 					}
 					sender.getInventory().addItem(itemStack);
+					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(sender);
+					GDGlobalData globalData = goldenDupe.getGlobalData();
+
+					gdPlayer.setTimesDuped(gdPlayer.getTimesDuped()+1);
+					gdPlayer.setItemsDuped(gdPlayer.getItemsDuped()+itemStack.getAmount());
+					globalData.setTimesDuped(globalData.getTimesDuped()+1);
+					globalData.setItemsDuped(globalData.getItemsDuped()+itemStack.getAmount());
 				});
 
 		commandManager.command(dupe);
@@ -91,9 +100,15 @@ public class DupeCommand extends GDCloudCommand {
 						commandMessenger.message(sender, "dupe.message-undupable-combat");
 						return;
 					}
+					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(sender);
+					GDGlobalData globalData = goldenDupe.getGlobalData();
 					int debug = 0;
 					for (int i = 0; i < times-1; i++){
 						itemStack = sender.getInventory().getItemInMainHand();
+						gdPlayer.setTimesDuped(gdPlayer.getTimesDuped()+1);
+						gdPlayer.setItemsDuped(gdPlayer.getItemsDuped()+itemStack.getAmount());
+						globalData.setTimesDuped(globalData.getTimesDuped()+1);
+						globalData.setItemsDuped(globalData.getItemsDuped()+itemStack.getAmount());
 
 						debug++;
 						if (sender.getInventory().addItem(itemStack).isEmpty()){

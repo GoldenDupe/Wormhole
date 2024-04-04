@@ -11,6 +11,7 @@ import org.joml.Vector3d;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.models.impl.GDHome;
 
 @Cloud
 public class DelHomeCommand extends GDCloudCommand {
@@ -39,11 +40,13 @@ public class DelHomeCommand extends GDCloudCommand {
                                 return;
                             }
 
+                            GDHome home = goldenDupe.getHomes(player).get(homeName.toLowerCase());
+
                             goldenDupe.requestDeleteHome(player, homeName);
 
                             commandMessenger.message(sender, "delhome.message-del",
                                     new Placeholder("home", homeName),
-                                    new Placeholder("xyz", new Vector3d(sender.getX(), sender.getY(), sender.getZ())),
+                                    new Placeholder("xyz", new Vector3d(home.getX(), home.getY(), home.getZ())),
                                     new Placeholder("world", sender.getWorld().getName()));
                         })
         );

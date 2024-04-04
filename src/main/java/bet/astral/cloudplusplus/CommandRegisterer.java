@@ -25,6 +25,7 @@ public interface CommandRegisterer<P extends JavaPlugin> extends MessageReload {
 
 
 	default void registerCommands(List<String> packages, PaperCommandManager<?> commandManager){
+		int i = 0;
 		for (String subPackage : packages){
 			try (ScanResult scanResult = new ClassGraph()
 					.enableAllInfo().acceptPackages(subPackage).scan()) {
@@ -33,11 +34,13 @@ public interface CommandRegisterer<P extends JavaPlugin> extends MessageReload {
 				for (String clazzName : classes){
 					Class<?> clazz = Class.forName(clazzName);
 					registerCommand(clazz, commandManager);
+					i++;
 				}
 			} catch (ClassNotFoundException e) {
 				throw new RuntimeException(e);
 			}
 		}
+		plugin().getLogger().info("Registered total of "+ i + " of commands!");
 	}
 
 	default boolean cannotInject(Class<?> clazz){
