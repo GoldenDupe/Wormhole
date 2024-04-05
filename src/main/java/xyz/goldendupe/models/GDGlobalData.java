@@ -7,10 +7,7 @@ import org.bukkit.block.DecoratedPot;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.MusicInstrumentMeta;
+import org.bukkit.inventory.meta.*;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.utils.impl.SpawnPosition;
 
@@ -30,6 +27,8 @@ public class GDGlobalData {
 	private long timesDuped;
 	@Setter
 	private long itemsDuped;
+	@Setter
+	private long randomItemsGenerated;
 
 	public GDGlobalData(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
@@ -57,13 +56,10 @@ public class GDGlobalData {
 		addMaterials(illegalDupe, illegalConfig.getStringList("dupe.illegals"));
 		illegalDupe.add(Material.AIR);
 		addMaterials(illegalDupeCombat, illegalConfig.getStringList("dupe.combat"));
-
 		addMaterials(illegalPlacement, illegalConfig.getStringList("placement"));
-
 		List<String> randomIllegals = illegalConfig.getStringList("random.illegals");
 		randomItems = new LinkedList<>();
 		for (Material material : Registry.MATERIAL){
-//		for (Material material : Material.values()){
 			if (randomIllegals.contains(material.name())){
 				continue;
 			}
@@ -75,50 +71,6 @@ public class GDGlobalData {
 			} catch (NullPointerException e){
 				getGoldenDupe().getLogger().severe("Couldn't check if material "+ material.key().namespace()+":"+ material.key().value()+ " is a data pack only item!");
 			}
-		}
-		if (illegalConfig.getBoolean("random.all-goat-horns", false)){
-			for (MusicInstrument instrument : Registry.INSTRUMENT){
-				ItemStack itemStack = new ItemStack(Material.GOAT_HORN);
-				MusicInstrumentMeta meta = (MusicInstrumentMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.GOAT_HORN));
-				meta.setInstrument(instrument);
-				itemStack.setItemMeta(meta);
-				randomItems.add(itemStack);
-			}
-		}
-		if (illegalConfig.getBoolean("random.full-decorated-potteries", false)){
-			for (Material material : Tag.ITEMS_BREAKS_DECORATED_POTS.getValues()){
-				ItemStack itemStack = new ItemStack(Material.DECORATED_POT);
-				BlockStateMeta meta = (BlockStateMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.DECORATED_POT));
-				DecoratedPot decoratedPot = (DecoratedPot) meta.getBlockState();
-				decoratedPot.setSherd(DecoratedPot.Side.BACK, material);
-				decoratedPot.setSherd(DecoratedPot.Side.FRONT, material);
-				decoratedPot.setSherd(DecoratedPot.Side.LEFT, material);
-				decoratedPot.setSherd(DecoratedPot.Side.RIGHT, material);
-				meta.setBlockState(decoratedPot);
-				itemStack.setItemMeta(meta);
-				randomItems.add(itemStack);
-			}
-		}
-		if (illegalConfig.getBoolean("random.all-enchanted-books", true)){
-			for (Enchantment enchantment : Registry.ENCHANTMENT){
-				if (enchantment == Enchantment.MENDING){
-					// FUCK MENDING
-					continue;
-				}
-				for (int i = 0; i < enchantment.getMaxLevel(); i++){
-					ItemStack itemStack = new ItemStack(Material.ENCHANTED_BOOK);
-					EnchantmentStorageMeta meta = (EnchantmentStorageMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.ENCHANTED_BOOK));
-					meta.addStoredEnchant(enchantment, i, false);
-					itemStack.setItemMeta(meta);
-					randomItems.add(itemStack);
-				}
-			}
-		}
-		for (int i = 0; i < illegalConfig.getInt("random.random-firework-boost", 0); i++){
-			ItemStack itemStack = new ItemStack(Material.FIREWORK_ROCKET);
-			FireworkMeta meta = (FireworkMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET));
-			meta.setPower(i);
-			itemStack.setItemMeta(meta);
 		}
 	}
 
@@ -133,6 +85,51 @@ public class GDGlobalData {
 			}
 		}
 	}
+
+	public ItemStack patchRandomItem(ItemStack itemStack, Random random) {
+		File file = new File(goldenDupe.getDataFolder(), "illegals.yml");
+		YamlConfiguration illegalConfig = YamlConfiguration.loadConfiguration(file);
+		ItemMeta meta = itemStack.getItemMeta();
+
+		if (illegalConfig.getBoolean("random.all-goat-horns", false) && meta instanceof MusicInstrumentMeta instrumentMeta){
+			List<MusicInstrument> instruments = Registry.INSTRUMENT.stream().toList();
+			if (random.nextDouble()>0.1){
+				instrumentMeta.setInstrument(instruments.get(random.nextInt(0, instruments.size()-1)));
+			}
+		}
+		if (illegalConfig.getBoolean("random.full-decorated-potteries", false) && meta instanceof BlockStateMeta blockStateMeta){
+			DecoratedPot decoratedPot = (DecoratedPot) blockStateMeta.getBlockState();
+			List<Material> materials = Tag.ITEMS_BREAKS_DECORATED_POTS.getValues().stream().toList();
+			for (DecoratedPot.Side side : DecoratedPot.Side.values()) {
+				if (random.nextDouble() > 0.45) {
+					Material material = materials.get(random.nextInt(0, materials.size()));
+					decoratedPot.setSherd(side, material);
+				}
+			}
+			blockStateMeta.setBlockState(decoratedPot);
+		}
+		if (illegalConfig.getBoolean("random.all-enchanted-books", true) && meta instanceof EnchantmentStorageMeta enchantmentStorageMeta){
+			if (random.nextDouble()>0.20){
+				List<Enchantment> enchantments = Registry.ENCHANTMENT.stream().toList();
+				Enchantment enchantment = enchantments.get(random.nextInt(0, enchantments.size()-1));
+				if (enchantment.getMaxLevel() == 1){
+					enchantmentStorageMeta.addStoredEnchant(enchantment, 1, false);
+				} else {
+					enchantmentStorageMeta.addStoredEnchant(enchantment, random.nextInt(1, enchantment.getMaxLevel()), false);
+				}
+			}
+		}
+		if (illegalConfig.getInt("random.random-firework-boost", 0) > 0 && meta instanceof FireworkMeta fireworkMeta){
+			int power = random.nextInt(0, illegalConfig.getInt("random.random-firework-boost", 0));
+			if (power != 0){
+				fireworkMeta.setPower(power);
+			}
+		}
+
+		itemStack.setItemMeta(meta);
+		return itemStack;
+	}
+
 
 	/*
 	 * SPAWNS
@@ -160,5 +157,4 @@ public class GDGlobalData {
 
 	public void requestMessageGroupSave(){
 	}
-
 }

@@ -53,6 +53,9 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 	@Getter
 	@Setter
 	private int itemsDuped;
+	@Getter
+	@Setter
+	private int generatedRandomItems;
 	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
 	@Getter
 	private final Map<UUID, GDMessageGroup> messagegroups = new HashMap<>();
@@ -67,7 +70,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 		this.autoConfirmClearInv = false;
 	}
 
-	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, boolean autoConfirmClearInv, boolean vanished, boolean isToggled, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, int generatedRandomItems, boolean autoConfirmClearInv, boolean vanished, boolean isToggled, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
 		this.goldenDupe = goldenDupe;
 		this.uniqueId = uniqueId;
 		this.chat = chat;
@@ -80,6 +83,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 		this.color = color;
 		this.timesDuped = timesDuped;
 		this.itemsDuped = itemsDuped;
+		this.generatedRandomItems = generatedRandomItems;
 		this.vanished = vanished;
 		this.isToggled = isToggled;
 		this.isToggleDropItem = isToggleDropItem;
@@ -269,8 +273,11 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 				"chat VARCHAR(15), " +
 				"chatColor JSON, " +
 				"clearInvConfirm BOOLEAN, " +
-				"homes JSON"+
-				"vanished BOOLEAN ," +
+				"homes JSON, "+
+				"timesDuped INTEGER, " +
+				"itemsDuped INTEGER, " +
+				"randomItems INTEGER, " +
+				"vanished BOOLEAN," +
 				"toggleItems BOOLEAN, " +
 				"toggleDrop BOOLEAN, " +
 				"togglePickup BOOLEAN, " +
@@ -296,6 +303,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 
 		int itemsDuped = resultSet.getInt("timesDuped");
 		int timesDuped = resultSet.getInt("itemsDuped");
+		int receivedRandomItems = resultSet.getInt("randomItems");
 
 		boolean vanished = resultSet.getBoolean("vanished");
 		boolean invConfirm = resultSet.getBoolean("clearInvConfirm");
@@ -314,6 +322,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 				homes,
 				itemsDuped,
 				timesDuped,
+				receivedRandomItems,
 				invConfirm,
 				vanished,
 				toggleItems,
@@ -334,6 +343,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 				"homes, "+
 				"timesDuped, "+
 				"itemsDuped, "+
+				"randomItems, "+
 				"clearInvConfirm," +
 				"vanished," +
 				"toggleItems," +
@@ -369,6 +379,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 				"homes = ?, " +
 				"itemsDuped = ?, "+
 				"timesDuped = ?, "+
+				"randomItems = ?, "+
 				"clearInvConfirm = ?, " +
 				"vanished = ?, " +
 				"toggleItems = ?, " +

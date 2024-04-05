@@ -72,7 +72,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private ReportUserDatabase reportUserDatabase;
     private CommandSpyDatabase commandSpyDatabase;
     @Getter
-    private GDGlobalData globalData = new GDGlobalData(this);
+    private final GDGlobalData globalData = new GDGlobalData(this);
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
@@ -140,10 +140,29 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
             PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
             for (Player player : getServer().getOnlinePlayers()){
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
-                if (gdPlayer.isToggled()){
+                if (gdPlayer.isToggled()) {
+                    // Random items from this list will randomized, but they will have empty NBT
                     ItemStack itemStack = globalData.getRandomItems().get(random.nextInt(globalData.getRandomItems().size()));
-                    player.getInventory().addItem(itemStack);
+                    // using patchRandomItem randomizes it, if it can be randomized even more
+                    itemStack = globalData.patchRandomItem(itemStack, random);
+
+                    // Adding the items to a map allows checking if player could actually hold the item
+                    Map<Integer, ItemStack> items = player.getInventory().addItem(itemStack);
+                    // If the map is not empty, the player couldn't hold the item
+                    if (!items.isEmpty()){
+                        for (Map.Entry<Integer, ItemStack> entry : items.entrySet()){
+                            // Spawning the item as a dropped item and making the player who dropped it
+                            // The player will have pickup priority for the item
+                            player.getWorld().dropItem(player.getLocation(), entry.getValue(), (item)->{
+                                item.setThrower(player.getUniqueId());
+                            });
+                        }
+                    }
+                    gdPlayer.setGeneratedRandomItems(gdPlayer.getGeneratedRandomItems()+1);
+                    globalData.setRandomItemsGenerated(globalData.getRandomItemsGenerated()+1);
                 }
+
+
                 if (gdPlayer.isToggleSpeed()){
                     if (!player.hasPotionEffect(PotionEffectType.SPEED) && player.hasPotionEffect(PotionEffectType.SPEED) && player.getPotionEffect(PotionEffectType.SPEED).getAmplifier()<1){
                         player.removePotionEffect(PotionEffectType.SPEED);
