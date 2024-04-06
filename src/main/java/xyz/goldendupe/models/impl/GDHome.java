@@ -15,7 +15,7 @@ public class GDHome extends Position implements Placeholderable {
 		super(name, java.util.UUID.randomUUID(), x, y, z, yaw, world);
 	}
 	public GDHome(String name, java.util.UUID uniqueId, double x, double y, double z, float yaw, @NotNull String world) {
-		super(name, java.util.UUID.randomUUID(), x, y, z, yaw, world);
+		super(name, uniqueId, x, y, z, yaw, world);
 	}
 	@Override
 	public Collection<Placeholder> asPlaceholder(String s) {
