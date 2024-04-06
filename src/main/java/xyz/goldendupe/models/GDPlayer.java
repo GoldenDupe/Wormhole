@@ -14,6 +14,7 @@ import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.events.GDChatChangeEvent;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.models.impl.GDHome;
+import xyz.goldendupe.models.impl.GDSpawn;
 import xyz.goldendupe.models.savable.Savable;
 import xyz.goldendupe.models.serializer.ChatColorSerializer;
 import xyz.goldendupe.models.serializer.HomeSerializer;
@@ -36,7 +37,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 			.create();
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
-	private SpawnPosition teleportingSpawn;
+	private GDSpawn teleportingSpawn;
 	private GDChat chat;
 	private boolean autoConfirmClearInv;
 	private GDChatColor color = GDChatColor.DEFAULT;
@@ -103,11 +104,11 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 	}
 
 
-	public SpawnPosition teleportingSpawn() {
+	public GDSpawn teleportingSpawn() {
 		return teleportingSpawn;
 	}
 
-	public GDPlayer setTeleportingSpawn(SpawnPosition teleportingSpawn) {
+	public GDPlayer setTeleportingSpawn(GDSpawn teleportingSpawn) {
 		this.teleportingSpawn = teleportingSpawn;
 		return this;
 	}

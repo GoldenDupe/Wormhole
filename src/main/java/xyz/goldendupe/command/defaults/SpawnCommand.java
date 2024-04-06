@@ -2,7 +2,6 @@ package xyz.goldendupe.command.defaults;
 
 import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -13,9 +12,9 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.models.impl.GDSpawn;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.TimedTeleport;
-import xyz.goldendupe.utils.impl.SpawnPosition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +45,9 @@ public class SpawnCommand extends GDCloudCommand {
 				.handler(context -> {
 					Player sender = context.sender();
 					GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
-					SpawnPosition oldTeleport = player.teleportingSpawn();
+					GDSpawn oldTeleport = player.teleportingSpawn();
 
-					SpawnPosition newSpawn = goldenDupe.getGlobalData().getSpawns().get(spawn);
+					GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(spawn);
 					if (newSpawn == null){
 						if (sender.hasPermission(MemberType.ADMINISTRATOR.permissionOf("spawn-info"))){
 							sender.sendRichMessage("Spawn is not set for spawn <white>"+spawn);
@@ -95,7 +94,7 @@ public class SpawnCommand extends GDCloudCommand {
 						.handler(context -> {
 							Player sender = context.sender();
 							Player whoToTeleport = context.sender();
-							SpawnPosition newSpawn = goldenDupe.getGlobalData().getSpawns().get(name);
+							GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(name);
 
 							whoToTeleport.teleportAsync(newSpawn.asLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
 							commandMessenger.message(sender, name + ".message-admin-teleport", new Placeholder("new", newSpawn.getName()), new Placeholder("player", whoToTeleport.name()));

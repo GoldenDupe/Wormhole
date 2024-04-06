@@ -34,6 +34,7 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDPlayer;
@@ -68,6 +69,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     private GoldenMessenger debugMessenger;
     private YamlConfiguration config;
     private PlayerDatabase playerDatabase;
+    @Getter
+    private SpawnDatabase spawnDatabase;
     private ReportDatabase reportDatabase;
     private ReportUserDatabase reportUserDatabase;
     private CommandSpyDatabase commandSpyDatabase;
@@ -134,6 +137,9 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         reportUserDatabase = new ReportUserDatabase(this);
         reportDatabase = new ReportDatabase(this);
         commandSpyDatabase = new CommandSpyDatabase(this);
+
+        spawnDatabase = new SpawnDatabase(this);
+        spawnDatabase.load();
 
         getServer().getScheduler().runTaskTimer(this, ()->{
             PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false, null);

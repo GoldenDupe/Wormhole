@@ -28,13 +28,14 @@ public class RemoveSpawnCommand extends GDCloudCommand {
                             Player sender = context.sender();
                             String spawnName = context.get("removespawn-name");
 
-                            if (goldenDupe.getGlobalData().getSpawns().containsKey(spawnName.toLowerCase())) {
-                                goldenDupe.getGlobalData().removeSpawn(spawnName);
-                                commandMessenger.message(sender, "removespawn.message-already-removed",
+                            if (goldenDupe.getSpawnDatabase().exists(spawnName)) {
+                                goldenDupe.getSpawnDatabase().delete(spawnName);
+                                commandMessenger.message(sender, "setspawn.message-remove",
                                         new Placeholder("spawn", spawnName));
                                 return;
                             }
-                            commandMessenger.message(sender, "setspawn.message-remove",
+
+                            commandMessenger.message(sender, "removespawn.message-already-removed",
                                     new Placeholder("spawn", spawnName));
                         })
         );

@@ -11,7 +11,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.utils.impl.SpawnPosition;
+import xyz.goldendupe.models.impl.GDSpawn;
 
 @Cloud
 public class SetSpawnCommand extends GDCloudCommand {
@@ -38,21 +38,21 @@ public class SetSpawnCommand extends GDCloudCommand {
 							if (!hasPermission) permission = "";
 
 
-							if (goldenDupe.getGlobalData().getSpawns().containsKey(spawnName.toLowerCase())){
+							if (goldenDupe.getSpawnDatabase().exists(spawnName)){
 								commandMessenger.message(sender, "setspawn.message-already-set",
 										new Placeholder("spawn", spawnName));
 								return;
 							}
 
-							goldenDupe.getGlobalData().addSpawn(
-									new SpawnPosition(
+							goldenDupe.getSpawnDatabase().create(
+									new GDSpawn(
 											spawnName.toLowerCase(),
-											location.getWorld().getName(),
 											permission,
 											location.getX(),
 											location.getY(),
 											location.getZ(),
-											location.getYaw()
+											location.getYaw(),
+											location.getWorld()
 									)
 							);
 
