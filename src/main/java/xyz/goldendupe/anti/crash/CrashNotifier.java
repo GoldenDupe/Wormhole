@@ -91,6 +91,15 @@ public class CrashNotifier implements Listener {
 		Pair<Integer, Integer> pair = new Pair<>(chunk.getX(), chunk.getZ());
 		redstoneAmount.putIfAbsent(pair, 0);
 		redstoneAmount.put(pair, redstoneAmount.get(pair) + 1);
+		if (redstoneAmount.get(pair) == 200) {
+			notify(new Notification(
+					System.currentTimeMillis(),
+					getIdAndAdd(),
+					event.getBlock().getLocation(),
+					null,
+					Notification.Type.REDSTONE_200
+			));
+		}
 		if (redstoneAmount.get(pair) == 400) {
 			notify(new Notification(
 					System.currentTimeMillis(),
@@ -116,15 +125,6 @@ public class CrashNotifier implements Listener {
 					event.getBlock().getLocation(),
 					null,
 					Notification.Type.REDSTONE_800
-			));
-		}
-		if (redstoneAmount.get(pair) == 1000) {
-			notify(new Notification(
-					System.currentTimeMillis(),
-					getIdAndAdd(),
-					event.getBlock().getLocation(),
-					null,
-					Notification.Type.REDSTONE_1000
 			));
 		}
 	}

@@ -49,7 +49,7 @@ repositories {
 
 
 dependencies {
-    implementation 'bet.astral:Messenger:1.5.1' // Messenger
+    implementation 'bet.astral:Messenger:1.6.0' // Messenger
 
     // have it as compile only as it needs to run as it's own plugin
     compileOnly 'bet.astral:Fluffy:1.0' // Fluffy (Combat System)

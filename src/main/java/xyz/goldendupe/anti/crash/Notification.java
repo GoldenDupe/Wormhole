@@ -24,10 +24,10 @@ public class Notification {
 
 	enum Type {
 		ARROW_LANDED_TOO_MANY_TIMES,
+		REDSTONE_200,
 		REDSTONE_400,
 		REDSTONE_600,
 		REDSTONE_800,
-		REDSTONE_1000,
 
 	}
 }

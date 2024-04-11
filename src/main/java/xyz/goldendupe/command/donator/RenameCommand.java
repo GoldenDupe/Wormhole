@@ -1,10 +1,16 @@
 package xyz.goldendupe.command.donator;
 
+import bet.astral.cloudplusplus.ComponentSuggestion;
+import bet.astral.cloudplusplus.ComponentTooltipSuggestion;
+import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
@@ -14,10 +20,10 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupe;
-import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,22 +40,54 @@ public class RenameCommand extends GDCloudCommand {
 								.suggestionProvider(new SuggestionProvider<>() {
 									@Override
 									public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
-										return CompletableFuture.completedFuture(List.of(Suggestion.suggestion(context.sender() instanceof Player player ? LegacyComponentSerializer.legacyAmpersand().serialize(player.getInventory().getItemInMainHand().displayName()) : "")));
+										return CompletableFuture.supplyAsync(() -> {
+											if (context.sender() instanceof Player player) {
+												ItemMeta meta = player.getInventory().getItemInMainHand().getItemMeta();
+												if (meta.hasDisplayName()) {
+													return List.of(
+															new ComponentTooltipSuggestion(ComponentSuggestion.Mode.LEGACY,
+																	meta.displayName(),
+																	meta.displayName()));
+												}
+												return
+														List.of(
+																new ComponentTooltipSuggestion(ComponentSuggestion.Mode.LEGACY,
+																		Component.translatable(player.getInventory().getItemInMainHand(), Component.translatable(player.getInventory().getItemInMainHand())),
+																		Component.translatable(player.getInventory().getItemInMainHand(), Component.translatable(player.getInventory().getItemInMainHand()))
+														));
+											}
+											return Collections.emptyList();
+										});
 									}
 								})
 						)
-						.handler(context->{
+						.handler(context -> {
 							Player player = context.sender();
+
 							String argument = context.get("name");
-							if (player.getInventory().getItemInMainHand().isEmpty()){
+							if (player.getInventory().getItemInMainHand().isEmpty()) {
 								commandMessenger.message(player, "rename.message-cannot-rename-air");
 								return;
 							}
-							Component oldName = player.getInventory().getItemInMainHand().displayName();
 							Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(argument);
-							player.getInventory().getItemInMainHand().editMeta(meta->meta.displayName(component));
+							component = component.hoverEvent(HoverEvent.showText(component));
+
+							if (PlainTextComponentSerializer.plainText().serialize(component).length() > 20 && !player.hasPermission(MemberType.ADMINISTRATOR.permissionOf("rename"))) {
+								commandMessenger.message(player, "rename.message-too-long");
+								return;
+							}
+
+							Component oldName = player.getInventory().getItemInMainHand().getItemMeta().displayName();
+							if (oldName == null) {
+								oldName = Component.translatable(player.getInventory().getItemInMainHand()).hoverEvent(HoverEvent.showText(Component.translatable(player.getInventory().getItemInMainHand())));
+							} else {
+								oldName = oldName.hoverEvent(HoverEvent.showText(oldName));
+							}
+
+							final Component finalComponent = component;
+							player.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(finalComponent));
+
 							commandMessenger.message(player, "rename.message-renamed", new Placeholder("name", component), new Placeholder("old_name", oldName));
-						})
-		);
+						}));
 	}
 }

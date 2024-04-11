@@ -37,15 +37,21 @@ public class ChatItemListener implements GDListener {
 			ItemStack itemStack = player.getInventory().getItemInMainHand();
 			Component itemComponent;
 			if (itemStack.isEmpty()){
-				itemComponent = Component.text("1x", Color.GREEN).appendSpace().append(Component.text(player.getName(), Color.MINECOIN)).append(Component.text("'s hand", Color.MINECOIN)).hoverEvent(HoverEvent.showText(Component.text("Nothing to see here, it's just a hand.", Color.WHITE)));
+				itemComponent = Component.text("1", Color.GREEN)
+						.append(Component.text("x", NamedTextColor.GRAY))
+						.appendSpace()
+						.append(Component.text(player.getName(), Color.YELLOW))
+						.append(Component.text("'s hand", Color.WHITE))
+						.hoverEvent(HoverEvent.showText(Component.text("Nothing to see here, it's just a hand.", Color.WHITE)));
 			} else {
 				ItemMeta meta = itemStack.getItemMeta();
 				Component displayname = meta.hasDisplayName() ? meta.displayName() : Component.translatable(itemStack.translationKey());
 
-				itemComponent = Component.text(itemStack.getAmount()+"x", NamedTextColor.GREEN)
+				itemComponent = Component.text(""+itemStack.getAmount(), Color.GREEN)
+						.append(Component.text("x", NamedTextColor.GRAY))
+						.color(NamedTextColor.WHITE)
 						.appendSpace().append(displayname)
-						.hoverEvent(itemStack)
-				;
+						.hoverEvent(itemStack);
 			}
 			Component finalItemComponent = itemComponent;
 			event.result(event.result().replaceText(builder->

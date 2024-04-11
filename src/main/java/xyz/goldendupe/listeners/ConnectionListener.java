@@ -7,6 +7,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.persistence.PersistentDataType;
 import xyz.goldendupe.command.staff.VanishCommand;
+import xyz.goldendupe.events.PlayerFirstJoinEvent;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -61,6 +62,9 @@ public class ConnectionListener implements GDListener{
 										)
 								)
 				);
+				PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
+				playerFirstJoinEvent.callEvent();
+				event.joinMessage(playerFirstJoinEvent.joinMessage());
 			}
 		}
 	}

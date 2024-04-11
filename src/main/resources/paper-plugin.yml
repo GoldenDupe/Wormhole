@@ -26,7 +26,7 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
-    Unity:
+    Unity-Factions:
       load: BEFORE
       required: true
       join-classpath: true

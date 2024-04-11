@@ -21,7 +21,6 @@ import xyz.goldendupe.models.serializer.HomeSerializer;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
-import xyz.goldendupe.utils.impl.SpawnPosition;
 import xyz.goldendupe.utils.reference.FactionPlayerReference;
 
 import java.sql.Connection;

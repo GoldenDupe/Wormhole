@@ -365,6 +365,7 @@ toggle-random-items:
 
 rename:
   message-cannot-rename-air: "%prefix_short% Cannot rename air. Not capable to edit minecraft that much."
+  message-too-long: "%prefix_short% You are trying to enter too long name to your item. Max Length: 20"
   message-renamed: "%prefix_short% Renamed your item to %name% from %old_name%."
 
 mending:
