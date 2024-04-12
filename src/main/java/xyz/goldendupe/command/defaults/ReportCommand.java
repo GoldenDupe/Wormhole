@@ -22,6 +22,7 @@ import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCooldownCommand;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
+import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.astronauts.RUser;
 import xyz.goldendupe.models.astronauts.Report;
 import xyz.goldendupe.messenger.AstronautPlaceholders;
@@ -95,12 +96,12 @@ public class ReportCommand extends GDCloudCooldownCommand {
 
 					rUser.setPlayerReportsSent(rUser.playerReportsSent()+1);
 
-					List<Placeholder> placeholders = new ArrayList<>(GoldenMessenger.playerPlaceholders("player", player));
+					List<Placeholder> placeholders = new ArrayList<>(commandMessenger.getPlaceholderManager().playerPlaceholders("player", player));
 					placeholders.addAll(AstronautPlaceholders.userReportPlaceholders("who", rUser));
 					placeholders.addAll(AstronautPlaceholders.reportPlaceholders("report", report));
 
 					placeholders.add(new Placeholder("who", who.name()));
-					placeholders.addAll(GoldenMessenger.playerPlaceholders("who", who));
+					placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who", who));
 					placeholders.add(new Placeholder("reason", reason));
 
 					if (rUser.knownToAbuseReports()) {

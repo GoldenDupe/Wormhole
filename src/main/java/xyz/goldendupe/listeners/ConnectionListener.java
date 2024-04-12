@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.chatcolor.Color;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class ConnectionListener implements GDListener{
 			}
 		});
 		Player player = event.getPlayer();
-		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().createPlaceholders("player", player));
+		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
 		placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
 
 		goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-join-brand", 5, placeholders);
@@ -49,12 +50,12 @@ public class ConnectionListener implements GDListener{
 		} else {
 			event.joinMessage(
 					Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-							.appendSpace().append(GoldenMessenger.prefixName(player))
+							.appendSpace().append(GoldenPlaceholderManager.prefixName(player))
 			);
 			if (!event.getPlayer().hasPlayedBefore()) {
 				event.joinMessage(
 						Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-								.appendSpace().append(GoldenMessenger.prefixName(player))
+								.appendSpace().append(GoldenPlaceholderManager.prefixName(player))
 								.appendNewline().append(
 										Component.text("Click to send a welcome message for ", Color.MINECOIN).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
 												.hoverEvent(HoverEvent.showText(Component.text("Click here to send a welcome to ", Color.GRAY).append(player.name())))
@@ -78,7 +79,7 @@ public class ConnectionListener implements GDListener{
 	private void onKick(PlayerKickEvent event){
 		Player player = event.getPlayer();
 		PlayerKickEvent.Cause cause = event.getCause();
-		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().createPlaceholders("player", player));
+		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
 		placeholders.add(new Placeholder("cause", cause.name()));
 		placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
 

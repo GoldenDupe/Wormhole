@@ -14,6 +14,7 @@ import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class PlaytimeCommand extends GDCloudCommand {
 					long MM = TimeUnit.SECONDS.toMinutes(playtime) % 60;
 					long SS = TimeUnit.SECONDS.toSeconds(playtime) % 60;
 					List<Placeholder> placeholders = new LinkedList<>(List.of(new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS)));
-					placeholders.addAll(GoldenMessenger.playerPlaceholders("who", sender));
+					placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who", sender));
 					commandMessenger.message(sender, "playtime.message-playtime-self", placeholders);
 		});
 		commandManager.command(builder);
@@ -54,7 +55,7 @@ public class PlaytimeCommand extends GDCloudCommand {
 					long MM = TimeUnit.SECONDS.toMinutes(playtime) % 60;
 					long SS = TimeUnit.SECONDS.toSeconds(playtime) % 60;
 					List<Placeholder> placeholders = new LinkedList<>(List.of(new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS)));
-					placeholders.addAll(PlaceholderUtils.createPlaceholders("who", who));
+					placeholders.addAll(commandMessenger.getPlaceholderManager().offlinePlayerPlaceholders("who", who));
 					if (sender.equals(who)) {
 						commandMessenger.message(sender, "playtime.message-playtime-self", placeholders);
 					} else {

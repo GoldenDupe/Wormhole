@@ -1,6 +1,7 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.messenger.Message;
+import bet.astral.messenger.message.MessageType;
+import bet.astral.messenger.message.message.IMessage;
 import bet.astral.messenger.placeholder.PlaceholderList;
 import bet.astral.unity.model.FPrefix;
 import bet.astral.unity.model.FRole;
@@ -21,7 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.admin.MarkAsOGCommand;
-import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
@@ -36,7 +37,7 @@ public class ChatFormatListener implements GDListener {
 		return format(player, player, GDChat.GLOBAL, component);
 	}
 	public static @NotNull Component format(Player player, Audience whoSees, GDChat chat, Component message) {
-		Component name = GoldenMessenger.prefixNameSuffix(player);
+		Component name = GoldenPlaceholderManager.prefixNameSuffix(player);
 
 		LuckPerms luckPerms = goldenDupe.luckPerms();
 		User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
@@ -61,14 +62,14 @@ public class ChatFormatListener implements GDListener {
 		}
 
 		if (chat.asMessageChannel() != null) {
-			Message msg = goldenDupe.messenger().getMessage(chat.name().toLowerCase() + "chat.chat-message");
+			IMessage<?, Component> msg = goldenDupe.messenger().getMessage(chat.name().toLowerCase() + "chat.chat-message");
 			if (msg != null) {
-				PlaceholderList placeholders = new PlaceholderList(goldenDupe.messenger().createPlaceholders(player));
+				PlaceholderList placeholders = new PlaceholderList(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
 				placeholders.add("message", message);
 
 				format = goldenDupe.messenger().parse(
 						msg,
-						Message.Type.CHAT,
+						MessageType.CHAT,
 						placeholders);
 				return format;
 			}

@@ -1,8 +1,9 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.Message;
 import bet.astral.messenger.Messenger;
+import bet.astral.messenger.message.message.IMessage;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -40,7 +41,7 @@ public class GoldenDupeCommand extends GDCloudCommand {
 								try {
 									Field field = Messenger.class.getDeclaredField("messagesMap");
 									field.setAccessible(true);
-									Map<String, Message> messageMap = (Map<String, Message>) field.get(plugin.commandMessenger());
+									@SuppressWarnings("unchecked") Map<String, IMessage<?, Component>> messageMap = (Map<String, IMessage<?, Component>>) field.get(plugin.commandMessenger());
 
 									plugin.reloadConfig();
 									plugin.reloadMessengers();

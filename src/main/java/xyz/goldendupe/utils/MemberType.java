@@ -1,7 +1,7 @@
 package xyz.goldendupe.utils;
 
-import bet.astral.messenger.permission.Permission;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.permission.Permission;
 import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.models.GDChat;
@@ -38,11 +38,6 @@ public enum MemberType {
 	public Permission messenger(){
 		return Permission.of("goldendupe.messenger."+type);
 	}
-
-	public Permission messengerOf(String permission){
-		return Permission.of("goldendupe."+type+"."+permission);
-	}
-
 	public org.incendo.cloud.permission.Permission cloudOf(String permission){
 		return org.incendo.cloud.permission.Permission.permission("goldendupe."+type+"."+permission);
 	}

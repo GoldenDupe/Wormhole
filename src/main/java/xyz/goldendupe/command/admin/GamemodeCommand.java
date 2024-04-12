@@ -73,7 +73,7 @@ public class GamemodeCommand extends GDCloudCommand {
 									} else {
 										commandMessenger.message(sender,
 												gameMode.name().toLowerCase()
-														+ ".message-admin-already-same", commandMessenger.createPlaceholders(other));
+														+ ".message-admin-already-same", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
@@ -82,7 +82,7 @@ public class GamemodeCommand extends GDCloudCommand {
 													+ ".message-enabled");
 									commandMessenger.message(sender,
 											gameMode.name().toLowerCase()
-													+ ".message-admin-enabled", commandMessenger.createPlaceholders(other));
+													+ ".message-admin-enabled", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
 								} else {
 									other.setGameMode(gameMode);
 									commandMessenger.message(sender,
@@ -134,7 +134,7 @@ public class GamemodeCommand extends GDCloudCommand {
 									} else {
 										commandMessenger.message(sender,
 												gameMode.name().toLowerCase()
-														+ ".message-admin-already-same", commandMessenger.createPlaceholders(other));
+														+ ".message-admin-already-same", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
@@ -143,7 +143,7 @@ public class GamemodeCommand extends GDCloudCommand {
 													+ ".message-enabled");
 									commandMessenger.message(sender,
 											gameMode.name().toLowerCase()
-													+ ".message-admin-enabled", commandMessenger.createPlaceholders(other));
+													+ ".message-admin-enabled", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
 								} else {
 									other.setGameMode(gameMode);
 									commandMessenger.message(sender,

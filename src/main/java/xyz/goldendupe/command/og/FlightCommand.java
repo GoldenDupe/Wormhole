@@ -68,7 +68,7 @@ public class FlightCommand extends GDCloudCommand {
 					other.setFlying(other.getAllowFlight());
 					if (!other.equals(sender)) {
 						commandMessenger.message(sender, "fly." + (other.isFlying() ? "message-admin-enabled" : "message-admin-disabled"),
-								new Placeholder("player", commandMessenger.createPlaceholders(other)));
+								new Placeholder("player", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other)));
 						commandMessenger.message(other, "fly." + (other.isFlying() ? "message-enabled" : "message-disabled"));
 						return;
 					}

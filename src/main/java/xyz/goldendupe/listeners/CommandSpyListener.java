@@ -1,15 +1,13 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.messenger.permission.Permission;
 import bet.astral.messenger.placeholder.Placeholder;
 import io.papermc.paper.event.player.PlayerSignCommandPreprocessEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.util.Vector;
+import org.incendo.cloud.permission.PredicatePermission;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.astronauts.CSPYUser;
 
@@ -28,7 +26,7 @@ public class CommandSpyListener implements GDListener {
 		String command = event.getMessage();
 		goldenDupe.commandMessenger()
 				.broadcast(
-						Permission.of(sender -> {
+						PredicatePermission.of(sender -> {
 							if (sender instanceof Player player) {
 								CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
 								if (user.isCommandSpyToggled()) {
@@ -57,7 +55,7 @@ public class CommandSpyListener implements GDListener {
 		String command = event.getMessage();
 		goldenDupe.commandMessenger()
 				.broadcast(
-						Permission.of(sender -> {
+						PredicatePermission.of(sender -> {
 							if (sender instanceof Player player) {
 								CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
 								if (user.isCommandSpyToggled()) {

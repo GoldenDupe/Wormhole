@@ -64,6 +64,8 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public static final Random random = new Random(System.nanoTime());
     public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = false;
+    @Getter
+    private boolean isDevelopmentServer;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     @Getter
     private final FusionFlare fusionFlare = new FusionFlare(this);
@@ -88,7 +90,9 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
     @Getter(AccessLevel.PUBLIC) private Factions factions;
 
-    public GoldenDupe(GoldenDupeBoostrap boostrap){}
+    public GoldenDupe(GoldenDupeBoostrap boostrap){
+        this.isDevelopmentServer = boostrap.isDevServer();
+    }
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
     }
@@ -127,9 +131,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         loadCommands();
         getLogger().info("Loaded commands!");
         // listeners (Reflected)
-        getLogger().info("Loading event listeners..!");
         loadListeners();
-        getLogger().info("Loaded event listeners!");
         registerListener(new InventoryListener());
 
         // Messengers
@@ -227,19 +229,15 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     private GoldenMessenger loadMessenger(boolean debug, String name){
         FileConfiguration configuration = YamlConfiguration.loadConfiguration(new File(getDataFolder(), name));
-        GoldenMessenger goldenMessenger = new GoldenMessenger(configuration, new HashMap<>(), debug);
-        getLogger().info("Loading placeholders for messages...");
-        Map<String, Placeholder> placeholderMap = goldenMessenger.loadPlaceholders("placeholders");
-        getLogger().info("Loaded placeholders for messages...");
+        GoldenMessenger goldenMessenger = new GoldenMessenger(paperCommandManager, configuration);
+        Map<String, Placeholder> placeholderMap = goldenMessenger.getPlaceholderManager().loadPlaceholders("placeholders", configuration);
         // Debug
         if (placeholderMap == null){
             placeholderMap = new HashMap<>();
         } else {
             placeholderMap = new HashMap<>(placeholderMap);
         }
-        getLogger().info("Overriding message placeholders...");
-        goldenMessenger.overrideDefaultPlaceholders(placeholderMap);
-        getLogger().info("Overrode message placeholders...");
+        goldenMessenger.getPlaceholderManager().setDefaults(placeholderMap);
         return goldenMessenger;
     }
 

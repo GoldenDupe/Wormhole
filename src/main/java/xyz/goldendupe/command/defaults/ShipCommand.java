@@ -34,8 +34,8 @@ public class ShipCommand extends GDCloudCommand {
 							List<Placeholder> placeholders = new LinkedList<>();
 							placeholders.add(new Placeholder("who", playerOne.name()));
 							placeholders.add(new Placeholder("who-2", playerTwo.name()));
-							placeholders.addAll(commandMessenger.createPlaceholders("who", playerOne));
-							placeholders.addAll(commandMessenger.createPlaceholders("who-2", playerOne));
+							placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who", playerOne));
+							placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who-2", playerOne));
 							placeholders.addAll(createMatch("personality"));
 							placeholders.addAll(createMatch("passion"));
 							placeholders.addAll(createMatch("friendship"));

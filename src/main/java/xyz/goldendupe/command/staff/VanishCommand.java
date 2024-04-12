@@ -42,7 +42,7 @@ public class VanishCommand extends GDCloudCommand {
 						commandMessenger.message(sender,
 								"vanish.message-vanished");
 						commandMessenger.broadcast(GoldenMessenger.MessageChannel.STAFF,
-								"vanish.broadcast-staff-vanished", commandMessenger.createPlaceholders(sender));
+								"vanish.broadcast-staff-vanished", commandMessenger.getPlaceholderManager().playerPlaceholders("player", sender));
 					} else {
 						sender.getPersistentDataContainer().remove(KEY_VANISHED);
 						Bukkit.getOnlinePlayers().stream().filter(player -> !player.equals(sender))
@@ -52,7 +52,7 @@ public class VanishCommand extends GDCloudCommand {
 						commandMessenger.message(sender,
 								"vanish.message-unvanished");
 						commandMessenger.broadcast(GoldenMessenger.MessageChannel.STAFF,
-								"vanish.broadcast-staff-unvanished", commandMessenger.createPlaceholders(sender));
+								"vanish.broadcast-staff-unvanished", commandMessenger.getPlaceholderManager().playerPlaceholders("player", sender));
 					}
 				});
 		commandPlayer(builder);

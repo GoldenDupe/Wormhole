@@ -69,7 +69,7 @@ public class CustomChatCommand extends GDCloudCommand {
                                         gdPlayer.setChat(type);
                                     }
                                 } else {
-                                    List<Placeholder> placeholders = new LinkedList<>(commandMessenger.createPlaceholders(player));
+                                    List<Placeholder> placeholders = new LinkedList<>(commandMessenger.getPlaceholderManager().playerPlaceholders("player", player));
                                     placeholders.add(new LegacyPlaceholder("message", message));
                                     commandMessenger
                                             .broadcast(type.asMessageChannel(),

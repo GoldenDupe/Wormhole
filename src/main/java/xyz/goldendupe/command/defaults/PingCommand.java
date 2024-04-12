@@ -12,6 +12,7 @@ import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.Ping;
 
@@ -28,7 +29,7 @@ public class PingCommand extends GDCloudCommand {
 				.senderType(Player.class)
 				.handler(context-> {
 							Player sender = context.sender();
-							List<Placeholder> placeholders = new LinkedList<>(GoldenMessenger.playerPlaceholders("player", sender));
+							List<Placeholder> placeholders = new LinkedList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player.", sender));
 							int ping = sender.getPing();
 							Component coloredPing = Ping.defaultPing.format(ping);
 
@@ -45,7 +46,7 @@ public class PingCommand extends GDCloudCommand {
 				.handler(context-> {
 							Player argument = context.get("player");
 							Player sender = context.sender();
-							List<Placeholder> placeholders = new LinkedList<>(GoldenMessenger.playerPlaceholders("player", argument));
+							List<Placeholder> placeholders = new LinkedList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", argument));
 							int ping = argument.getPing();
 							Component coloredPing = Ping.defaultPing.format(ping);
 
