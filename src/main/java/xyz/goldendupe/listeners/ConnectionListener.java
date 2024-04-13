@@ -2,14 +2,9 @@ package xyz.goldendupe.listeners;
 
 import bet.astral.messenger.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataType;
-import xyz.goldendupe.command.staff.VanishCommand;
-import xyz.goldendupe.events.PlayerFirstJoinEvent;
-import xyz.goldendupe.messenger.GoldenMessenger;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +12,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.command.staff.VanishCommand;
+import xyz.goldendupe.events.PlayerFirstJoinEvent;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.chatcolor.Color;
 
@@ -52,12 +50,14 @@ public class ConnectionListener implements GDListener{
 		} else {
 			event.joinMessage(
 					Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-							.appendSpace().append(GoldenPlaceholderManager.prefixName(player))
+							.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(player))
 			);
 			if (!event.getPlayer().hasPlayedBefore()) {
 				event.joinMessage(
 						Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-								.appendSpace().append(GoldenPlaceholderManager.prefixName(player))
+								.append(Component.empty().decoration(TextDecoration.BOLD, false))
+								.appendSpace().append(GoldenPlaceholderManager.prefixName(player)));
+				/*
 								.appendNewline().append(
 										Component.text("Click to send a welcome message for ", Color.MINECOIN).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
 												.hoverEvent(HoverEvent.showText(Component.text("Click here to send a welcome to ", Color.GRAY).append(player.name())))
@@ -65,6 +65,7 @@ public class ConnectionListener implements GDListener{
 										)
 								)
 				);
+				 */
 				PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
 				playerFirstJoinEvent.callEvent();
 				event.joinMessage(playerFirstJoinEvent.joinMessage());
@@ -75,6 +76,14 @@ public class ConnectionListener implements GDListener{
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event){
 		goldenDupe.playerDatabase().unload(event.getPlayer());
+		if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.KEY_VANISHED)) {
+			event.quitMessage(null);
+		} else {
+			event.quitMessage(
+					Component.text("-", Color.RED, TextDecoration.BOLD)
+							.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(event.getPlayer()))
+			);
+		}
 	}
 
 	@EventHandler
