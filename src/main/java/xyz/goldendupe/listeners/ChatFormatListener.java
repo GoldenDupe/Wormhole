@@ -47,10 +47,14 @@ public class ChatFormatListener implements GDListener {
 			OriginalMemberType originalMemberType = roleOptional.get();
 			name = name.hoverEvent(HoverEvent.showText(Component
 					.text("OG Player", NamedTextColor.GOLD, TextDecoration.BOLD)
+					.appendSpace()
+					.append(Component.text("|", Color.DARK_GRAY, TextDecoration.BOLD))
+					.appendSpace()
 					.append(Component
-							.text("Previously ranked as ", Color.GREEN)
+							.text("Previous rank ", Color.WHITE)
+							.append(Component.text(":", Color.GRAY))
 							.append(originalMemberType.displayname(player))
-					)));
+					).decoration(TextDecoration.ITALIC, false)));
 		}
 
 		Component format = Component.empty();
