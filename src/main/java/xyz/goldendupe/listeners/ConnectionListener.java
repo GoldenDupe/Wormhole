@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.persistence.PersistentDataType;
 import xyz.goldendupe.command.staff.VanishCommand;
 import xyz.goldendupe.events.PlayerFirstJoinEvent;
@@ -40,10 +41,11 @@ public class ConnectionListener implements GDListener{
 			}
 		});
 		Player player = event.getPlayer();
-		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
-		placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
-
-		goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-join-brand", 5, placeholders);
+		Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, ()->{
+			List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
+			placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
+			goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-join-brand", 5, placeholders);
+		}, 10);
 
 		if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.KEY_VANISHED)) {
 			event.joinMessage(null);
