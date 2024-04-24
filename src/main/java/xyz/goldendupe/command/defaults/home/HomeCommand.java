@@ -4,6 +4,7 @@ import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
@@ -44,11 +45,11 @@ public class HomeCommand extends GDCloudCommand {
                             commandMessenger.message(sender, "home.message-teleporting",
                                     new Placeholder("home", homeName));
                             new TimedTeleport(commandMessenger, "home",
-                                    sender, home.asLocation(), false, 100).accept();
-
+                                    sender, home.asLocation(),
+                                    false, 100)
+                                    .setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)
+                                    .accept();
                         })
         );
-
     }
-
 }

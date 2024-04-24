@@ -1,10 +1,12 @@
 package xyz.goldendupe.utils;
 
 import bet.astral.messenger.Messenger;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.goldendupe.GoldenDupe;
 
@@ -24,6 +26,8 @@ public class TimedTeleport {
 	private Consumer<Entity> startConsumer = null;
 	private Consumer<Entity> moveConsumer = null;
 	private Consumer<Entity> teleportConsumer = null;
+	@Getter
+	private PlayerTeleportEvent.TeleportCause teleportCause = PlayerTeleportEvent.TeleportCause.PLUGIN;
 
 	public TimedTeleport(Messenger<?> messenger, String messagePrefix, List<Entity> entities, Location to,  boolean allowMoving, int ticksToTeleport){
 		this.messagePrefix = messagePrefix;
@@ -73,7 +77,7 @@ public class TimedTeleport {
 
 			if (ticksLeft <= 0){
 				for (Entity entity : entitiesToTeleport) {
-					entity.teleportAsync(to);
+					entity.teleportAsync(to, teleportCause);
 					if (entity instanceof Player player) {
 						messenger.message(player, messagePrefix + ".message-teleported");
 					}
@@ -124,6 +128,11 @@ public class TimedTeleport {
 
 	public TimedTeleport setTeleportConsumer(Consumer<Entity> teleportConsumer) {
 		this.teleportConsumer = teleportConsumer;
+		return this;
+	}
+
+	public TimedTeleport setTeleportCause(PlayerTeleportEvent.TeleportCause teleportCause) {
+		this.teleportCause = teleportCause;
 		return this;
 	}
 }

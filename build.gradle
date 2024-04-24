@@ -57,8 +57,10 @@ dependencies {
     compileOnly 'bet.astral:Unity:1.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
-    implementation 'io.github.classgraph:classgraph:4.8.165'
+    compileOnly 'io.github.classgraph:classgraph:4.8.165'
 
+    //
+    compileOnly('com.zaxxer:HikariCP:5.1.0')
 
     // Cloud and brigadier for commands
     compileOnly 'com.mojang:brigadier:1.0.18'

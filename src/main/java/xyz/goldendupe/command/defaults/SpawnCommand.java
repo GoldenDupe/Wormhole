@@ -25,11 +25,11 @@ public class SpawnCommand extends GDCloudCommand {
 
 	public SpawnCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
-		cooldowns.put(MemberType.DEFAULT, 125);
-		cooldowns.put(MemberType.DONATOR, 87);
-		cooldowns.put(MemberType.OG, 62);
-		cooldowns.put(MemberType.MODERATOR, 87);
-		cooldowns.put(MemberType.ADMINISTRATOR, 65);
+		cooldowns.put(MemberType.DEFAULT, 120);
+		cooldowns.put(MemberType.DONATOR, 80);
+		cooldowns.put(MemberType.OG, 60);
+		cooldowns.put(MemberType.MODERATOR, 60);
+		cooldowns.put(MemberType.ADMINISTRATOR, 20);
 
 		abstractSpawn("overworld", "spawn");
 		abstractSpawn("nether", "nether");
@@ -49,10 +49,8 @@ public class SpawnCommand extends GDCloudCommand {
 
 					GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(spawn);
 					if (newSpawn == null){
-						if (sender.hasPermission(MemberType.ADMINISTRATOR.permissionOf("spawn-info"))){
-							sender.sendRichMessage("Spawn is not set for spawn <white>"+spawn);
-						}
 						commandMessenger.message(sender, name+".message-unusable");
+						return;
 					}
 					//noinspection DataFlowIssue
 					if (!sender.hasPermission(newSpawn.getPermission())) {
@@ -74,15 +72,13 @@ public class SpawnCommand extends GDCloudCommand {
 					if (cooldown == null) {
 						cooldown = 0;
 					}
-					new TimedTeleport(commandMessenger,
-							spawn,
-							sender,
-							newSpawn.asLocation(),
-							false,
-							cooldown)
+					new TimedTeleport(commandMessenger, spawn,
+							sender, newSpawn.asLocation(),
+							false, cooldown)
 							.setMoveConsumer(entity -> player.setTeleportingSpawn(null))
-							.setTeleportConsumer(entity -> player.setTeleportingSpawn(null))
-							.setTeleportConsumer(entity -> player.setTeleportingSpawn(newSpawn));
+							.setTeleportConsumer(entity -> player.setTeleportingSpawn(newSpawn))
+							.setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)
+							.accept();
 				});
 		commandManager.command(commandBuilder);
 
