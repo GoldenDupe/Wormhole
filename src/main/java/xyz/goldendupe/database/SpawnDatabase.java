@@ -1,8 +1,8 @@
 package xyz.goldendupe.database;
 
 import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
+import com.google.gson.internal.LinkedTreeMap;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.impl.GDSpawn;
 import xyz.goldendupe.models.serializer.SpawnSerializer;
@@ -72,10 +72,11 @@ public class SpawnDatabase {
 		}
 		try {
 			FileReader fileReader = new FileReader(file);
-			Collection<GDSpawn> spawns = (Collection<GDSpawn>) GSON.fromJson(fileReader, spawnType.getRawType());
-			spawns.forEach(spawn->{
+			JsonArray jsonArray = JsonParser.parseReader(fileReader).getAsJsonArray();
+			for (JsonElement element : jsonArray){
+				GDSpawn spawn = GSON.fromJson(element, GDSpawn.class);
 				this.spawns.put(spawn.getName().toLowerCase(), spawn);
-			});
+			}
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
 		}
