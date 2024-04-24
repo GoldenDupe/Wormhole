@@ -2,6 +2,7 @@ package xyz.goldendupe.command.defaults;
 
 import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -31,9 +32,11 @@ public class SpawnCommand extends GDCloudCommand {
 		cooldowns.put(MemberType.MODERATOR, 60);
 		cooldowns.put(MemberType.ADMINISTRATOR, 20);
 
-		abstractSpawn("overworld", "spawn");
-		abstractSpawn("nether", "nether");
-		abstractSpawn("end", "end");
+		for (Spawn spawn : Spawn.values()){
+			for (String name : spawn.names){
+				abstractSpawn(spawn.name, name);
+			}
+		}
 	}
 
 	private void abstractSpawn(String spawn, String name) {
@@ -97,5 +100,22 @@ public class SpawnCommand extends GDCloudCommand {
 							commandMessenger.message(sender, name + ".message-teleported", new Placeholder("new", newSpawn.getName()));
 						})
 		);
+	}
+
+	@Getter
+	public enum Spawn {
+		OVERWORLD("overworld", "spawn", "overworld", "ow"),
+		NETHER("nether", "nether", "hell"),
+		END("end", "theend", "end")
+		;
+
+
+		private final String name;
+		private final String[] names;
+		Spawn(String name, String... names1) {
+			this.name = name;
+			this.names = names1;
+		}
+
 	}
 }
