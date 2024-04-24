@@ -107,8 +107,7 @@ public class Position implements Identity {
 	}
 
 	public Location asLocation(){
-		return new Location(Bukkit.getWorld(world), x, y, z, yaw, 90);
-
+		return new Location(Bukkit.getWorld(world), x, y, z, yaw, 0);
 	}
 
 	@Nullable
