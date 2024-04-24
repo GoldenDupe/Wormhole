@@ -76,7 +76,7 @@ public class SpawnCommand extends GDCloudCommand {
 							sender, newSpawn.asLocation(),
 							false, cooldown)
 							.setMoveConsumer(entity -> player.setTeleportingSpawn(null))
-							.setTeleportConsumer(entity -> player.setTeleportingSpawn(newSpawn))
+							.setTeleportConsumer(entity -> player.setTeleportingSpawn(null))
 							.setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)
 							.accept();
 				});
