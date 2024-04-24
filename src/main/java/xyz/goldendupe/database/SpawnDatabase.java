@@ -63,8 +63,6 @@ public class SpawnDatabase {
 	}
 
 	public void load(){
-		TypeToken<Collection<GDSpawn>> spawnType = new TypeToken<>() {
-		};
 		File file = new File(goldenDupe.getDataFolder(), "spawns.json");
 		if (!file.exists()){
 			return;
