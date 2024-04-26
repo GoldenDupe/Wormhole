@@ -23,7 +23,6 @@ public class UptimeCommand extends GDCloudCommand {
                                 Description.of("Tells the player how long the server has been running."),
                                 "ut", "runtime"
                         )
-                        .senderType(Player.class)
                         .handler(context -> {
                             long runtimeMillis = goldenDupe.getStartTimer().get();
 
