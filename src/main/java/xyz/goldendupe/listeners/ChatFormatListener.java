@@ -1,8 +1,7 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.messenger.message.MessageType;
-import bet.astral.messenger.message.message.IMessage;
-import bet.astral.messenger.placeholder.PlaceholderList;
+import bet.astral.messenger.v2.placeholder.Placeholder;
+import bet.astral.messenger.v2.translation.TranslationKey;
 import bet.astral.unity.model.FPrefix;
 import bet.astral.unity.model.FRole;
 import bet.astral.unity.model.Faction;
@@ -65,59 +64,9 @@ public class ChatFormatListener implements GDListener {
 			}
 		}
 
-		if (chat.asMessageChannel() != null) {
-			IMessage<?, Component> msg = goldenDupe.messenger().getMessage(chat.name().toLowerCase() + "chat.chat-message");
-			if (msg != null) {
-				PlaceholderList placeholders = new PlaceholderList(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
-				placeholders.add("message", message);
-
-				format = goldenDupe.messenger().parse(
-						msg,
-						MessageType.CHAT,
-						placeholders);
-				return format;
-			}
-		} else if (chat == GDChat.CLAN || chat == GDChat.CLAN_ALLY){
-			format = Component.empty();
-			if (!(whoSees instanceof Player)){
-				try {
-					throw new IllegalAccessException("Couldn't show chat message for CLAN and CLAN_ALLY to "+ whoSees.getClass().getName() + " as it's not instance of a player!");
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				}
-			}
-			GDPlayer sender = goldenDupe.playerDatabase().fromPlayer(player);
-			GDPlayer receiver = goldenDupe.playerDatabase().fromPlayer((Player) whoSees);
-			switch (chat){
-				case CLAN -> {
-					if (!receiver.getFactionID().equals(sender.getFactionID())){
-						throw new RuntimeException("Couldn't message "+ receiver.offlinePlayer().getName() + " ("+receiver.uuid()+") as they are not in the same clan as "+ sender.offlinePlayer().getName() + " ("+sender.offlinePlayer().getUniqueId()+"). The GDChat type is set to CLAN and not CLAN_ALLY!");
-					}
-					format = format.append(Component.text("CLAN", Color.CLAN_RED, TextDecoration.BOLD)
-							.hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE)
-									.appendNewline()
-									.append(Component.text("This message is displayed only displayed to your clan.", Color.CLAN_RED)))));
-				}
-				case CLAN_ALLY -> {
-					if (!receiver.getFactionID().equals(sender.getFactionID())){
-						format = format.append(Component.text("ALLY", Color.CLAN_ALLY_BLUE, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan's ally.", Color.WHITE).appendNewline().append(Component.text("This message is displayed from an ally of your faction.", Color.CLAN_ALLY_BLUE)))));
-					} else {
-						format = format.append(Component.text("CLAN", Color.CLAN_ALLY_BLUE, TextDecoration.BOLD).hoverEvent(HoverEvent.showText(Component.text("This message is from your clan.", Color.WHITE).appendNewline().append(Component.text("This message is displayed to all allies of the faction.", Color.CLAN_ALLY_BLUE)))));
-					}
-				}
-			}
-			Faction faction = gdPlayer.getFaction();
-			assert faction != null;
-			FPrefix prefix = faction.getPrivatePrefix(player);
-			format = format
-					.appendSpace()
-					.append(prefix.format(player))
-					.appendSpace()
-					.append(Component.text("\u00BB", NamedTextColor.GRAY))
-					.appendSpace()
-					.append(message);
+		if (chat.asMessageChannel() != null && chat.asMemberType() != null) {
 			return format;
-		} else {
+		}else {
 			Faction faction = gdPlayer.getFaction();
 			if (faction != null) {
 				FRole role = faction.getRole(player);
@@ -160,6 +109,12 @@ public class ChatFormatListener implements GDListener {
 	private void onChat(@NotNull AsyncChatEvent event){
 		Player p = event.getPlayer();
 		GDChat chat = goldenDupe().playerDatabase().fromPlayer(p).chat();
+		if (chat.asMemberType() != null && chat.asMessageChannel() != null){
+			event.viewers().removeIf(viewer->viewer instanceof Player player && !player.hasPermission(chat.asMessageChannel().permission()));
+			goldenDupe.messenger().message(event.viewers(), TranslationKey.of("commands."+chat.name()+"-chat.chat"), Placeholder.of("player", p.name()), Placeholder.of("message", event.message()));
+			event.setCancelled(true);
+			return;
+		}
 		event.renderer(new ChatRenderer() {
 			@Override
 			public @NotNull Component render(@NotNull Player player, @NotNull Component component, @NotNull Component message, @NotNull Audience audience) {
