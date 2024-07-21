@@ -1,15 +1,16 @@
 package xyz.goldendupe.command.defaults.home;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.Position;
 import xyz.goldendupe.utils.TimedTeleport;
@@ -17,8 +18,8 @@ import xyz.goldendupe.utils.TimedTeleport;
 @Cloud
 public class HomeCommand extends GDCloudCommand {
 
-    public HomeCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-        super(goldenDupe, commandManager);
+    public HomeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
 
         commandManager.command(
                 commandManager.commandBuilder(
@@ -31,20 +32,20 @@ public class HomeCommand extends GDCloudCommand {
                         .handler(context -> {
 
                             Player sender = context.sender();
-                            GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
+                            GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
                             String homeName = context.get("home-name").toString().toLowerCase();
 
-                            if (!goldenDupe.getHomes(player).containsKey(homeName)){
-                                commandMessenger.message(sender, "home.message-doesnt-exist",
-                                        new Placeholder("home", homeName));
+                            if (!goldenDupe().getHomes(player).containsKey(homeName)){
+                                commandMessenger.message(sender, Translations.COMMAND_HOME_DOESNT_EXIST,
+                                        Placeholder.of("home", homeName));
                                 return;
                             }
 
-                            Position home = goldenDupe.getHomes(player).get(homeName);
+                            Position home = goldenDupe().getHomes(player).get(homeName);
 
-                            commandMessenger.message(sender, "home.message-teleporting",
-                                    new Placeholder("home", homeName));
-                            new TimedTeleport(commandMessenger, "home",
+                            commandMessenger.message(sender, Translations.COMMAND_HOME_TELEPORTING,
+                                    Placeholder.of("home", homeName));
+                            new TimedTeleport(commandMessenger, "commands.home",
                                     sender, home.asLocation(),
                                     false, 100)
                                     .setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)

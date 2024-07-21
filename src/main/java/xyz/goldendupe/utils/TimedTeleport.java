@@ -1,6 +1,6 @@
 package xyz.goldendupe.utils;
 
-import bet.astral.messenger.Messenger;
+import bet.astral.messenger.v2.Messenger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitTask;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.messenger.Translations;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -16,7 +17,7 @@ import java.util.function.Consumer;
 
 public class TimedTeleport {
 	private final String messagePrefix;
-	private final Messenger<?> messenger;
+	private final Messenger messenger;
 	private final Location to;
 	private final boolean allowMoving;
 	private final Map<Entity, Location> locationMap = new HashMap<>();
@@ -29,7 +30,7 @@ public class TimedTeleport {
 	@Getter
 	private PlayerTeleportEvent.TeleportCause teleportCause = PlayerTeleportEvent.TeleportCause.PLUGIN;
 
-	public TimedTeleport(Messenger<?> messenger, String messagePrefix, List<Entity> entities, Location to,  boolean allowMoving, int ticksToTeleport){
+	public TimedTeleport(Messenger messenger, String messagePrefix, List<Entity> entities, Location to,  boolean allowMoving, int ticksToTeleport){
 		this.messagePrefix = messagePrefix;
 		this.messenger = messenger;
 		this.to = to;
@@ -37,7 +38,7 @@ public class TimedTeleport {
 		this.entitiesToTeleport = new HashSet<>(entities);
 		this.ticksLeft = ticksToTeleport;
 	}
-	public TimedTeleport(Messenger<?> messenger, String messagePrefix, Entity entity, Location to, boolean allowMoving, int ticksToTeleport){
+	public TimedTeleport(Messenger messenger, String messagePrefix, Entity entity, Location to, boolean allowMoving, int ticksToTeleport){
 		this.messagePrefix = messagePrefix;
 		this.messenger = messenger;
 		this.to = to;
@@ -63,7 +64,7 @@ public class TimedTeleport {
 					if (newLoc.distance(locationMap.get(entity)) > 0.25) {
 						entitiesToTeleport.remove(entity);
 						if (entity instanceof Player player) {
-							messenger.message(player, messagePrefix + ".message-teleport-canceled-moved");
+							messenger.message(player, Translations.get(messagePrefix + ".teleport-canceled-moved"));
 						}
 						if (moveConsumer != null)
 							moveConsumer.accept(entity);
@@ -79,7 +80,7 @@ public class TimedTeleport {
 				for (Entity entity : entitiesToTeleport) {
 					entity.teleportAsync(to, teleportCause);
 					if (entity instanceof Player player) {
-						messenger.message(player, messagePrefix + ".message-teleported");
+						messenger.message(player, Translations.get(messagePrefix + ".teleported"));
 					}
 					if (teleportConsumer != null)
 						teleportConsumer.accept(entity);

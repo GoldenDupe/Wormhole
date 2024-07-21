@@ -1,23 +1,25 @@
 package xyz.goldendupe.command.defaults.home;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.joml.Vector3d;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.GoldenMessenger;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDHome;
 
 @Cloud
 public class DelHomeCommand extends GDCloudCommand {
 
-    public DelHomeCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-        super(goldenDupe, commandManager);
+    public DelHomeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
 
         commandManager.command(
                 commandManager.commandBuilder(
@@ -32,22 +34,25 @@ public class DelHomeCommand extends GDCloudCommand {
                             Player sender = context.sender();
                             String homeName = context.get("delhome-name").toString().toLowerCase();
 
-                            GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
+                            GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 
-                            if (!goldenDupe.getHomes(player).containsKey(homeName)){
-                                commandMessenger.message(sender, "delhome.message-doesnt-exist",
-                                        new Placeholder("home", homeName));
+                            if (!goldenDupe().getHomes(player).containsKey(homeName)){
+                                commandMessenger.message(sender, Translations.COMMAND_DELETE_HOME_DOESNT_EXIST,
+                                        Placeholder.of("home", homeName));
                                 return;
                             }
 
-                            GDHome home = goldenDupe.getHomes(player).get(homeName.toLowerCase());
+                            GDHome home = goldenDupe().getHomes(player).get(homeName.toLowerCase());
 
-                            goldenDupe.requestDeleteHome(player, homeName);
+                            goldenDupe().requestDeleteHome(player, homeName);
 
-                            commandMessenger.message(sender, "delhome.message-del",
-                                    new Placeholder("home", homeName),
-                                    new Placeholder("xyz", new Vector3d(home.getX(), home.getY(), home.getZ())),
-                                    new Placeholder("world", sender.getWorld().getName()));
+                            commandMessenger.message(sender, Translations.COMMAND_DELETE_HOME_REMOVED,
+                                    Placeholder.of("home", homeName),
+                                    Placeholder.of("xyz", new Vector3d(home.getX(), home.getY(), home.getZ()).toString()),
+                                    Placeholder.of("x", GoldenMessenger.format(home.getX())),
+                                    Placeholder.of("y", GoldenMessenger.format(home.getY())),
+                                    Placeholder.of("z", GoldenMessenger.format(home.getZ())),
+                                    Placeholder.of("world", sender.getWorld().getName()));
                         })
         );
 
