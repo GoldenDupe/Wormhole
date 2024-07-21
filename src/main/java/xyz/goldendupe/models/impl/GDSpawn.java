@@ -1,11 +1,13 @@
 package xyz.goldendupe.models.impl;
 
-import bet.astral.messenger.placeholder.Placeholder;
-import bet.astral.messenger.placeholder.Placeholderable;
-import bet.astral.messenger.utils.PlaceholderUtils;
+import bet.astral.messenger.v2.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholderable;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.utils.Position;
 
 import java.util.Collection;
@@ -25,17 +27,16 @@ public class GDSpawn extends Position implements Placeholderable {
 
 
 	@Override
-	public Collection<Placeholder> asPlaceholder(String s) {
+	public @NotNull Collection<@NotNull Placeholder> toPlaceholders(@Nullable String s) {
 		return List.of(
-				PlaceholderUtils.createPlaceholder(s, "x", getX()),
-				PlaceholderUtils.createPlaceholder(s, "y", getY()),
-				PlaceholderUtils.createPlaceholder(s, "z", getZ()),
-				PlaceholderUtils.createPlaceholder(s, "yaw", getYaw()),
-				PlaceholderUtils.createPlaceholder(s, "pitch", 90),
-				PlaceholderUtils.createPlaceholder(s, "xyz", "x: "+getX()+", y: "+getY()+", z: " + getZ()),
-				PlaceholderUtils.createPlaceholder(s, "world", getWorldName()),
-				PlaceholderUtils.createPlaceholder(s, "name_id", getName().toLowerCase()),
-				PlaceholderUtils.createPlaceholder(s, "name", getName()),
-				PlaceholderUtils.createPlaceholder(s, "id", getUniqueId().toString()));
+				Placeholder.of(s, "x", Component.text(GoldenMessenger.format(getX()))),
+				Placeholder.of(s, "y", Component.text(GoldenMessenger.format(getY()))),
+				Placeholder.of(s, "z", Component.text(GoldenMessenger.format(getZ()))),
+				Placeholder.of(s, "yaw", Component.text(GoldenMessenger.format(getYaw()))),
+				Placeholder.of(s, "pitch", Component.text(GoldenMessenger.format(90))),
+				Placeholder.of(s, "world", Component.text(getWorldName())),
+				Placeholder.of(s, "name_id", Component.text(getName().toLowerCase())),
+				Placeholder.of(s, "name", Component.text(getName())),
+				Placeholder.of(s, "id", Component.text(getUniqueId().toString())));
 	}
 }
