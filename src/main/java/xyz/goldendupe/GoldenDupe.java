@@ -413,4 +413,6 @@ public final class GoldenDupe extends JavaPlugin {
     }
 
 
+    public void reloadMessengers() {
+    }
 }
