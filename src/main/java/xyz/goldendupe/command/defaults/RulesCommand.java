@@ -6,6 +6,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 
 @Cloud
@@ -16,6 +17,7 @@ public class RulesCommand extends GDCloudCommand {
 		commandManager.command(commandManager.commandBuilder(
 				"rules",
 				Description.of("Shows the rules of the server."))
+						.permission(MemberType.DEFAULT.permissionOf("rules"))
 				.handler(context->{
 					commandMessenger.message(context.sender(), "rules.message.rules");
 				})

@@ -14,22 +14,17 @@ public class TrashListener implements GDListener{
 	}
 
 	@EventHandler
-	private void onTrashInventory(InventoryClickEvent event){
-		if (event.getInventory().getHolder() instanceof TrashCommand.TrashInventory inventory){
-			if (event.getSlot()>44){
+	private void onTrashInventory(InventoryClickEvent event) {
+		if (event.getInventory().getHolder() instanceof TrashCommand.TrashInventory inventory) {
+			if (event.getSlot() > 44) {
 				event.setCancelled(true);
-				if (event.getSlot()==45){
+				if (event.getSlot() == 45) {
 					event.getWhoClicked().openInventory(TrashCommand.trashCans.get(Math.max(inventory.backward, 0)).getInventory());
-				} else if (event.getSlot()==53){
-					event.getWhoClicked().openInventory(TrashCommand.trashCans.get(Math.min(inventory.forward, TrashCommand.trashCans.size()-1)).getInventory());
-				} else if (event.getSlot()==49){
-					if (System.currentTimeMillis()< inventory.nextClearAllow) {
-						for (int i = 0; i < 45; i++){
-							event.getInventory().setItem(i, null);
-						}
-						inventory.nextClearAllow=System.currentTimeMillis()+TrashCommand.CLEAR_TIME;
-					} else {
-						event.getWhoClicked().sendRichMessage("<red>You need to wait " + ((System.currentTimeMillis()-inventory.nextClearAllow)/1000)+ "s until you can clear this inventory again.");
+				} else if (event.getSlot() == 53) {
+					event.getWhoClicked().openInventory(TrashCommand.trashCans.get(Math.min(inventory.forward, TrashCommand.trashCans.size() - 1)).getInventory());
+				} else if (event.getSlot() == 49) {
+					for (int i = 0; i < 45; i++) {
+						event.getInventory().setItem(i, null);
 					}
 				}
 			}

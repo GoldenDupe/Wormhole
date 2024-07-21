@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.command.defaults.SpawnCommand;
 import xyz.goldendupe.command.staff.VanishCommand;
 import xyz.goldendupe.events.PlayerFirstJoinEvent;
 import xyz.goldendupe.messenger.GoldenMessenger;
@@ -69,6 +70,10 @@ public class ConnectionListener implements GDListener{
 				PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
 				playerFirstJoinEvent.callEvent();
 				event.joinMessage(playerFirstJoinEvent.joinMessage());
+
+				Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, ()->{
+					event.getPlayer().teleportAsync(goldenDupe.getSpawnDatabase().get(SpawnCommand.Spawn.OVERWORLD.getName()).asLocation());
+				}, 7);
 			}
 		}
 	}

@@ -76,6 +76,7 @@ public class ChatColorListener implements GDListener {
 
 			case GRADIENT -> {
 				StringBuilder reset = new StringBuilder("<gradient:");
+				int i = 0;
 				if (chatColor.colors().size()>1) {
 					for (Color color : chatColor.colors().values()) {
 						if (color == null) {
@@ -85,6 +86,7 @@ public class ChatColorListener implements GDListener {
 							reset.append(":");
 						}
 						reset.append(color.asHex());
+						i++;
 					}
 					if (chatColor.colors().size() == 1) {
 						reset.append(":").append(reset.toString().split(":")[1]);
@@ -96,6 +98,7 @@ public class ChatColorListener implements GDListener {
 				if (player.hasPermission(MemberType.ADMINISTRATOR.permissionOf(permission))) {
 					message = message.replace("<reset>", "<reset>" + reset);
 				}
+				
 				return MiniMessage.miniMessage().deserialize(reset+message);
 			}
 			case NONE -> {

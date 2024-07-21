@@ -32,8 +32,8 @@ public class SpawnCommand extends GDCloudCommand {
 		cooldowns.put(MemberType.MODERATOR, 60);
 		cooldowns.put(MemberType.ADMINISTRATOR, 20);
 
-		for (Spawn spawn : Spawn.values()){
-			for (String name : spawn.names){
+		for (Spawn spawn : Spawn.values()) {
+			for (String name : spawn.names) {
 				abstractSpawn(spawn.name, name);
 			}
 		}
@@ -45,14 +45,29 @@ public class SpawnCommand extends GDCloudCommand {
 						Description.of("Allows player to teleport to " + name)
 				)
 				.senderType(Player.class)
+				.optional(
+						PlayerParser.playerComponent().name("who-to-teleport"))
 				.handler(context -> {
 					Player sender = context.sender();
+					if (context.optional("who-to-teleport").isPresent() && sender.hasPermission(MemberType.ADMINISTRATOR.permissionOf("spawn.teleport-others"))) {
+						Player whoToTeleport = (Player) context.optional("who-to-teleport").orElse(null);
+						if (whoToTeleport == null){
+							return;
+						}
+						GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(name);
+
+						whoToTeleport.teleportAsync(newSpawn.asLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
+						commandMessenger.message(sender, name + ".message-admin-teleport", new Placeholder("new", newSpawn.getName()), new Placeholder("player", whoToTeleport.name()));
+						commandMessenger.message(sender, name + ".message-teleported", new Placeholder("new", newSpawn.getName()));
+
+						return;
+					}
 					GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
 					GDSpawn oldTeleport = player.teleportingSpawn();
 
 					GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(spawn);
-					if (newSpawn == null){
-						commandMessenger.message(sender, name+".message-unusable");
+					if (newSpawn == null) {
+						commandMessenger.message(sender, name + ".message-unusable");
 						return;
 					}
 					//noinspection DataFlowIssue
@@ -84,34 +99,18 @@ public class SpawnCommand extends GDCloudCommand {
 							.accept();
 				});
 		commandManager.command(commandBuilder);
-
-		commandManager.command(
-				commandBuilder
-						.permission(MemberType.ADMINISTRATOR.cloudOf("spawn.teleport-others"))
-						.argument(
-								PlayerParser.playerComponent().name("who-to-teleport"))
-						.handler(context -> {
-							Player sender = context.sender();
-							Player whoToTeleport = context.sender();
-							GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(name);
-
-							whoToTeleport.teleportAsync(newSpawn.asLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
-							commandMessenger.message(sender, name + ".message-admin-teleport", new Placeholder("new", newSpawn.getName()), new Placeholder("player", whoToTeleport.name()));
-							commandMessenger.message(sender, name + ".message-teleported", new Placeholder("new", newSpawn.getName()));
-						})
-		);
 	}
 
 	@Getter
 	public enum Spawn {
 		OVERWORLD("overworld", "spawn", "overworld", "ow"),
 		NETHER("nether", "nether", "hell"),
-		END("end", "theend", "end")
-		;
+		END("end", "theend", "end");
 
 
 		private final String name;
 		private final String[] names;
+
 		Spawn(String name, String... names1) {
 			this.name = name;
 			this.names = names1;

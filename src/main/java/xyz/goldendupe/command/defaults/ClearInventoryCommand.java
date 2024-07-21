@@ -20,6 +20,7 @@ import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class ClearInventoryCommand extends GDCloudCommand {
 								Description.of("Clears the player's inventory."),
 								"clearinv", "clearinventory", "inventoryclear", "invclear"
 						)
+						.permission(MemberType.DEFAULT.permissionOf("trash"))
 						.senderType(Player.class)
 						.flag(CommandFlag.builder("change-auto-confirm"))
 						.handler(context -> {

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UptimeCommand extends GDCloudCommand {
@@ -23,6 +24,7 @@ public class UptimeCommand extends GDCloudCommand {
                                 Description.of("Tells the player how long the server has been running."),
                                 "ut", "runtime"
                         )
+                        .permission(MemberType.DEFAULT.permissionOf("uptime"))
                         .handler(context -> {
                             long runtimeMillis = goldenDupe.getStartTimer().get();
 

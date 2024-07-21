@@ -8,6 +8,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ClearOwnChatCommand extends GDCloudCommand {
@@ -18,9 +19,9 @@ public class ClearOwnChatCommand extends GDCloudCommand {
 				commandManager.commandBuilder(
 								"clearmychat",
 								Description.of("Clears the player's chat."),
-								"mychatbanish!", "bleach"
+								"bleach"
 						)
-						.permission("goldendupe.all.clearchat")
+						.permission(MemberType.DEFAULT.permissionOf("clear-my-chat"))
 						.senderType(Player.class)
 						.handler(context -> {
 							Player sender = context.sender();

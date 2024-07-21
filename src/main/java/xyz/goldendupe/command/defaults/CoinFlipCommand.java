@@ -10,6 +10,5 @@ import xyz.goldendupe.command.cloud.GDCloudCommand;
 public class CoinFlipCommand extends GDCloudCommand {
 	public CoinFlipCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
-
 	}
 }

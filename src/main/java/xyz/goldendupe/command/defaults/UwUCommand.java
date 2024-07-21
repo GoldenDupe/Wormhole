@@ -16,12 +16,14 @@ import xyz.goldendupe.listeners.ChatUwUListener;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
+import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UwUCommand extends GDCloudCommand {
 	public UwUCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
 		super(goldenDupe, commandManager);
 		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UWU?", Color.MINECOIN, TextDecoration.OBFUSCATED)))
+						.permission(MemberType.DEFAULT.permissionOf("uwu"))
 				.handler(context->{
 					CommandSender sender = context.sender();
 					Component uwu = ChatUwUListener.uwuString();

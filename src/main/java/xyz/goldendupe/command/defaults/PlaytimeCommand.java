@@ -1,7 +1,6 @@
 package xyz.goldendupe.command.defaults;
 
 import bet.astral.messenger.placeholder.Placeholder;
-import bet.astral.messenger.utils.PlaceholderUtils;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
@@ -13,8 +12,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
-import xyz.goldendupe.messenger.GoldenMessenger;
-import xyz.goldendupe.messenger.GoldenPlaceholderManager;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +30,7 @@ public class PlaytimeCommand extends GDCloudCommand {
 				Description.of("Allows player to see their own playtime."),
 				"pt")
 				.senderType(Player.class)
+				.permission(MemberType.DEFAULT.permissionOf("playtime"))
 				.handler(context->{
 					Player sender = context.sender();
 

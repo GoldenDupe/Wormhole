@@ -44,6 +44,7 @@ public class DupeCommand extends GDCloudCommand {
 				"d"
 		)
 				.senderType(Player.class)
+				.permission(MemberType.DEFAULT.permissionOf("dupe"))
 				.handler(context->{
 					Player sender = context.sender();
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
@@ -176,6 +177,9 @@ public class DupeCommand extends GDCloudCommand {
 	public boolean anyIllegals(ItemStack itemStack){
 		if (ContainerUtils.isCarryableContainer(itemStack)){
 			for (ItemStack item : ContainerUtils.getCarryableContainer(itemStack)){
+				if (item == null){
+					continue;
+				}
 				if (anyIllegals(item)){
 					return false;
 				}

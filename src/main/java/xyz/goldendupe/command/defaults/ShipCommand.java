@@ -10,6 +10,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.utils.MemberType;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public class ShipCommand extends GDCloudCommand {
 		commandManager.command(
 				commandManager.commandBuilder("ship", Description.of("Allows a player to ship 2 different players together"),
 						"fuck")
+						.permission(MemberType.DEFAULT.permissionOf("ship"))
 						.argument(PlayerParser.playerComponent().name("player-one"))
 						.argument(PlayerParser.playerComponent().name("player-two"))
 						.handler(context->{

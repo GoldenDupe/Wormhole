@@ -40,7 +40,7 @@ public class TrashCommand extends GDCloudCommand {
 				"JeffersonMBA", "Lynxdeer", "Prodeathmaster", "lilcorgi_", "ycu", "nc_optical", "ItsIsolation",
 				"t6b", "crewly", "zeroarmy27", "sxlace_", "z_conquest", "catalystcx", "ImNotLying", "Kitkat2116",
 				"Fate65", "bltck", "dev_ghosty - Scammed $100", "Kazaretski",  "pl0ks", "frogiswoman", "brodaaa",
-				"kaylinthedragon", "arielazi", "1crusty", "unluckyl", "craftingtoty1000", "kgroom123", "alphaarmor",
+				"kaylinthedragon", "arielazi", "1crusty1", "unluckyl", "craftingtoty1000", "kgroom123", "alphaarmor",
 				"circular_man", "keith__", "jonahed", "notpetya", "cryptokian"
 		));
 
@@ -99,7 +99,7 @@ public class TrashCommand extends GDCloudCommand {
 		super(goldenDupe, commandManager);
 		commandManager.command(commandManager.commandBuilder("trash",
 						Description.of("Allows players to delete"),
-						"garbage", "josh", "disposal", "rubbish", "british")
+						"garbage", "josh", "disposal", "rubbish", "tinder")
 				.permission(MemberType.DEFAULT.cloudOf("trash"))
 				.senderType(Player.class)
 				.handler(context -> {
@@ -114,8 +114,6 @@ public class TrashCommand extends GDCloudCommand {
 		private final Inventory inventory;
 		public final int forward;
 		public final int backward;
-		public long nextClearAllow = System.currentTimeMillis()+CLEAR_TIME;
-
 
 		public TrashInventory(int forward, int backward) {
 			this.forward = forward;
