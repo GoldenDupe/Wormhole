@@ -10,7 +10,7 @@ plugins {
 
     id 'io.freefair.lombok' version '5.1.0'
 
-    id("io.papermc.paperweight.userdev") version "1.5.10"
+    id("io.papermc.paperweight.userdev") version "1.7.1"
 
     id("xyz.jpenilla.run-paper") version "2.2.2"
 
@@ -49,12 +49,17 @@ repositories {
 
 
 dependencies {
-    implementation 'bet.astral:Messenger:1.6.0' // Messenger
-
+    implementation 'bet.astral:messenger:2.0.0' // Messenger
+    implementation 'bet.astral:messenger-paper:2.0.0' // Messenger
+    implementation 'bet.astral:messenger-cloud:2.0.0' // Messenger
     // have it as compile only as it needs to run as it's own plugin
     compileOnly 'bet.astral:Fluffy:1.0' // Fluffy (Combat System)
     // Factions/Clans
     compileOnly 'bet.astral:Unity:1.0'
+    // CPP
+    compileOnly 'bet.astral:cloudplusplus:1.2.5'
+    // GUIMan
+    compileOnly 'bet.astral:guiman:1.0.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'
@@ -64,11 +69,12 @@ dependencies {
 
     // Cloud and brigadier for commands
     compileOnly 'com.mojang:brigadier:1.0.18'
-    var cloudVersion = "2.0.0-SNAPSHOT";
-    compileOnly 'org.incendo:cloud-core:' + cloudVersion
-    compileOnly 'org.incendo:cloud-paper:' + cloudVersion
-    compileOnly 'org.incendo:cloud-brigadier:' + cloudVersion
-    compileOnly 'org.incendo:cloud-minecraft-extras:' + cloudVersion
+    var cloudMineccraft = "2.0.0-beta.8";
+    var cloudCore = "2.0.0-rc.2";
+    compileOnly 'org.incendo:cloud-core:' + cloudCore
+    compileOnly 'org.incendo:cloud-paper:' + cloudMineccraft
+    compileOnly 'org.incendo:cloud-brigadier:' + cloudMineccraft
+    compileOnly 'org.incendo:cloud-minecraft-extras:' + cloudMineccraft
 
     implementation 'org.projectlombok:lombok:1.18.26'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -78,9 +84,7 @@ dependencies {
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"  // Vault
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
-    compileOnly "io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT" // Paper MC
-    // Other Dependencies
-    paperweight.paperDevBundle("1.20.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
 }
 
 // Some shit is importing 1.13 bukkit api and not 1.20.1 api
@@ -90,20 +94,8 @@ configurations.compileOnly {
     exclude group: 'org.bukkit', module: 'bukkit'
 }
 
-def targetJavaVersion = 17
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release.set(targetJavaVersion)
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 processResources {

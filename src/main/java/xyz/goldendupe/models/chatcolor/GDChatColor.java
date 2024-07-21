@@ -42,6 +42,9 @@ public class GDChatColor {
 	}
 
 	public GDChatColor setColors(Map<Integer, Color> colors) {
+		if (colors == null) {
+			colors = new HashMap<>();
+		}
 		this.colors = colors;
 		return this;
 	}
@@ -111,6 +114,15 @@ public class GDChatColor {
 	public GDChatColor setUnderlined(boolean underlined) {
 		this.underlined = underlined;
 		return this;
+	}
+
+	public void reset() {
+		this.underlined = false;
+		this.strikethrough = false;
+		this.italic = false;
+		this.rainbowReversed = false;
+		this.rainbowMode = 0;
+		this.colors = new HashMap<>();
 	}
 
 	public enum Mode {

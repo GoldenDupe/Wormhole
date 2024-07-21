@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.cloud;
 
+import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.cloudplusplus.command.CloudPPCommand;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,7 @@ public class GDCloudCommand extends CloudPPCommand<GoldenDupe, CommandSender> {
 	protected final GoldenDupe goldenDupe;
 	protected GoldenMessenger commandMessenger;
 	protected GoldenMessenger debugMessenger;
-	public GDCloudCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
+	public GDCloudCommand(CommandRegisterer<>, PaperCommandManager<CommandSender> commandManager) {
 		super(plugin, commandManager);
 		this.goldenDupe = plugin;
 		reloadMessengers();
