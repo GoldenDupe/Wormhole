@@ -1,58 +1,47 @@
 package xyz.goldendupe.messenger;
 
-import bet.astral.messenger.Messenger;
-import bet.astral.messenger.message.adventure.serializer.ComponentTypeSerializer;
-import bet.astral.messenger.placeholder.Placeholder;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.incendo.cloud.CommandManager;
-import org.incendo.cloud.permission.Permission;
-import org.jetbrains.annotations.NotNull;
+import bet.astral.messenger.v2.delay.Delay;
+import bet.astral.messenger.v2.paper.PaperMessenger;
+import bet.astral.messenger.v2.permission.Permission;
+import bet.astral.messenger.v2.placeholder.Placeholder;
+import bet.astral.messenger.v2.translation.TranslationKey;
 import xyz.goldendupe.GoldenDupe;
 
 import java.time.Duration;
 import java.util.*;
 
 
-public class GoldenMessenger extends Messenger<GoldenDupe> implements MessageLoader {
+public class GoldenMessenger extends PaperMessenger implements MessageLoader {
 	private static final GoldenDupe gd;
 	static  {
 		gd = GoldenDupe.getPlugin(GoldenDupe.class);
 	}
-	public GoldenMessenger(CommandManager<CommandSender> commandManager, FileConfiguration messageConfig) {
-		super(gd, commandManager, new HashMap<>(), new ComponentTypeSerializer(), messageConfig);
-		setPlaceholderManager(new GoldenPlaceholderManager());
+	public GoldenMessenger() {
+		super(null);
 	}
-
-	@Override
-	@NotNull
-	public GoldenPlaceholderManager getPlaceholderManager() {
-		return (GoldenPlaceholderManager) super.getPlaceholderManager();
-	}
-
 
 	public List<Placeholder> createCooldownPlaceholders(long left){
 		List<Placeholder> placeholders = new LinkedList<>();
 		Duration durationLeft = Duration.ofMillis(left);
-		placeholders.add(new Placeholder("%cooldown_millis%", durationLeft.toMillis()));
-		placeholders.add(new Placeholder("%cooldown_seconds%", durationLeft.toSeconds()));
-		placeholders.add(new Placeholder("%cooldown_minutes%", durationLeft.toMinutes()));
-		placeholders.add(new Placeholder("%cooldown_hours%", durationLeft.toHours()));
+		placeholders.add(Placeholder.of("%cooldown_millis%", durationLeft.toMillis()));
+		placeholders.add(Placeholder.of("%cooldown_seconds%", durationLeft.toSeconds()));
+		placeholders.add(Placeholder.of("%cooldown_minutes%", durationLeft.toMinutes()));
+		placeholders.add(Placeholder.of("%cooldown_hours%", durationLeft.toHours()));
 		return placeholders;
 	}
 
-	public void broadcast(MessageChannel channel, String messageKey, int delay, List<Placeholder> placeholders){
+	public void broadcast(MessageChannel channel, TranslationKey messageKey, Delay delay, List<Placeholder> placeholders){
 		placeholders = new LinkedList<>(placeholders);
-		broadcast(Permission.of(channel.permission), messageKey, delay, placeholders);
+		broadcast(Permission.of(channel.permission), delay, messageKey, placeholders);
 	}
-	public void broadcast(MessageChannel channel, String messageKey, int delay, Placeholder... placeholders){
-		broadcast(channel, messageKey, delay, Arrays.stream(placeholders).toList());
+	public void broadcast(MessageChannel channel, TranslationKey messageKey, Delay delay, Placeholder... placeholders){
+		broadcast(Permission.of(channel.permission), delay, messageKey, placeholders);
 	}
-	public void broadcast(MessageChannel channel, String messageKey, List<Placeholder> placeholders){
-		broadcast(channel, messageKey, 0, placeholders);
+	public void broadcast(MessageChannel channel, TranslationKey messageKey, List<Placeholder> placeholders){
+		broadcast(Permission.of(channel.permission), messageKey, placeholders);
 	}
-	public void broadcast(MessageChannel channel, String messageKey, Placeholder... placeholders){
-		broadcast(channel, messageKey, 0, placeholders);
+	public void broadcast(MessageChannel channel, TranslationKey messageKey, Placeholder... placeholders){
+		broadcast(Permission.of(channel.permission), messageKey, placeholders);
 	}
 
 
