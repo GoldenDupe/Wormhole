@@ -1,24 +1,24 @@
 package xyz.goldendupe.command.og;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
-import io.papermc.paper.adventure.AdventureComponent;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.Command;
-import org.incendo.cloud.brigadier.suggestion.TooltipSuggestion;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
 import org.incendo.cloud.description.Description;
+import org.incendo.cloud.minecraft.extras.suggestion.ComponentTooltipSuggestion;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
 
@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class FlightCommand extends GDCloudCommand {
-	public FlightCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
-		Command.Builder<Player> builder = commandBuilder("fly",
+	public FlightCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
+		Command.Builder<Player> builder = commandBuilderPlayer("fly",
 				Description.of("Allows player to toggle the flight mode.")
 				, "flight")
 				.permission(MemberType.OG.cloudOf("fly").or(MemberType.ADMINISTRATOR.cloudOf("fly")).or(MemberType.MODERATOR.cloudOf("fly")))
@@ -38,7 +38,11 @@ public class FlightCommand extends GDCloudCommand {
 					Player sender = context.sender();
 					sender.setAllowFlight(!sender.getAllowFlight());
 					sender.setFlying(sender.getAllowFlight());
-					commandMessenger.message(sender, "fly." + (sender.isFlying() ? "message-enabled" : "message-disabled"));
+					if (sender.isFlying()){
+						commandMessenger.message(sender, Translations.COMMAND_FLY_TRUE);
+					} else {
+						commandMessenger.message(sender, Translations.COMMAND_FLY_FALSE);
+					}
 				});
 		commandPlayer(builder);
 		commandPlayer(builder
@@ -49,14 +53,20 @@ public class FlightCommand extends GDCloudCommand {
 									@Override
 									public @NonNull CompletableFuture<? extends @NonNull Iterable<? extends @NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 										return CompletableFuture.supplyAsync(() -> Bukkit.getOnlinePlayers().stream().map(player ->
-												TooltipSuggestion.suggestion(player.getName(),
-														new AdventureComponent(
+												ComponentTooltipSuggestion.suggestion(player.getName(),
 																player.name().appendSpace().append(Component.text("|", Color.DARK_GRAY))
 																		.appendSpace()
-																		.append(Component.text("Flight", Color.YELLOW))
+																		.append(Component.text("Flight allowed", Color.YELLOW))
 																		.append(Component.text(":", Color.GRAY))
 																		.appendSpace()
-																		.append(player.isFlying() ? Component.text("Enabled", Color.GREEN) : Component.text("Disabled", Color.RED))))).collect(Collectors.toSet()));
+																		.append(player.getAllowFlight() ? Component.text("Enabled", Color.GREEN) : Component.text("Disabled", Color.RED))
+																		.appendNewline()
+																		.appendSpace()
+																		.append(Component.text("Flying", Color.YELLOW))
+																		.append(Component.text(":", Color.GRAY))
+																		.appendSpace()
+																		.append(player.isFlying() ? Component.text("Enabled", Color.GREEN) : Component.text("Disabled", Color.RED))))
+												.collect(Collectors.toSet()));
 									}
 								}
 						))
@@ -67,12 +77,20 @@ public class FlightCommand extends GDCloudCommand {
 					other.setAllowFlight(!sender.getAllowFlight());
 					other.setFlying(other.getAllowFlight());
 					if (!other.equals(sender)) {
-						commandMessenger.message(sender, "fly." + (other.isFlying() ? "message-admin-enabled" : "message-admin-disabled"),
-								new Placeholder("player", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other)));
-						commandMessenger.message(other, "fly." + (other.isFlying() ? "message-enabled" : "message-disabled"));
+						if (other.getAllowFlight()) {
+							commandMessenger.message(sender, Translations.COMMAND_FLY_ADMIN_TRUE, Placeholder.of("player", other.name()));
+							commandMessenger.message(other, Translations.COMMAND_FLY_TRUE);
+						} else {
+							commandMessenger.message(sender, Translations.COMMAND_FLY_ADMIN_FALSE, Placeholder.of("player", other.name()));
+							commandMessenger.message(other, Translations.COMMAND_FLY_FALSE);
+						}
 						return;
 					}
-					commandMessenger.message(other, "fly." + (other.isFlying() ? "message-enabled" : "message-disabled"));
+					if (other.getAllowFlight()) {
+						commandMessenger.message(other, Translations.COMMAND_FLY_TRUE);
+					} else {
+						commandMessenger.message(other, Translations.COMMAND_FLY_FALSE);
+					}
 				})
 		);
 	}
