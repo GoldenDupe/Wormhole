@@ -1,32 +1,28 @@
 package xyz.goldendupe.command.cloud;
 
-import bet.astral.cloudplusplus.CommandRegisterer;
-import bet.astral.cloudplusplus.annotations.DoNotReflect;
-import bet.astral.cloudplusplus.command.CloudPPCommand;
+import bet.astral.cloudplusplus.command.CPPCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.messenger.GoldenMessenger;
 
-@DoNotReflect
-public class GDCloudCommand extends CloudPPCommand<GoldenDupe, CommandSender> {
-	protected final GoldenDupe goldenDupe;
+public class GDCloudCommand extends CPPCommand<CommandSender> {
+	private GoldenDupe goldenDupe;
 	protected GoldenMessenger commandMessenger;
-	protected GoldenMessenger debugMessenger;
-	public GDCloudCommand(CommandRegisterer<>, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
-		this.goldenDupe = plugin;
-		reloadMessengers();
+	public GDCloudCommand(GoldenDupeBootstrap registerer, PaperCommandManager<CommandSender> commandManager) {
+		super(registerer, commandManager);
+		commandMessenger = (GoldenMessenger) registerer.getMessenger();
 	}
 
-	@Override
-	public void reloadMessengers() {
-		super.reloadMessengers();
-		this.commandMessenger = (GoldenMessenger) super.commandMessenger;
-		this.debugMessenger = (GoldenMessenger) super.debugMessenger;
+	public GoldenDupe goldenDupe(){
+		if (goldenDupe == null){
+			goldenDupe = GoldenDupe.instance();
+		}
+		return goldenDupe;
 	}
 
 	public void commandPlayer(Command<Player> command) {
