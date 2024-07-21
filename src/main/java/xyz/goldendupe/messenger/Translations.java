@@ -42,6 +42,8 @@ public class Translations {
 	public static final Translation COMMAND_SPY_COMMAND_BLOCKED = new Translation("commands.commandspy.command-blocked").add(ComponentType.CHAT, text("<white>%command% <green>is now blocked from your command spy."));
 	public static final Translation COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED = new Translation("commands.commandspy.command-already-unblocked").add(ComponentType.CHAT, text("<white>%command% <red>already has been unblocked."));
 	public static final Translation COMMAND_SPY_COMMAND_UNBLOCKED = new Translation("commands.commandspy.command-unblocked").add(ComponentType.CHAT, text("<white>%command% <green>is now unblocked from your command spy."));
+	public static final Translation LISTENER_COMMAND_SPY_EXECUTED = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY] <yellow>%player% <white>executed command <yellow>%command_suggest%"));
+	public static final Translation LISTENER_COMMAND_SPY_EXECUTED_SIGN = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY] <yellow>%player% <white>executed sign command (%x%, %y%, %z%, %world%) <yellow>%command_suggest%"));
 	// Dupable modification
 	public static final Translation COMMAND_DUPABLE_AIR = new Translation("commands.dupable.air").add(ComponentType.CHAT, text("<red>You cannot change if air is dupable or undupable."));
 	public static final Translation COMMAND_DUPABLE_MADE_DUPABLE = new Translation("commands.dupable.made-dupable").add(ComponentType.CHAT, text("<red>Made your item dupable."));
@@ -179,7 +181,8 @@ public class Translations {
 	public static final Translation COMMAND_ADMIN_CHAT_FALSE = new Translation("commands.admin-chat.disabled").add(ComponentType.CHAT, text("<green>Your chat messages will no longer forwarded to admin chat."));
 	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE = new Translation("commands.admin-chat.chat").add(ComponentType.CHAT, text("<red><bold>[ADMIN] <white>%player% >> <white>%message%"));
 	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE_CONSOLE = new Translation("commands.admin-chat.chat-console").add(ComponentType.CHAT, text("<red><bold>[ADMIN] <red>CONSOLE >> <white>%message%"));
-
+	// Illegals
+	public static final Translation LISTENER_ILLEGAL = new Translation("listeners.illegal.cannot-place").add(ComponentType.CHAT, text("<red>You cannot place <white>%block%<red>."));
 
 	private static Component text(@NotNull String val){
 		return MiniMessage.miniMessage().deserialize(val);
