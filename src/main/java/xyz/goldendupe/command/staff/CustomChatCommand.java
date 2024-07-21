@@ -1,16 +1,16 @@
 package xyz.goldendupe.command.staff;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.LegacyPlaceholder;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDChat;
 import xyz.goldendupe.models.GDPlayer;
 
@@ -20,30 +20,29 @@ import java.util.List;
 @Cloud
 public class CustomChatCommand extends GDCloudCommand {
 
-    public CustomChatCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-        super(plugin, commandManager);
+    public CustomChatCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
 
         for (GDChat chat : GDChat.values()) {
             if (chat.asMessageChannel() == null || chat.asMemberType() == null) return;
             abstractChatCommand(chat);
         }
-
     }
 
     void abstractChatCommand(GDChat type) {
 
-        final String st = type.name().toLowerCase();
-        String name = (type == GDChat.STAFF ? st : st + "s");
+        final String name = type.name().toLowerCase();
+        String group = (type == GDChat.STAFF ? name : name + "s");
 
         commandManager.command(
                 commandManager.commandBuilder(
-                                st + "chat",
-                                Description.of("Lets " + name + " send messages only other " + name + " can see."),
-                                st.charAt(0) + "chat",
-                                st.charAt(0)+"c"
+                                name + "chat",
+                                Description.of("Lets " + group + " send messages only other " + group + " can see."),
+                                name.charAt(0) + "chat",
+                                name.charAt(0)+"c"
                         )
                         .optional(StringParser.stringComponent(StringParser.StringMode.GREEDY).name("chat-text"))
-                        .permission(type.asMemberType().cloudOf(st+"chat"))
+                        .permission(type.asMemberType().cloudOf("rank-chat"))
                         .handler(context -> {
 
                             CommandSender sender = context.sender();
@@ -59,27 +58,27 @@ public class CustomChatCommand extends GDCloudCommand {
 
                             if (sender instanceof Player player) {
                                 if (!hasArgs) {
-                                    GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+                                    GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
                                     GDChat chat = gdPlayer.chat();
                                     if (chat == type) {
-                                        commandMessenger.message(sender, st + ".message-toggle-off");
+                                        commandMessenger.message(sender, Translations.get(name + ".enabled"));
                                         gdPlayer.setChat(GDChat.GLOBAL);
                                     } else {
-                                        commandMessenger.message(sender, st + ".message-toggle-on");
+                                        commandMessenger.message(sender, Translations.get(name + ".disabled"));
                                         gdPlayer.setChat(type);
                                     }
                                 } else {
-                                    List<Placeholder> placeholders = new LinkedList<>(commandMessenger.getPlaceholderManager().playerPlaceholders("player", player));
-                                    placeholders.add(new LegacyPlaceholder("message", message));
+                                    List<Placeholder> placeholders = new LinkedList<>();
+                                    placeholders.add(Placeholder.legacy("message", message));
                                     commandMessenger
                                             .broadcast(type.asMessageChannel(),
-                                                    st + "chat.message-chat", placeholders);
+                                                    Translations.get(name + ".chat"), placeholders);
                                 }
                             } else if (hasArgs && sender instanceof ConsoleCommandSender) {
                                 commandMessenger
                                         .broadcast(type.asMessageChannel(),
-                                                st + "chat.message-chat-console",
-                                                new LegacyPlaceholder("message", message));
+                                                Translations.get(name + ".chat-console"),
+                                                Placeholder.legacy("message", message));
                             }
 
                         })

@@ -1,6 +1,6 @@
 package xyz.goldendupe.command.staff;
 
-import bet.astral.messenger.placeholder.LegacyPlaceholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -8,15 +8,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 
 @Cloud
 public class ClearChatCommand extends GDCloudCommand {
 
-	public ClearChatCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public ClearChatCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
 								"clearchat",
@@ -33,8 +34,8 @@ public class ClearChatCommand extends GDCloudCommand {
 //								Bukkit.broadcast(Component.text("CC#"+i), "goldendupe.staff.clearchat.receive");
 								Bukkit.broadcast(component, "goldendupe.staff.clearchat.receive");
 							}
-							commandMessenger.broadcast("clearchat.message-chat-cleared",
-									new LegacyPlaceholder("who", sender instanceof ConsoleCommandSender ? "Server-Console" : sender.getName()));
+							commandMessenger.broadcast(Translations.COMMAND_CLEAR_CHAT,
+									Placeholder.legacy("who", sender instanceof ConsoleCommandSender ? "Server-Console" : sender.getName()));
 						})
 		);
 	}
