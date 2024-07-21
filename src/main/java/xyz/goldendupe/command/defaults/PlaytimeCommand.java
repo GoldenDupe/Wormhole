@@ -1,6 +1,8 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.messenger.v2.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.PlaceholderList;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
@@ -9,12 +11,11 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.parser.OfflinePlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
-import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 @Cloud
 public class PlaytimeCommand extends GDCloudCommand {
 
-	public PlaytimeCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public PlaytimeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 
 		Command.Builder<Player> builder = commandManager.commandBuilder(
 				"playtime",
@@ -38,9 +39,10 @@ public class PlaytimeCommand extends GDCloudCommand {
 					long HH = TimeUnit.SECONDS.toHours(playtime) % 24;
 					long MM = TimeUnit.SECONDS.toMinutes(playtime) % 60;
 					long SS = TimeUnit.SECONDS.toSeconds(playtime) % 60;
-					List<Placeholder> placeholders = new LinkedList<>(List.of(new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS)));
-					placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who", sender));
-					commandMessenger.message(sender, "playtime.message-playtime-self", placeholders);
+					PlaceholderList placeholders = new PlaceholderList(List.of(Placeholder.of("hours", HH), Placeholder.of("minutes", MM), Placeholder.of("seconds", SS)));
+					placeholders.add(Placeholder.of("player", sender.name()));
+
+					commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
 		});
 		commandManager.command(builder);
 		commandManager.command(builder
@@ -53,12 +55,12 @@ public class PlaytimeCommand extends GDCloudCommand {
 					long HH = TimeUnit.SECONDS.toHours(playtime) % 24;
 					long MM = TimeUnit.SECONDS.toMinutes(playtime) % 60;
 					long SS = TimeUnit.SECONDS.toSeconds(playtime) % 60;
-					List<Placeholder> placeholders = new LinkedList<>(List.of(new Placeholder("hours", HH), new Placeholder("minutes", MM), new Placeholder("seconds", SS)));
-					placeholders.addAll(commandMessenger.getPlaceholderManager().offlinePlayerPlaceholders("who", who));
+					PlaceholderList placeholders = new PlaceholderList(List.of(Placeholder.of("hours", HH), Placeholder.of("minutes", MM), Placeholder.of("seconds", SS)));
+					placeholders.add(Placeholder.of("player", who.getName()));
 					if (sender.equals(who)) {
-						commandMessenger.message(sender, "playtime.message-playtime-self", placeholders);
+						commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
 					} else {
-						commandMessenger.message(sender, "playtime.message-playtime-other", placeholders);
+						commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_OTHER, placeholders);
 					}
 				})
 		);

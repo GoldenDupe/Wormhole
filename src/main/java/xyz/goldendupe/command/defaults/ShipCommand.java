@@ -1,15 +1,15 @@
 package xyz.goldendupe.command.defaults;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
+import org.incendo.cloud.parser.standard.StringParser;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
 import java.util.ArrayList;
@@ -22,27 +22,32 @@ import java.util.Random;
 public class ShipCommand extends GDCloudCommand {
 	private final Random random = new Random(System.currentTimeMillis());
 
-	public ShipCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public ShipCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder("ship", Description.of("Allows a player to ship 2 different players together"),
 						"fuck")
 						.permission(MemberType.DEFAULT.permissionOf("ship"))
-						.argument(PlayerParser.playerComponent().name("player-one"))
-						.argument(PlayerParser.playerComponent().name("player-two"))
+						.argument(StringParser.stringComponent(StringParser.StringMode.QUOTED).name("player-one"))
+						.argument(StringParser.stringComponent(StringParser.StringMode.QUOTED).name("player-two"))
 						.handler(context->{
-							Player playerOne = context.get("player-one");
-							Player playerTwo = context.get("player-two");
+							String playerOne = context.get("player-one");
+							String playerTwo = context.get("player-two");
 							List<Placeholder> placeholders = new LinkedList<>();
-							placeholders.add(new Placeholder("who", playerOne.name()));
-							placeholders.add(new Placeholder("who-2", playerTwo.name()));
-							placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who", playerOne));
-							placeholders.addAll(commandMessenger.getPlaceholderManager().playerPlaceholders("who-2", playerOne));
-							placeholders.addAll(createMatch("personality"));
-							placeholders.addAll(createMatch("passion"));
-							placeholders.addAll(createMatch("friendship"));
-							placeholders.addAll(createMatch("chemistry"));
-							commandMessenger.message(context.sender(), "ship.message-shipped", placeholders);
+							placeholders.add(Placeholder.of("who", playerOne));
+							placeholders.add(Placeholder.of("who-2", playerTwo));
+							placeholders.addAll(createMatch("progress-bar-0"));
+							placeholders.addAll(createMatch("progress-bar-1"));
+							placeholders.addAll(createMatch("progress-bar-2"));
+							placeholders.addAll(createMatch("progress-bar-3"));
+							placeholders.addAll(createMatch("progress-bar-4"));
+							placeholders.addAll(createMatch("progress-bar-5"));
+							placeholders.addAll(createMatch("progress-bar-6"));
+							placeholders.addAll(createMatch("progress-bar-7"));
+							placeholders.addAll(createMatch("progress-bar-8"));
+							placeholders.addAll(createMatch("progress-bar-9"));
+							placeholders.addAll(createMatch("progress-bar-10"));
+							commandMessenger.message(context.sender(), Translations.COMMAND_SHIP, placeholders);
 						})
 		);
 	}
@@ -67,8 +72,8 @@ public class ShipCommand extends GDCloudCommand {
 		}
 		bar = "<gray>"+bar;
 		List<Placeholder> placeholders = new ArrayList<>();
-		placeholders.add(new Placeholder(name+"_match", MiniMessage.miniMessage().deserialize(bar)));
-		placeholders.add(new Placeholder(name+"_int", random));
+		placeholders.add(Placeholder.of(name+"-bar", MiniMessage.miniMessage().deserialize(bar)));
+		placeholders.add(Placeholder.of(name+"-int", random));
 		return placeholders;
 	}
 

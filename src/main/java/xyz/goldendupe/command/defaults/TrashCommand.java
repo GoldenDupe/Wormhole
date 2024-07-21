@@ -16,6 +16,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
@@ -41,7 +42,7 @@ public class TrashCommand extends GDCloudCommand {
 				"t6b", "crewly", "zeroarmy27", "sxlace_", "z_conquest", "catalystcx", "ImNotLying", "Kitkat2116",
 				"Fate65", "bltck", "dev_ghosty - Scammed $100", "Kazaretski",  "pl0ks", "frogiswoman", "brodaaa",
 				"kaylinthedragon", "arielazi", "1crusty1", "unluckyl", "craftingtoty1000", "kgroom123", "alphaarmor",
-				"circular_man", "keith__", "jonahed", "notpetya", "cryptokian"
+				"circular_man", "keith__", "jonahed", "notpetya", "cryptokian", "numba2"
 		));
 
 		NamespacedKey key = new NamespacedKey(GoldenDupe.getPlugin(GoldenDupe.class), "random");
@@ -95,15 +96,15 @@ public class TrashCommand extends GDCloudCommand {
 		}
 	}
 
-	public TrashCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public TrashCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		commandManager.command(commandManager.commandBuilder("trash",
 						Description.of("Allows players to delete"),
 						"garbage", "josh", "disposal", "rubbish", "tinder")
 				.permission(MemberType.DEFAULT.cloudOf("trash"))
 				.senderType(Player.class)
 				.handler(context -> {
-					goldenDupe.getServer().getScheduler().runTask(goldenDupe, () -> {
+					goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
 						context.sender().openInventory(trashCans.get(0).inventory);
 					});
 				})

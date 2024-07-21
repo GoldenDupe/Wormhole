@@ -1,7 +1,7 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +10,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDSpawn;
@@ -24,8 +24,8 @@ import java.util.Map;
 public class SpawnCommand extends GDCloudCommand {
 	private static final Map<MemberType, Integer> cooldowns = new HashMap<>();
 
-	public SpawnCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public SpawnCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		cooldowns.put(MemberType.DEFAULT, 120);
 		cooldowns.put(MemberType.DONATOR, 80);
 		cooldowns.put(MemberType.OG, 60);
@@ -49,23 +49,25 @@ public class SpawnCommand extends GDCloudCommand {
 						PlayerParser.playerComponent().name("who-to-teleport"))
 				.handler(context -> {
 					Player sender = context.sender();
+					sender.sendMessage("Spawn command needs to be rewritten");
+					/*
 					if (context.optional("who-to-teleport").isPresent() && sender.hasPermission(MemberType.ADMINISTRATOR.permissionOf("spawn.teleport-others"))) {
 						Player whoToTeleport = (Player) context.optional("who-to-teleport").orElse(null);
 						if (whoToTeleport == null){
 							return;
 						}
-						GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(name);
+						GDSpawn newSpawn = goldenDupe().getSpawnDatabase().get(name);
 
 						whoToTeleport.teleportAsync(newSpawn.asLocation(), PlayerTeleportEvent.TeleportCause.COMMAND);
-						commandMessenger.message(sender, name + ".message-admin-teleport", new Placeholder("new", newSpawn.getName()), new Placeholder("player", whoToTeleport.name()));
-						commandMessenger.message(sender, name + ".message-teleported", new Placeholder("new", newSpawn.getName()));
+						commandMessenger.message(sender, name + ".message-admin-teleport", Placeholder.of("new", newSpawn.getName()), Placeholder.of("player", whoToTeleport.name()));
+						commandMessenger.message(sender, name + ".message-teleported", Placeholder.of("new", newSpawn.getName()));
 
 						return;
 					}
-					GDPlayer player = goldenDupe.playerDatabase().fromPlayer(sender);
+					GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 					GDSpawn oldTeleport = player.teleportingSpawn();
 
-					GDSpawn newSpawn = goldenDupe.getSpawnDatabase().get(spawn);
+					GDSpawn newSpawn = goldenDupe().getSpawnDatabase().get(spawn);
 					if (newSpawn == null) {
 						commandMessenger.message(sender, name + ".message-unusable");
 						return;
@@ -97,6 +99,8 @@ public class SpawnCommand extends GDCloudCommand {
 							.setTeleportConsumer(entity -> player.setTeleportingSpawn(null))
 							.setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)
 							.accept();
+
+					 */
 				});
 		commandManager.command(commandBuilder);
 	}

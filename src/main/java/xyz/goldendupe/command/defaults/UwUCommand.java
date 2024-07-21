@@ -9,7 +9,7 @@ import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.listeners.ChatFormatListener;
 import xyz.goldendupe.listeners.ChatUwUListener;
@@ -20,21 +20,21 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UwUCommand extends GDCloudCommand {
-	public UwUCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
-		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UWU?", Color.MINECOIN, TextDecoration.OBFUSCATED)))
+	public UwUCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
+		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UwU?", Color.YELLOW, TextDecoration.OBFUSCATED)))
 						.permission(MemberType.DEFAULT.permissionOf("uwu"))
 				.handler(context->{
 					CommandSender sender = context.sender();
 					Component uwu = ChatUwUListener.uwuString();
 					if (sender instanceof Player player){
-						GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+						GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 						GDChat chat = gdPlayer.chat();
 						for (Player audience : Bukkit.getOnlinePlayers()){
 							audience.sendMessage(ChatFormatListener.format(player, audience, chat, uwu));
 						}
-						goldenDupe.getServer().getConsoleSender().sendMessage(
-								ChatFormatListener.format(player, goldenDupe.getServer().getConsoleSender(), chat, uwu));
+						goldenDupe().getServer().getConsoleSender().sendMessage(
+								ChatFormatListener.format(player, goldenDupe().getServer().getConsoleSender(), chat, uwu));
 					} else {
 						BukkitCommand.broadcastCommandMessage(sender, uwu);
 					}

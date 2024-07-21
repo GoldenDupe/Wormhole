@@ -1,22 +1,22 @@
 package xyz.goldendupe.command.defaults;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UptimeCommand extends GDCloudCommand {
 
-    public UptimeCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-        super(goldenDupe, commandManager);
+    public UptimeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
 
         commandManager.command(
                 commandManager.commandBuilder(
@@ -26,10 +26,10 @@ public class UptimeCommand extends GDCloudCommand {
                         )
                         .permission(MemberType.DEFAULT.permissionOf("uptime"))
                         .handler(context -> {
-                            long runtimeMillis = goldenDupe.getStartTimer().get();
+                            long runtimeMillis = goldenDupe().getStartTimer().get();
 
-                            commandMessenger.message(context.sender(), "uptime.message-uptime",
-                                    new Placeholder("time", convertMillisToTimeString(runtimeMillis)));
+                            commandMessenger.message(context.sender(), Translations.COMMAND_UPTIME,
+                                    Placeholder.of("time", convertMillisToTimeString(runtimeMillis)));
                         })
         );
 

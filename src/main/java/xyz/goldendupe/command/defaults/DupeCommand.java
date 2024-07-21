@@ -1,8 +1,8 @@
 package xyz.goldendupe.command.defaults;
 
 import bet.astral.fluffy.manager.CombatManager;
-import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -23,8 +23,9 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.jetbrains.annotations.NotNull;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.ContainerUtils;
@@ -36,8 +37,8 @@ import java.util.*;
 public class DupeCommand extends GDCloudCommand {
 	private static final int DUPE_GUI_TICKS = 7;
 	private final Map<UUID, DonatorDupeMenu> dupeInventories = new HashMap<>();
-	public DupeCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public DupeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		Command.Builder<Player> dupe = commandManager.commandBuilder(
 				"dupe",
 				Description.of("Allows player to dupe their current held item."),
@@ -49,24 +50,24 @@ public class DupeCommand extends GDCloudCommand {
 					Player sender = context.sender();
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
 					if (!canDupe(itemStack)){
-						commandMessenger.message(sender, "dupe.message-undupable");
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						return;
 					} else if (anyIllegals(itemStack)){
 						if (ContainerUtils.isShulkerBox(itemStack)){
-							commandMessenger.message(sender, "dupe.message-undupable-shulker");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
 						} else if (ContainerUtils.isBundle(itemStack)){
-							commandMessenger.message(sender, "dupe.message-undupable-bundle");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
 						} else {
-							commandMessenger.message(sender, "dupe.message-undupable");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						}
 						return;
 					} else if (!canDupeCombat(itemStack, sender)){
-						commandMessenger.message(sender, "dupe.message-undupable-combat");
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
 						return;
 					}
 					sender.getInventory().addItem(itemStack);
-					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(sender);
-					GDGlobalData globalData = goldenDupe.getGlobalData();
+					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(sender);
+					GDGlobalData globalData = goldenDupe().getGlobalData();
 
 					gdPlayer.setTimesDuped(gdPlayer.getTimesDuped()+1);
 					gdPlayer.setItemsDuped(gdPlayer.getItemsDuped()+itemStack.getAmount());
@@ -86,23 +87,23 @@ public class DupeCommand extends GDCloudCommand {
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
 
 					if (!canDupe(itemStack)){
-						commandMessenger.message(sender, "dupe.message-undupable");
-					return;
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
+						return;
 					} else if (anyIllegals(itemStack)){
 						if (ContainerUtils.isShulkerBox(itemStack)){
-							commandMessenger.message(sender, "dupe.message-undupable-shulker");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
 						} else if (ContainerUtils.isBundle(itemStack)){
-							commandMessenger.message(sender, "dupe.message-undupable-bundle");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
 						} else {
-							commandMessenger.message(sender, "dupe.message-undupable");
+							commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						}
 						return;
 					} else if (!canDupeCombat(itemStack, sender)){
-						commandMessenger.message(sender, "dupe.message-undupable-combat");
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
 						return;
 					}
-					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(sender);
-					GDGlobalData globalData = goldenDupe.getGlobalData();
+					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(sender);
+					GDGlobalData globalData = goldenDupe().getGlobalData();
 					int debug = 0;
 					for (int i = 0; i < times-1; i++){
 						itemStack = sender.getInventory().getItemInMainHand();
@@ -115,18 +116,18 @@ public class DupeCommand extends GDCloudCommand {
 						if (sender.getInventory().addItem(itemStack).isEmpty()){
 							continue;
 						}
-						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug+1));
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug + 1));
 						return;
 					}
 					if (debug>1){
-						commandMessenger.message(sender, "dupe.message-super-duper", new Placeholder("super-duper", debug+1));
+						commandMessenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug+1));
 					}
 				})
 		);
 		commandManager.command(dupe.literal("menu")
 				.permission(MemberType.DONATOR.cloudOf("dupe-menu"))
 				.handler(context->{
-					goldenDupe.getServer().getScheduler().runTask(goldenDupe, ()->{
+					goldenDupe().getServer().getScheduler().runTask(goldenDupe(), ()->{
 						Player sender = context.sender();
 						dupeInventories.putIfAbsent(sender.getUniqueId(), new DonatorDupeMenu(this, sender));
 						sender.openInventory(dupeInventories.get(sender.getUniqueId()).getInventory());
@@ -134,7 +135,7 @@ public class DupeCommand extends GDCloudCommand {
 				})
 		);
 
-		goldenDupe.getServer().getScheduler().runTaskTimer(goldenDupe, (timer)->{
+		goldenDupe().getServer().getScheduler().runTaskTimer(goldenDupe(), (timer)->{
 			if (dupeInventories.isEmpty()){
 				return;
 			}
@@ -153,11 +154,11 @@ public class DupeCommand extends GDCloudCommand {
 		if (itemStack.hasItemMeta()) {
 			ItemMeta meta = itemStack.getItemMeta();
 			PersistentDataContainer container = meta.getPersistentDataContainer();
-			if (container.has(goldenDupe.KEY_UNDUPABLE) && Boolean.TRUE.equals(container.get(goldenDupe.KEY_UNDUPABLE, PersistentDataType.BOOLEAN))) {
+			if (container.has(goldenDupe().KEY_UNDUPABLE) && Boolean.TRUE.equals(container.get(goldenDupe().KEY_UNDUPABLE, PersistentDataType.BOOLEAN))) {
 				return false;
 			}
 		}
-		for (Material material : goldenDupe.getGlobalData().getIllegalDupe()) {
+		for (Material material : goldenDupe().getGlobalData().getIllegalDupe()) {
 			if (material == itemStack.getType()) {
 				return false;
 			}
@@ -165,9 +166,9 @@ public class DupeCommand extends GDCloudCommand {
 		return true;
 	}
 	public boolean canDupeCombat(ItemStack itemStack, @NotNull OfflinePlayer player){
-		CombatManager combatManager = goldenDupe.getFluffy().getCombatManager();
+		CombatManager combatManager = goldenDupe().getFluffy().getCombatManager();
 		if (combatManager.hasTags(player)){
-			return !(goldenDupe.getGlobalData().getIllegalDupeCombat().contains(itemStack.getType()));
+			return !(goldenDupe().getGlobalData().getIllegalDupeCombat().contains(itemStack.getType()));
 		}
 		return true;
 	}
