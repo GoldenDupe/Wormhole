@@ -1,6 +1,7 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import io.papermc.paper.adventure.AdventureComponent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -18,8 +19,9 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.EnumParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
 
@@ -29,17 +31,15 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class GamemodeCommand extends GDCloudCommand {
-	public GamemodeCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
+	public GamemodeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		abstractCommand(GameMode.SURVIVAL, "gms");
 		abstractCommand(GameMode.CREATIVE, "gmc");
 		abstractCommand(GameMode.SPECTATOR, "gmsp");
 		abstractCommand(GameMode.ADVENTURE, "gma");
 		commandPlayer(
-				commandBuilder("gamemode", Description.of("Allows admin to switch their gamemode to other gamemodes."),
-						"gm")
+				commandBuilderPlayer("gamemode", Description.of("Allows admin to switch their gamemode to other gamemodes."), "gm")
 						.permission(MemberType.ADMINISTRATOR.cloudOf("gamemode"))
-						.senderType(Player.class)
 						.required(EnumParser.enumComponent(GameMode.class).name("gamemode"))
 						.optional(PlayerParser.playerComponent().name("who-to-switch")
 								.suggestionProvider(
@@ -62,32 +62,25 @@ public class GamemodeCommand extends GDCloudCommand {
 							GameMode gameMode = context.get("gamemode");
 							Player sender = context.sender();
 							Player other = (Player) context.optional("who-to-switch").orElse(sender);
-
-							goldenDupe.getServer().getScheduler().runTask(goldenDupe, () -> {
-
+							goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
 								if (other.getGameMode() == gameMode) {
 									if (other.equals(sender)) {
 										commandMessenger.message(sender,
-												gameMode.name().toLowerCase()
-														+ ".message-already-same");
+												alreadySame(gameMode));
 									} else {
 										commandMessenger.message(sender,
-												gameMode.name().toLowerCase()
-														+ ".message-admin-already-same", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
+												alreadySameAdmin(gameMode), Placeholder.of("player", other.name()));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
 									commandMessenger.message(other,
-											gameMode.name().toLowerCase()
-													+ ".message-enabled");
+											enabled(gameMode));
 									commandMessenger.message(sender,
-											gameMode.name().toLowerCase()
-													+ ".message-admin-enabled", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
+											enabledAdmin(gameMode), Placeholder.of("player", other.name()));
 								} else {
 									other.setGameMode(gameMode);
 									commandMessenger.message(sender,
-											gameMode.name().toLowerCase()
-													+ ".message-enabled");
+											enabled(gameMode));
 								}
 							});
 						})
@@ -96,11 +89,10 @@ public class GamemodeCommand extends GDCloudCommand {
 	}
 
 	private void abstractCommand(GameMode gameMode, String... alias) {
-		Command.Builder<Player> builder = commandBuilder(gameMode.name().toLowerCase(),
+		Command.Builder<Player> builder = commandBuilderPlayer(gameMode.name().toLowerCase(),
 						Description.of("Allows admins to switch their gamemode to "+ gameMode.name().toLowerCase()),
 						alias)
 						.permission(MemberType.ADMINISTRATOR.cloudOf(gameMode.name().toLowerCase()))
-						.senderType(Player.class)
 						.optional(PlayerParser.playerComponent().name("who-to-switch")
 								.suggestionProvider(
 										new SuggestionProvider<>() {
@@ -124,31 +116,25 @@ public class GamemodeCommand extends GDCloudCommand {
 							Player sender = context.sender();
 							Player other = (Player) context.optional("who-to-switch").orElse(sender);
 
-							goldenDupe.getServer().getScheduler().runTask(goldenDupe, () -> {
-
+							goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
 								if (other.getGameMode() == gameMode) {
 									if (other.equals(sender)) {
 										commandMessenger.message(sender,
-												gameMode.name().toLowerCase()
-														+ ".message-already-same");
+												alreadySame(gameMode));
 									} else {
 										commandMessenger.message(sender,
-												gameMode.name().toLowerCase()
-														+ ".message-admin-already-same", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
+												alreadySameAdmin(gameMode), Placeholder.of("player", other.name()));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
 									commandMessenger.message(other,
-											gameMode.name().toLowerCase()
-													+ ".message-enabled");
+											enabled(gameMode));
 									commandMessenger.message(sender,
-											gameMode.name().toLowerCase()
-													+ ".message-admin-enabled", commandMessenger.getPlaceholderManager().playerPlaceholders("player", other));
+											enabledAdmin(gameMode), Placeholder.of("player", other.name()));
 								} else {
 									other.setGameMode(gameMode);
 									commandMessenger.message(sender,
-											gameMode.name().toLowerCase()
-													+ ".message-enabled");
+											enabled(gameMode));
 								}
 							});
 						});
@@ -168,6 +154,76 @@ public class GamemodeCommand extends GDCloudCommand {
 			}
 			case SPECTATOR -> {
 				return Component.text("Spectator", Color.EMERALD);
+			}
+		}
+		return null;
+	}
+
+	private Translations.Translation alreadySame(GameMode gm){
+		switch (gm){
+			case CREATIVE -> {
+				return Translations.COMMAND_GMC_ALREADY_SAME;
+			}
+			case SURVIVAL -> {
+				return Translations.COMMAND_GMS_ALREADY_SAME;
+			}
+			case ADVENTURE -> {
+				return Translations.COMMAND_GMA_ALREADY_SAME;
+			}
+			case SPECTATOR -> {
+				return Translations.COMMAND_GMSP_ALREADY_SAME;
+			}
+		}
+		return null;
+	}
+
+	private Translations.Translation alreadySameAdmin(GameMode gm){
+		switch (gm){
+			case CREATIVE -> {
+				return Translations.COMMAND_GMC_ALREADY_SAME_ADMIN;
+			}
+			case SURVIVAL -> {
+				return Translations.COMMAND_GMS_ALREADY_SAME_ADMIN;
+			}
+			case ADVENTURE -> {
+				return Translations.COMMAND_GMA_ALREADY_SAME_ADMIN;
+			}
+			case SPECTATOR -> {
+				return Translations.COMMAND_GMSP_ALREADY_SAME_ADMIN;
+			}
+		}
+		return null;
+	}
+	private Translations.Translation enabled(GameMode gm){
+		switch (gm){
+			case CREATIVE -> {
+				return Translations.COMMAND_GMC_ENABLED;
+			}
+			case SURVIVAL -> {
+				return Translations.COMMAND_GMS_ENABLED;
+			}
+			case ADVENTURE -> {
+				return Translations.COMMAND_GMA_ENABLED;
+			}
+			case SPECTATOR -> {
+				return Translations.COMMAND_GMSP_ENABLED;
+			}
+		}
+		return null;
+	}
+	private Translations.Translation enabledAdmin(GameMode gm){
+		switch (gm){
+			case CREATIVE -> {
+				return Translations.COMMAND_GMC_ENABLED_ADMIN;
+			}
+			case SURVIVAL -> {
+				return Translations.COMMAND_GMS_ENABLED_ADMIN;
+			}
+			case ADVENTURE -> {
+				return Translations.COMMAND_GMA_ENABLED_ADMIN;
+			}
+			case SPECTATOR -> {
+				return Translations.COMMAND_GMSP_ENABLED_ADMIN;
 			}
 		}
 		return null;
