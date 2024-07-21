@@ -1,10 +1,9 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.messenger.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,14 +12,9 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.command.defaults.SpawnCommand;
-import xyz.goldendupe.command.staff.VanishCommand;
 import xyz.goldendupe.events.PlayerFirstJoinEvent;
-import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.chatcolor.Color;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ConnectionListener implements GDListener{
 	private final GoldenDupe goldenDupe;
@@ -33,31 +27,21 @@ public class ConnectionListener implements GDListener{
 	private void onJoin(PlayerJoinEvent event) {
 		goldenDupe.playerDatabase().load(event.getPlayer()).thenAccept(player -> {
 			goldenDupe.playerDatabase().keepLoaded(player);
-			if (player.vanished()) {
-				event.getPlayer().getPersistentDataContainer().set(VanishCommand.KEY_VANISHED, PersistentDataType.BOOLEAN, true);
-			} else {
-				event.getPlayer().getPersistentDataContainer().remove(VanishCommand.KEY_VANISHED);
-			}
 		});
 		Player player = event.getPlayer();
-		Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, ()->{
-			List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
-			placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
-			goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-join-brand", 5, placeholders);
-		}, 10);
+		Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, () -> {
+			goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("Joined using ").append(Component.text(player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"))));
+		}, 25);
 
-		if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.KEY_VANISHED)) {
-			event.joinMessage(null);
-		} else {
+		event.joinMessage(
+				Component.text("+", Color.EMERALD, TextDecoration.BOLD)
+						.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(player))
+		);
+		if (!event.getPlayer().hasPlayedBefore()) {
 			event.joinMessage(
 					Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-							.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(player))
-			);
-			if (!event.getPlayer().hasPlayedBefore()) {
-				event.joinMessage(
-						Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-								.append(Component.empty().decoration(TextDecoration.BOLD, false))
-								.appendSpace().append(GoldenPlaceholderManager.prefixName(player)));
+							.append(Component.empty().decoration(TextDecoration.BOLD, false))
+							.appendSpace().append(GoldenPlaceholderManager.prefixName(player)));
 				/*
 								.appendNewline().append(
 										Component.text("Click to send a welcome message for ", Color.MINECOIN).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
@@ -67,39 +51,28 @@ public class ConnectionListener implements GDListener{
 								)
 				);
 				 */
-				PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
-				playerFirstJoinEvent.callEvent();
-				event.joinMessage(playerFirstJoinEvent.joinMessage());
+			PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
+			playerFirstJoinEvent.callEvent();
+			event.joinMessage(playerFirstJoinEvent.joinMessage());
 
-				Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, ()->{
-					event.getPlayer().teleportAsync(goldenDupe.getSpawnDatabase().get(SpawnCommand.Spawn.OVERWORLD.getName()).asLocation());
-				}, 7);
-			}
+			Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, () -> {
+				event.getPlayer().teleportAsync(goldenDupe.getSpawnDatabase().get(SpawnCommand.Spawn.OVERWORLD.getName()).asLocation());
+			}, 7);
 		}
 	}
 
 	@EventHandler
-	public void onQuit(PlayerQuitEvent event){
+	public void onQuit(PlayerQuitEvent event) {
 		goldenDupe.playerDatabase().unload(event.getPlayer());
-		if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.KEY_VANISHED)) {
-			event.quitMessage(null);
-		} else {
-			event.quitMessage(
-					Component.text("-", Color.RED, TextDecoration.BOLD)
-							.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(event.getPlayer()))
-			);
-		}
+		event.quitMessage(
+				Component.text("-", Color.RED, TextDecoration.BOLD)
+						.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(event.getPlayer()))
+		);
 	}
 
 	@EventHandler
 	private void onKick(PlayerKickEvent event){
-		Player player = event.getPlayer();
-		PlayerKickEvent.Cause cause = event.getCause();
-		List<Placeholder> placeholders = new ArrayList<>(goldenDupe.messenger().getPlaceholderManager().playerPlaceholders("player", player));
-		placeholders.add(new Placeholder("cause", cause.name()));
-		placeholders.add(new Placeholder("player_brand", player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"));
-
-		goldenDupe.messenger().broadcast(GoldenMessenger.MessageChannel.STAFF, "player-kick-cause", 5, placeholders);
+		goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("was kicked for ").append(event.reason())).append(Component.text(" ("+event.getCause().name()+")", NamedTextColor.DARK_RED)));
 	}
 
 	@Override
