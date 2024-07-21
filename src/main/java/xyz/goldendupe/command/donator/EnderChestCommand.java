@@ -6,13 +6,14 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class EnderChestCommand extends GDCloudCommand {
-    public EnderChestCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-        super(goldenDupe, commandManager);
+    public EnderChestCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(
                                 "enderchest",
@@ -23,7 +24,7 @@ public class EnderChestCommand extends GDCloudCommand {
                         .senderType(Player.class)
                         .handler(context -> {
                             Player sender = context.sender();
-                            goldenDupe.getServer().getScheduler().runTask(goldenDupe, ()->{
+                            goldenDupe().getServer().getScheduler().runTask(goldenDupe(), ()->{
                                 sender.openInventory(sender.getEnderChest());
                             });
                         })

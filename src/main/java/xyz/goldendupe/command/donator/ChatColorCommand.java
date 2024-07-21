@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
@@ -58,8 +58,8 @@ public class ChatColorCommand extends GDCloudCommand {
 	private static final ItemStack RIGHT = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzMzYWU4ZGU3ZWQwNzllMzhkMmM4MmRkNDJiNzRjZmNiZDk0YjM0ODAzNDhkYmI1ZWNkOTNkYThiODEwMTVlMyJ9fX0=");
 
 
-	public ChatColorCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public ChatColorCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 
 		ItemStack backgroundItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 		backgroundItem.editMeta(meta -> {
@@ -92,31 +92,31 @@ public class ChatColorCommand extends GDCloudCommand {
 					preGeneratedButtons.add(clickable);
 					generatedButtonsByColor.put(color, clickable);
 
-					goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single." + name));
-					goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient." + name));
+					goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single." + name));
+					goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient." + name));
 				} catch (IllegalAccessException e) {
 					throw new RuntimeException(e);
 				}
 			}
 		}
 
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient"));
 
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow"));
 
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format"));
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.underlined"));
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"));
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"));
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.underlined"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"));
 
-		goldenDupe.registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single"));
+		goldenDupe().registerPermission(MemberType.DONATOR.permissionOf("chatcolor.single"));
 
 		Command.Builder<Player> chatColorBuilder = commandManager.commandBuilder("chatcolor", Description.of("Allows donators to change their chat color."), "chatcolour", "chatformat")
 				.senderType(Player.class)
 				.handler(context -> {
 					profiles.putIfAbsent(context.sender().getUniqueId(), new MenuProfile());
-					Bukkit.getScheduler().runTask(goldenDupe, () -> createMainMenu(context.sender()));
+					Bukkit.getScheduler().runTask(goldenDupe(), () -> createMainMenu(context.sender()));
 				});
 		commandManager.command(chatColorBuilder);
 	}
@@ -164,7 +164,7 @@ public class ChatColorCommand extends GDCloudCommand {
 								meta.displayName(Component.text("Reset Everything", Color.DARK_RED).decoration(TextDecoration.ITALIC, false));
 							})
 									.setAction(clickTypes, (clickable, item, p) -> {
-										GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(p);
+										GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 										GDChatColor chatColor = gdPlayer.color();
 										chatColor.setColors(null);
 										chatColor.reset();
@@ -205,7 +205,7 @@ public class ChatColorCommand extends GDCloudCommand {
 							meta.displayName(Component.text("Reset Positions", Color.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
 						})
 								.setAction(clickTypes, (clickable, item, p) -> {
-									GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(p);
+									GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 									gdPlayer.color().setColors(null);
 									gdPlayer.color().setMode(GDChatColor.Mode.SINGLE);
 									p.sendMessage(Component.text("Reset your gradient color selections!", Color.RED));
@@ -232,7 +232,7 @@ public class ChatColorCommand extends GDCloudCommand {
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
 			slotBuilder.setAction(clickTypes, (clickable, item, p) -> {
-				GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 
 				Color color = (Color) clickable.getData("color");
 
@@ -280,7 +280,7 @@ public class ChatColorCommand extends GDCloudCommand {
 				.addSlotClickable(15, rainbowReverse(false, RIGHT))
 				.addSlotClickable(13, new ClickableBuilder(Material.BARRIER, (meta)->meta.displayName(Component.text("Reset Rainbow Settings")))
 						.setAction(clickTypes, (clickable, item, p)->{
-							GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(p);
+							GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 							gdPlayer.color().setRainbowMode(0).setRainbowReversed(false);
 							p.sendMessage(Component.text("Reset your settings for your rainbow chat color.", Color.GREEN));
 						})
@@ -303,7 +303,7 @@ public class ChatColorCommand extends GDCloudCommand {
 			meta.lore(list);
 		});
 		return new ClickableBuilder(item).setAction(clickTypes, (clickable, i, player) -> {
-					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 					GDChatColor chatColor = gdPlayer.color();
 					if (chatColor.equals(GDChatColor.DEFAULT)) {
 						chatColor = new GDChatColor(GDChatColor.Mode.RAINBOW, GDChatColor.DEFAULT.colors().get(0));
@@ -324,7 +324,6 @@ public class ChatColorCommand extends GDCloudCommand {
 		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
 		MiniMessage mm = MiniMessage.miniMessage();
 		ItemStack item = itemStack.clone();
-		LegacyComponentSe
 		item.editMeta(meta -> {
 			meta.displayName(Component.text("Set the rainbow to " + (reverse ? "reversed" : "forward"), MINECOIN).decoration(TextDecoration.ITALIC, false).compact());
 			List<Component> list = new ArrayList<>();
@@ -333,7 +332,7 @@ public class ChatColorCommand extends GDCloudCommand {
 			meta.lore(list);
 		});
 		return new ClickableBuilder(item).setAction(clickTypes, (clickable, i, player) -> {
-					GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 					GDChatColor chatColor = gdPlayer.color();
 					if (chatColor.equals(GDChatColor.DEFAULT)) {
 						chatColor = new GDChatColor(GDChatColor.Mode.RAINBOW, GDChatColor.DEFAULT.colors().get(0));
@@ -364,7 +363,7 @@ public class ChatColorCommand extends GDCloudCommand {
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
 			slotBuilder.setAction(clickTypes, (clickable, item, p) -> {
-				GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 
 				Color color = (Color) clickable.getData("color");
 
@@ -393,7 +392,7 @@ public class ChatColorCommand extends GDCloudCommand {
 			meta.displayName(Component.text("RESET", NamedTextColor.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
 		});
 		guiBuilder.addSlotClickable(35, new ClickableBuilder(reset).setAction(clickTypes, (clickable, item, p) -> {
-			GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(p);
+			GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 			gdPlayer.color().colors().put(data, null);
 			player.sendMessage(Component.text("Removed your gradient position " + (data + 1) + ".", MINECOIN));
 			profile.gradientPositionMenu.generateInventory(player);
@@ -412,7 +411,7 @@ public class ChatColorCommand extends GDCloudCommand {
 			profile.formatMenu.generateInventory(player);
 			return;
 		}
-		GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
+		GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 		List<ClickType> clickTypes = List.of(ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT, ClickType.RIGHT, ClickType.LEFT);
 
 		ItemStack underlined = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);

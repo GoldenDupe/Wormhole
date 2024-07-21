@@ -9,20 +9,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class DropAllCommand extends GDCloudCommand {
-	public DropAllCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
+	public DropAllCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		commandPlayer(
 				commandBuilderPlayer("dropall",
 						Description.of("Allows player to drop all their items at time."))
 						.permission(MemberType.DONATOR.cloudOf("dropall"))
 						.handler(context -> {
-							Bukkit.getScheduler().runTask(plugin, () -> {
+							Bukkit.getScheduler().runTask(goldenDupe(), () -> {
 								Player player = context.sender();
 								Vector vector = player.getEyeLocation().getDirection().multiply(0.34);
 								Location location = player.getEyeLocation().add(0, -0.15, 0);
