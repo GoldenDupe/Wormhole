@@ -6,13 +6,21 @@ import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.translation.TranslationKey;
 
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.*;
 
 
 public class GoldenMessenger extends PaperMessenger implements MessageLoader {
+	private static final DecimalFormat format = new DecimalFormat(".xx");
 	public GoldenMessenger() {
 		super(null);
+	}
+	public static String format(double number){
+		return format.format(number);
+	}
+	public static String format(float number){
+		return format.format(number);
 	}
 
 	public List<Placeholder> createCooldownPlaceholders(long left){
