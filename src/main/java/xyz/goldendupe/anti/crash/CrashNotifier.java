@@ -1,5 +1,6 @@
 package xyz.goldendupe.anti.crash;
 
+import bet.astral.tuples.Pair;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import lombok.Getter;
 import org.bukkit.Chunk;
@@ -14,7 +15,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.utils.Pair;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +88,7 @@ public class CrashNotifier implements Listener {
 	@EventHandler
 	private void onRedstoneTick(BlockRedstoneEvent event) {
 		Chunk chunk = event.getBlock().getChunk();
-		Pair<Integer, Integer> pair = new Pair<>(chunk.getX(), chunk.getZ());
+		Pair<Integer, Integer> pair = Pair.immutable(chunk.getX(), chunk.getZ());
 		redstoneAmount.putIfAbsent(pair, 0);
 		redstoneAmount.put(pair, redstoneAmount.get(pair) + 1);
 		if (redstoneAmount.get(pair) == 200) {
