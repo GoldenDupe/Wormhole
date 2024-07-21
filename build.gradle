@@ -54,12 +54,12 @@ dependencies {
     implementation 'bet.astral:messenger-cloud:2.0.0' // Messenger
     // have it as compile only as it needs to run as it's own plugin
     compileOnly 'bet.astral:Fluffy:1.0' // Fluffy (Combat System)
-    // Factions/Clans
-    compileOnly 'bet.astral:Unity:1.0'
     // CPP
     compileOnly 'bet.astral:cloudplusplus:1.2.5'
     // GUIMan
     compileOnly 'bet.astral:guiman:1.0.0'
+    // Factions/Clans
+    compileOnly 'bet.astral:Unity:1.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'
@@ -70,8 +70,6 @@ dependencies {
     // Cloud and brigadier for commands
     compileOnly 'com.mojang:brigadier:1.0.18'
     var cloudMineccraft = "2.0.0-beta.8";
-    var cloudCore = "2.0.0-rc.2";
-    compileOnly 'org.incendo:cloud-core:' + cloudCore
     compileOnly 'org.incendo:cloud-paper:' + cloudMineccraft
     compileOnly 'org.incendo:cloud-brigadier:' + cloudMineccraft
     compileOnly 'org.incendo:cloud-minecraft-extras:' + cloudMineccraft
