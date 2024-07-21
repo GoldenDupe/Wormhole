@@ -1,11 +1,9 @@
 package xyz.goldendupe;
 
-import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.fluffy.FluffyCombat;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
-import bet.astral.messenger.placeholder.Placeholder;
 import bet.astral.unity.Factions;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,8 +22,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +55,7 @@ import java.util.*;
 import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 
-public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<GoldenDupe> {
+public final class GoldenDupe extends JavaPlugin {
     private static GoldenDupe instance;
     public static final Random random = new Random(System.nanoTime());
     public static Seasons SEASON = Seasons.SEASON_1;
@@ -90,7 +86,7 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
     @Getter(AccessLevel.PUBLIC) private Factions factions;
 
-    public GoldenDupe(GoldenDupeBoostrap boostrap){
+    public GoldenDupe(GoldenDupeBootstrap boostrap){
         this.isDevelopmentServer = boostrap.isDevServer();
     }
     private GoldenDupe() {
@@ -126,16 +122,9 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         reloadConfig();
         // global data inc. illegals
         globalData.reload();
-        // messages.yml
-        getLogger().info("Loading commands..!");
-        loadCommands();
-        getLogger().info("Loaded commands!");
         // listeners (Reflected)
         loadListeners();
         registerListener(new InventoryListener());
-
-        // Messengers
-        reloadMessengers();
 
         playerDatabase = new PlayerDatabase(this);
         reportUserDatabase = new ReportUserDatabase(this);
@@ -203,13 +192,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         getComponentLogger().info("GoldenDupe has disabled!");
     }
 
-
-    public void reloadMessengers(){
-        commandMessenger = loadMessenger(false, "messages.yml");
-        debugMessenger = loadMessenger(true, "debug-messages.yml");
-        CommandRegisterer.super.reloadMessengers();
-    }
-
     // Updated it with fewer reflections
     public static GoldenDupe instance() {
         return instance;
@@ -226,21 +208,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
     public Map<String, GDHome> getHomes(GDPlayer player) {
         return player.getHomes();
     }
-
-    private GoldenMessenger loadMessenger(boolean debug, String name){
-        FileConfiguration configuration = YamlConfiguration.loadConfiguration(new File(getDataFolder(), name));
-        GoldenMessenger goldenMessenger = new GoldenMessenger(paperCommandManager, configuration);
-        Map<String, Placeholder> placeholderMap = goldenMessenger.getPlaceholderManager().loadPlaceholders("placeholders", configuration);
-        // Debug
-        if (placeholderMap == null){
-            placeholderMap = new HashMap<>();
-        } else {
-            placeholderMap = new HashMap<>(placeholderMap);
-        }
-        goldenMessenger.getPlaceholderManager().setDefaults(placeholderMap);
-        return goldenMessenger;
-    }
-
 
     public void reloadConfig() {
         File configFile = new File(getDataFolder(), "config.yml");
@@ -342,28 +309,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 	    return doNotReflect != null;
     }
 
-    private void loadCommands(){
-        paperCommandManager = new PaperCommandManager<>(
-                this,
-                ExecutionCoordinator.asyncCoordinator(),
-                SenderMapper.identity()
-        );
-        paperCommandManager.registerBrigadier();
-        paperCommandManager.registerAsynchronousCompletions();
-
-        registerCommands(
-                List.of(
-                        "xyz.goldendupe.command.admin",
-                        "xyz.goldendupe.command.defaults",
-                        "xyz.goldendupe.command.donator",
-                        "xyz.goldendupe.command.staff",
-                        "xyz.goldendupe.command.og"
-                ),
-                paperCommandManager
-        );
-
-        reloadMessengers();
-    }
 
     private void uploadUploads(){
         String[] files = new String[]{
@@ -414,6 +359,13 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
         }
     }
 
+    Constructor<?> getConstructor(Class<?> clazz, Class<?>... params) throws NoSuchMethodException {
+        try {
+            return clazz.getConstructor(params);
+        } catch (NoSuchMethodException var4) {
+            return clazz.getDeclaredConstructor(params);
+        }
+    }
 
     private FileConfiguration getConfig(File file){
         return YamlConfiguration.loadConfiguration(file);
@@ -429,21 +381,6 @@ public final class GoldenDupe extends JavaPlugin implements CommandRegisterer<Go
 
     public GoldenMessenger messenger() {
         return commandMessenger;
-    }
-
-    @Override
-    public GoldenMessenger commandMessenger() {
-        return commandMessenger;
-    }
-
-    @Override
-    public GoldenMessenger debugMessenger() {
-        return debugMessenger;
-    }
-
-    @Override
-    public GoldenDupe plugin() {
-        return this;
     }
 
     public PlayerDatabase playerDatabase() {
