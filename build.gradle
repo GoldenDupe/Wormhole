@@ -50,8 +50,9 @@ repositories {
 
 dependencies {
     implementation 'bet.astral:messenger:2.0.0' // Messenger
-    implementation 'bet.astral:messenger-paper:2.0.0' // Messenger
     implementation 'bet.astral:messenger-cloud:2.0.0' // Messenger
+    implementation 'bet.astral:messenger-paper:2.0.0' // Messenger
+    implementation 'bet.astral:tuples:1.0.0'
     // have it as compile only as it needs to run as it's own plugin
     compileOnly 'bet.astral:Fluffy:1.0' // Fluffy (Combat System)
     // CPP
