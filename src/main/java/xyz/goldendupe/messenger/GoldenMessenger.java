@@ -5,17 +5,12 @@ import bet.astral.messenger.v2.paper.PaperMessenger;
 import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.translation.TranslationKey;
-import xyz.goldendupe.GoldenDupe;
 
 import java.time.Duration;
 import java.util.*;
 
 
 public class GoldenMessenger extends PaperMessenger implements MessageLoader {
-	private static final GoldenDupe gd;
-	static  {
-		gd = GoldenDupe.getPlugin(GoldenDupe.class);
-	}
 	public GoldenMessenger() {
 		super(null);
 	}
