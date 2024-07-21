@@ -10,7 +10,7 @@ import org.incendo.cloud.bukkit.parser.OfflinePlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.EnumParser;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.OriginalMemberType;
@@ -18,10 +18,10 @@ import xyz.goldendupe.utils.OriginalMemberType;
 @Cloud
 public class MarkAsOGCommand extends GDCloudCommand {
 	public static final String OG_ROLE_KEY = "original-role";
-	public MarkAsOGCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
+	public MarkAsOGCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		command(
-				commandBuilder("mark-as-og")
+				commandManager.commandBuilder("mark-as-og")
 						.commandDescription(Description.of(""))
 						.permission(MemberType.OWNER.permissionOf("mark-as-og"))
 						.required(
@@ -38,7 +38,7 @@ public class MarkAsOGCommand extends GDCloudCommand {
 							OfflinePlayer who = context.get("who");
 							OriginalMemberType originalMemberType = context.get(OG_ROLE_KEY);
 
-							LuckPerms luckPerms = plugin.luckPerms();
+							LuckPerms luckPerms = goldenDupe().luckPerms();
 							User user = luckPerms.getUserManager().getUser(who.getUniqueId());
 
 							if (user == null){

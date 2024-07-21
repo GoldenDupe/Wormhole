@@ -13,9 +13,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
-import bet.astral.cloudplusplus.command.CloudPPCommand;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,13 +27,15 @@ public class DupableCommand extends GDCloudCommand {
 	private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 	private static final Component LINE = MiniMessage.miniMessage().deserialize("<red>This item is undupable!");
 
-	public DupableCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public DupableCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
 								"dupable",
 								Description.of("Makes your held item dupable/undupable."),
-								"makedupable"
+								"makedupable",
+								"makeundupable",
+								"undupable"
 						)
 						.senderType(Player.class)
 						.permission("goldendupe.admin.dupable")
@@ -42,7 +44,7 @@ public class DupableCommand extends GDCloudCommand {
 
 							ItemStack itemStack = sender.getInventory().getItemInMainHand();
 							if (itemStack.isEmpty()){
-								commandMessenger.message(sender, "dupable.message-air");
+								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_AIR);
 								return;
 							}
 
@@ -51,13 +53,13 @@ public class DupableCommand extends GDCloudCommand {
 
 							PersistentDataContainer container = meta.getPersistentDataContainer();
 
-							boolean isDupable = !container.has(goldenDupe.KEY_UNDUPABLE);
+							boolean isDupable = !container.has(goldenDupe().KEY_UNDUPABLE);
 
-							if (!isDupable)
-								container.remove(goldenDupe.KEY_UNDUPABLE);
-
-							else
-								container.set(goldenDupe.KEY_UNDUPABLE, PersistentDataType.BOOLEAN, true);
+							if (!isDupable) {
+								container.remove(goldenDupe().KEY_UNDUPABLE);
+							} else {
+								container.set(goldenDupe().KEY_UNDUPABLE, PersistentDataType.BOOLEAN, true);
+							}
 
 							List<Component> lore = meta.lore();
 							if (lore != null) {
@@ -75,7 +77,11 @@ public class DupableCommand extends GDCloudCommand {
 							meta.lore(lore);
 
 							itemStack.setItemMeta(meta);
-							commandMessenger.message(sender, "dupable.message-success");
+							if (isDupable) {
+								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_MADE_DUPABLE);
+							} else{
+								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_MADE_UNDUPABLE);
+							}
 						})
 		);
 	}

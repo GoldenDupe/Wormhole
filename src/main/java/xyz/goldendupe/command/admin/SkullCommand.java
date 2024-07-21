@@ -1,7 +1,7 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -12,15 +12,16 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class SkullCommand extends GDCloudCommand {
 
-    public SkullCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-        super(goldenDupe, commandManager);
+    public SkullCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+        super(bootstrap, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(
                                 "skull",
@@ -37,16 +38,13 @@ public class SkullCommand extends GDCloudCommand {
 
                             ItemStack stack = new ItemStack(Material.PLAYER_HEAD, 1);
                             SkullMeta meta = (SkullMeta) stack.getItemMeta();
-                            goldenDupe.getServer().getScheduler().runTaskAsynchronously(goldenDupe, ()->{
-
-
+                            goldenDupe().getServer().getScheduler().runTaskAsynchronously(goldenDupe(), ()->{
                                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(name);
                                 meta.setOwningPlayer(offlinePlayer);
 	                            stack.setItemMeta(meta);
 	                            sender.getInventory().addItem(stack);
-	                            commandMessenger.message(sender, "skull.skull-given", new Placeholder("player", name));
+	                            commandMessenger.message(sender, Translations.COMMAND_SKULL_GIVE, Placeholder.of("player", name));
                             });
-
                         })
         );
     }

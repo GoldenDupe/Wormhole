@@ -1,7 +1,7 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.astronauts.goldendupe.Astronauts;
-import bet.astral.messenger.placeholder.Placeholder;
+import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,9 +15,10 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
-import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.astronauts.CSPYUser;
 import xyz.goldendupe.utils.MemberType;
 
@@ -29,8 +30,8 @@ import java.util.stream.Collectors;
 @Astronauts
 @Cloud
 public class CommandSpyCommand extends GDCloudCommand {
-	public CommandSpyCommand(GoldenDupe goldenDupe, PaperCommandManager<CommandSender> commandManager) {
-		super(goldenDupe, commandManager);
+	public CommandSpyCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 		Command.Builder<Player> spyCommand = commandManager
 				.commandBuilder("commandspy",
 						Description.of("Allows administrators to see the commands players execute"),
@@ -39,7 +40,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 				.permission(MemberType.ADMINISTRATOR.cloudOf("commandspy"))
 				.senderType(Player.class)
 				.handler(context->{
-					commandMessenger.message(context.sender(), "commandspy.message-help");
+					commandMessenger.message(context.sender(), Translations.COMMAND_SPY_HELP);
 				});
 		commandManager.command(spyCommand);
 
@@ -47,12 +48,12 @@ public class CommandSpyCommand extends GDCloudCommand {
 				.literal("toggle")
 				.handler(context->{
 					Player player = context.sender();
-					CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+					CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 					boolean isToggled = !user.isCommandSpyToggled();
 					if (isToggled){
-						commandMessenger.message(player, "commandspy.message-toggle-true");
+						commandMessenger.message(player, Translations.COMMAND_SPY_TOGGLE_TRUE);
 					} else {
-						commandMessenger.message(player, "commandspy.message-toggle-false");
+						commandMessenger.message(player, Translations.COMMAND_SPY_TOGGLE_FALSE);
 					}
 					user.setCommandSpyToggled(isToggled);
 				})
@@ -68,7 +69,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 											public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> {
 													Player player = (Player) context.sender();
-													CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+													CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 													List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 													players.removeIf(p -> user.blockedUsers().contains(p.getUniqueId()));
 
@@ -83,12 +84,12 @@ public class CommandSpyCommand extends GDCloudCommand {
 							Player player = context.sender();
 							Player who = context.get("player-to-block");
 
-							CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (user.blockedUsers().contains(who.getUniqueId())){
-								commandMessenger.message(player, "commandspy.message-player-already-blocked");
+								commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_BLOCKED, Placeholder.of("player", who.name()));
 								return;
 							}
-							commandMessenger.message(player, "commandspy.message-player-blocked", new Placeholder("player", who.getName()));
+							commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_BLOCKED, Placeholder.of("player", who.name()));
 							user.blockedUsers().add(who.getUniqueId());
 						}));
 		commandManager.command(spyCommand
@@ -102,7 +103,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 											public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> {
 													Player player = (Player) context.sender();
-													CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+													CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 													List<Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
 													players.removeIf(p -> !user.blockedUsers().contains(p.getUniqueId()));
 
@@ -117,12 +118,12 @@ public class CommandSpyCommand extends GDCloudCommand {
 							Player player = context.sender();
 							Player who = context.get("player-to-unblock");
 
-							CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (!user.blockedUsers().contains(who.getUniqueId())){
-								commandMessenger.message(player, "commandspy.message-player-already-unblocked");
+								commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_UNBLOCKED, Placeholder.of("player", who.name()));
 								return;
 							}
-							commandMessenger.message(player, "commandspy.message-player-unblocked", new Placeholder("player", who.getName()));
+							commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_UNBLOCKED, Placeholder.of("player", who.name()));
 							user.blockedUsers().add(who.getUniqueId());
 						}));
 
@@ -139,7 +140,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 											public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> {
 													Player player = (Player) context.sender();
-													CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+													CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 													List<String> commands = new ArrayList<>();
 													for (String command : Bukkit.getServer().getCommandMap().getKnownCommands().keySet()){
 														if (user.blockedCommands().contains("/"+command)){
@@ -159,12 +160,12 @@ public class CommandSpyCommand extends GDCloudCommand {
 							Player player = context.sender();
 							String command = context.get("command-to-block");
 
-							CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (user.blockedCommands().contains(command)){
-								commandMessenger.message(player, "commandspy.message-command-already-blocked");
+								commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_BLOCKED, Placeholder.of("command", command));
 								return;
 							}
-							commandMessenger.message(player, "commandspy.message-command-blocked", new Placeholder("command", command));
+							commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_BLOCKED, Placeholder.of("command", command));
 							user.blockedCommands().remove(command);
 						}));
 
@@ -179,7 +180,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 											public @NonNull CompletableFuture<@NonNull Iterable<@NonNull Suggestion>> suggestionsFuture(@NonNull CommandContext<Object> context, @NonNull CommandInput input) {
 												return CompletableFuture.supplyAsync(() -> {
 													Player player = (Player) context.sender();
-													CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+													CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 													List<String> commands = new ArrayList<>();
 													for (String command : Bukkit.getServer().getCommandMap().getKnownCommands().keySet()){
 														if (!user.blockedCommands().contains("/"+command)){
@@ -199,12 +200,12 @@ public class CommandSpyCommand extends GDCloudCommand {
 							Player player = context.sender();
 							String command = context.get("command-to-unblock");
 
-							CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player);
+							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (!user.blockedCommands().contains(command)){
-								commandMessenger.message(player, "commandspy.message-command-already-unblocked");
+								commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED, Placeholder.of("command", command));
 								return;
 							}
-							commandMessenger.message(player, "commandspy.message-command-unblocked", new Placeholder("command", command));
+							commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_UNBLOCKED, Placeholder.of("command", command));
 							user.blockedCommands().remove(command);
 						}));
 

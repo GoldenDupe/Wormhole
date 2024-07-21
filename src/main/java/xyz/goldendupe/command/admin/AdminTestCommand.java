@@ -22,6 +22,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.incendo.cloud.brigadier.suggestion.TooltipSuggestion;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.context.CommandInput;
+import org.incendo.cloud.description.Description;
 import org.incendo.cloud.minecraft.extras.suggestion.ComponentTooltipSuggestion;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.DoubleParser;
@@ -29,7 +30,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.ApiStatus;
-import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
@@ -41,11 +42,11 @@ import java.util.concurrent.CompletableFuture;
 @ApiStatus.Internal
 @Cloud
 public class AdminTestCommand extends GDCloudCommand {
-	public AdminTestCommand(GoldenDupe plugin, PaperCommandManager<CommandSender> commandManager) {
-		super(plugin, commandManager);
+	public AdminTestCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+		super(bootstrap, commandManager);
 
 		commandPlayer(
-				commandBuilder("rolltest")
+				commandBuilderPlayer("rolltest", Description.of("admin-only"))
 						.senderType(Player.class)
 						.handler(context -> {
 							Player player = context.sender();
@@ -106,10 +107,10 @@ public class AdminTestCommand extends GDCloudCommand {
 							context.sender().sendMessage("Hi!");
 						})
 		);
-		commandPlayer(
-				commandBuilder(
-						"particle-test"
-				)
+		command(
+				commandBuilderPlayer(
+						"particle-test",
+						Description.of("admin-only"))
 						.permission(MemberType.OWNER.cloudOf("particle-test"))
 						.senderType(Player.class)
 						.argument(DoubleParser.doubleComponent().name("height"))
@@ -120,7 +121,7 @@ public class AdminTestCommand extends GDCloudCommand {
 						.handler(context -> {
 							Player sender = context.sender();
 
-							FusionFlare fusionFlare = plugin.getFusionFlare();
+							FusionFlare fusionFlare = goldenDupe().getFusionFlare();
 							FFParticle<?> particle = new AnimatedParticle<>(List.of(Particle.WAX_ON, Particle.WAX_OFF));
 							//FFParticle<?> particle = new LiteralParticle<>(Particle.DRIP_LAVA);
 
@@ -143,7 +144,7 @@ public class AdminTestCommand extends GDCloudCommand {
 									new CircleModel(fusionFlare, particle, location2, 1, size, rotation, (float) between);
 							CubeModel model2 = new CubeModel(fusionFlare, particle, location2, 1, 4, between, size);
 							final boolean[] goingDown = {false};
-							plugin.getServer().getScheduler().runTaskTimer(plugin,
+							goldenDupe().getServer().getScheduler().runTaskTimer(goldenDupe(),
 									() -> {
 										double currentSize = model.getSize();
 										double sizeDiff;
