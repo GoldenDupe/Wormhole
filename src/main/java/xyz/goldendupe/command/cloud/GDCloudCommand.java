@@ -12,10 +12,12 @@ import xyz.goldendupe.messenger.GoldenMessenger;
 
 public class GDCloudCommand extends CPPCommand<CommandSender> {
 	private GoldenDupe goldenDupe;
+	protected GoldenMessenger messenger;
+	@Deprecated(forRemoval = true)
 	protected GoldenMessenger commandMessenger;
 	public GDCloudCommand(GoldenDupeBootstrap registerer, PaperCommandManager<CommandSender> commandManager) {
 		super(registerer, commandManager);
-		commandMessenger = (GoldenMessenger) registerer.getMessenger();
+		messenger = commandMessenger = (GoldenMessenger) registerer.getMessenger();
 	}
 
 	public GoldenDupe goldenDupe(){
