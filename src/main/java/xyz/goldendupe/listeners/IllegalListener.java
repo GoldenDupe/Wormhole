@@ -20,7 +20,7 @@ public class IllegalListener implements GDListener {
 	@EventHandler(priority = EventPriority.HIGH)
 	private void onBlockPlace(BlockPlaceEvent event){
 		Block block = event.getBlock();
-		if (goldenDupe.getGlobalData().getIllegalPlacement().contains(block.getType())){
+		if (goldenDupe.getSettings().getIllegalPlacements().contains(block.getType())){
 			if (event.getPlayer().hasPermission(MemberType.ADMINISTRATOR.permissionOf("bypass-illegal-build"))){
 				return;
 			}

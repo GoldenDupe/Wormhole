@@ -26,7 +26,8 @@ import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
-import xyz.goldendupe.models.GDGlobalData;
+import xyz.goldendupe.models.GDSavedData;
+import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.ContainerUtils;
 import xyz.goldendupe.utils.MemberType;
@@ -50,24 +51,24 @@ public class DupeCommand extends GDCloudCommand {
 					Player sender = context.sender();
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
 					if (!canDupe(itemStack)){
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
+						messenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						return;
 					} else if (anyIllegals(itemStack)){
 						if (ContainerUtils.isShulkerBox(itemStack)){
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
+							messenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
 						} else if (ContainerUtils.isBundle(itemStack)){
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
+							messenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
 						} else {
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
+							messenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						}
 						return;
 					} else if (!canDupeCombat(itemStack, sender)){
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
+						messenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
 						return;
 					}
 					sender.getInventory().addItem(itemStack);
 					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(sender);
-					GDGlobalData globalData = goldenDupe().getGlobalData();
+					GDSavedData globalData = goldenDupe().getSavedData();
 
 					gdPlayer.setTimesDuped(gdPlayer.getTimesDuped()+1);
 					gdPlayer.setItemsDuped(gdPlayer.getItemsDuped()+itemStack.getAmount());
@@ -87,23 +88,23 @@ public class DupeCommand extends GDCloudCommand {
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
 
 					if (!canDupe(itemStack)){
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
+						messenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						return;
 					} else if (anyIllegals(itemStack)){
 						if (ContainerUtils.isShulkerBox(itemStack)){
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
+							messenger.message(sender, Translations.COMMAND_DUPE_SHULKER);
 						} else if (ContainerUtils.isBundle(itemStack)){
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
+							messenger.message(sender, Translations.COMMAND_DUPE_BUNDLE);
 						} else {
-							commandMessenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
+							messenger.message(sender, Translations.COMMAND_DUPE_UNDUPABLE);
 						}
 						return;
 					} else if (!canDupeCombat(itemStack, sender)){
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
+						messenger.message(sender, Translations.COMMAND_DUPE_COMBAT);
 						return;
 					}
 					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(sender);
-					GDGlobalData globalData = goldenDupe().getGlobalData();
+					GDSavedData globalData = goldenDupe().getSavedData();
 					int debug = 0;
 					for (int i = 0; i < times-1; i++){
 						itemStack = sender.getInventory().getItemInMainHand();
@@ -116,11 +117,11 @@ public class DupeCommand extends GDCloudCommand {
 						if (sender.getInventory().addItem(itemStack).isEmpty()){
 							continue;
 						}
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug + 1));
+						messenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug + 1));
 						return;
 					}
 					if (debug>1){
-						commandMessenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug+1));
+						messenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug+1));
 					}
 				})
 		);
@@ -158,7 +159,7 @@ public class DupeCommand extends GDCloudCommand {
 				return false;
 			}
 		}
-		for (Material material : goldenDupe().getGlobalData().getIllegalDupe()) {
+		for (Material material : goldenDupe().getSettings().getIllegalDupe()) {
 			if (material == itemStack.getType()) {
 				return false;
 			}
@@ -168,7 +169,7 @@ public class DupeCommand extends GDCloudCommand {
 	public boolean canDupeCombat(ItemStack itemStack, @NotNull OfflinePlayer player){
 		CombatManager combatManager = goldenDupe().getFluffy().getCombatManager();
 		if (combatManager.hasTags(player)){
-			return !(goldenDupe().getGlobalData().getIllegalDupeCombat().contains(itemStack.getType()));
+			return !(goldenDupe().getSettings().getIllegalDupeCombat().contains(itemStack.getType()));
 		}
 		return true;
 	}

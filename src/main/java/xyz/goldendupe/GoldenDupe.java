@@ -40,7 +40,8 @@ import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.messenger.Translations;
-import xyz.goldendupe.models.GDGlobalData;
+import xyz.goldendupe.models.GDSavedData;
+import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.utils.MemberType;
@@ -79,7 +80,10 @@ public final class GoldenDupe extends JavaPlugin {
     private ReportUserDatabase reportUserDatabase;
     private CommandSpyDatabase commandSpyDatabase;
     @Getter
-    private final GDGlobalData globalData = new GDGlobalData(this);
+    // TODO initialize
+    private GDSettings settings;
+    @Getter
+    private GDSavedData savedData;
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
@@ -125,7 +129,7 @@ public final class GoldenDupe extends JavaPlugin {
         // config.yml
         reloadConfig();
         // global data inc. illegals
-        globalData.reload();
+        settings.reload();
         // listeners (Reflected)
         loadListeners();
         registerListener(new InventoryListener());
@@ -141,15 +145,15 @@ public final class GoldenDupe extends JavaPlugin {
         registerListener(new CrashNotifier(this, new Notifier()));
 
         getServer().getScheduler().runTaskTimer(this, ()->{
-            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false, null);
-            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false, null);
+            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false);
+            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false);
             for (Player player : getServer().getOnlinePlayers()){
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
                 if (gdPlayer.isToggled()) {
                     // Random items from this list will randomized, but they will have empty NBT
-                    ItemStack itemStack = globalData.getRandomItems().get(random.nextInt(globalData.getRandomItems().size()));
+                    ItemStack itemStack = settings.getRandomItemData().getAllowedItems().get(random.nextInt(settings.getRandomItemData().getAllowedItems().size()));
                     // using patchRandomItem randomizes it, if it can be randomized even more
-                    itemStack = globalData.patchRandomItem(itemStack, random);
+                    itemStack = settings.patchRandomItem(itemStack, random);
 
                     // Adding the items to a map allows checking if player could actually hold the item
                     Map<Integer, ItemStack> items = player.getInventory().addItem(itemStack);
@@ -164,7 +168,7 @@ public final class GoldenDupe extends JavaPlugin {
                         }
                     }
                     gdPlayer.setGeneratedRandomItems(gdPlayer.getGeneratedRandomItems()+1);
-                    globalData.setRandomItemsGenerated(globalData.getRandomItemsGenerated()+1);
+                    savedData.setItemsGenerated(savedData.getItemsGenerated()+1);
                 }
 
 

@@ -1,8 +1,6 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.unity.libs.bet.astral.messenger.message.message.IMessage;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -12,9 +10,6 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
-
-import java.lang.reflect.Field;
-import java.util.Map;
 
 @Cloud
 public class GoldenDupeCommand extends GDCloudCommand {
@@ -40,7 +35,6 @@ public class GoldenDupeCommand extends GDCloudCommand {
 
 									goldenDupe().reloadConfig();
 									goldenDupe().reloadMessengers();
-									goldenDupe().getGlobalData().reload();
 								} catch (Exception e) {
 									Bukkit.broadcast(MiniMessage.miniMessage().deserialize(
 											"<gold><bold>Golden<white>Dupe<reset> <red>GoldenDupe failed to reload the server! Check console for the error! A server restart is required!"

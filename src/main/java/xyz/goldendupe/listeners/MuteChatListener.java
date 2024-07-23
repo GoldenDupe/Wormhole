@@ -19,7 +19,7 @@ public class MuteChatListener implements GDListener{
 
 	@EventHandler(ignoreCancelled = true)
 	public void onAsyncChat(AsyncChatEvent event) {
-		if (goldenDupe.getGlobalData().isGlobalChatMute() && !event.getPlayer().hasPermission(goldenDupe.getGlobalData().getGlobalChatMuteAllowedUsers().getBypass())){
+		if (goldenDupe.getSettings().isGlobalChatMute() && !event.getPlayer().hasPermission(goldenDupe.getSettings().getGlobalChatMuteAllowedUsers().getBypass())){
 			event.setCancelled(true);
 			goldenDupe.messenger().message(event.getPlayer(), Translations.LISTENER_MUTECHAT_MUTED);
 		}
