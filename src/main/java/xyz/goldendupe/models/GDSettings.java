@@ -39,10 +39,8 @@ public class GDSettings {
 	@Deprecated(forRemoval = true)
 	private long randomItemsGenerated;
 	@Setter
-	@Deprecated(forRemoval = true)
 	private boolean globalChatMute = false;
 	@Setter
-	@Deprecated(forRemoval = true)
 	private AllowedUsers globalChatMuteAllowedUsers = AllowedUsers.ALL;
 
 	public GDSettings(Set<Material> illegalDupeCombat, Set<Material> illegalDupe, Set<Material> illegalPlacements, RandomItemsData randomItemData) {
