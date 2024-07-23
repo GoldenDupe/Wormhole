@@ -35,11 +35,11 @@ public class NickCommand extends GDCloudCommand {
                             //noinspection deprecation
                             String colorless = ChatColor.stripColor(nickname);
                             if (colorless.length()>16){
-                                commandMessenger.message(sender, Translations.COMMAND_NICKNAME_TOO_LONG, Placeholder.of("nickname", colorless), Placeholder.of("length", colorless.length()));
+                                messenger.message(sender, Translations.COMMAND_NICKNAME_TOO_LONG, Placeholder.of("nickname", colorless), Placeholder.of("length", colorless.length()));
                                 return;
                             }
                             if (!colorless.matches("[a-zA-Z0-9_-]")){
-                                commandMessenger.message(sender, Translations.COMMAND_NICKNAME_ILLEGAL, Placeholder.of("nickname", colorless), Placeholder.of("length", colorless.length()));
+                                messenger.message(sender, Translations.COMMAND_NICKNAME_ILLEGAL, Placeholder.of("nickname", colorless), Placeholder.of("length", colorless.length()));
                                 return;
                             }
                             Component component;
@@ -51,7 +51,7 @@ public class NickCommand extends GDCloudCommand {
                             }
                             placeholders.add("nickname", component);
 
-                            commandMessenger.message(sender, Translations.COMMAND_NICKNAME_SUCCESS, placeholders);
+                            messenger.message(sender, Translations.COMMAND_NICKNAME_SUCCESS, placeholders);
 
                             sender.displayName(component);
                         })

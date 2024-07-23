@@ -42,7 +42,7 @@ public class PlaytimeCommand extends GDCloudCommand {
 					PlaceholderList placeholders = new PlaceholderList(List.of(Placeholder.of("hours", HH), Placeholder.of("minutes", MM), Placeholder.of("seconds", SS)));
 					placeholders.add(Placeholder.of("player", sender.name()));
 
-					commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
+					messenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
 		});
 		commandManager.command(builder);
 		commandManager.command(builder
@@ -58,9 +58,9 @@ public class PlaytimeCommand extends GDCloudCommand {
 					PlaceholderList placeholders = new PlaceholderList(List.of(Placeholder.of("hours", HH), Placeholder.of("minutes", MM), Placeholder.of("seconds", SS)));
 					placeholders.add(Placeholder.of("player", who.getName()));
 					if (sender.equals(who)) {
-						commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
+						messenger.message(sender, Translations.COMMAND_PLAYTIME_SELF, placeholders);
 					} else {
-						commandMessenger.message(sender, Translations.COMMAND_PLAYTIME_OTHER, placeholders);
+						messenger.message(sender, Translations.COMMAND_PLAYTIME_OTHER, placeholders);
 					}
 				})
 		);

@@ -31,9 +31,9 @@ public class ToggleSpeedCommand extends GDCloudCommand {
 							player.setToggleSpeed(!toggle);
 
 							if (!toggle) {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_SPEED_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_SPEED_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_SPEED_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_SPEED_FALSE);
 							}
 						})
 		);

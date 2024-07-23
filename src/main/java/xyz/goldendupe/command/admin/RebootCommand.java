@@ -40,12 +40,12 @@ public class RebootCommand extends GDCloudCommand {
                     long timeUntilRestart = timeForRestart - rebootTimer.get();
 
                     if (task != null) {
-                        commandMessenger.message(context.sender(), Translations.COMMAND_REBOOT_ALREADY_RESTARTING,
+                        messenger.message(context.sender(), Translations.COMMAND_REBOOT_ALREADY_RESTARTING,
                                 Placeholder.of("until-restart", UptimeCommand.convertMillisToTimeString(timeUntilRestart)));
                         return;
                     }
 
-                    commandMessenger.message(context.sender(), Translations.COMMAND_REBOOT_RESTARTING,
+                    messenger.message(context.sender(), Translations.COMMAND_REBOOT_RESTARTING,
                             Placeholder.of("until-restart", UptimeCommand.convertMillisToTimeString(timeUntilRestart)));
 
                     rebootTimer.reset();
@@ -90,7 +90,7 @@ public class RebootCommand extends GDCloudCommand {
                 .handler(context -> {
 
                     if (task == null) {
-                        commandMessenger.message(context.sender(), Translations.COMMAND_REBOOT_NOT_RESTARTING);
+                        messenger.message(context.sender(), Translations.COMMAND_REBOOT_NOT_RESTARTING);
                         return;
                     }
 
@@ -98,7 +98,7 @@ public class RebootCommand extends GDCloudCommand {
                     rebootTimer.reset();
                     task.cancel();
                     task = null;
-                    commandMessenger.broadcast(Translations.COMMAND_REBOOT_ABORT);
+                    messenger.broadcast(Translations.COMMAND_REBOOT_ABORT);
 
                 })
         );

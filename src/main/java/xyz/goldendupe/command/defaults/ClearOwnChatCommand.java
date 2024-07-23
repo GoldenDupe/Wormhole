@@ -31,7 +31,7 @@ public class ClearOwnChatCommand extends GDCloudCommand {
 							for (int i = 0; i < 275; i++) {
 								sender.sendMessage(component);
 							}
-							commandMessenger.message(sender, Translations.COMMAND_CLEAR_MY_CHAT);
+							messenger.message(sender, Translations.COMMAND_CLEAR_MY_CHAT);
 						})
 		);
 	}

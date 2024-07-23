@@ -21,7 +21,7 @@ public class RulesCommand extends GDCloudCommand {
 				Description.of("Shows the rules of the server."))
 						.permission(MemberType.DEFAULT.permissionOf("rules"))
 				.handler(context->{
-					commandMessenger.message(context.sender(), Translations.COMMAND_RULES);
+					messenger.message(context.sender(), Translations.COMMAND_RULES);
 				})
 		);
 	}

@@ -31,9 +31,9 @@ public class ToggleItemPickupCommand extends GDCloudCommand {
 							player.setTogglePickupItem(!toggle);
 
 							if (!toggle) {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_FALSE);
 							}
 						})
 		);

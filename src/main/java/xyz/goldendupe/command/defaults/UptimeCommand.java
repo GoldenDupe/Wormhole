@@ -28,7 +28,7 @@ public class UptimeCommand extends GDCloudCommand {
                         .handler(context -> {
                             long runtimeMillis = goldenDupe().getStartTimer().get();
 
-                            commandMessenger.message(context.sender(), Translations.COMMAND_UPTIME,
+                            messenger.message(context.sender(), Translations.COMMAND_UPTIME,
                                     Placeholder.of("time", convertMillisToTimeString(runtimeMillis)));
                         })
         );

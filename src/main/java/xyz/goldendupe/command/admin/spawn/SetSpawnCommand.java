@@ -63,7 +63,7 @@ public class SetSpawnCommand extends GDCloudCommand {
 
 
 							if (goldenDupe().getSpawnDatabase().exists(spawnName)) {
-								commandMessenger.message(sender, Translations.SPAWN_ALREADY_SET,
+								messenger.message(sender, Translations.SPAWN_ALREADY_SET,
 										Placeholder.of("spawn", spawnName));
 								return;
 							}
@@ -80,7 +80,7 @@ public class SetSpawnCommand extends GDCloudCommand {
 									)
 							);
 
-							commandMessenger.message(sender, Translations.SPAWN_SET,
+							messenger.message(sender, Translations.SPAWN_SET,
 									Placeholder.of("spawn", spawnName),
 									Placeholder.of("x", format(location.getX())),
 									Placeholder.of("y", format(location.getY())),

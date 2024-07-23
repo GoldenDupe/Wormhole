@@ -33,7 +33,7 @@ public class PingCommand extends GDCloudCommand {
 							placeholders.add(Placeholder.of("ping", ping));
 							placeholders.add(Placeholder.of("ping_colored", coloredPing));
 
-							commandMessenger.message(sender, Translations.COMMAND_PING_SELF, placeholders);
+							messenger.message(sender, Translations.COMMAND_PING_SELF, placeholders);
 						}
 				);
 		commandManager.command(pingBuilder);
@@ -50,9 +50,9 @@ public class PingCommand extends GDCloudCommand {
 							placeholders.add(Placeholder.of("ping_colored", coloredPing));
 
 							if (sender.equals(argument)) {
-								commandMessenger.message(sender, Translations.COMMAND_PING_SELF, placeholders);
+								messenger.message(sender, Translations.COMMAND_PING_SELF, placeholders);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_PING_OTHER, placeholders);
+								messenger.message(sender, Translations.COMMAND_PING_OTHER, placeholders);
 							}
 						}
 				)

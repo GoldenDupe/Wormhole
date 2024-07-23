@@ -65,7 +65,7 @@ public class LoopCommand extends GDCloudCommand {
 
 							if (tasks.get(sender.getUniqueId()) != null){
 								if (!tasks.get(sender.getUniqueId()).isCancelled()){
-									commandMessenger.message(sender, Translations.COMMAND_LOOP_ALREADY_LOOPING);
+									messenger.message(sender, Translations.COMMAND_LOOP_ALREADY_LOOPING);
 									return;
 								}
 							}
@@ -76,15 +76,15 @@ public class LoopCommand extends GDCloudCommand {
 							String executing = context.get("executable");
 
 							AtomicInteger timesExecuted = new AtomicInteger();
-							commandMessenger.message(sender, Translations.COMMAND_LOOP_BEGIN, Placeholder.of("%command%", executing), Placeholder.of("times", times));
+							messenger.message(sender, Translations.COMMAND_LOOP_BEGIN, Placeholder.of("%command%", executing), Placeholder.of("times", times));
 							if (times>200){
-								commandMessenger.message(sender, Translations.COMMAND_LOOP_WARN, Placeholder.of("%command%", executing), Placeholder.of("times", times));
+								messenger.message(sender, Translations.COMMAND_LOOP_WARN, Placeholder.of("%command%", executing), Placeholder.of("times", times));
 							}
 							goldenDupe().getServer().getAsyncScheduler().runAtFixedRate(goldenDupe(),
 									task->{
 										if (timesExecuted.get()>times){
 											task.cancel();
-											commandMessenger.message(sender, Translations.COMMAND_LOOP_DONE, Placeholder.of("%command%", executing), Placeholder.of("times", times));
+											messenger.message(sender, Translations.COMMAND_LOOP_DONE, Placeholder.of("%command%", executing), Placeholder.of("times", times));
 											return;
 										}
 
@@ -107,11 +107,11 @@ public class LoopCommand extends GDCloudCommand {
 							if (tasks.get(sender.getUniqueId()) != null){
 								if (!tasks.get(sender.getUniqueId()).isCancelled()){
 									tasks.get(sender.getUniqueId()).cancel();
-									commandMessenger.message(sender, Translations.COMMAND_LOOP_CANCELED);
+									messenger.message(sender, Translations.COMMAND_LOOP_CANCELED);
 									return;
 								}
 							}
-							commandMessenger.message(sender, Translations.COMMAND_LOOP_NO_TASK_FOUND);
+							messenger.message(sender, Translations.COMMAND_LOOP_NO_TASK_FOUND);
 						})
 				);
 	}

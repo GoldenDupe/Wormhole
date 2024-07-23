@@ -40,11 +40,11 @@ public class SetHomeCommand extends GDCloudCommand {
                             GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 
                             if (goldenDupe().getHomes(player).containsKey(homeName)){
-                                commandMessenger.message(sender, Translations.COMMAND_SET_HOME_ALREADY_EXISTS,
+                                messenger.message(sender, Translations.COMMAND_SET_HOME_ALREADY_EXISTS,
                                         Placeholder.of("home", homeName));
                                 return;
                             } else if (goldenDupe().getHomes(player).size() >= player.getMaxHomes()) {
-                                commandMessenger.message(sender, Translations.COMMAND_SET_HOME_MAX_HOMES,
+                                messenger.message(sender, Translations.COMMAND_SET_HOME_MAX_HOMES,
                                         Placeholder.of("max-homes", player.getMaxHomes()),
                                         Placeholder.of("homes", goldenDupe().getHomes(player).size()));
                                 return;
@@ -69,7 +69,7 @@ public class SetHomeCommand extends GDCloudCommand {
                             placeholders.add(Placeholder.of("x", GoldenMessenger.format(home.getX())));
                             placeholders.add(Placeholder.of("y", GoldenMessenger.format(home.getY())));
                             placeholders.add(Placeholder.of("z", GoldenMessenger.format(home.getZ())));
-                            commandMessenger.message(sender, Translations.COMMAND_SET_HOME_SUCCESS,
+                            messenger.message(sender, Translations.COMMAND_SET_HOME_SUCCESS,
                                     placeholders);
                         })
         );

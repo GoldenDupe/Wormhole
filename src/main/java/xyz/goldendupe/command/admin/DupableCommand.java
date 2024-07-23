@@ -44,7 +44,7 @@ public class DupableCommand extends GDCloudCommand {
 
 							ItemStack itemStack = sender.getInventory().getItemInMainHand();
 							if (itemStack.isEmpty()){
-								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_AIR);
+								messenger.message(sender, Translations.COMMAND_DUPABLE_AIR);
 								return;
 							}
 
@@ -78,9 +78,9 @@ public class DupableCommand extends GDCloudCommand {
 
 							itemStack.setItemMeta(meta);
 							if (isDupable) {
-								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_MADE_DUPABLE);
+								messenger.message(sender, Translations.COMMAND_DUPABLE_MADE_DUPABLE);
 							} else{
-								commandMessenger.message(sender, Translations.COMMAND_DUPABLE_MADE_UNDUPABLE);
+								messenger.message(sender, Translations.COMMAND_DUPABLE_MADE_UNDUPABLE);
 							}
 						})
 		);

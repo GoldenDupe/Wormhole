@@ -36,16 +36,16 @@ public class HomeCommand extends GDCloudCommand {
                             String homeName = context.get("home-name").toString().toLowerCase();
 
                             if (!goldenDupe().getHomes(player).containsKey(homeName)){
-                                commandMessenger.message(sender, Translations.COMMAND_HOME_DOESNT_EXIST,
+                                messenger.message(sender, Translations.COMMAND_HOME_DOESNT_EXIST,
                                         Placeholder.of("home", homeName));
                                 return;
                             }
 
                             Position home = goldenDupe().getHomes(player).get(homeName);
 
-                            commandMessenger.message(sender, Translations.COMMAND_HOME_TELEPORTING,
+                            messenger.message(sender, Translations.COMMAND_HOME_TELEPORTING,
                                     Placeholder.of("home", homeName));
-                            new TimedTeleport(commandMessenger, "commands.home",
+                            new TimedTeleport(messenger, "commands.home",
                                     sender, home.asLocation(),
                                     false, 100)
                                     .setTeleportCause(PlayerTeleportEvent.TeleportCause.COMMAND)

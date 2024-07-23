@@ -47,7 +47,7 @@ public class ShipCommand extends GDCloudCommand {
 							placeholders.addAll(createMatch("progress-bar-8"));
 							placeholders.addAll(createMatch("progress-bar-9"));
 							placeholders.addAll(createMatch("progress-bar-10"));
-							commandMessenger.message(context.sender(), Translations.COMMAND_SHIP, placeholders);
+							messenger.message(context.sender(), Translations.COMMAND_SHIP, placeholders);
 						})
 		);
 	}

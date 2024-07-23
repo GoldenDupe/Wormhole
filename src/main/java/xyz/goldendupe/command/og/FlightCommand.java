@@ -39,9 +39,9 @@ public class FlightCommand extends GDCloudCommand {
 					sender.setAllowFlight(!sender.getAllowFlight());
 					sender.setFlying(sender.getAllowFlight());
 					if (sender.isFlying()){
-						commandMessenger.message(sender, Translations.COMMAND_FLY_TRUE);
+						messenger.message(sender, Translations.COMMAND_FLY_TRUE);
 					} else {
-						commandMessenger.message(sender, Translations.COMMAND_FLY_FALSE);
+						messenger.message(sender, Translations.COMMAND_FLY_FALSE);
 					}
 				});
 		commandPlayer(builder);
@@ -78,18 +78,18 @@ public class FlightCommand extends GDCloudCommand {
 					other.setFlying(other.getAllowFlight());
 					if (!other.equals(sender)) {
 						if (other.getAllowFlight()) {
-							commandMessenger.message(sender, Translations.COMMAND_FLY_ADMIN_TRUE, Placeholder.of("player", other.name()));
-							commandMessenger.message(other, Translations.COMMAND_FLY_TRUE);
+							messenger.message(sender, Translations.COMMAND_FLY_ADMIN_TRUE, Placeholder.of("player", other.name()));
+							messenger.message(other, Translations.COMMAND_FLY_TRUE);
 						} else {
-							commandMessenger.message(sender, Translations.COMMAND_FLY_ADMIN_FALSE, Placeholder.of("player", other.name()));
-							commandMessenger.message(other, Translations.COMMAND_FLY_FALSE);
+							messenger.message(sender, Translations.COMMAND_FLY_ADMIN_FALSE, Placeholder.of("player", other.name()));
+							messenger.message(other, Translations.COMMAND_FLY_FALSE);
 						}
 						return;
 					}
 					if (other.getAllowFlight()) {
-						commandMessenger.message(other, Translations.COMMAND_FLY_TRUE);
+						messenger.message(other, Translations.COMMAND_FLY_TRUE);
 					} else {
-						commandMessenger.message(other, Translations.COMMAND_FLY_FALSE);
+						messenger.message(other, Translations.COMMAND_FLY_FALSE);
 					}
 				})
 		);

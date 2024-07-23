@@ -52,12 +52,12 @@ public class RemoveSpawnCommand extends GDCloudCommand {
 
                             if (goldenDupe().getSpawnDatabase().exists(spawnName)) {
                                 goldenDupe().getSpawnDatabase().delete(spawnName);
-                                commandMessenger.message(sender, Translations.SPAWN_REMOVED,
+                                messenger.message(sender, Translations.SPAWN_REMOVED,
                                         Placeholder.of("spawn", spawnName));
                                 return;
                             }
 
-                            commandMessenger.message(sender, Translations.SPAWN_ALREADY_REMOVED,
+                            messenger.message(sender, Translations.SPAWN_ALREADY_REMOVED,
                                     Placeholder.of("spawn", spawnName));
                         })
         );

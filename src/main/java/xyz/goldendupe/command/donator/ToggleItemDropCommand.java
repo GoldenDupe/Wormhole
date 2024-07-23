@@ -32,9 +32,9 @@ public class ToggleItemDropCommand extends GDCloudCommand {
 							player.setToggleDropItem(!toggle);
 
 							if (!toggle){
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_FALSE);
 							}
 
 						})

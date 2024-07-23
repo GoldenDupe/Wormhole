@@ -61,21 +61,21 @@ public class CustomChatCommand extends GDCloudCommand {
                                     GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
                                     GDChat chat = gdPlayer.chat();
                                     if (chat == type) {
-                                        commandMessenger.message(sender, Translations.get(name + ".enabled"));
+                                        messenger.message(sender, Translations.get(name + ".enabled"));
                                         gdPlayer.setChat(GDChat.GLOBAL);
                                     } else {
-                                        commandMessenger.message(sender, Translations.get(name + ".disabled"));
+                                        messenger.message(sender, Translations.get(name + ".disabled"));
                                         gdPlayer.setChat(type);
                                     }
                                 } else {
                                     List<Placeholder> placeholders = new LinkedList<>();
                                     placeholders.add(Placeholder.legacy("message", message));
-                                    commandMessenger
+                                    messenger
                                             .broadcast(type.asMessageChannel(),
                                                     Translations.get(name + ".chat"), placeholders);
                                 }
                             } else if (hasArgs && sender instanceof ConsoleCommandSender) {
-                                commandMessenger
+                                messenger
                                         .broadcast(type.asMessageChannel(),
                                                 Translations.get(name + ".chat-console"),
                                                 Placeholder.legacy("message", message));

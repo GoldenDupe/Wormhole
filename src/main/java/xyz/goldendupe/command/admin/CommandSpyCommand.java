@@ -1,6 +1,5 @@
 package xyz.goldendupe.command.admin;
 
-import bet.astral.astronauts.goldendupe.Astronauts;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-@Astronauts
 @Cloud
 public class CommandSpyCommand extends GDCloudCommand {
 	public CommandSpyCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
@@ -40,7 +38,7 @@ public class CommandSpyCommand extends GDCloudCommand {
 				.permission(MemberType.ADMINISTRATOR.cloudOf("commandspy"))
 				.senderType(Player.class)
 				.handler(context->{
-					commandMessenger.message(context.sender(), Translations.COMMAND_SPY_HELP);
+					messenger.message(context.sender(), Translations.COMMAND_SPY_HELP);
 				});
 		commandManager.command(spyCommand);
 
@@ -51,9 +49,9 @@ public class CommandSpyCommand extends GDCloudCommand {
 					CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 					boolean isToggled = !user.isCommandSpyToggled();
 					if (isToggled){
-						commandMessenger.message(player, Translations.COMMAND_SPY_TOGGLE_TRUE);
+						messenger.message(player, Translations.COMMAND_SPY_TOGGLE_TRUE);
 					} else {
-						commandMessenger.message(player, Translations.COMMAND_SPY_TOGGLE_FALSE);
+						messenger.message(player, Translations.COMMAND_SPY_TOGGLE_FALSE);
 					}
 					user.setCommandSpyToggled(isToggled);
 				})
@@ -86,10 +84,10 @@ public class CommandSpyCommand extends GDCloudCommand {
 
 							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (user.blockedUsers().contains(who.getUniqueId())){
-								commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_BLOCKED, Placeholder.of("player", who.name()));
+								messenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_BLOCKED, Placeholder.of("player", who.name()));
 								return;
 							}
-							commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_BLOCKED, Placeholder.of("player", who.name()));
+							messenger.message(player, Translations.COMMAND_SPY_PLAYER_BLOCKED, Placeholder.of("player", who.name()));
 							user.blockedUsers().add(who.getUniqueId());
 						}));
 		commandManager.command(spyCommand
@@ -120,10 +118,10 @@ public class CommandSpyCommand extends GDCloudCommand {
 
 							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (!user.blockedUsers().contains(who.getUniqueId())){
-								commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_UNBLOCKED, Placeholder.of("player", who.name()));
+								messenger.message(player, Translations.COMMAND_SPY_PLAYER_ALREADY_UNBLOCKED, Placeholder.of("player", who.name()));
 								return;
 							}
-							commandMessenger.message(player, Translations.COMMAND_SPY_PLAYER_UNBLOCKED, Placeholder.of("player", who.name()));
+							messenger.message(player, Translations.COMMAND_SPY_PLAYER_UNBLOCKED, Placeholder.of("player", who.name()));
 							user.blockedUsers().add(who.getUniqueId());
 						}));
 
@@ -162,10 +160,10 @@ public class CommandSpyCommand extends GDCloudCommand {
 
 							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (user.blockedCommands().contains(command)){
-								commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_BLOCKED, Placeholder.of("command", command));
+								messenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_BLOCKED, Placeholder.of("command", command));
 								return;
 							}
-							commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_BLOCKED, Placeholder.of("command", command));
+							messenger.message(player, Translations.COMMAND_SPY_COMMAND_BLOCKED, Placeholder.of("command", command));
 							user.blockedCommands().remove(command);
 						}));
 
@@ -202,10 +200,10 @@ public class CommandSpyCommand extends GDCloudCommand {
 
 							CSPYUser user = goldenDupe().commandSpyDatabase().fromPlayer(player);
 							if (!user.blockedCommands().contains(command)){
-								commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED, Placeholder.of("command", command));
+								messenger.message(player, Translations.COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED, Placeholder.of("command", command));
 								return;
 							}
-							commandMessenger.message(player, Translations.COMMAND_SPY_COMMAND_UNBLOCKED, Placeholder.of("command", command));
+							messenger.message(player, Translations.COMMAND_SPY_COMMAND_UNBLOCKED, Placeholder.of("command", command));
 							user.blockedCommands().remove(command);
 						}));
 

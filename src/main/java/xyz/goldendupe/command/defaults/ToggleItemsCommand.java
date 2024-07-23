@@ -30,9 +30,9 @@ public class ToggleItemsCommand extends GDCloudCommand {
 							player.setToggled(!toggle);
 
 							if (!toggle){
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_ITEMS_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_ITEMS_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_ITEMS_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_ITEMS_FALSE);
 							}
 						})
 		);

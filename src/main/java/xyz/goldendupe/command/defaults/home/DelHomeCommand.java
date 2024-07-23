@@ -37,7 +37,7 @@ public class DelHomeCommand extends GDCloudCommand {
                             GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 
                             if (!goldenDupe().getHomes(player).containsKey(homeName)){
-                                commandMessenger.message(sender, Translations.COMMAND_DELETE_HOME_DOESNT_EXIST,
+                                messenger.message(sender, Translations.COMMAND_DELETE_HOME_DOESNT_EXIST,
                                         Placeholder.of("home", homeName));
                                 return;
                             }
@@ -46,7 +46,7 @@ public class DelHomeCommand extends GDCloudCommand {
 
                             goldenDupe().requestDeleteHome(player, homeName);
 
-                            commandMessenger.message(sender, Translations.COMMAND_DELETE_HOME_REMOVED,
+                            messenger.message(sender, Translations.COMMAND_DELETE_HOME_REMOVED,
                                     Placeholder.of("home", homeName),
                                     Placeholder.of("xyz", new Vector3d(home.getX(), home.getY(), home.getZ()).toString()),
                                     Placeholder.of("x", GoldenMessenger.format(home.getX())),

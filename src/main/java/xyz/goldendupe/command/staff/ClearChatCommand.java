@@ -34,7 +34,7 @@ public class ClearChatCommand extends GDCloudCommand {
 //								Bukkit.broadcast(Component.text("CC#"+i), "goldendupe.staff.clearchat.receive");
 								Bukkit.broadcast(component, "goldendupe.staff.clearchat.receive");
 							}
-							commandMessenger.broadcast(Translations.COMMAND_CLEAR_CHAT,
+							messenger.broadcast(Translations.COMMAND_CLEAR_CHAT,
 									Placeholder.legacy("who", sender instanceof ConsoleCommandSender ? "Server-Console" : sender.getName()));
 						})
 		);

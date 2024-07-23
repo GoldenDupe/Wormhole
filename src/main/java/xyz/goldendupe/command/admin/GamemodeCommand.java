@@ -65,21 +65,21 @@ public class GamemodeCommand extends GDCloudCommand {
 							goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
 								if (other.getGameMode() == gameMode) {
 									if (other.equals(sender)) {
-										commandMessenger.message(sender,
+										messenger.message(sender,
 												alreadySame(gameMode));
 									} else {
-										commandMessenger.message(sender,
+										messenger.message(sender,
 												alreadySameAdmin(gameMode), Placeholder.of("player", other.name()));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
-									commandMessenger.message(other,
+									messenger.message(other,
 											enabled(gameMode));
-									commandMessenger.message(sender,
+									messenger.message(sender,
 											enabledAdmin(gameMode), Placeholder.of("player", other.name()));
 								} else {
 									other.setGameMode(gameMode);
-									commandMessenger.message(sender,
+									messenger.message(sender,
 											enabled(gameMode));
 								}
 							});
@@ -119,21 +119,21 @@ public class GamemodeCommand extends GDCloudCommand {
 							goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
 								if (other.getGameMode() == gameMode) {
 									if (other.equals(sender)) {
-										commandMessenger.message(sender,
+										messenger.message(sender,
 												alreadySame(gameMode));
 									} else {
-										commandMessenger.message(sender,
+										messenger.message(sender,
 												alreadySameAdmin(gameMode), Placeholder.of("player", other.name()));
 									}
 								} else if (!other.equals(sender)) {
 									other.setGameMode(gameMode);
-									commandMessenger.message(other,
+									messenger.message(other,
 											enabled(gameMode));
-									commandMessenger.message(sender,
+									messenger.message(sender,
 											enabledAdmin(gameMode), Placeholder.of("player", other.name()));
 								} else {
 									other.setGameMode(gameMode);
-									commandMessenger.message(sender,
+									messenger.message(sender,
 											enabled(gameMode));
 								}
 							});

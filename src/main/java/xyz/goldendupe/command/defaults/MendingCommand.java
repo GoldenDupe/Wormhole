@@ -24,15 +24,15 @@ public class MendingCommand extends GDCloudCommand {
 						.handler(context->{
 							Player sender = context.sender();
 							if (sender.getInventory().getItemInMainHand().isEmpty()){
-								commandMessenger.message(sender, Translations.COMMAND_MENDING_AIR);
+								messenger.message(sender, Translations.COMMAND_MENDING_AIR);
 								return;
 							}
 							if (!Enchantment.MENDING.canEnchantItem(sender.getInventory().getItemInMainHand())){
-								commandMessenger.message(sender, Translations.COMMAND_MENDING_CANNOT_ENCHANT);
+								messenger.message(sender, Translations.COMMAND_MENDING_CANNOT_ENCHANT);
 								return;
 							}
 							sender.getInventory().getItemInMainHand().addEnchantment(Enchantment.MENDING, 1);
-							commandMessenger.message(sender, Translations.COMMAND_MENDING_SUCCESS);
+							messenger.message(sender, Translations.COMMAND_MENDING_SUCCESS);
 						})
 				;
 		commandManager.command(builder);

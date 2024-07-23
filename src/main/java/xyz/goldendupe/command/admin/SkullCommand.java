@@ -43,7 +43,7 @@ public class SkullCommand extends GDCloudCommand {
                                 meta.setOwningPlayer(offlinePlayer);
 	                            stack.setItemMeta(meta);
 	                            sender.getInventory().addItem(stack);
-	                            commandMessenger.message(sender, Translations.COMMAND_SKULL_GIVE, Placeholder.of("player", name));
+                                messenger.message(sender, Translations.COMMAND_SKULL_GIVE, Placeholder.of("player", name));
                             });
                         })
         );

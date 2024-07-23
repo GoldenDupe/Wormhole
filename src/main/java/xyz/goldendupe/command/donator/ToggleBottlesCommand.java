@@ -31,9 +31,9 @@ public class ToggleBottlesCommand extends GDCloudCommand {
 							player.setToggleNightVision(!toggle);
 
 							if (!toggle){
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_POTION_BOTTLES_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_POTION_BOTTLES_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_POTION_BOTTLES_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_POTION_BOTTLES_FALSE);
 							}
 						})
 		);

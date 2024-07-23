@@ -60,14 +60,14 @@ public class RenameCommand extends GDCloudCommand {
 
 							String argument = context.get("name");
 							if (player.getInventory().getItemInMainHand().isEmpty()) {
-								commandMessenger.message(player, Translations.COMMAND_RENAME_AIR);
+								messenger.message(player, Translations.COMMAND_RENAME_AIR);
 								return;
 							}
 							Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(argument);
 							component = component.hoverEvent(HoverEvent.showText(component));
 
 							if (PlainTextComponentSerializer.plainText().serialize(component).length() > 50 && !player.hasPermission(MemberType.ADMINISTRATOR.permissionOf("rename"))) {
-								commandMessenger.message(player, Translations.COMMAND_RENAME_TOO_LONG);
+								messenger.message(player, Translations.COMMAND_RENAME_TOO_LONG);
 								return;
 							}
 
@@ -81,7 +81,7 @@ public class RenameCommand extends GDCloudCommand {
 							final Component finalComponent = component;
 							player.getInventory().getItemInMainHand().editMeta(meta -> meta.displayName(finalComponent));
 
-							commandMessenger.message(player, Translations.COMMAND_RENAME_SUCCESS, Placeholder.of("name", component), Placeholder.of("old_name", oldName));
+							messenger.message(player, Translations.COMMAND_RENAME_SUCCESS, Placeholder.of("name", component), Placeholder.of("old_name", oldName));
 						}));
 	}
 }

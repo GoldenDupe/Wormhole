@@ -30,9 +30,9 @@ public class ToggleNightVisionCommand extends GDCloudCommand {
 							player.setToggleNightVision(!toggle);
 
 							if (!toggle){
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_NIGHT_VISION_TRUE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_NIGHT_VISION_TRUE);
 							} else {
-								commandMessenger.message(sender, Translations.COMMAND_TOGGLE_NIGHT_VISION_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_NIGHT_VISION_FALSE);
 							}
 						})
 		);
