@@ -4,6 +4,7 @@ import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.fluffy.FluffyCombat;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
+import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.unity.Factions;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,9 +39,11 @@ import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.listeners.GDListener;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDGlobalData;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDHome;
+import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
@@ -51,6 +54,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
@@ -176,10 +180,16 @@ public final class GoldenDupe extends JavaPlugin {
                 }
             }
         }, 20, ToggleItemsCommand.RANDOM_ITEM_TICKS);
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
+            messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_1);
+        }, 100, 1, TimeUnit.SECONDS);
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
+            messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_30);
+        }, 100, 30, TimeUnit.SECONDS);
+
+
 
         fusionFlare.ready();
-
-
         getComponentLogger().info("GoldenDupe has enabled!");
     }
 
