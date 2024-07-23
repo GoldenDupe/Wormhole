@@ -184,6 +184,14 @@ public class Translations {
 	// Illegals
 	public static final Translation LISTENER_ILLEGAL = new Translation("listeners.illegal.cannot-place").add(ComponentType.CHAT, text("<red>You cannot place <white>%block%<red>."));
 
+	// mute chat
+	public static final Translation COMMAND_MUTECHAT_UNMUTED = new Translation("commands.mutechat.unmuted").add(ComponentType.CHAT, text("<green>The chat has been unmuted!"));
+	public static final Translation COMMAND_MUTECHAT_MUTED = new Translation("commands.mutechat.muted").add(ComponentType.CHAT, text("<red>The chat has been muted!"));
+	public static final Translation COMMAND_MUTECHAT_BYPASS = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<yellow>You have permission to bypass chat mute."));
+	public static final Translation LISTENER_MUTECHAT_MUTED = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<yellow>The chat is currently muted!."));
+	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("commands.mutechat.bypass").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!"));
+	public static final Translation TIMED_MUTECHAT_REMINDER_30 = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<red>The chat is currently muted!"));
+
 	private static Component text(@NotNull String val){
 		return MiniMessage.miniMessage().deserialize(val);
 	}

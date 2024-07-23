@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import xyz.goldendupe.GoldenDupe;
+import xyz.goldendupe.utils.MemberType;
 
 import java.io.File;
 import java.util.*;
@@ -27,6 +28,10 @@ public class GDGlobalData {
 	private long itemsDuped;
 	@Setter
 	private long randomItemsGenerated;
+	@Setter
+	private boolean globalChatMute;
+	@Setter
+	private AllowedUsers globalChatMuteAllowedUsers;
 
 	public GDGlobalData(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
@@ -134,5 +139,23 @@ public class GDGlobalData {
 	 */
 
 	public void requestMessageGroupSave(){
+	}
+
+	@Getter
+	public enum AllowedUsers {
+		ALL("", MemberType.MODERATOR.permissionOf("mute-chat")),
+		DONATOR(MemberType.DONATOR.permissionOf("mute-chat-bypass"), MemberType.ADMINISTRATOR.permissionOf("mute-chat.donator")),
+		STAFF(MemberType.MODERATOR.permissionOf("mute-chat-bypass"), MemberType.MODERATOR.permissionOf("mute-chat.staff")),
+		ADMIN(MemberType.ADMINISTRATOR.permissionOf("mute-chat-bypass"), MemberType.ADMINISTRATOR.permissionOf("mute-chat")),
+		OWNER(MemberType.OWNER.permissionOf("mute-chat-bypass"), MemberType.OWNER.permissionOf("mute-chat")),
+		;
+
+		private final String bypass;
+		private final String command;
+		AllowedUsers(String bypass, String command) {
+			this.bypass = bypass;
+			this.command = command;
+		}
+
 	}
 }
