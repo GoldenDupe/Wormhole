@@ -99,9 +99,9 @@ public class ClearInventoryCommand extends GDCloudCommand {
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 							if (context.flags().isPresent("change-auto-confirm")) {
 								if (player.autoConfirmClearInv()) {
-									commandMessenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_TRUE);
+									messenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_TRUE);
 								} else {
-									commandMessenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_FALSE);
+									messenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_FALSE);
 								}
 								player.setAutoConfirmClearInv(!player.autoConfirmClearInv());
 							} else {
@@ -112,7 +112,7 @@ public class ClearInventoryCommand extends GDCloudCommand {
 									sender.getInventory().setLeggings(null);
 									sender.getInventory().setBoots(null);
 									sender.getInventory().setItemInOffHand(null);
-									commandMessenger.message(sender, Translations.COMMAND_CLEAR_CLEARED);
+									messenger.message(sender, Translations.COMMAND_CLEAR_CLEARED);
 									return;
 								}
 
