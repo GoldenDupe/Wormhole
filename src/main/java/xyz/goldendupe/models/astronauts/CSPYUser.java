@@ -1,6 +1,5 @@
 package xyz.goldendupe.models.astronauts;
 
-import bet.astral.astronauts.goldendupe.Astronauts;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.utils.annotations.temporal.RequireSave;
 
@@ -9,7 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 @RequireSave
-@Astronauts
 public class CSPYUser {
 	private final UUID uniqueId;
 	private CommandSpyDatabase database;

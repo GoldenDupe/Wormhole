@@ -45,8 +45,6 @@ import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
-import xyz.goldendupe.database.astronauts.ReportDatabase;
-import xyz.goldendupe.database.astronauts.ReportUserDatabase;
 import xyz.goldendupe.datagen.GenerateFiles;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.messenger.Translations;
@@ -86,8 +84,6 @@ public final class GoldenDupe extends JavaPlugin {
     private PlayerDatabase playerDatabase;
     @Getter
     private SpawnDatabase spawnDatabase;
-    private ReportDatabase reportDatabase;
-    private ReportUserDatabase reportUserDatabase;
     private CommandSpyDatabase commandSpyDatabase;
     @Getter
     // TODO initialize
@@ -190,8 +186,6 @@ public final class GoldenDupe extends JavaPlugin {
         registerListener(new InventoryListener());
 
         playerDatabase = new PlayerDatabase(this);
-        reportUserDatabase = new ReportUserDatabase(this);
-        reportDatabase = new ReportDatabase(this);
         commandSpyDatabase = new CommandSpyDatabase(this);
 
         spawnDatabase = new SpawnDatabase(this);
@@ -464,14 +458,6 @@ public final class GoldenDupe extends JavaPlugin {
 
     public Economy vaultEconomy() {
         return vaultEconomy;
-    }
-
-    public ReportDatabase reportDatabase() {
-        return reportDatabase;
-    }
-
-    public ReportUserDatabase reportUserDatabase() {
-        return reportUserDatabase;
     }
 
     public LuckPerms luckPerms() {

@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.*;
 
 
-public class GoldenMessenger extends PaperMessenger implements MessageLoader {
+public class GoldenMessenger extends PaperMessenger {
 	private static final DecimalFormat format = new DecimalFormat(".xx");
 	public GoldenMessenger() {
 		super(null);

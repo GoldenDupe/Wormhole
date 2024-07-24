@@ -1,22 +1,11 @@
 package xyz.goldendupe.messenger;
 
-import bet.astral.messenger.adventure.AdventurePlaceholderManager;
-import bet.astral.messenger.placeholder.Placeholder;
-import bet.astral.messenger.utils.PlaceholderUtils;
-import bet.astral.unity.utils.refrence.PlayerReference;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.models.GDPlayer;
 
-import java.util.LinkedList;
-import java.util.List;
-
-public class GoldenPlaceholderManager extends AdventurePlaceholderManager {
+public class GoldenPlaceholderManager {
 
 	private static final GoldenDupe gd;
 	private static final boolean vaultExists;
@@ -26,28 +15,6 @@ public class GoldenPlaceholderManager extends AdventurePlaceholderManager {
 		vaultExists = gd.vaultChat() != null;
 		luckPermsExists = gd.luckPerms() != null;
 	}
-
-	@Override
-	public List<Placeholder> audiencePlaceholders(@Nullable String prefix, @NotNull Audience audience) {
-		if (audience instanceof PlayerReference playerReference && playerReference.player() != null){
-			return super.playerPlaceholders(prefix, playerReference.player());
-		} else if (audience instanceof GDPlayer player){
-			return super.playerPlaceholders(prefix, player.player());
-		}
-		return super.audiencePlaceholders(prefix, audience);
-	}
-
-	@Override
-	public @NotNull List<Placeholder> playerPlaceholders(@Nullable String prefix, @NotNull Player player) {
-		List<Placeholder> placeholders = new LinkedList<>(super.playerPlaceholders(prefix, player));
-		placeholders.add(PlaceholderUtils.createPlaceholder(prefix, "prefix", prefix(player)));
-		placeholders.add(PlaceholderUtils.createPlaceholder(prefix, "suffix", suffix(player)));
-		placeholders.add(PlaceholderUtils.createPlaceholder(prefix, "prefix_name", prefixName(player)));
-		placeholders.add(PlaceholderUtils.createPlaceholder(prefix, "suffix_name", suffixName(player)));
-		placeholders.add(PlaceholderUtils.createPlaceholder(prefix, "prefix_suffix_name", prefixNameSuffix(player)));
-		return placeholders;
-	}
-
 	public static String prefix(Player player){
 		if (vaultExists && !luckPermsExists){
 			return gd.vaultChat().getPlayerPrefix(player);
