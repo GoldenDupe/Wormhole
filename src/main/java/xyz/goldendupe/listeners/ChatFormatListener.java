@@ -2,10 +2,6 @@ package xyz.goldendupe.listeners;
 
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.translation.TranslationKey;
-import bet.astral.unity.model.FPrefix;
-import bet.astral.unity.model.FRole;
-import bet.astral.unity.model.Faction;
-import bet.astral.unity.utils.refrence.FactionReferenceImpl;
 import io.papermc.paper.chat.ChatRenderer;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.audience.Audience;
@@ -67,6 +63,7 @@ public class ChatFormatListener implements GDListener {
 		if (chat.asMessageChannel() != null && chat.asMemberType() != null) {
 			return format;
 		}else {
+			/*
 			Faction faction = gdPlayer.getFaction();
 			if (faction != null) {
 				FRole role = faction.getRole(player);
@@ -74,6 +71,8 @@ public class ChatFormatListener implements GDListener {
 				format = format.append(prefix.format(faction)).appendSpace();
 //              format = format.append(faction.getDisplayname()).appendSpace();
 			}
+
+			 */
 		}
 		//noinspection UnnecessaryUnicodeEscape
 		format = format.append(name)
@@ -86,6 +85,7 @@ public class ChatFormatListener implements GDListener {
 
 	private ChatFormatListener(GoldenDupe goldenDupe){
 		ChatFormatListener.goldenDupe = goldenDupe;
+		/*
 		goldenDupe.getFactions().registerChatHandler(
 				(fPlayer, faction, audience, message, type) -> {
 					FactionReferenceImpl reference = (FactionReferenceImpl) audience;
@@ -103,6 +103,8 @@ public class ChatFormatListener implements GDListener {
 					}
 				}
 		);
+
+		 */
 	}
 
 	@EventHandler

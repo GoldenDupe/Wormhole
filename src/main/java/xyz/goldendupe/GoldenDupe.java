@@ -1,14 +1,11 @@
 package xyz.goldendupe;
 
-import bet.astral.cloudplusplus.annotations.DoNotReflect;
-import bet.astral.fluffy.FluffyCombat;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.v2.locale.LanguageTable;
 import bet.astral.messenger.v2.locale.source.FileLanguageSource;
 import bet.astral.messenger.v2.locale.source.LanguageSource;
 import bet.astral.messenger.v2.permission.Permission;
-import bet.astral.unity.Factions;
 import com.google.gson.Gson;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -97,8 +94,6 @@ public final class GoldenDupe extends JavaPlugin {
     private PaperCommandManager<CommandSender> paperCommandManager;
     // Do NOT reset
     @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
-    @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
-    @Getter(AccessLevel.PUBLIC) private Factions factions;
     private List<InitAfterBootstrap> initAfterBootstraps;
 
     public GoldenDupe(GoldenDupeBootstrap boostrap){
@@ -151,11 +146,6 @@ public final class GoldenDupe extends JavaPlugin {
 	    } catch (IOException e) {
 		    throw new RuntimeException(e);
 	    }
-
-
-
-	    fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
-        factions = Factions.getPlugin(Factions.class);
 
         uploadUploads();
         instance = this;
@@ -314,19 +304,10 @@ public final class GoldenDupe extends JavaPlugin {
 
 
     public void registerListener(Listener listener){
-        if (cannotInject(listener.getClass())){
-            getLogger().warning("Couldn't initialize listener: "+ listener.getClass().getName() + " as it's not available in this season!");
-            return;
-        }
-
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
     public void registerListener(Class<?> listener){
-        if (cannotInject(listener)){
-            getLogger().warning("Couldn't initialize listener: "+ listener.getName() + " as it's not available in this season or the class is cannot be reflected!");
-            return;
-        }
         Constructor<?> constructor;
         try {
             constructor = getConstructor(listener, GoldenDupe.class);
@@ -368,11 +349,6 @@ public final class GoldenDupe extends JavaPlugin {
             getServer().getPluginManager().addPermission(bukkitPermission);
         }
     }
-    public boolean cannotInject(Class<?> clazz){
-        DoNotReflect doNotReflect = clazz.getAnnotation(DoNotReflect.class);
-	    return doNotReflect != null;
-    }
-
 
     private void uploadUploads(){
         String[] files = new String[]{

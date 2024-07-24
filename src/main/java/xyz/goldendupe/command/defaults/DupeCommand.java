@@ -1,6 +1,5 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.fluffy.manager.CombatManager;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import net.kyori.adventure.text.Component;
@@ -27,7 +26,6 @@ import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
-import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.ContainerUtils;
 import xyz.goldendupe.utils.MemberType;
@@ -167,10 +165,12 @@ public class DupeCommand extends GDCloudCommand {
 		return true;
 	}
 	public boolean canDupeCombat(ItemStack itemStack, @NotNull OfflinePlayer player){
+		/*
 		CombatManager combatManager = goldenDupe().getFluffy().getCombatManager();
 		if (combatManager.hasTags(player)){
 			return !(goldenDupe().getSettings().getIllegalDupeCombat().contains(itemStack.getType()));
 		}
+		 */
 		return true;
 	}
 

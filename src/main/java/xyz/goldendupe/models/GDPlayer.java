@@ -1,11 +1,11 @@
 package xyz.goldendupe.models;
 
-import bet.astral.unity.Factions;
 import com.google.gson.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import net.luckperms.api.LuckPermsProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,6 @@ import xyz.goldendupe.models.serializer.HomeSerializer;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
-import xyz.goldendupe.utils.reference.FactionPlayerReference;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID> {
+public class GDPlayer implements Flaggable, Savable<UUID> {
 	public static final Gson GSON = new GsonBuilder()
 			.registerTypeAdapter(GDChatColor.class, new ChatColorSerializer())
 			.registerTypeAdapter(GDHome.class, new HomeSerializer())
@@ -117,7 +116,7 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 	}
 
 	public GDPlayer setChat(GDChat chat) {
-		GDChatChangeEvent event = new GDChatChangeEvent(player(), this.chat, chat);
+		GDChatChangeEvent event = new GDChatChangeEvent(Bukkit.getPlayer(uuid()), this.chat, chat);
 		event.callEvent();
 		this.chat = chat;
 		return this;
@@ -248,23 +247,12 @@ public class GDPlayer implements Flaggable, FactionPlayerReference, Savable<UUID
 		//noinspection unchecked
 		return (Flag<V>) flags.get(key);
 	}
-	@Override
 	public java.util.@NotNull UUID uuid() {
 		return uniqueId;
 	}
 
-	@Override
-	public @NotNull Factions getFactions() {
-		return goldenDupe.getFactions();
-	}
-
 	public @NotNull GoldenDupe getGoldenDupe() {
 		return goldenDupe;
-	}
-
-	@Override
-	public java.util.@Nullable UUID getFactionId() {
-		return getFactionID();
 	}
 
 

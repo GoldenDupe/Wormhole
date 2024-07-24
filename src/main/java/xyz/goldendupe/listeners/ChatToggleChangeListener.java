@@ -1,15 +1,9 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.unity.event.player.ASyncPlayerChangeChatEvent;
-import bet.astral.unity.model.FChat;
-import bet.astral.unity.model.FPlayer;
-import org.bukkit.event.EventHandler;
 import xyz.goldendupe.GoldenDupe;
-import xyz.goldendupe.events.GDChatChangeEvent;
-import xyz.goldendupe.models.GDChat;
-import xyz.goldendupe.models.GDPlayer;
 
 public class ChatToggleChangeListener implements GDListener {
+	/*
 	public static GDChat convert(FChat chat){
 		switch (chat){
 			case ALLY -> {
@@ -45,12 +39,14 @@ public class ChatToggleChangeListener implements GDListener {
 			}
 		}
 	}
+
+	 */
 	private final GoldenDupe goldenDupe;
 
 	public ChatToggleChangeListener(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
 	}
-
+	/*
 	@SuppressWarnings("OverrideOnly")
 	@EventHandler
 	public void onChatChange(ASyncPlayerChangeChatEvent event) {
@@ -82,6 +78,7 @@ public class ChatToggleChangeListener implements GDListener {
 		fPlayer.setChatType(fChat);
 	}
 
+	 */
 	@Override
 	public GoldenDupe goldenDupe() {
 		return goldenDupe;

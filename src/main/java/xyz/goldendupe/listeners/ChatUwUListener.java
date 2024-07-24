@@ -3,7 +3,6 @@ package xyz.goldendupe.listeners;
 import io.papermc.paper.event.player.AsyncChatDecorateEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.event.EventHandler;
 import xyz.goldendupe.GoldenDupe;
 
@@ -19,11 +18,12 @@ public class ChatUwUListener implements GDListener{
 	private static List<String> randomUwuStrings = new ArrayList<>();
 	protected ChatUwUListener(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
-		Configuration configuration = goldenDupe.getConfig();
-		for (String patternStr : configuration.getStringList("uwu-strings")){
+
+		for (String patternStr : goldenDupe.getSettings().getUwuString()){
 			uwuPatterns.add(Pattern.compile("(?i)("+patternStr+")"));
 			randomUwuStrings.add(patternStr);
 		}
+		uwuPatterns.add(Pattern.compile("(?i)uwu"));
 	}
 
 	public static Component uwuString() {

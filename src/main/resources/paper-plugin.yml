@@ -15,19 +15,7 @@ loader: xyz.goldendupe.GoldenDupeLoader
 
 dependencies:
   server:
-    Vault:
-      load: BEFORE
-      required: false
-      join-classpath: true
     LuckPerms:
       load: BEFORE
       required: false
-      join-classpath: true
-    Fluffy:
-      load: BEFORE
-      required: false
-      join-classpath: true
-    Unity-Factions:
-      load: BEFORE
-      required: true
       join-classpath: true

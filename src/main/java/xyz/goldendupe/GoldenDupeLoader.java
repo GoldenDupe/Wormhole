@@ -19,11 +19,9 @@ public class GoldenDupeLoader implements PluginLoader {
 
 		// Cloud
 		String cloudFramework = "2.0.0-beta.8";
-		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-core:"+cloudFramework), null));
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-paper:"+cloudFramework), null));
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-brigadier:"+cloudFramework), null));
 		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-minecraft-extras:"+cloudFramework), null));
-		resolver.addDependency(new Dependency(new DefaultArtifact("org.incendo:cloud-services:"+cloudFramework), null));
 		pluginClasspathBuilder.addLibrary(resolver);
 
 
