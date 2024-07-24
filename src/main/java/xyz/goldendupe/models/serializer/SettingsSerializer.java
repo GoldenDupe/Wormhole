@@ -27,7 +27,6 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 				loadMaterials(dupe.getAsJsonArray("global")),
 				loadMaterials(object.getAsJsonArray("placement_illegals")),
 				new GDSettings.RandomItemsData(
-						new Random(),
 						loadMaterials(itemData.getAsJsonArray("illegals")),
 						loadNamespacedKeys(enchant.getAsJsonArray("illegal")),
 						itemData.get("modify-decorated-pots").getAsBoolean(),
@@ -35,8 +34,11 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 						enchant.get("allow-only-vanilla-enchants").getAsBoolean(),
 						firework.get("modify-fireworks").getAsBoolean(),
 						firework.get("max-firework-boost").getAsInt(),
-						itemData.get("modify-goat-horns").getAsBoolean()
-				));
+						itemData.get("modify-goat-horns").getAsBoolean(),
+						itemData.get("modify-tipped-arrows").getAsBoolean()
+				),
+				loadStringList(object.get("uwu-messages").getAsJsonArray())
+		);
 	}
 
 	@Override
@@ -78,7 +80,9 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 		fireworks.addProperty("max-firework-boost", randomItemData.getMaxFireworkBoost());
 		random.add("fireworks", fireworks);
 		random.addProperty("modify-goat-horns", randomItemData.isAllowUpdatedGoatHorns());
+		random.addProperty("modify-tipped-arrows", randomItemData.isAllowUpdatedArrows());
 		object.add("item-data", random);
+		object.add("uwu-messages", saveStringList(src.getUwuString()));
 		return object;
 	}
 
@@ -102,12 +106,25 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 		}
 		return keys;
 	}
+
+	public List<String> loadStringList(@NotNull JsonArray array){
+		List<String> list = new LinkedList<>();
+		for (JsonElement jsonElement : array) {
+			list.add(jsonElement.getAsString());
+		}
+		return list;
+	}
 	private JsonArray saveMaterials(@NotNull Set<Material> materials){
 		return saveNamespacedKeys(materials.stream().map(Material::getKey).collect(Collectors.toSet()));
 	}
 	private JsonArray saveNamespacedKeys(@NotNull Set<NamespacedKey> materials){
 		JsonArray array = new JsonArray();
 		materials.stream().map(val->gson.toJsonTree(val.toString())).forEach(array::add);
+		return array;
+	}
+	private JsonArray saveStringList(@NotNull List<String> list){
+		JsonArray array = new JsonArray();
+		list.forEach(array::add);
 		return array;
 	}
 }

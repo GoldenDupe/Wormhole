@@ -6,6 +6,7 @@ import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.unity.Factions;
+import com.google.gson.Gson;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.luckperms.api.LuckPerms;
@@ -38,6 +39,7 @@ import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.astronauts.ReportDatabase;
 import xyz.goldendupe.database.astronauts.ReportUserDatabase;
+import xyz.goldendupe.datagen.GenerateFiles;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
@@ -51,6 +53,7 @@ import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.utils.Timer;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -70,8 +73,7 @@ public final class GoldenDupe extends JavaPlugin {
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
     @Getter
     private final FusionFlare fusionFlare = new FusionFlare(this);
-    private GoldenMessenger commandMessenger;
-    private GoldenMessenger debugMessenger;
+    private GoldenMessenger messenger;
     private YamlConfiguration config;
     private PlayerDatabase playerDatabase;
     @Getter
@@ -96,14 +98,39 @@ public final class GoldenDupe extends JavaPlugin {
 
     public GoldenDupe(GoldenDupeBootstrap boostrap){
         this.isDevelopmentServer = boostrap.isDevServer();
+        messenger = (GoldenMessenger) boostrap.getMessenger();
     }
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
     }
 
+
+    public <T> T getJson(@NotNull Gson gson, @NotNull File file, Class<T> type) throws IOException {
+        FileReader reader = new FileReader(file);
+        T t = gson.fromJson(reader, type);
+        reader.close();
+        return t;
+    }
+
     @Override
     public void onEnable() {
-        fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
+        GenerateFiles generator = new GenerateFiles();
+	    try {
+		    generator.generate(getDataFolder());
+	    } catch (IOException e) {
+            getServer().getPluginManager().disablePlugin(this);
+		    throw new RuntimeException(e);
+	    }
+
+	    try {
+		    settings = getJson(generator.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
+            savedData = getJson(generator.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
+	    } catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
+
+
+	    fluffy = FluffyCombat.getPlugin(FluffyCombat.class);
         factions = Factions.getPlugin(Factions.class);
 
         uploadUploads();
@@ -233,6 +260,7 @@ public final class GoldenDupe extends JavaPlugin {
         isDebug = config.getBoolean("debug");
     }
 
+    @Deprecated(forRemoval = true)
     @Override
     public @NotNull FileConfiguration getConfig() {
         return config;
@@ -394,7 +422,7 @@ public final class GoldenDupe extends JavaPlugin {
     }
 
     public GoldenMessenger messenger() {
-        return commandMessenger;
+        return messenger;
     }
 
     public PlayerDatabase playerDatabase() {

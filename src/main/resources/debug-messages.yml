@@ -1,5 +1,0 @@
-placeholders:
-  - name: prefix
-    value: "<gold><bold>Golden<white><bold>Dupe<reset> <light_purple><bold>Debug<reset>"
-  - name: prefix_short
-    value: "<gold><bold>G<white><bold>D<reset> <light_purple><bold>Debug<reset>"

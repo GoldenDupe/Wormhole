@@ -2,13 +2,14 @@ name: GoldenDupe
 version: '${version}'
 api-version: '1.20'
 authors: [Antritus, _Devourer]
-description: GoldenDupe's new engine is here. Powering 80% of GoldenDupe hopefully without lag.
+description: GoldenDupe's new engine is here!
 website: goldendupe.xyz
 
 # The main plugin
 main: xyz.goldendupe.GoldenDupe
 # Makes sure the plugin is used by paper servers and not spigot servers
-bootstrapper: xyz.goldendupe.GoldenDupeBoostrap
+# Loads commands
+bootstrapper: xyz.goldendupe.GoldenDupeBootstrap
 # Loads the libraries for the plugin
 loader: xyz.goldendupe.GoldenDupeLoader
 

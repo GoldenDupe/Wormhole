@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionType;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.utils.MemberType;
 
@@ -42,12 +43,14 @@ public class GDSettings {
 	private boolean globalChatMute = false;
 	@Setter
 	private AllowedUsers globalChatMuteAllowedUsers = AllowedUsers.ALL;
+	private List<String> uwuString;
 
-	public GDSettings(Set<Material> illegalDupeCombat, Set<Material> illegalDupe, Set<Material> illegalPlacements, RandomItemsData randomItemData) {
+	public GDSettings(Set<Material> illegalDupeCombat, Set<Material> illegalDupe, Set<Material> illegalPlacements, RandomItemsData randomItemData, List<String> uwuString) {
 		this.illegalDupeCombat = illegalDupeCombat;
 		this.illegalDupe = illegalDupe;
 		this.illegalPlacements = illegalPlacements;
 		this.randomItemData = randomItemData;
+		this.uwuString = uwuString;
 	}
 
 	public void fetchGoldenDupe(){
@@ -136,6 +139,12 @@ public class GDSettings {
 			if (power > 0){
 				fireworkMeta.setPower(power);
 			}
+		} if (randomItemData.allowUpdatedArrows && meta instanceof PotionMeta potionMeta && itemStack.getType()==Material.TIPPED_ARROW){
+			List<PotionType> types = new ArrayList<>(Registry.POTION.stream().toList());
+			types.removeAll(List.of(PotionType.MUNDANE, PotionType.LUCK, PotionType.THICK, PotionType.WATER));
+			PotionType type = types.get(random.nextInt(0, types.size()-1));
+			potionMeta.setBasePotionType(type);
+			potionMeta.setColor(Registry.POTION_EFFECT_TYPE.get(type.getKey()).getColor());
 		}
 
 		itemStack.setItemMeta(meta);
@@ -161,7 +170,6 @@ public class GDSettings {
 
 	@Getter
 	public static class RandomItemsData {
-		private final Random random;
 		private final List<ItemStack> allowedItems;
 		private final Set<Material> illegalsItems;
 		private final Set<NamespacedKey> illegalEnchants;
@@ -171,9 +179,9 @@ public class GDSettings {
 		private final boolean allowUpdatedFireworks;
 		private final int maxFireworkBoost;
 		private final boolean allowUpdatedGoatHorns;
+		private final boolean allowUpdatedArrows;
 
-		public RandomItemsData(Random random, Set<Material> illegals, Set<NamespacedKey> illegalEnchants, boolean allowUpdatedSherds, boolean allowUpdatedBooks, boolean allowOnlyVanillaEnchants, boolean allowUpdatedFireworks, int maxFireworkBoost, boolean allowUpdatedGoatHorns) {
-			this.random = random;
+		public RandomItemsData(Set<Material> illegals, Set<NamespacedKey> illegalEnchants, boolean allowUpdatedSherds, boolean allowUpdatedBooks, boolean allowOnlyVanillaEnchants, boolean allowUpdatedFireworks, int maxFireworkBoost, boolean allowUpdatedGoatHorns, boolean allowUpdatedArrows) {
 			this.illegalsItems = illegals;
 			this.illegalEnchants = illegalEnchants;
 			this.allowUpdatedDecoratedPots = allowUpdatedSherds;
@@ -182,6 +190,7 @@ public class GDSettings {
 			this.allowUpdatedFireworks = allowUpdatedFireworks;
 			this.maxFireworkBoost = maxFireworkBoost;
 			this.allowUpdatedGoatHorns = allowUpdatedGoatHorns;
+			this.allowUpdatedArrows = allowUpdatedArrows;
 
 
 			Registry<Material> materials = Registry.MATERIAL;
