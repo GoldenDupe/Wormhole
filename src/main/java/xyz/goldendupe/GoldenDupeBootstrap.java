@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.datagen.GenerateFiles;
+import xyz.goldendupe.datagen.GenerateMessages;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.models.GDSavedData;
 import xyz.goldendupe.models.GDSettings;
@@ -31,8 +32,6 @@ public class GoldenDupeBootstrap implements PluginBootstrap {
 	@Getter
 	private boolean devServer = false;
 	final GoldenMessenger messenger = new GoldenMessenger();
-	GDSettings settings;
-	GDSavedData data;
 	public List<InitAfterBootstrap> initAfterBootstraps = new LinkedList<>();
 	@Override
 	public void bootstrap(@NotNull BootstrapContext bootstrapContext) {
@@ -41,16 +40,9 @@ public class GoldenDupeBootstrap implements PluginBootstrap {
 		devServer = file.exists();
 
 		File dataFolder = new File(bootstrapContext.getPluginSource().getParent().toFile(), "GoldenDupe");
-		GenerateFiles generator = new GenerateFiles();
+		GenerateMessages generator = new GenerateMessages();
 		try {
 			generator.generate(dataFolder);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		try {
-			settings = getJson(generator.gson, new File(dataFolder, "config.json"), GDSettings.class);
-			data = getJson(generator.gson, new File(dataFolder, "global-data.json"), GDSavedData.class);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

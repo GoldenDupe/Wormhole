@@ -2,17 +2,10 @@ package xyz.goldendupe;
 
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
-import bet.astral.messenger.v2.locale.LanguageTable;
-import bet.astral.messenger.v2.locale.source.FileLanguageSource;
-import bet.astral.messenger.v2.locale.source.LanguageSource;
 import bet.astral.messenger.v2.permission.Permission;
 import com.google.gson.Gson;
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.NamespacedKey;
@@ -100,16 +93,30 @@ public final class GoldenDupe extends JavaPlugin {
         this.isDevelopmentServer = boostrap.isDevServer();
         messenger = boostrap.messenger;
         initAfterBootstraps = boostrap.initAfterBootstraps;
-        this.settings = boostrap.settings;
-        this.savedData = boostrap.data;
     }
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
     }
 
+    public <T> T getJson(@NotNull Gson gson, @NotNull File file, Class<T> type) throws IOException {
+        FileReader reader = new FileReader(file);
+        T t = gson.fromJson(reader, type);
+        reader.close();
+        return t;
+    }
+
     @Override
     public void onEnable() {
         instance = this;
+
+        GenerateFiles generateFiles = new GenerateFiles();
+	    try {
+		    generateFiles.generate(getDataFolder());
+            this.settings = getJson(generateFiles.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
+            this.savedData = getJson(generateFiles.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
+	    } catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
 
         initAfterBootstraps.forEach(InitAfterBootstrap::init);
 
