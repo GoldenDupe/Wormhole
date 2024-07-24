@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.listeners.ChatFormatListener;
 import xyz.goldendupe.models.GDChat;
@@ -17,7 +18,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class WelcomeCommand extends GDCloudCommand {
-	public WelcomeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+	public WelcomeCommand(GoldenDupeCommandRegister bootstrap, PaperCommandManager<CommandSender> commandManager) {
 		super(bootstrap, commandManager);
 		commandPlayer(commandManager.commandBuilder("welcome")
 				.argument(PlayerParser.playerComponent().name("who"))

@@ -23,6 +23,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
@@ -36,8 +37,9 @@ import java.util.*;
 public class DupeCommand extends GDCloudCommand {
 	private static final int DUPE_GUI_TICKS = 7;
 	private final Map<UUID, DonatorDupeMenu> dupeInventories = new HashMap<>();
-	public DupeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public DupeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
+
 		Command.Builder<Player> dupe = commandManager.commandBuilder(
 				"dupe",
 				Description.of("Allows player to dupe their current held item."),

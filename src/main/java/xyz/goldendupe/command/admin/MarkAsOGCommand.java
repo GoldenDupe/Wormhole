@@ -11,6 +11,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.EnumParser;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.OriginalMemberType;
@@ -18,8 +19,8 @@ import xyz.goldendupe.utils.OriginalMemberType;
 @Cloud
 public class MarkAsOGCommand extends GDCloudCommand {
 	public static final String OG_ROLE_KEY = "original-role";
-	public MarkAsOGCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public MarkAsOGCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		command(
 				commandManager.commandBuilder("mark-as-og")
 						.commandDescription(Description.of(""))

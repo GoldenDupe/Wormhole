@@ -10,13 +10,14 @@ import org.bukkit.util.Vector;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class DropAllCommand extends GDCloudCommand {
-	public DropAllCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public DropAllCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandPlayer(
 				commandBuilderPlayer("dropall",
 						Description.of("Allows player to drop all their items at time."))

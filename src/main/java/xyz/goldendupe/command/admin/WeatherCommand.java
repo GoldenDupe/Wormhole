@@ -10,15 +10,18 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.EnumParser;
 import org.incendo.cloud.permission.Permission;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class WeatherCommand extends GDCloudCommand {
-	public WeatherCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
-
+	public WeatherCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
+		abstractCommand(Weather.SUN, "sun", "sunny");
+		abstractCommand(Weather.RAIN, "rain", "rainy");
+		abstractCommand(Weather.THUNDER, "thunder", "storm");
 	}
 
 	public void abstractCommand(Weather weatherType, String name, String... aliases){
@@ -26,15 +29,13 @@ public class WeatherCommand extends GDCloudCommand {
 				commandManager.commandBuilder(name,
 						"Allows changing the weather type to "+ name+".")
 						.permission(Permission.of(MemberType.ADMINISTRATOR.permissionOf("weather."+name)))
-						.required(EnumParser.enumComponent(Weather.class).name("weather"))
 						.handler(context->{
 							CommandSender commandSender = context.sender();
-							Weather weather = context.get("weather");
-							messenger.message(commandSender, weather.translation);
+							messenger.message(commandSender, weatherType.translation);
 							if (commandSender instanceof Player player){
-								weather.set(player.getWorld());
+								weatherType.set(player.getWorld());
 							} else {
-								Bukkit.getWorlds().forEach(weather::set);
+								Bukkit.getWorlds().forEach(weatherType::set);
 							}
 						})
 		);

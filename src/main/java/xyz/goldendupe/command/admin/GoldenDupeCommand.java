@@ -8,13 +8,14 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class GoldenDupeCommand extends GDCloudCommand {
-	public GoldenDupeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public GoldenDupeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		Command.Builder<CommandSender> builder = commandManager.commandBuilder("goldendupe",
 				Description.of("GoldenDupe is known for it's shitty community."))
 				.handler(context->{

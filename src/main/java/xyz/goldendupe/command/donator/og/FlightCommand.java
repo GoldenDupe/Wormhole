@@ -17,6 +17,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.chatcolor.Color;
@@ -27,8 +28,8 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class FlightCommand extends GDCloudCommand {
-	public FlightCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public FlightCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		Command.Builder<Player> builder = commandBuilderPlayer("fly",
 				Description.of("Allows player to toggle the flight mode.")
 				, "flight")

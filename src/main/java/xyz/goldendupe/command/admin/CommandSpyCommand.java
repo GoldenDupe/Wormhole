@@ -16,6 +16,7 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.astronauts.CSPYUser;
@@ -28,8 +29,8 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class CommandSpyCommand extends GDCloudCommand {
-	public CommandSpyCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public CommandSpyCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		Command.Builder<Player> spyCommand = commandManager
 				.commandBuilder("commandspy",
 						Description.of("Allows administrators to see the commands players execute"),

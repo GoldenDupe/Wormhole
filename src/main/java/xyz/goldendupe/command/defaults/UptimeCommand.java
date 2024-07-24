@@ -8,6 +8,7 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
@@ -15,8 +16,8 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class UptimeCommand extends GDCloudCommand {
 
-    public UptimeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
+    public UptimeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
 
         commandManager.command(
                 commandManager.commandBuilder(

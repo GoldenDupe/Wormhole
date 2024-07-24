@@ -20,6 +20,7 @@ import org.incendo.cloud.parser.standard.EnumParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.chatcolor.Color;
@@ -31,8 +32,8 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class GamemodeCommand extends GDCloudCommand {
-	public GamemodeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public GamemodeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		abstractCommand(GameMode.SURVIVAL, "gms");
 		abstractCommand(GameMode.CREATIVE, "gmc");
 		abstractCommand(GameMode.SPECTATOR, "gmsp");

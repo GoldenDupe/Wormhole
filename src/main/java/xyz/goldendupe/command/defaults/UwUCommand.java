@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.minecraft.extras.RichDescription;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.listeners.ChatFormatListener;
 import xyz.goldendupe.listeners.ChatUwUListener;
@@ -20,8 +21,8 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UwUCommand extends GDCloudCommand {
-	public UwUCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public UwUCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UwU?", Color.YELLOW, TextDecoration.OBFUSCATED)))
 						.permission(MemberType.DEFAULT.permissionOf("uwu"))
 				.handler(context->{

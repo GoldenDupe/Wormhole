@@ -8,6 +8,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSettings;
@@ -15,8 +16,8 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class MuteChatCommand extends GDCloudCommand {
-	public MuteChatCommand(GoldenDupeBootstrap registerer, PaperCommandManager<CommandSender> commandManager) {
-		super(registerer, commandManager);
+	public MuteChatCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		Command.Builder<CommandSender> command =commandManager.commandBuilder("mutechat", Description.of(""), "mc")
 				.permission(MemberType.MODERATOR.permissionOf("mutechat"))
 				.handler(context->{

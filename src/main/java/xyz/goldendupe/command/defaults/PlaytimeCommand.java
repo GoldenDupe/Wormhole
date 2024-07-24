@@ -12,6 +12,7 @@ import org.incendo.cloud.bukkit.parser.OfflinePlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
@@ -23,8 +24,9 @@ import java.util.concurrent.TimeUnit;
 @Cloud
 public class PlaytimeCommand extends GDCloudCommand {
 
-	public PlaytimeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public PlaytimeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
+
 
 		Command.Builder<Player> builder = commandManager.commandBuilder(
 				"playtime",

@@ -12,6 +12,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.command.defaults.UptimeCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -26,9 +27,8 @@ public class RebootCommand extends GDCloudCommand {
     final Timer rebootTimer = new Timer();
     BukkitTask task = null;
 
-    public RebootCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
-
+    public RebootCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
         Command.Builder<CommandSender> rebootCommand = commandManager
                 .commandBuilder(
                         "reboot",

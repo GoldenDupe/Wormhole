@@ -11,6 +11,7 @@ import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDSpawn;
@@ -24,8 +25,8 @@ import java.util.Map;
 public class SpawnCommand extends GDCloudCommand {
 	private static final Map<MemberType, Integer> cooldowns = new HashMap<>();
 
-	public SpawnCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public SpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		cooldowns.put(MemberType.DEFAULT, 120);
 		cooldowns.put(MemberType.DONATOR, 80);
 		cooldowns.put(MemberType.OG, 60);

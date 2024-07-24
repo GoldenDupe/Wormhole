@@ -9,6 +9,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
@@ -18,8 +19,8 @@ import xyz.goldendupe.utils.TimedTeleport;
 @Cloud
 public class HomeCommand extends GDCloudCommand {
 
-    public HomeCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
+    public HomeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
 
         commandManager.command(
                 commandManager.commandBuilder(

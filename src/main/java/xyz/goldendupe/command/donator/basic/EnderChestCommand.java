@@ -7,13 +7,14 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class EnderChestCommand extends GDCloudCommand {
-    public EnderChestCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
+    public EnderChestCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(
                                 "enderchest",

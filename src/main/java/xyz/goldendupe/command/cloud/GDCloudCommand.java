@@ -8,12 +8,14 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
+import xyz.goldendupe.command.admin.GoldenDupeCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 
 public class GDCloudCommand extends CPPCommand<CommandSender> {
 	private GoldenDupe goldenDupe;
 	protected GoldenMessenger messenger;
-	public GDCloudCommand(GoldenDupeBootstrap registerer, PaperCommandManager<CommandSender> commandManager) {
+	public GDCloudCommand(GoldenDupeCommandRegister registerer, PaperCommandManager<CommandSender> commandManager) {
 		super(registerer, commandManager);
 		messenger = (GoldenMessenger) registerer.getMessenger();
 	}

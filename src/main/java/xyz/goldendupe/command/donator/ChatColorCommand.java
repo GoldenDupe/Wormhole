@@ -24,6 +24,7 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
@@ -58,9 +59,8 @@ public class ChatColorCommand extends GDCloudCommand {
 	private static final ItemStack RIGHT = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzMzYWU4ZGU3ZWQwNzllMzhkMmM4MmRkNDJiNzRjZmNiZDk0YjM0ODAzNDhkYmI1ZWNkOTNkYThiODEwMTVlMyJ9fX0=");
 
 
-	public ChatColorCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
-
+	public ChatColorCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		ItemStack backgroundItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 		backgroundItem.editMeta(meta -> {
 			meta.displayName(Component.text(""));

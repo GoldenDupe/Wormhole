@@ -6,6 +6,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
@@ -14,8 +15,8 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class ToggleItemsCommand extends GDCloudCommand {
 	public static final int RANDOM_ITEM_TICKS = 20*15; // 20 ticks * 15 seconds
-	public ToggleItemsCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public ToggleItemsCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
 								"toggle",

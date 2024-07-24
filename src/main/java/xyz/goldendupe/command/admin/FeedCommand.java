@@ -8,6 +8,7 @@ import org.incendo.cloud.bukkit.parser.PlayerParser;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
@@ -15,8 +16,8 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class FeedCommand extends GDCloudCommand {
 
-    public FeedCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
+    public FeedCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(
                                 "feed",

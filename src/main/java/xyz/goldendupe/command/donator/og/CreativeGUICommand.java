@@ -15,6 +15,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
@@ -28,9 +29,9 @@ import java.util.Map;
 public class CreativeGUICommand extends GDCloudCommand implements InitAfterBootstrap {
 	private final Map<Integer, GUI> guis = new IdentityHashMap<>();
 
-	public CreativeGUICommand(GoldenDupeBootstrap registerer, PaperCommandManager<CommandSender> commandManager) {
-		super(registerer, commandManager);
-		registerer.initAfterBootstraps.add(this);
+	public CreativeGUICommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
+		register.bootstrap.initAfterBootstraps.add(this);
 		commandPlayer(commandBuilderPlayer("blocks", Description.of("Allows player to take items from a menu with all blocks in the server. Illegal items will not be in the menu."), "blocksmenu", "blockmenu")
 				.handler(context -> {
 					guis.get(0).generateInventory(context.sender());

@@ -17,6 +17,7 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.command.defaults.SpawnCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -32,8 +33,8 @@ import static xyz.goldendupe.messenger.GoldenMessenger.format;
 public class SetSpawnCommand extends GDCloudCommand {
 
 	//Not sure if I broke this or not but I changed some of the structure
-	public SetSpawnCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public SetSpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
 								"setspawn",

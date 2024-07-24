@@ -20,6 +20,7 @@ import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
@@ -35,8 +36,8 @@ import java.util.stream.Collectors;
 @Cloud
 public class LoopCommand extends GDCloudCommand {
 	private final Map<UUID, ScheduledTask> tasks = new HashMap<>();
-	public LoopCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public LoopCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 				Command.Builder<Player> builder = commandManager.commandBuilder(
 						"loop",
 						Description.of("Allows admins to loop chat "),

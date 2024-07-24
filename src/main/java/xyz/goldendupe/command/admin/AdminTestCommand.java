@@ -31,6 +31,7 @@ import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.ApiStatus;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
@@ -42,8 +43,8 @@ import java.util.concurrent.CompletableFuture;
 @ApiStatus.Internal
 @Cloud
 public class AdminTestCommand extends GDCloudCommand {
-	public AdminTestCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public AdminTestCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 
 		commandPlayer(
 				commandBuilderPlayer("rolltest", Description.of("admin-only"))

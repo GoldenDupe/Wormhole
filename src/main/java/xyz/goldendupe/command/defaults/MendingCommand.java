@@ -7,14 +7,15 @@ import org.incendo.cloud.Command;
 import org.incendo.cloud.paper.PaperCommandManager;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class MendingCommand extends GDCloudCommand {
-	public MendingCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public MendingCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 
 		Command.Builder<Player> builder =
 				commandManager.commandBuilder("mending",

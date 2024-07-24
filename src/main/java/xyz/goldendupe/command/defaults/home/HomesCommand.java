@@ -8,6 +8,7 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.joml.Vector3d;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.messenger.Translations;
@@ -16,8 +17,9 @@ import xyz.goldendupe.models.GDPlayer;
 @Cloud
 public class HomesCommand extends GDCloudCommand {
 
-    public HomesCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-        super(bootstrap, commandManager);
+    public HomesCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+        super(register, commandManager);
+
 
         commandManager.command(
                 commandManager.commandBuilder(

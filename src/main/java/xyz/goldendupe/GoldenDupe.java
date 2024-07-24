@@ -98,57 +98,20 @@ public final class GoldenDupe extends JavaPlugin {
 
     public GoldenDupe(GoldenDupeBootstrap boostrap){
         this.isDevelopmentServer = boostrap.isDevServer();
-        messenger = (GoldenMessenger) boostrap.getMessenger();
+        messenger = boostrap.messenger;
         initAfterBootstraps = boostrap.initAfterBootstraps;
+        this.settings = boostrap.settings;
+        this.savedData = boostrap.data;
     }
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
     }
 
-
-    public <T> T getJson(@NotNull Gson gson, @NotNull File file, Class<T> type) throws IOException {
-        FileReader reader = new FileReader(file);
-        T t = gson.fromJson(reader, type);
-        reader.close();
-        return t;
-    }
-
     @Override
     public void onEnable() {
-        if (!initAfterBootstraps.isEmpty()){
-            initAfterBootstraps.forEach(InitAfterBootstrap::init);
-        }
-        GenerateFiles generator = new GenerateFiles();
-	    try {
-		    generator.generate(getDataFolder());
-	    } catch (IOException e) {
-            getServer().getPluginManager().disablePlugin(this);
-		    throw new RuntimeException(e);
-	    }
-
-	    try {
-		    settings = getJson(generator.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
-            savedData = getJson(generator.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
-
-	    LanguageSource englishSource;
-	    try {
-		    englishSource = FileLanguageSource.gson(messenger, Locale.US, new File(getDataFolder(), "messages.json"), GsonComponentSerializer.gson());
-            LanguageTable englishTable = LanguageTable.of(englishSource);
-            messenger.setLocale(Locale.US);
-            messenger.setDefaultLocale(englishSource);
-            messenger.registerLanguageTable(Locale.US, englishTable);
-            messenger.setUseReceiverLocale(false);
-            messenger.setPrefix(Component.text("G", NamedTextColor.GOLD).append(Component.text("D", NamedTextColor.WHITE).appendSpace()).decoration(TextDecoration.BOLD, true));
-            messenger.setSendASync(true);
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
-
-        uploadUploads();
         instance = this;
+
+        initAfterBootstraps.forEach(InitAfterBootstrap::init);
 
         if (getServer().getPluginManager().getPlugin("Vault") != null){
 

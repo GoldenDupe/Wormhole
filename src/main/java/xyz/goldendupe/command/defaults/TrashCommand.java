@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
@@ -96,8 +97,8 @@ public class TrashCommand extends GDCloudCommand {
 		}
 	}
 
-	public TrashCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public TrashCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandManager.command(commandManager.commandBuilder("trash",
 						Description.of("Allows players to delete"),
 						"garbage", "josh", "disposal", "rubbish", "tinder")

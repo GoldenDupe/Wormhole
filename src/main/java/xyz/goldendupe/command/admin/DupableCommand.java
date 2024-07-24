@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import xyz.goldendupe.GoldenDupeBootstrap;
+import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 
@@ -27,8 +28,8 @@ public class DupableCommand extends GDCloudCommand {
 	private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 	private static final Component LINE = MiniMessage.miniMessage().deserialize("<red>This item is undupable!");
 
-	public DupableCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
-		super(bootstrap, commandManager);
+	public DupableCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
 								"dupable",
