@@ -16,8 +16,8 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
+import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.utils.MemberType;
@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.Random;
 
 @Cloud
-public class TrashCommand extends GDCloudCommand {
+public class TrashCommand extends GDCloudCommand implements InitAfterBootstrap {
 	public static final long CLEAR_TIME = 300000;
 	private static List<String> trashNames = new ArrayList<>();
 	public static List<TrashInventory> trashCans = new ArrayList<>();
 	private static List<ItemStack> bar = new ArrayList<>();
-	static {
+	public void init() {
 		trashNames.addAll(List.of(
 				"FlammableFlowMC", "Josh", "Antritus", "_Devourer", "BaguetteWithInternetAccess",
 				"Androdir", "Sowrd", "Bl1tzy", "2397", "Dream", "MrEnderBroFTW", "BluJay77",
@@ -97,7 +97,7 @@ public class TrashCommand extends GDCloudCommand {
 		}
 	}
 
-	public TrashCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public TrashCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(commandManager.commandBuilder("trash",
 						Description.of("Allows players to delete"),

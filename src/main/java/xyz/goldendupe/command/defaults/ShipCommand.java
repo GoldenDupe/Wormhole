@@ -23,7 +23,7 @@ import java.util.Random;
 public class ShipCommand extends GDCloudCommand {
 	private final Random random = new Random(System.currentTimeMillis());
 
-	public ShipCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ShipCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder("ship", Description.of("Allows a player to ship 2 different players together"),

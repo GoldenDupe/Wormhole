@@ -21,7 +21,7 @@ import java.util.List;
 @Cloud
 public class CustomChatCommand extends GDCloudCommand {
 
-    public CustomChatCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public CustomChatCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         for (GDChat chat : GDChat.values()) {
             if (chat.asMessageChannel() == null || chat.asMemberType() == null) return;

@@ -29,9 +29,8 @@ import java.util.Map;
 public class CreativeGUICommand extends GDCloudCommand implements InitAfterBootstrap {
 	private final Map<Integer, GUI> guis = new IdentityHashMap<>();
 
-	public CreativeGUICommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public CreativeGUICommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
-		register.bootstrap.initAfterBootstraps.add(this);
 		commandPlayer(commandBuilderPlayer("blocks", Description.of("Allows player to take items from a menu with all blocks in the server. Illegal items will not be in the menu."), "blocksmenu", "blockmenu")
 				.handler(context -> {
 					guis.get(0).generateInventory(context.sender());
@@ -76,7 +75,7 @@ public class CreativeGUICommand extends GDCloudCommand implements InitAfterBoots
 
 	public Component getComponent(Translations.Translation translation, Placeholder... placeholders) {
 		GoldenMessenger messenger = goldenDupe().messenger();
-		return messenger.parseComponent(translation, Locale.US, ComponentType.CHAT, placeholders);
+		return messenger.disablePrefixForNextParse().parseComponent(translation, Locale.US, ComponentType.CHAT, placeholders);
 	}
 
 	@Override

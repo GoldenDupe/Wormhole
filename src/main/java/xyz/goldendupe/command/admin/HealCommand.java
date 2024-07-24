@@ -16,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class HealCommand extends GDCloudCommand {
 
-    public HealCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public HealCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(

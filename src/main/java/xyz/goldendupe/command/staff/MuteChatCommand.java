@@ -16,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class MuteChatCommand extends GDCloudCommand {
-	public MuteChatCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public MuteChatCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		Command.Builder<CommandSender> command =commandManager.commandBuilder("mutechat", Description.of(""), "mc")
 				.permission(MemberType.MODERATOR.permissionOf("mutechat"))

@@ -6,10 +6,9 @@ import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import org.incendo.cloud.parser.standard.EnumParser;
 import org.incendo.cloud.permission.Permission;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -17,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class WeatherCommand extends GDCloudCommand {
-	public WeatherCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public WeatherCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		abstractCommand(Weather.SUN, "sun", "sunny");
 		abstractCommand(Weather.RAIN, "rain", "rainy");
@@ -27,7 +26,7 @@ public class WeatherCommand extends GDCloudCommand {
 	public void abstractCommand(Weather weatherType, String name, String... aliases){
 		command(
 				commandManager.commandBuilder(name,
-						"Allows changing the weather type to "+ name+".")
+						Description.of("Allows changing the weather type to "+ name+"."))
 						.permission(Permission.of(MemberType.ADMINISTRATOR.permissionOf("weather."+name)))
 						.handler(context->{
 							CommandSender commandSender = context.sender();

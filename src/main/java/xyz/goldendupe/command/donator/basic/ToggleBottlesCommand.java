@@ -15,7 +15,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ToggleBottlesCommand extends GDCloudCommand {
-	public ToggleBottlesCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ToggleBottlesCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(

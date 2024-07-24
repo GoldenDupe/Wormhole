@@ -1,5 +1,6 @@
 package xyz.goldendupe.command.cloud;
 
+import io.papermc.paper.brigadier.NullCommandSender;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -9,6 +10,10 @@ import java.util.Map;
 
 public class SenderMapper implements org.incendo.cloud.SenderMapper<CommandSourceStack, CommandSender> {
 	private final Map<CommandSender, CommandSourceStack> sourceStackMap = new HashMap<>();
+
+	public SenderMapper() {
+	}
+
 	@Override
 	public @NonNull CommandSender map(@NonNull CommandSourceStack base) {
 		sourceStackMap.put(base.getSender(), base);
@@ -17,6 +22,11 @@ public class SenderMapper implements org.incendo.cloud.SenderMapper<CommandSourc
 
 	@Override
 	public @NonNull CommandSourceStack reverse(@NonNull CommandSender mapped) {
-		return sourceStackMap.get(sourceStackMap);
+		System.out.println("Trying to get command source stack instance for "+ mapped.getClass());
+		System.out.println("Trying to get command source stack for namme  "+ mapped.getName());
+		if (mapped instanceof NullCommandSender){
+			return NullSourceStack.INSTANCE;
+		}
+		return sourceStackMap.get(mapped);
 	}
 }

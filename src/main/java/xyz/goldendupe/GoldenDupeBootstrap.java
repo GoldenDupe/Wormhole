@@ -9,18 +9,16 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
-import xyz.goldendupe.datagen.GenerateFiles;
 import xyz.goldendupe.datagen.GenerateMessages;
 import xyz.goldendupe.messenger.GoldenMessenger;
-import xyz.goldendupe.models.GDSavedData;
-import xyz.goldendupe.models.GDSettings;
+import xyz.goldendupe.messenger.Translations;
+import xyz.goldendupe.models.chatcolor.Color;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -30,16 +28,17 @@ import java.util.Locale;
 public class GoldenDupeBootstrap implements PluginBootstrap {
 	private ComponentLogger logger;
 	@Getter
+	private GoldenDupeCommandRegister commandRegister;
 	private boolean devServer = false;
 	final GoldenMessenger messenger = new GoldenMessenger();
 	public List<InitAfterBootstrap> initAfterBootstraps = new LinkedList<>();
 	@Override
 	public void bootstrap(@NotNull BootstrapContext bootstrapContext) {
 		logger = bootstrapContext.getLogger();
-		File file = new File(bootstrapContext.getDataDirectory().toFile(), bootstrapContext.getConfiguration().getName()+"/"+".dev");
-		devServer = file.exists();
+
 
 		File dataFolder = new File(bootstrapContext.getPluginSource().getParent().toFile(), "GoldenDupe");
+
 		GenerateMessages generator = new GenerateMessages();
 		try {
 			generator.generate(dataFolder);
@@ -49,19 +48,21 @@ public class GoldenDupeBootstrap implements PluginBootstrap {
 
 		LanguageSource englishSource;
 		try {
-			englishSource = FileLanguageSource.gson(messenger, Locale.US, new File(dataFolder, "messages.json"), GsonComponentSerializer.gson());
+			englishSource = FileLanguageSource.gson(messenger, Locale.US, new File(dataFolder, "messages.json"), MiniMessage.miniMessage());
 			LanguageTable englishTable = LanguageTable.of(englishSource);
 			messenger.setLocale(Locale.US);
 			messenger.setDefaultLocale(englishSource);
 			messenger.registerLanguageTable(Locale.US, englishTable);
 			messenger.setUseReceiverLocale(false);
-			messenger.setPrefix(Component.text("G", NamedTextColor.GOLD).append(Component.text("D", NamedTextColor.WHITE).appendSpace()).decoration(TextDecoration.BOLD, true));
 			messenger.setSendASync(true);
+			messenger.setPrefix(MiniMessage.miniMessage().deserialize("<gold><bold>G<white><bold>D<reset> "));
+			messenger.enablePrefix();
+			messenger.loadTranslations(List.copyOf(Translations.translations()));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 
-		new GoldenDupeCommandRegister(messenger, bootstrapContext, this);
+		commandRegister = new GoldenDupeCommandRegister(messenger, bootstrapContext, this);
 	}
 
 
@@ -74,6 +75,9 @@ public class GoldenDupeBootstrap implements PluginBootstrap {
 
 	@Override
 	public @NotNull JavaPlugin createPlugin(@NotNull PluginProviderContext context) {
+		devServer = true;
+		logger.info("Server Debug Mode: "+ devServer);
+
 		GoldenDupe goldenDupe = new GoldenDupe(this);
 		ComponentLogger logger = goldenDupe.getComponentLogger();
 		if (devServer) {
@@ -86,4 +90,7 @@ public class GoldenDupeBootstrap implements PluginBootstrap {
 		return new GoldenDupe(this);
 	}
 
+	public boolean isDev() {
+		return devServer;
+	}
 }

@@ -15,7 +15,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class ToggleItemsCommand extends GDCloudCommand {
 	public static final int RANDOM_ITEM_TICKS = 20*15; // 20 ticks * 15 seconds
-	public ToggleItemsCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ToggleItemsCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(

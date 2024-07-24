@@ -6,6 +6,7 @@ import bet.astral.messenger.v2.placeholder.PlaceholderList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class NickCommand extends GDCloudCommand {
-    public NickCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public NickCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(
@@ -34,8 +35,7 @@ public class NickCommand extends GDCloudCommand {
                         .handler(context -> {
                             Player sender = context.sender();
                             String nickname = context.get("nick");
-                            //noinspection deprecation
-                            String colorless = ChatColor.stripColor(nickname);
+                            String colorless = PlainTextComponentSerializer.plainText().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(nickname));
                             if (colorless.length()>16){
                                 messenger.message(sender, Translations.COMMAND_NICKNAME_TOO_LONG, Placeholder.of("nickname", colorless), Placeholder.of("length", colorless.length()));
                                 return;
@@ -61,4 +61,5 @@ public class NickCommand extends GDCloudCommand {
                         })
         );
     }
+
 }

@@ -19,15 +19,14 @@ import xyz.goldendupe.models.impl.GDHome;
 @Cloud
 public class DelHomeCommand extends GDCloudCommand {
 
-    public DelHomeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public DelHomeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
 
 
         commandManager.command(
                 commandManager.commandBuilder(
-                                "delhome",
-                                Description.of("Deletes one of your existing homes."),
-                                "dh", "deletehome"
+                                "removehome",
+                                Description.of("Deletes one of your existing homes."), "deletehome"
                         )
                         .senderType(Player.class)
                         .argument(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("delhome-name"))

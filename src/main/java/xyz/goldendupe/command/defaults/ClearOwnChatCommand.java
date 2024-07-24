@@ -5,9 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -16,7 +14,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class ClearOwnChatCommand extends GDCloudCommand {
 
-	public ClearOwnChatCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ClearOwnChatCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 		commandManager.command(
@@ -33,7 +31,7 @@ public class ClearOwnChatCommand extends GDCloudCommand {
 							for (int i = 0; i < 275; i++) {
 								sender.sendMessage(component);
 							}
-							messenger.message(sender, Translations.COMMAND_CLEAR_MY_CHAT);
+							messenger.message(sender, Translations.COMMAND_CHAT_CLEAR_SELF);
 						})
 		);
 	}

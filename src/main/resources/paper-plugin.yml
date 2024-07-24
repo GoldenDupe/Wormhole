@@ -1,6 +1,6 @@
 name: GoldenDupe
 version: '${version}'
-api-version: '1.20'
+api-version: '1.21'
 authors: [Antritus, _Devourer]
 description: GoldenDupe's new engine is here!
 website: goldendupe.xyz

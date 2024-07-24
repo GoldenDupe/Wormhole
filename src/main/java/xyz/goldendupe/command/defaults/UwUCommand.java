@@ -21,7 +21,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class UwUCommand extends GDCloudCommand {
-	public UwUCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public UwUCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(commandManager.commandBuilder("uwu", RichDescription.of(Component.text("GoldenDupe? But UwU?", Color.YELLOW, TextDecoration.OBFUSCATED)))
 						.permission(MemberType.DEFAULT.permissionOf("uwu"))

@@ -101,15 +101,17 @@ public class GDSettings {
 	public ItemStack patchRandomItem(ItemStack itemStack, Random random) {
 		fetchGoldenDupe();
 		ItemMeta meta = itemStack.getItemMeta();
-
+		if (randomItemData == null){
+			// Might be overridden so, trying to fetch random item data is a good idea.
+			randomItemData = getRandomItemData();
+		}
 		if (randomItemData.allowUpdatedGoatHorns && meta instanceof MusicInstrumentMeta instrumentMeta){
 			List<MusicInstrument> instruments = Registry.INSTRUMENT.stream().toList();
 			if (random.nextDouble()>0.1){
 				instrumentMeta.setInstrument(instruments.get(random.nextInt(0, instruments.size()-1)));
 			}
 		}
-		if (randomItemData.allowUpdatedDecoratedPots && meta instanceof BlockStateMeta blockStateMeta){
-			DecoratedPot decoratedPot = (DecoratedPot) blockStateMeta.getBlockState();
+		if (randomItemData.allowUpdatedDecoratedPots && meta instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof DecoratedPot decoratedPot){
 			List<Material> materials = Tag.ITEMS_BREAKS_DECORATED_POTS.getValues().stream().toList();
 			for (DecoratedPot.Side side : DecoratedPot.Side.values()) {
 				if (random.nextDouble() > 0.45) {
@@ -195,7 +197,7 @@ public class GDSettings {
 
 			Registry<Material> materials = Registry.MATERIAL;
 			World world = Bukkit.getWorlds().get(0);
-			List<ItemStack> items = materials.stream().filter(material-> !illegalsItems.contains(material)).filter(material->material.isEnabledByFeature(world)).map(ItemStack::new).toList();
+			List<ItemStack> items = materials.stream().filter(material-> !illegalsItems.contains(material)).filter(material->material.isEnabledByFeature(world)).filter(Material::isItem).map(ItemStack::new).toList();
 			allowedItems = ImmutableList.copyOf(items);
 		}
 

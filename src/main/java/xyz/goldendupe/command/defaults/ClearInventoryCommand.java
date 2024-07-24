@@ -18,8 +18,8 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.flag.CommandFlag;
 import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
+import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
@@ -28,11 +28,11 @@ import xyz.goldendupe.utils.MemberType;
 import java.util.List;
 
 @Cloud
-public class ClearInventoryCommand extends GDCloudCommand {
+public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBootstrap {
 
-	public static final GUI clearMenu;
+	public static GUI clearMenu;
 
-	static {
+	public void init() {
 
 		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
 
@@ -59,12 +59,12 @@ public class ClearInventoryCommand extends GDCloudCommand {
 					player.getInventory().setBoots(null);
 					player.getInventory().setItemInOffHand(null);
 					player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
-					GoldenDupe.instance().messenger().message(player, Translations.COMMAND_SET_HOME_SUCCESS);
+					GoldenDupe.instance().messenger().message(player, Translations.COMMAND_CLEAR_INVENTORY_CLEARED);
 				}).build();
 
 		Clickable deny = new ClickableBuilder(itemStackDeny).setAction(clickTypes, (clickable, i, player) -> {
 			player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
-			GoldenDupe.getPlugin(GoldenDupe.class).messenger().message(player, Translations.COMMAND_CLEAR_CANCEL);
+			GoldenDupe.getPlugin(GoldenDupe.class).messenger().message(player, Translations.COMMAND_CLEAR_INVENTORY_CANCEL);
 		}).build();
 
 		GUIBuilder builder = new GUIBuilder(3).name(Component.text("Clear Inventory Confirmation"));
@@ -84,9 +84,8 @@ public class ClearInventoryCommand extends GDCloudCommand {
 
 	}
 
-	public ClearInventoryCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ClearInventoryCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
-
 		commandManager.command(
 				commandManager.commandBuilder(
 								"clear",
@@ -101,9 +100,9 @@ public class ClearInventoryCommand extends GDCloudCommand {
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 							if (context.flags().isPresent("change-auto-confirm")) {
 								if (player.autoConfirmClearInv()) {
-									messenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_TRUE);
+									messenger.message(sender, Translations.COMMAND_CLEAR_INVENTORY_TOGGLE_TRUE);
 								} else {
-									messenger.message(sender, Translations.COMMAND_CLEAR_TOGGLE_FALSE);
+									messenger.message(sender, Translations.COMMAND_CLEAR_INVENTORY_TOGGLE_FALSE);
 								}
 								player.setAutoConfirmClearInv(!player.autoConfirmClearInv());
 							} else {
@@ -114,7 +113,7 @@ public class ClearInventoryCommand extends GDCloudCommand {
 									sender.getInventory().setLeggings(null);
 									sender.getInventory().setBoots(null);
 									sender.getInventory().setItemInOffHand(null);
-									messenger.message(sender, Translations.COMMAND_CLEAR_CLEARED);
+									messenger.message(sender, Translations.COMMAND_CLEAR_INVENTORY_CLEARED);
 									return;
 								}
 

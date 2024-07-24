@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Cloud
 public class LoopCommand extends GDCloudCommand {
 	private final Map<UUID, ScheduledTask> tasks = new HashMap<>();
-	public LoopCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public LoopCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 				Command.Builder<Player> builder = commandManager.commandBuilder(
 						"loop",

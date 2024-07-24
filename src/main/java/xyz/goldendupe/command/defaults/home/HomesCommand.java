@@ -17,7 +17,7 @@ import xyz.goldendupe.models.GDPlayer;
 @Cloud
 public class HomesCommand extends GDCloudCommand {
 
-    public HomesCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public HomesCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
 
 

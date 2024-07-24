@@ -27,7 +27,7 @@ public class RebootCommand extends GDCloudCommand {
     final Timer rebootTimer = new Timer();
     BukkitTask task = null;
 
-    public RebootCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public RebootCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         Command.Builder<CommandSender> rebootCommand = commandManager
                 .commandBuilder(

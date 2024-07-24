@@ -22,8 +22,8 @@ import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.IntegerParser;
 import org.jetbrains.annotations.NotNull;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
+import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
@@ -34,12 +34,11 @@ import xyz.goldendupe.utils.MemberType;
 import java.util.*;
 
 @Cloud
-public class DupeCommand extends GDCloudCommand {
+public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 	private static final int DUPE_GUI_TICKS = 7;
 	private final Map<UUID, DonatorDupeMenu> dupeInventories = new HashMap<>();
-	public DupeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public DupeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
-
 		Command.Builder<Player> dupe = commandManager.commandBuilder(
 				"dupe",
 				Description.of("Allows player to dupe their current held item."),
@@ -135,20 +134,6 @@ public class DupeCommand extends GDCloudCommand {
 					});
 				})
 		);
-
-		goldenDupe().getServer().getScheduler().runTaskTimer(goldenDupe(), (timer)->{
-			if (dupeInventories.isEmpty()){
-				return;
-			}
-			for (DonatorDupeMenu menu : dupeInventories.values()){
-				menu.tick();
-				for (HumanEntity entity : menu.inventory.getViewers()){
-					if (entity instanceof Player player){
-						player.updateInventory();
-					}
-				}
-			}
-		}, 20, DUPE_GUI_TICKS);
 	}
 
 	public boolean canDupe(ItemStack itemStack) {
@@ -192,6 +177,23 @@ public class DupeCommand extends GDCloudCommand {
 			return !canDupe(itemStack);
 		}
 		return false;
+	}
+
+	@Override
+	public void init() {
+		goldenDupe().getServer().getScheduler().runTaskTimer(goldenDupe(), (timer)->{
+			if (dupeInventories.isEmpty()){
+				return;
+			}
+			for (DonatorDupeMenu menu : dupeInventories.values()){
+				menu.tick();
+				for (HumanEntity entity : menu.inventory.getViewers()){
+					if (entity instanceof Player player){
+						player.updateInventory();
+					}
+				}
+			}
+		}, 20, DUPE_GUI_TICKS);
 	}
 
 	private static class DonatorDupeMenu implements InventoryHolder {

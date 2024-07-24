@@ -21,7 +21,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class SkullCommand extends GDCloudCommand {
 
-    public SkullCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public SkullCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(

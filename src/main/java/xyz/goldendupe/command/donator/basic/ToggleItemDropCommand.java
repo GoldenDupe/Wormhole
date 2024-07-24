@@ -15,7 +15,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ToggleItemDropCommand extends GDCloudCommand {
-	public ToggleItemDropCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ToggleItemDropCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 		commandManager.command(

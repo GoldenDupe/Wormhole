@@ -16,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class UptimeCommand extends GDCloudCommand {
 
-    public UptimeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public UptimeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
 
         commandManager.command(

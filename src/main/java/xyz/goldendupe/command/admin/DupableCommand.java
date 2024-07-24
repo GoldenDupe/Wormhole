@@ -28,7 +28,7 @@ public class DupableCommand extends GDCloudCommand {
 	private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 	private static final Component LINE = MiniMessage.miniMessage().deserialize("<red>This item is undupable!");
 
-	public DupableCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public DupableCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(

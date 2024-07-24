@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class GamemodeCommand extends GDCloudCommand {
-	public GamemodeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public GamemodeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		abstractCommand(GameMode.SURVIVAL, "gms");
 		abstractCommand(GameMode.CREATIVE, "gmc");

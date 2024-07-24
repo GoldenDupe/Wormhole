@@ -21,15 +21,14 @@ import xyz.goldendupe.models.impl.GDHome;
 @Cloud
 public class SetHomeCommand extends GDCloudCommand {
 
-    public SetHomeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public SetHomeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
 
 
         commandManager.command(
                 commandManager.commandBuilder(
                                 "sethome",
-                                Description.of("Sets a new home that you can teleport to."),
-                                "addhome"
+                                Description.of("Sets a new home that you can teleport to.")
                         )
                         .senderType(Player.class)
                         .argument(StringParser.stringComponent(StringParser.StringMode.SINGLE).name("sethome-name"))

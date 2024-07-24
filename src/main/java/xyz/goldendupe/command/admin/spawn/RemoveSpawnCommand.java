@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Cloud
 public class RemoveSpawnCommand extends GDCloudCommand {
 
-    public RemoveSpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public RemoveSpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(

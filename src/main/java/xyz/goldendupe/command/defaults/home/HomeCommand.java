@@ -19,7 +19,7 @@ import xyz.goldendupe.utils.TimedTeleport;
 @Cloud
 public class HomeCommand extends GDCloudCommand {
 
-    public HomeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public HomeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
 
         commandManager.command(

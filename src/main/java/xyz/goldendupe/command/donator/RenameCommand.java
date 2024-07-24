@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Cloud
 public class RenameCommand extends GDCloudCommand {
-	public RenameCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public RenameCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder("rename", Description.of("Allows player to rename their item to specified string."))

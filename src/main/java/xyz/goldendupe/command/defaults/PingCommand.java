@@ -20,7 +20,7 @@ import xyz.goldendupe.utils.Ping;
 @Cloud
 public class PingCommand extends GDCloudCommand {
 
-	private PingCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	private PingCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 		Command.Builder<Player> pingBuilder = commandManager.commandBuilder("ping", Description.of("Shows the ping of a player."), "ms")

@@ -1,11 +1,10 @@
 package xyz.goldendupe;
 
-import bet.astral.cloudplusplus.CommandRegisterer;
+import bet.astral.cloudplusplus.paper.PaperCommandRegisterer;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.receiver.Receiver;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import org.bukkit.command.CommandSender;
-import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.goldendupe.command.cloud.SenderMapper;
 
-public class GoldenDupeCommandRegister implements CommandRegisterer<CommandSender> {
-	private final CommandManager<CommandSender> commandManager;
+public class GoldenDupeCommandRegister implements PaperCommandRegisterer<CommandSender> {
+	private final PaperCommandManager.Bootstrapped<CommandSender> commandManager;
 	private final Logger logger = LoggerFactory.getLogger("GoldenDupeCommands");
 	private final Messenger messenger;
 	public final GoldenDupeBootstrap bootstrap;
@@ -36,7 +35,7 @@ public class GoldenDupeCommandRegister implements CommandRegisterer<CommandSende
 	}
 
 	@Override
-	public CommandManager<CommandSender> getCommandManager() {
+	public PaperCommandManager.Bootstrapped<CommandSender> getCommandManager() {
 		return commandManager;
 	}
 

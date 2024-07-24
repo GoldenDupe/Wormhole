@@ -10,7 +10,7 @@ import xyz.goldendupe.command.cloud.GDCloudCommand;
 
 @Cloud
 public class CoinFlipCommand extends GDCloudCommand {
-	public CoinFlipCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public CoinFlipCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 	}

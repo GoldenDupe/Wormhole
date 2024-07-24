@@ -17,28 +17,32 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 	private final Gson gson = new Gson();
 	@Override
 	public GDSettings deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		JsonObject object = json.getAsJsonObject();
-		JsonObject dupe = json.getAsJsonObject();
-		JsonObject itemData = object.getAsJsonObject("data-item");
-		JsonObject enchant = itemData.getAsJsonObject("enchant");
-		JsonObject firework = itemData.getAsJsonObject("fireworks");
-		return new GDSettings(
-				loadMaterials(dupe.getAsJsonArray("combat")),
-				loadMaterials(dupe.getAsJsonArray("global")),
-				loadMaterials(object.getAsJsonArray("placement_illegals")),
-				new GDSettings.RandomItemsData(
-						loadMaterials(itemData.getAsJsonArray("illegals")),
-						loadNamespacedKeys(enchant.getAsJsonArray("illegal")),
-						itemData.get("modify-decorated-pots").getAsBoolean(),
-						enchant.get("modify-enchanted-books").getAsBoolean(),
-						enchant.get("allow-only-vanilla-enchants").getAsBoolean(),
-						firework.get("modify-fireworks").getAsBoolean(),
-						firework.get("max-firework-boost").getAsInt(),
-						itemData.get("modify-goat-horns").getAsBoolean(),
-						itemData.get("modify-tipped-arrows").getAsBoolean()
-				),
-				loadStringList(object.get("uwu-messages").getAsJsonArray())
-		);
+		try {
+			JsonObject object = json.getAsJsonObject();
+			JsonObject dupe = json.getAsJsonObject();
+			JsonObject itemData = object.getAsJsonObject("data-item");
+			JsonObject enchant = itemData.getAsJsonObject("enchant");
+			JsonObject firework = itemData.getAsJsonObject("fireworks");
+			return new GDSettings(
+					loadMaterials(dupe.getAsJsonArray("combat")),
+					loadMaterials(dupe.getAsJsonArray("global")),
+					loadMaterials(object.getAsJsonArray("placement_illegals")),
+					new GDSettings.RandomItemsData(
+							loadMaterials(itemData.getAsJsonArray("illegals")),
+							loadNamespacedKeys(enchant.getAsJsonArray("illegal")),
+							itemData.get("modify-decorated-pots").getAsBoolean(),
+							enchant.get("modify-enchanted-books").getAsBoolean(),
+							enchant.get("allow-only-vanilla-enchants").getAsBoolean(),
+							firework.get("modify-fireworks").getAsBoolean(),
+							firework.get("max-firework-boost").getAsInt(),
+							itemData.get("modify-goat-horns").getAsBoolean(),
+							itemData.get("modify-tipped-arrows").getAsBoolean()
+					),
+					loadStringList(object.get("uwu-messages").getAsJsonArray())
+			);
+		} catch (NullPointerException e) {
+			return null;
+		}
 	}
 
 	@Override

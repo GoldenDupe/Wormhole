@@ -13,7 +13,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class EnderChestCommand extends GDCloudCommand {
-    public EnderChestCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public EnderChestCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(

@@ -25,7 +25,7 @@ import java.util.Map;
 public class SpawnCommand extends GDCloudCommand {
 	private static final Map<MemberType, Integer> cooldowns = new HashMap<>();
 
-	public SpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public SpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		cooldowns.put(MemberType.DEFAULT, 120);
 		cooldowns.put(MemberType.DONATOR, 80);

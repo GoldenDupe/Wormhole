@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Cloud
 public class FlightCommand extends GDCloudCommand {
-	public FlightCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public FlightCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		Command.Builder<Player> builder = commandBuilderPlayer("fly",
 				Description.of("Allows player to toggle the flight mode.")

@@ -15,7 +15,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class ToggleItemPickupCommand extends GDCloudCommand {
-	public ToggleItemPickupCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public ToggleItemPickupCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(

@@ -14,7 +14,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class MendingCommand extends GDCloudCommand {
-	public MendingCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public MendingCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 		Command.Builder<Player> builder =

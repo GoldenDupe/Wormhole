@@ -5,16 +5,15 @@ import bet.astral.messenger.v2.component.ComponentType;
 import bet.astral.messenger.v2.component.TitleComponentPart;
 import bet.astral.messenger.v2.translation.TranslationKey;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,6 @@ import java.util.Map;
 public class Translations {
 	private static final Map<String, Translation> translation = new HashMap<>();
 	private static final Gson gson = new Gson();
-	private static final GsonComponentSerializer gsonSerializer = GsonComponentSerializer.gson();
 	private static final MiniMessage mm = MiniMessage.miniMessage();
 	// DELETE SPAWN
 	public static final Translation SPAWN_ALREADY_REMOVED = new Translation("commands.removespawn.already-removed").add(ComponentType.CHAT, text("<red>Couldn't remove spawn <white>%spawn%<red>, as it doesn't exist."));
@@ -42,8 +40,8 @@ public class Translations {
 	public static final Translation COMMAND_SPY_COMMAND_BLOCKED = new Translation("commands.commandspy.command-blocked").add(ComponentType.CHAT, text("<white>%command% <green>is now blocked from your command spy."));
 	public static final Translation COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED = new Translation("commands.commandspy.command-already-unblocked").add(ComponentType.CHAT, text("<white>%command% <red>already has been unblocked."));
 	public static final Translation COMMAND_SPY_COMMAND_UNBLOCKED = new Translation("commands.commandspy.command-unblocked").add(ComponentType.CHAT, text("<white>%command% <green>is now unblocked from your command spy."));
-	public static final Translation LISTENER_COMMAND_SPY_EXECUTED = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY] <yellow>%player% <white>executed command <yellow>%command_suggest%"));
-	public static final Translation LISTENER_COMMAND_SPY_EXECUTED_SIGN = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY] <yellow>%player% <white>executed sign command (%x%, %y%, %z%, %world%) <yellow>%command_suggest%"));
+	public static final Translation LISTENER_COMMAND_SPY_EXECUTED = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY]<!bold> <yellow>%player% <white>executed command <yellow>%command_suggest%"));
+	public static final Translation LISTENER_COMMAND_SPY_EXECUTED_SIGN = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY]<!bold> <yellow>%player% <white>executed sign command (%x%, %y%, %z%, %world%) <yellow>%command_suggest%"));
 	// Dupable modification
 	public static final Translation COMMAND_DUPABLE_AIR = new Translation("commands.dupable.air").add(ComponentType.CHAT, text("<red>You cannot change if air is dupable or undupable."));
 	public static final Translation COMMAND_DUPABLE_MADE_DUPABLE = new Translation("commands.dupable.made-dupable").add(ComponentType.CHAT, text("<red>Made your item dupable."));
@@ -103,18 +101,18 @@ public class Translations {
 	public static final Translation COMMAND_SET_HOME_MAX_HOMES = new Translation("commands.set-home.too-many-homes").add(ComponentType.CHAT, text("<red>You have already set too many homes!"));
 	public static final Translation COMMAND_SET_HOME_SUCCESS = new Translation("commands.set-home.success").add(ComponentType.CHAT, text("<green>Set home <white>%home%<green> to <gray>x<white>%x%<gray>, y<white>%y%<gray>, z<white>%z%<gray>, <white>%world%<green>."));
 	// Clear inv
-	public static final Translation COMMAND_CLEAR_CLEARED = new Translation("commands.clear.success").add(ComponentType.CHAT, text("<green>Cleared your inventory successfully."));
-	public static final Translation COMMAND_CLEAR_CANCEL = new Translation("commands.clear.cancel").add(ComponentType.CHAT, text("<green>Canceled your inventory clear."));
-	public static final Translation COMMAND_CLEAR_TOGGLE_TRUE = new Translation("commands.clear.cancel").add(ComponentType.CHAT, text("<green>You will now automatically clear your inventory when you use <white>/clear<green>."));
-	public static final Translation COMMAND_CLEAR_TOGGLE_FALSE = new Translation("commands.clear.cancel").add(ComponentType.CHAT, text("<green>You will no longer automatically clear your inventory when you use <white>/clear<green>."));
+	public static final Translation COMMAND_CLEAR_INVENTORY_CLEARED = new Translation("commands.clear-inventory.success").add(ComponentType.CHAT, text("<green>Cleared your inventory successfully."));
+	public static final Translation COMMAND_CLEAR_INVENTORY_CANCEL = new Translation("commands.clear-inventory.cancel").add(ComponentType.CHAT, text("<green>Canceled your inventory clear."));
+	public static final Translation COMMAND_CLEAR_INVENTORY_TOGGLE_TRUE = new Translation("commands.clear-inventory.toggle_true").add(ComponentType.CHAT, text("<green>You will now automatically clear your inventory when you use <white>/clear<green>."));
+	public static final Translation COMMAND_CLEAR_INVENTORY_TOGGLE_FALSE = new Translation("commands.clear-inventory.toggle_false").add(ComponentType.CHAT, text("<green>You will no longer automatically clear your inventory when you use <white>/clear<green>."));
 	// Clear my own chat
-	public static final Translation COMMAND_CLEAR_MY_CHAT = new Translation("commands.clear-my-chat.success").add(ComponentType.CHAT, text("<green>Cleared your chat!"));
+	public static final Translation COMMAND_CHAT_CLEAR_SELF = new Translation("commands.clear-my-chat.success").add(ComponentType.CHAT, text("<green>Cleared your chat!"));
 	// Dupe
 	public static final Translation COMMAND_DUPE_UNDUPABLE = new Translation("commands.dupe.undupable").add(ComponentType.CHAT, text("<red>You cannot dupe your item as it's undupable."));
 	public static final Translation COMMAND_DUPE_BUNDLE = new Translation("commands.dupe.bundle").add(ComponentType.CHAT, text("<red>You cannot dupe your bundle as it contains undupable items."));
 	public static final Translation COMMAND_DUPE_SHULKER = new Translation("commands.dupe.shulker").add(ComponentType.CHAT, text("<red>You cannot dupe your item as it's undupable."));
 	public static final Translation COMMAND_DUPE_COMBAT = new Translation("commands.dupe.combat").add(ComponentType.CHAT, text("<red>You cannot dupe your item while in combat."));
-	public static final Translation COMMAND_DUPE_SUPER_DUPER = new Translation("commands.dupe.multi").add(ComponentType.CHAT, text("<aqua><bold>SUPER DUPER <white>Duped your item %super-dupe% times."));
+	public static final Translation COMMAND_DUPE_SUPER_DUPER = new Translation("commands.dupe.multi").add(ComponentType.CHAT, text("<aqua><bold>SUPER DUPER<!bold> <white>Duped your item %super-duper% times."));
 	// Mending
 	public static final Translation COMMAND_MENDING_AIR = new Translation("commands.mending.cannot-enchant-air").add(ComponentType.CHAT, text("<red>Cannot enchant air with mending."));
 	public static final Translation COMMAND_MENDING_CANNOT_ENCHANT = new Translation("commands.mending.cannot-enchant-item").add(ComponentType.CHAT, text("<red>Your item does not support mending."));
@@ -134,7 +132,7 @@ public class Translations {
 	public static final Translation COMMAND_TOGGLE_ITEMS_FALSE = new Translation("commands.toggle-items.disabled").add(ComponentType.CHAT, text("<red>You will no longer receive random items!"));
 	// Toggle Night Vision
 	public static final Translation COMMAND_TOGGLE_NIGHT_VISION_TRUE = new Translation("commands.toggle-night-vision.enabled").add(ComponentType.CHAT, text("<green>You will now have permanent night vision"));
-	public static final Translation COMMAND_TOGGLE_NIGHT_VISION_FALSE = new Translation("commands.toggle-night-vision.enabled").add(ComponentType.CHAT, text("<green>You will no longer have permanent night vision"));
+	public static final Translation COMMAND_TOGGLE_NIGHT_VISION_FALSE = new Translation("commands.toggle-night-vision.disabled").add(ComponentType.CHAT, text("<green>You will no longer have permanent night vision"));
 	// Uptime
 	public static final Translation COMMAND_UPTIME = new Translation("commands.uptime.uptime").add(ComponentType.CHAT, text("<green>The server has been up for <white>%time%"));
 	// Nickname
@@ -158,29 +156,29 @@ public class Translations {
 	public static final Translation COMMAND_FLY_TRUE = new Translation("commands.fly.enabled").add(ComponentType.CHAT, text("<green>You can now fly."));
 	public static final Translation COMMAND_FLY_FALSE = new Translation("commands.fly.disabled").add(ComponentType.CHAT, text("<green>You can no longer fly."));
 	public static final Translation COMMAND_FLY_ADMIN_TRUE = new Translation("commands.fly.admin-enabled").add(ComponentType.CHAT, text("<white>%player%<green> can fly now."));
-	public static final Translation COMMAND_FLY_ADMIN_FALSE = new Translation("commands.fly.admin-enabled").add(ComponentType.CHAT, text("<white>%player%<green> can no longer fly."));
+	public static final Translation COMMAND_FLY_ADMIN_FALSE = new Translation("commands.fly.admin-disabled").add(ComponentType.CHAT, text("<white>%player%<green> can no longer fly."));
 	// Speed toggle
 	public static final Translation COMMAND_TOGGLE_SPEED_TRUE = new Translation("commands.toggle-speed.enabled").add(ComponentType.CHAT, text("<green>You will now have permanent speed 1."));
 	public static final Translation COMMAND_TOGGLE_SPEED_FALSE = new Translation("commands.toggle-speed.disabled").add(ComponentType.CHAT, text("<green>You will no longer have permanent speed 1."));
 	// Clear chat
-	public static final Translation COMMAND_CLEAR_CHAT = new Translation("commands.clear-chat.success").add(ComponentType.CHAT, text("<green>The chat was cleared by <white>%who%<green>!"));
+	public static final Translation COMMAND_CHAT_CLEAR_STAFF = new Translation("commands.clear-chat.success").add(ComponentType.CHAT, text("<green>The chat was cleared by <white>%who%<green>!"));
 	// Staff chat
 	public static final Translation COMMAND_STAFF_CHAT_TRUE = new Translation("commands.staff-chat.enabled").add(ComponentType.CHAT, text("<green>Your chat messages will now be forwarded to staff chat."));
 	public static final Translation COMMAND_STAFF_CHAT_FALSE = new Translation("commands.staff-chat.disabled").add(ComponentType.CHAT, text("<green>Your chat messages will no longer forwarded to staff chat."));
-	public static final Translation COMMAND_STAFF_CHAT_MESSAGE = new Translation("commands.staff-chat.chat").add(ComponentType.CHAT, text("<aqua><bold>[STAFF] <white>%player% >> <white>%message%"));
-	public static final Translation COMMAND_STAFF_CHAT_MESSAGE_CONSOLE = new Translation("commands.staff-chat.chat-console").add(ComponentType.CHAT, text("<aqua><bold>[STAFF] <red>CONSOLE >> <white>%message%"));
+	public static final Translation COMMAND_STAFF_CHAT_MESSAGE = new Translation("commands.staff-chat.chat").add(ComponentType.CHAT, text("<aqua><bold>[STAFF]<!bold> <white>%player% >> <white>%message%"));
+	public static final Translation COMMAND_STAFF_CHAT_MESSAGE_CONSOLE = new Translation("commands.staff-chat.chat-console").add(ComponentType.CHAT, text("<aqua><bold>[STAFF]<!bold> <red>CONSOLE >> <white>%message%"));
 	public static final Translation COMMAND_DONATOR_CHAT_TRUE = new Translation("commands.donator-chat.enabled").add(ComponentType.CHAT, text("<green>Your chat messages will now be forwarded to donator chat."));
 	public static final Translation COMMAND_DONATOR_CHAT_FALSE = new Translation("commands.donator-chat.disabled").add(ComponentType.CHAT, text("<green>Your chat messages will no longer forwarded to donator chat."));
-	public static final Translation COMMAND_DONATOR_CHAT_MESSAGE = new Translation("commands.donator-chat.chat").add(ComponentType.CHAT, text("<gold><bold>[DONOR] <white>%player% >> <white>%message%"));
-	public static final Translation COMMAND_DONATOR_CHAT_MESSAGE_CONSOLE = new Translation("commands.donator-chat.chat-console").add(ComponentType.CHAT, text("<gold><bold>[DONOR] <red>CONSOLE >> <white>%message%"));
+	public static final Translation COMMAND_DONATOR_CHAT_MESSAGE = new Translation("commands.donator-chat.chat").add(ComponentType.CHAT, text("<gold><bold>[DONOR]<!bold> <white>%player% >> <white>%message%"));
+	public static final Translation COMMAND_DONATOR_CHAT_MESSAGE_CONSOLE = new Translation("commands.donator-chat.chat-console").add(ComponentType.CHAT, text("<gold><bold>[DONOR]<!bold> <red>CONSOLE >> <white>%message%"));
 	public static final Translation COMMAND_BOOSTER_CHAT_TRUE = new Translation("commands.booster-chat.enabled").add(ComponentType.CHAT, text("<green>Your chat messages will now be forwarded to booster chat."));
 	public static final Translation COMMAND_BOOSTER_CHAT_FALSE = new Translation("commands.booster-chat.disabled").add(ComponentType.CHAT, text("<green>Your chat messages will no longer forwarded to booster chat."));
-	public static final Translation COMMAND_BOOSTER_CHAT_MESSAGE = new Translation("commands.booster-chat.chat").add(ComponentType.CHAT, text("<purple><bold>[BOOSTER] <white>%player% >> <white>%message%"));
-	public static final Translation COMMAND_BOOSTER_CHAT_MESSAGE_CONSOLE = new Translation("commands.booster-chat.chat-console").add(ComponentType.CHAT, text("<purple><bold>[BOOSTER] <red>CONSOLE >> <white>%message%"));
+	public static final Translation COMMAND_BOOSTER_CHAT_MESSAGE = new Translation("commands.booster-chat.chat").add(ComponentType.CHAT, text("<purple><bold>[BOOSTER]<!bold> <white>%player% >> <white>%message%"));
+	public static final Translation COMMAND_BOOSTER_CHAT_MESSAGE_CONSOLE = new Translation("commands.booster-chat.chat-console").add(ComponentType.CHAT, text("<purple><bold>[BOOSTER]<!bold> <red>CONSOLE >> <white>%message%"));
 	public static final Translation COMMAND_ADMIN_CHAT_TRUE = new Translation("commands.admin-chat.enabled").add(ComponentType.CHAT, text("<green>Your chat messages will now be forwarded to admin chat."));
 	public static final Translation COMMAND_ADMIN_CHAT_FALSE = new Translation("commands.admin-chat.disabled").add(ComponentType.CHAT, text("<green>Your chat messages will no longer forwarded to admin chat."));
-	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE = new Translation("commands.admin-chat.chat").add(ComponentType.CHAT, text("<red><bold>[ADMIN] <white>%player% >> <white>%message%"));
-	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE_CONSOLE = new Translation("commands.admin-chat.chat-console").add(ComponentType.CHAT, text("<red><bold>[ADMIN] <red>CONSOLE >> <white>%message%"));
+	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE = new Translation("commands.admin-chat.chat").add(ComponentType.CHAT, text("<red><bold>[ADMIN]<!bold> <white>%player% >> <white>%message%"));
+	public static final Translation COMMAND_ADMIN_CHAT_MESSAGE_CONSOLE = new Translation("commands.admin-chat.chat-console").add(ComponentType.CHAT, text("<red><bold>[ADMIN]<!bold> <red>CONSOLE >> <white>%message%"));
 	// Illegals
 	public static final Translation LISTENER_ILLEGAL = new Translation("listeners.illegal.cannot-place").add(ComponentType.CHAT, text("<red>You cannot place <white>%block%<red>."));
 
@@ -188,9 +186,9 @@ public class Translations {
 	public static final Translation COMMAND_MUTECHAT_UNMUTED = new Translation("commands.mutechat.unmuted").add(ComponentType.CHAT, text("<green>The chat has been unmuted!"));
 	public static final Translation COMMAND_MUTECHAT_MUTED = new Translation("commands.mutechat.muted").add(ComponentType.CHAT, text("<red>The chat has been muted!"));
 	public static final Translation COMMAND_MUTECHAT_BYPASS = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<yellow>You have permission to bypass chat mute."));
-	public static final Translation LISTENER_MUTECHAT_MUTED = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<yellow>The chat is currently muted!."));
-	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("commands.mutechat.bypass").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!"));
-	public static final Translation TIMED_MUTECHAT_REMINDER_30 = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<red>The chat is currently muted!"));
+	public static final Translation LISTENER_MUTECHAT_MUTED = new Translation("listener.mutechat.muted").add(ComponentType.CHAT, text("<yellow>The chat is currently muted!."));
+	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("timed.mutechat.second").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!"));
+	public static final Translation TIMED_MUTECHAT_REMINDER_30 = new Translation("timed.mutechat.half_minute").add(ComponentType.CHAT, text("<red>The chat is currently muted!"));
 
 	// Creative GUI
 	public static final Translation GUI_CREATIVE_TITLE = new Translation("gui.creative_blocks.title").add(ComponentType.CHAT, text("Blocks <yellow>%page%<dark_gray>/<red>%page_max%<"));
@@ -207,6 +205,10 @@ public class Translations {
 		return translation.containsKey(key) ? translation.get(key) : new Translation(key).add(ComponentType.CHAT, text(key));
 	}
 
+	public static Collection<Translation> translations(){
+		return translation.values();
+	}
+
 	public static JsonObject createDefaults() throws IllegalAccessException {
 		JsonObject fullObject = new JsonObject();
 		Class<Translations> translationsClass = Translations.class;
@@ -217,7 +219,7 @@ public class Translations {
 				if (object instanceof Translation translation){
 					Message message = translation.messages;
 					JsonElement element = null;
-					if (message.componentPart.size()>1) {
+					if (message.componentPart.size() > 1 || message.componentPart.get(ComponentType.CHAT) == null) {
 						JsonObject current = new JsonObject();
 						for (Map.Entry<ComponentType, ComponentPart> entry : message.componentPart.entrySet()) {
 							ComponentType type = entry.getKey();
@@ -228,24 +230,14 @@ public class Translations {
 								titleObj.addProperty("in", title.getFadeIn().toMillis());
 								titleObj.addProperty("stay", title.getStay().toMillis());
 								titleObj.addProperty("out", title.getFadeOut().toMillis());
-								titleObj.add("value", gsonSerializer.serializeToTree(part.getTextComponent()));
+								titleObj.addProperty("value", mm.serialize(part.getTextComponent()));
 								current.add(type.getName(), titleObj);
 							} else {
-								String json = gsonSerializer.serialize(part.getTextComponent());
-								if (json.contains("\n")){
-									JsonArray array = new JsonArray();
-									String miniMessage = mm.serialize(part.getTextComponent());
-									for (String split : miniMessage.split("\n")) {
-										array.add(GsonComponentSerializer.gson().serializeToTree(mm.deserialize(split)));
-									}
-									current.add(type.getName(), array);
-								} else {
-									current.add(type.getName(), gsonSerializer.serializeToTree(part.getTextComponent()));
-								}
+								current.addProperty(type.getName(), mm.serialize(part.getTextComponent()));
 							}
 						}
 					} else {
-						element = gsonSerializer.serializeToTree(((ComponentPart) (List.of(message.componentPart.values().toArray()).getFirst())).getTextComponent());
+						element = gson.toJsonTree(mm.serialize(((ComponentPart) (List.of(message.componentPart.values().toArray()).getFirst())).getTextComponent()));
 					}
 					fullObject.add(translation.key, element);
 				}

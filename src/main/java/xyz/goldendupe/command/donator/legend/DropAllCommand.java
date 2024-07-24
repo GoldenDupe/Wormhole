@@ -16,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class DropAllCommand extends GDCloudCommand {
-	public DropAllCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public DropAllCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandPlayer(
 				commandBuilderPlayer("dropall",

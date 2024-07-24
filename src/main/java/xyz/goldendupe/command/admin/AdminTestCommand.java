@@ -43,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
 @ApiStatus.Internal
 @Cloud
 public class AdminTestCommand extends GDCloudCommand {
-	public AdminTestCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public AdminTestCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 		commandPlayer(

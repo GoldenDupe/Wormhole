@@ -15,7 +15,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class RulesCommand extends GDCloudCommand {
 
-	public RulesCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public RulesCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(commandManager.commandBuilder(
 				"rules",

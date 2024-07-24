@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Cloud
 public class PlaytimeCommand extends GDCloudCommand {
 
-	public PlaytimeCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public PlaytimeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 
 

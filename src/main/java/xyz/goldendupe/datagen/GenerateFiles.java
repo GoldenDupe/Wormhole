@@ -2,9 +2,10 @@ package xyz.goldendupe.datagen;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import xyz.goldendupe.messenger.Translations;
+import org.jetbrains.annotations.Nullable;
 import xyz.goldendupe.models.GDSavedData;
 import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.serializer.GlobalSaveSerializer;
@@ -14,19 +15,12 @@ import java.io.*;
 import java.util.List;
 
 public class GenerateFiles {
-	public Gson gson = new GsonBuilder().registerTypeAdapter(GDSettings.class, new SettingsSerializer()).registerTypeAdapter(GDSavedData.class, new GlobalSaveSerializer()).setPrettyPrinting().create();
+	public Gson gson = new GsonBuilder().registerTypeAdapter(GDSettings.class, new SettingsSerializer()).registerTypeAdapter(GDSavedData.class, new GlobalSaveSerializer()).setPrettyPrinting().disableHtmlEscaping().create();
 	public void generate(@NotNull File folder) throws IOException {
 		File config = getOrCreate(new File(folder, "config.json"));
 		File data = getOrCreate(new File(folder, "global-data.json"));
-		File messages = getOrCreate(new File(folder, "messages.json"));
-
 		write(gson.toJsonTree(new SettingsData(), GDSettings.class).getAsJsonObject(), config);
 		write(gson.toJsonTree(new SavedDataData(), GDSavedData.class).getAsJsonObject(), data);
-		try {
-			write(Translations.createDefaults(), messages);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public void write(@NotNull JsonObject json, File file){
@@ -40,7 +34,7 @@ public class GenerateFiles {
 			}
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write(current.toString());
+			writer.write(gson.toJson(current));
 			writer.flush();
 			writer.close();
 			reader.close();
@@ -49,14 +43,25 @@ public class GenerateFiles {
 		}
 	}
 
-	private void checkUntilJsonEnd(@NotNull JsonObject json, JsonObject saving){
+	private JsonElement checkUntilJsonEnd(@Nullable JsonObject json, JsonObject saving){
+		if (json==null){
+			return null;
+		}
 		List.copyOf(json.keySet()).forEach(val->{
 			if (saving.get(val)==null){
 				saving.add(val, json.get(val));
 			} else if (saving.get(val).isJsonObject()){
-				checkUntilJsonEnd(json, saving.get(val).getAsJsonObject());
+				JsonObject object;
+				if (json.get(val)==null||json.get(val).isJsonNull()||!json.get(val).isJsonObject()){
+					object = new JsonObject();
+				} else {
+					object = json.get(val).getAsJsonObject();
+				}
+				JsonElement element = checkUntilJsonEnd(object, saving.get(val).getAsJsonObject());
+				saving.add(val, element);
 			}
 		});
+		return saving;
 	}
 
 	public File getOrCreate(@NotNull File file) throws IOException {

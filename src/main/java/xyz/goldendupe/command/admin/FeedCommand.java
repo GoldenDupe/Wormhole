@@ -16,7 +16,7 @@ import xyz.goldendupe.utils.MemberType;
 @Cloud
 public class FeedCommand extends GDCloudCommand {
 
-    public FeedCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+    public FeedCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(register, commandManager);
         commandManager.command(
                 commandManager.commandBuilder(

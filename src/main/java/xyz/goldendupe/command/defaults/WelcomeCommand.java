@@ -18,7 +18,7 @@ import xyz.goldendupe.utils.MemberType;
 
 @Cloud
 public class WelcomeCommand extends GDCloudCommand {
-	public WelcomeCommand(GoldenDupeCommandRegister bootstrap, PaperCommandManager<CommandSender> commandManager) {
+	public WelcomeCommand(GoldenDupeCommandRegister bootstrap, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(bootstrap, commandManager);
 		commandPlayer(commandManager.commandBuilder("welcome")
 				.argument(PlayerParser.playerComponent().name("who"))

@@ -10,7 +10,7 @@ import java.io.*;
 import java.util.List;
 
 public class GenerateMessages {
-	public Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	public Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 	public void generate(@NotNull File folder) throws IOException {
 		File messages = getOrCreate(new File(folder, "messages.json"));
 		try {
@@ -31,7 +31,8 @@ public class GenerateMessages {
 			}
 
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write(current.toString());
+			String jsonString = gson.toJson(current);
+			writer.write(jsonString);
 			writer.flush();
 			writer.close();
 			reader.close();

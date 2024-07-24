@@ -49,20 +49,18 @@ dependencies {
     implementation 'bet.astral:messenger-paper:2.0.0' // Messenger
     implementation 'bet.astral:tuples:1.0.0'
     implementation 'bet.astral:cloudplusplus:1.2.5'
+    implementation 'bet.astral:cloudplusplus-paper:1.2.5'
     implementation 'bet.astral:guiman:1.0.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'
 
-    //
-    compileOnly('com.zaxxer:HikariCP:5.1.0')
-
     // Cloud and brigadier for commands
     compileOnly 'com.mojang:brigadier:1.0.18'
     var cloudMineccraft = "2.0.0-beta.8";
-    compileOnly 'org.incendo:cloud-paper:' + cloudMineccraft
-    compileOnly 'org.incendo:cloud-brigadier:' + cloudMineccraft
-    compileOnly 'org.incendo:cloud-minecraft-extras:' + cloudMineccraft
+    implementation 'org.incendo:cloud-paper:' + cloudMineccraft
+    implementation 'org.incendo:cloud-brigadier:' + cloudMineccraft
+    implementation 'org.incendo:cloud-minecraft-extras:' + cloudMineccraft
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -105,13 +103,11 @@ shadowJar {
     relocate 'bet.astral.messenger', 'xyz.goldendupe.libs.messenger'
     relocate 'bet.astral.cloudplusplus', 'xyz.goldendupe.libs.cloudplusplus'
     relocate 'bet.astral.tuples', 'xyz.goldendupe.libs.tuples'
+    relocate 'org.incendo.cloud', 'xyz.goldendupe.libs.org.incendo.cloud'
 }
 
 tasks {
     runServer {
-        downloadPlugins {
-            url("https://download.luckperms.net/1552/bukkit/loader/LuckPerms-Bukkit-5.4.137.jar")
-        }
         minecraftVersion("1.21")
     }
 }

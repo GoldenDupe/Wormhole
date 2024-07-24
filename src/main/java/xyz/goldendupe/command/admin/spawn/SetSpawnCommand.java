@@ -33,7 +33,7 @@ import static xyz.goldendupe.messenger.GoldenMessenger.format;
 public class SetSpawnCommand extends GDCloudCommand {
 
 	//Not sure if I broke this or not but I changed some of the structure
-	public SetSpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager<CommandSender> commandManager) {
+	public SetSpawnCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);
 		commandManager.command(
 				commandManager.commandBuilder(
