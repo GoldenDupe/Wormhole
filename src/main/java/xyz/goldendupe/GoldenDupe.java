@@ -4,11 +4,18 @@ import bet.astral.cloudplusplus.annotations.DoNotReflect;
 import bet.astral.fluffy.FluffyCombat;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
+import bet.astral.messenger.v2.locale.LanguageTable;
+import bet.astral.messenger.v2.locale.source.FileLanguageSource;
+import bet.astral.messenger.v2.locale.source.LanguageSource;
 import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.unity.Factions;
 import com.google.gson.Gson;
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.NamespacedKey;
@@ -34,6 +41,7 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import xyz.goldendupe.anti.crash.CrashNotifier;
 import xyz.goldendupe.anti.crash.Notifier;
+import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
@@ -95,10 +103,12 @@ public final class GoldenDupe extends JavaPlugin {
     @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
     @Getter(AccessLevel.PUBLIC) private FluffyCombat fluffy;
     @Getter(AccessLevel.PUBLIC) private Factions factions;
+    private List<InitAfterBootstrap> initAfterBootstraps;
 
     public GoldenDupe(GoldenDupeBootstrap boostrap){
         this.isDevelopmentServer = boostrap.isDevServer();
         messenger = (GoldenMessenger) boostrap.getMessenger();
+        initAfterBootstraps = boostrap.initAfterBootstraps;
     }
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
@@ -114,6 +124,9 @@ public final class GoldenDupe extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if (!initAfterBootstraps.isEmpty()){
+            initAfterBootstraps.forEach(InitAfterBootstrap::init);
+        }
         GenerateFiles generator = new GenerateFiles();
 	    try {
 		    generator.generate(getDataFolder());
@@ -128,6 +141,21 @@ public final class GoldenDupe extends JavaPlugin {
 	    } catch (IOException e) {
 		    throw new RuntimeException(e);
 	    }
+
+	    LanguageSource englishSource;
+	    try {
+		    englishSource = FileLanguageSource.gson(messenger, Locale.US, new File(getDataFolder(), "messages.json"), GsonComponentSerializer.gson());
+            LanguageTable englishTable = LanguageTable.of(englishSource);
+            messenger.setLocale(Locale.US);
+            messenger.setDefaultLocale(englishSource);
+            messenger.registerLanguageTable(Locale.US, englishTable);
+            messenger.setUseReceiverLocale(false);
+            messenger.setPrefix(Component.text("G", NamedTextColor.GOLD).append(Component.text("D", NamedTextColor.WHITE).appendSpace()).decoration(TextDecoration.BOLD, true));
+            messenger.setSendASync(true);
+	    } catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
+
 
 
 	    fluffy = FluffyCombat.getPlugin(FluffyCombat.class);

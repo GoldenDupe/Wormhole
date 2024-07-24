@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
+import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
 import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.serializer.GlobalSaveSerializer;
@@ -17,8 +18,15 @@ public class GenerateFiles {
 	public void generate(@NotNull File folder) throws IOException {
 		File config = getOrCreate(new File(folder, "config.json"));
 		File data = getOrCreate(new File(folder, "global-data.json"));
+		File messages = getOrCreate(new File(folder, "messages.json"));
+
 		write(gson.toJsonTree(new SettingsData(), GDSettings.class).getAsJsonObject(), config);
 		write(gson.toJsonTree(new SavedDataData(), GDSavedData.class).getAsJsonObject(), data);
+		try {
+			write(Translations.createDefaults(), messages);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void write(@NotNull JsonObject json, File file){

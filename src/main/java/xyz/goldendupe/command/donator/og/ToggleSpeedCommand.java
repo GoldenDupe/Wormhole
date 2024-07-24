@@ -1,10 +1,9 @@
-package xyz.goldendupe.command.og;
+package xyz.goldendupe.command.donator.og;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
-import xyz.goldendupe.GoldenDupe;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.command.cloud.GDCloudCommand;

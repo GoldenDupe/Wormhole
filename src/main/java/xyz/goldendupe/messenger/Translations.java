@@ -192,6 +192,13 @@ public class Translations {
 	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("commands.mutechat.bypass").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!"));
 	public static final Translation TIMED_MUTECHAT_REMINDER_30 = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<red>The chat is currently muted!"));
 
+	// Creative GUI
+	public static final Translation GUI_CREATIVE_TITLE = new Translation("gui.creative_blocks.title").add(ComponentType.CHAT, text("Blocks <yellow>%page%<dark_gray>/<red>%page_max%<"));
+	public static final Translation GUI_CREATIVE_ITEM_NAME = new Translation("gui.creative_blocks.block_name").add(ComponentType.CHAT, text("<yellow>%block%"));
+	public static final Translation GUI_CREATIVE_BACK = new Translation("gui.creative_blocks.back").add(ComponentType.CHAT, text("<green>Previous Page"));
+	public static final Translation GUI_CREATIVE_CLOSE = new Translation("gui.creative_blocks.close").add(ComponentType.CHAT, text("<red>Close"));
+	public static final Translation GUI_CREATIVE_NEXT = new Translation("gui.creative_blocks.next").add(ComponentType.CHAT, text("<green>Next Page"));
+
 	private static Component text(@NotNull String val){
 		return MiniMessage.miniMessage().deserialize(val);
 	}

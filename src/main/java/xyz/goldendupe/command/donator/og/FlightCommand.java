@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.og;
+package xyz.goldendupe.command.donator.og;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.Placeholder;

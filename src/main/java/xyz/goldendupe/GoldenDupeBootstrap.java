@@ -17,10 +17,13 @@ import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
+import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.cloud.SenderMapper;
 import xyz.goldendupe.messenger.GoldenMessenger;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GoldenDupeBootstrap implements PluginBootstrap, CommandRegisterer<CommandSender> {
 	private ComponentLogger logger;
@@ -30,6 +33,7 @@ public class GoldenDupeBootstrap implements PluginBootstrap, CommandRegisterer<C
 	private String devServerName;
 	private String devServerSuperVisor;
 	private PaperCommandManager<CommandSender> commandManager;
+	public List<InitAfterBootstrap> initAfterBootstraps = new LinkedList<>();
 	@Override
 	public void bootstrap(@NotNull BootstrapContext bootstrapContext) {
 		logger = bootstrapContext.getLogger();
