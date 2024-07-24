@@ -1,9 +1,10 @@
-package xyz.goldendupe.command.donator;
+package xyz.goldendupe.command.donator.basic;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.placeholder.PlaceholderList;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -49,6 +50,8 @@ public class NickCommand extends GDCloudCommand {
                             } else {
                                 component = Component.text(colorless);
                             }
+                            // Remove obfuscation, so people cannot have names others cannot read
+                            component = component.decoration(TextDecoration.OBFUSCATED, false);
                             placeholders.add("nickname", component);
 
                             messenger.message(sender, Translations.COMMAND_NICKNAME_SUCCESS, placeholders);

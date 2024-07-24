@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.donator;
+package xyz.goldendupe.command.donator.basic;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,28 +13,30 @@ import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
-public class ToggleItemPickupCommand extends GDCloudCommand {
-	public ToggleItemPickupCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
+public class ToggleItemDropCommand extends GDCloudCommand {
+	public ToggleItemDropCommand(GoldenDupeBootstrap bootstrap, PaperCommandManager<CommandSender> commandManager) {
 		super(bootstrap, commandManager);
+
 		commandManager.command(
 				commandManager.commandBuilder(
-								"togglepickup",
-								Description.of("Allows a player to toggle picking up items from the ground."),
-								"toggleitempickup"
-						)
-						.permission(MemberType.DONATOR.cloudOf("toggle-pickup"))
+						"toggledrop",
+						Description.of("Allows a player to toggle dropping items to the ground."),
+						"toggledrops"
+				)
+						.permission(MemberType.DONATOR.cloudOf("toggle-drop"))
 						.senderType(Player.class)
-						.handler(context -> {
+						.handler(context->{
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isTogglePickupItem();
-							player.setTogglePickupItem(!toggle);
+							boolean toggle = player.isToggleDropItem();
+							player.setToggleDropItem(!toggle);
 
-							if (!toggle) {
-								messenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_TRUE);
+							if (!toggle){
+								messenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_TRUE);
 							} else {
-								messenger.message(sender, Translations.COMMAND_TOGGLE_PICKUP_FALSE);
+								messenger.message(sender, Translations.COMMAND_TOGGLE_DROPPING_FALSE);
 							}
+
 						})
 		);
 	}

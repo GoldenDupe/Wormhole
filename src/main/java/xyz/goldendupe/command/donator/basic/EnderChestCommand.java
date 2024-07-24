@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.donator;
+package xyz.goldendupe.command.donator.basic;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

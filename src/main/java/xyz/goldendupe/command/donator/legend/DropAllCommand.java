@@ -1,4 +1,4 @@
-package xyz.goldendupe.command.donator;
+package xyz.goldendupe.command.donator.legend;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import org.bukkit.Bukkit;
