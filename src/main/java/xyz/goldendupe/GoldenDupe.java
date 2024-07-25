@@ -2,11 +2,17 @@ package xyz.goldendupe;
 
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.InventoryListener;
+import bet.astral.messenger.v2.locale.LanguageTable;
+import bet.astral.messenger.v2.locale.source.FileLanguageSource;
+import bet.astral.messenger.v2.locale.source.LanguageSource;
 import bet.astral.messenger.v2.paper.PaperMessenger;
 import bet.astral.messenger.v2.permission.Permission;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -46,15 +52,15 @@ import xyz.goldendupe.models.GDSavedData;
 import xyz.goldendupe.models.GDSettings;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDHome;
+import xyz.goldendupe.models.serializer.GlobalSaveSerializer;
+import xyz.goldendupe.models.serializer.SettingsSerializer;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.utils.Timer;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -124,29 +130,24 @@ public final class GoldenDupe extends JavaPlugin {
 	    }
         getLogger().info("Loading settings and global data...");
 	    try {
-            if (!isDebug) {
-                this.settings = getJson(generateFiles.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
-                this.savedData = getJson(generateFiles.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
+            this.settings = getJson(generateFiles.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
+            this.savedData = getJson(generateFiles.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
 
-                if (settings == null) {
-                    getLogger().severe("Couldn't fetch settings properly.");
-                    getServer().getPluginManager().disablePlugin(this);
-                    Bukkit.shutdown();
-                    return;
-                }
-                if (savedData == null) {
-                    getLogger().severe("Couldn't fetch saved global data properly.");
-                    getServer().getPluginManager().disablePlugin(this);
-                    Bukkit.shutdown();
-                    return;
-                }
-            } else {
-                this.settings = new SettingsData();
-                this.savedData = new SavedDataData();
+            if (settings == null) {
+                getLogger().severe("Couldn't fetch settings properly.");
+                getServer().getPluginManager().disablePlugin(this);
+                Bukkit.shutdown();
+                return;
             }
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
+            if (savedData == null) {
+                getLogger().severe("Couldn't fetch saved global data properly.");
+                getServer().getPluginManager().disablePlugin(this);
+                Bukkit.shutdown();
+                return;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         getLogger().info("Initializing after bootstrapped commands.");
         initAfterBootstraps.forEach(InitAfterBootstrap::init);
@@ -229,6 +230,7 @@ public final class GoldenDupe extends JavaPlugin {
         getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
             if (getSettings().isGlobalChatMute()){
                 messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_1);
+                Bukkit.broadcast(Component.text("True"));
             }
         }, 100, 1, TimeUnit.SECONDS);
         getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
@@ -249,7 +251,36 @@ public final class GoldenDupe extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(GDSettings.class, new SettingsSerializer())
+                .registerTypeAdapter(GDSavedData.class, new GlobalSaveSerializer())
+                .disableHtmlEscaping()
+                        .setPrettyPrinting().create();
+        write(new File(getDataFolder(), "config.json"), settings, gson);
+        write(new File(getDataFolder(), "global-data.json"), savedData, gson);
         getComponentLogger().info("GoldenDupe has disabled!");
+    }
+
+    <T> void write(File file, T value, Gson gson){
+        if (!file.exists()){
+            if (!file.getParentFile().exists()){
+                file.getParentFile().mkdirs();
+            }
+	        try {
+		        file.createNewFile();
+	        } catch (IOException e) {
+		        throw new RuntimeException(e);
+	        }
+        }
+
+	    try {
+		    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writer.write(gson.toJson(value));
+            writer.flush();
+            writer.close();
+	    } catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
     }
 
     // Updated it with fewer reflections
@@ -456,5 +487,14 @@ public final class GoldenDupe extends JavaPlugin {
 
 
     public void reloadMessengers() {
+	    try {
+		    LanguageSource source = FileLanguageSource.gson(messenger, Locale.US, new File(getDataFolder(), "messages.json"), MiniMessage.miniMessage());
+            LanguageTable table = LanguageTable.of(source);
+            messenger.registerLanguageTable(Locale.US, table);
+            messenger.setDefaultLocale(source);
+            messenger.loadTranslations(List.copyOf(Translations.translations()));
+	    } catch (IOException e) {
+		    throw new RuntimeException(e);
+	    }
     }
 }
