@@ -49,9 +49,9 @@ public class GDPlayer implements Flaggable {
 	@NotNull
 	private final Map<NamespacedKey, Flag<?>> flags = new HashMap<>();
 
-	public GDPlayer(@NotNull GoldenDupe goldenDupe, @NotNull Player player){
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, @NotNull UUID player){
 		this.goldenDupe = goldenDupe;
-		this.uniqueId = player.getUniqueId();
+		this.uniqueId = player;
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
 		this.isToggleAutoConfirmClearInventory = false;

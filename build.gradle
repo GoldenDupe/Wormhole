@@ -50,7 +50,7 @@ dependencies {
     implementation 'bet.astral:tuples:1.0.0'
     implementation 'bet.astral:cloudplusplus:1.2.5'
     implementation 'bet.astral:cloudplusplus-paper:1.2.5'
-    implementation 'bet.astral:guiman:1.0.0'
+    implementation 'bet.astral:guiman:1.0.1'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'

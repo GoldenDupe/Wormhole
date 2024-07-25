@@ -28,8 +28,8 @@ public class ToggleBottlesCommand extends GDCloudCommand {
 						.handler(context -> {
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isToggleNightVision();
-							player.setToggleNightVision(!toggle);
+							boolean toggle = player.isTogglePotionBottles();
+							player.setTogglePotionBottles(!toggle);
 
 							if (!toggle){
 								messenger.message(sender, Translations.COMMAND_TOGGLE_POTION_BOTTLES_TRUE);

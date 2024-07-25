@@ -16,13 +16,17 @@ public class ChatColorSerializer implements JsonSerializer<GDChatColor>, JsonDes
 		Map<Integer, Color> colors = new HashMap<>();
 		JsonArray colorsArray = object.get("colors").getAsJsonArray();
 		for (int i = 0; i < 9; i++){
-			JsonElement element = colorsArray.get(i);
-			if (element == null || element.isJsonNull()){
-				colors.put(i, null);
-				continue;
+			try {
+				JsonElement element = colorsArray.get(i);
+				if (element == null || element.isJsonNull()) {
+					colors.put(i, null);
+					continue;
+				}
+				String hex = colorsArray.get(i).getAsString();
+				colors.put(i, Color.ofHex(hex));
+			} catch (IndexOutOfBoundsException e){
+				break;
 			}
-			String hex = colorsArray.get(i).getAsString();
-			colors.put(i, Color.ofHex(hex));
 		}
 
 		GDChatColor.Mode mode = GDChatColor.Mode.valueOf(object.get("mode").getAsString());
@@ -63,6 +67,9 @@ public class ChatColorSerializer implements JsonSerializer<GDChatColor>, JsonDes
 
 		JsonArray colors = new JsonArray();
 		for (int i = 0; i < 9; i++) {
+			if (chatColor.colors().get(i)==null){
+				continue;
+			}
 			colors.add(chatColor.colors().get(i).asHex());
 		}
 		object.add("colors", colors);

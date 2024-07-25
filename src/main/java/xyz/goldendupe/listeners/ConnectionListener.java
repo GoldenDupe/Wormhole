@@ -16,8 +16,9 @@ import xyz.goldendupe.events.PlayerFirstJoinEvent;
 import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.chatcolor.Color;
 
-public class ConnectionListener implements GDListener{
+public class ConnectionListener implements GDListener {
 	private final GoldenDupe goldenDupe;
+
 	protected ConnectionListener(GoldenDupe goldenDupe) {
 		this.goldenDupe = goldenDupe;
 	}
@@ -63,7 +64,9 @@ public class ConnectionListener implements GDListener{
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		goldenDupe.playerDatabase().unload(event.getPlayer());
+		goldenDupe.playerDatabase().save(goldenDupe.playerDatabase().fromPlayer(event.getPlayer())).thenRun(() -> {
+			goldenDupe.playerDatabase().unload(event.getPlayer());
+		});
 		event.quitMessage(
 				Component.text("-", Color.RED, TextDecoration.BOLD)
 						.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(event.getPlayer()))
@@ -71,8 +74,8 @@ public class ConnectionListener implements GDListener{
 	}
 
 	@EventHandler
-	private void onKick(PlayerKickEvent event){
-		goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("was kicked for ").append(event.reason())).append(Component.text(" ("+event.getCause().name()+")", NamedTextColor.DARK_RED)));
+	private void onKick(PlayerKickEvent event) {
+		goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("was kicked for ").append(event.reason())).append(Component.text(" (" + event.getCause().name() + ")", NamedTextColor.DARK_RED)));
 	}
 
 	@Override
@@ -80,15 +83,6 @@ public class ConnectionListener implements GDListener{
 		return goldenDupe;
 	}
 }
-
-
-
-
-
-
-
-
-
 
 
 

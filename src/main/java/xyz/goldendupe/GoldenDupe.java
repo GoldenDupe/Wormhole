@@ -1,6 +1,7 @@
 package xyz.goldendupe;
 
 import bet.astral.fusionflare.FusionFlare;
+import bet.astral.guiman.GUI;
 import bet.astral.guiman.InventoryListener;
 import bet.astral.messenger.v2.locale.LanguageTable;
 import bet.astral.messenger.v2.locale.source.FileLanguageSource;
@@ -17,7 +18,6 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,7 +29,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
 import io.github.classgraph.ClassGraph;
@@ -44,8 +43,6 @@ import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.datagen.GenerateFiles;
-import xyz.goldendupe.datagen.SavedDataData;
-import xyz.goldendupe.datagen.SettingsData;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
@@ -70,6 +67,7 @@ import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 
 public final class GoldenDupe extends JavaPlugin {
+    public static final String DISCORD = "https://discord.gg/DabTg3wVGQ";
     private static GoldenDupe instance;
     public static final Random random = new Random(System.nanoTime());
     public static Seasons SEASON = Seasons.SEASON_1;
@@ -93,8 +91,6 @@ public final class GoldenDupe extends JavaPlugin {
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
-    @SuppressWarnings("FieldCanBeLocal")
-    private PaperCommandManager<CommandSender> paperCommandManager;
     // Do NOT reset
     @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
     private List<InitAfterBootstrap> initAfterBootstraps;
@@ -120,6 +116,7 @@ public final class GoldenDupe extends JavaPlugin {
     public void onEnable() {
         instance = this;
         PaperMessenger.init(this);
+        GUI.init(this);
 
         GenerateFiles generateFiles = new GenerateFiles();
         getLogger().info("Patching settings and global data...");
@@ -192,7 +189,11 @@ public final class GoldenDupe extends JavaPlugin {
             PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false);
             for (Player player : getServer().getOnlinePlayers()){
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
-                if (gdPlayer.isToggled()) {
+                if (gdPlayer==null){
+                    getLogger().severe("NPE while trying to fetch user for "+ player.getUniqueId() + " ("+player.getName()+")");
+                    continue;
+                }
+                if (gdPlayer.isToggleRandomItems()) {
                     // Random items from this list will randomized, but they will have empty NBT
                     ItemStack itemStack = settings.getRandomItemData().getAllowedItems().get(random.nextInt(settings.getRandomItemData().getAllowedItems().size()));
                     // using patchRandomItem randomizes it, if it can be randomized even more
@@ -258,6 +259,8 @@ public final class GoldenDupe extends JavaPlugin {
                         .setPrettyPrinting().create();
         write(new File(getDataFolder(), "config.json"), settings, gson);
         write(new File(getDataFolder(), "global-data.json"), savedData, gson);
+
+        Bukkit.getOnlinePlayers().forEach(player-> playerDatabase.save(playerDatabase.fromPlayer(player)).thenRun(()->playerDatabase.unload(player)));
         getComponentLogger().info("GoldenDupe has disabled!");
     }
 

@@ -54,11 +54,11 @@ public class ChatFormatListener implements GDListener {
 
 		Component format = Component.empty();
 		GDPlayer gdPlayer = goldenDupe.playerDatabase().fromPlayer(player);
-		if (whoSees instanceof Player oPlayer) {
-			if (gdPlayer.vanished() && oPlayer.canSee(player)) {
-				format = format.append(Component.text("V", NamedTextColor.DARK_RED).decoration(TextDecoration.BOLD, true).appendSpace());
-			}
-		}
+//		if (whoSees instanceof Player oPlayer) {
+//			if (gdPlayer.vanished() && oPlayer.canSee(player)) {
+//				format = format.append(Component.text("V", NamedTextColor.DARK_RED).decoration(TextDecoration.BOLD, true).appendSpace());
+//			}
+//		}
 
 		if (chat.asMessageChannel() != null && chat.asMemberType() != null) {
 			return format;

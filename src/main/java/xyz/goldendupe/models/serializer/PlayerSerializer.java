@@ -36,12 +36,12 @@ public class PlayerSerializer implements JsonSerializer<GDPlayer>, JsonDeseriali
 
 		JsonObject toggle = object.getAsJsonObject("toggles");
 		boolean randomItems = toggle.get("random-items").getAsBoolean();
-		boolean drop = toggle.get("random-items").getAsBoolean();
-		boolean pickup = toggle.get("random-items").getAsBoolean();
-		boolean bottles = toggle.get("random-items").getAsBoolean();
-		boolean speed = toggle.get("random-items").getAsBoolean();
-		boolean nightVision = toggle.get("random-items").getAsBoolean();
-		boolean autoClearInventory = toggle.get("random-items").getAsBoolean();
+		boolean drop = toggle.get("drop").getAsBoolean();
+		boolean pickup = toggle.get("pickup").getAsBoolean();
+		boolean bottles = toggle.get("bottles").getAsBoolean();
+		boolean speed = toggle.get("speed").getAsBoolean();
+		boolean nightVision = toggle.get("night-vision").getAsBoolean();
+		boolean autoClearInventory = toggle.get("auto-clear-inventory").getAsBoolean();
 
 		return new GDPlayer(
 				GoldenDupe.instance(),

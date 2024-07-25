@@ -22,8 +22,6 @@ public class SenderMapper implements org.incendo.cloud.SenderMapper<CommandSourc
 
 	@Override
 	public @NonNull CommandSourceStack reverse(@NonNull CommandSender mapped) {
-		System.out.println("Trying to get command source stack instance for "+ mapped.getClass());
-		System.out.println("Trying to get command source stack for namme  "+ mapped.getName());
 		if (mapped instanceof NullCommandSender){
 			return NullSourceStack.INSTANCE;
 		}

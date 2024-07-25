@@ -80,7 +80,7 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 				.argument(
 						IntegerParser.integerComponent()
 								.name("amount")
-								.parser(IntegerParser.integerParser(2, 8)))
+								.parser(IntegerParser.integerParser(2, 10)))
 				.handler(context->{
 					Player sender = context.sender();
 					int times = context.get("amount");
@@ -105,7 +105,7 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(sender);
 					GDSavedData globalData = goldenDupe().getSavedData();
 					int debug = 0;
-					for (int i = 0; i < times-1; i++){
+					for (int i = 0; i < times; i++){
 						itemStack = sender.getInventory().getItemInMainHand();
 						gdPlayer.setTimesDuped(gdPlayer.getTimesDuped()+1);
 						gdPlayer.setItemsDuped(gdPlayer.getItemsDuped()+itemStack.getAmount());
@@ -116,11 +116,11 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 						if (sender.getInventory().addItem(itemStack).isEmpty()){
 							continue;
 						}
-						messenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug + 1));
+						messenger.disablePrefixForNextParse().message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug));
 						return;
 					}
-					if (debug>1){
-						messenger.message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug+1));
+					if (debug>0){
+						messenger.disablePrefixForNextParse().message(sender, Translations.COMMAND_DUPE_SUPER_DUPER, Placeholder.of("super-duper", debug));
 					}
 				})
 		);
@@ -214,18 +214,12 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 			inventory = Bukkit.createInventory(this, 9*3, Component.text("Donator Auto Duper"));
 			inventory.clear();
 			inventory.setItem(0, BACKGROUND);
-			inventory.setItem(1, BACKGROUND);
-			inventory.setItem(7, BACKGROUND);
 			inventory.setItem(8, BACKGROUND);
 
 			inventory.setItem(9, BACKGROUND);
-			inventory.setItem(10, BACKGROUND);
-			inventory.setItem(16, BACKGROUND);
 			inventory.setItem(17, BACKGROUND);
 
 			inventory.setItem(18, BACKGROUND);
-			inventory.setItem(19, BACKGROUND);
-			inventory.setItem(25, BACKGROUND);
 			inventory.setItem(26, BACKGROUND);
 			this.dupeCommand = dupeCommand;
 			this.owner = owner.getUniqueId();
@@ -239,6 +233,9 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 				if (itemStack == null || itemStack.isEmpty()) {
 					continue;
 				}
+				if (itemStack.getItemMeta().getPersistentDataContainer().getOrDefault(BACKGROUND_KEY, PersistentDataType.BOOLEAN, false)) {
+					continue;
+				}
 				if (!dupeCommand.canDupe(itemStack)) {
 					continue;
 				}
@@ -248,9 +245,7 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 				if (!dupeCommand.canDupeCombat(itemStack, Bukkit.getOfflinePlayer(owner))) {
 					continue;
 				}
-				if (itemStack.getItemMeta().getPersistentDataContainer().getOrDefault(BACKGROUND_KEY, PersistentDataType.BOOLEAN, false)) {
-					continue;
-				}
+
 				itemStack.setAmount(Math.min(itemStack.getAmount() * 2, itemStack.getType().getMaxStackSize()));
 			}
 		}

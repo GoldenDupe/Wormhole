@@ -22,13 +22,10 @@ import java.util.*;
 public class GDSettings {
 	private GoldenDupe goldenDupe;
 	private final Map<UUID, GDMessageGroup> messageGroups = new HashMap<>();
-	@Setter
 	private Set<Material> illegalDupeCombat;
-	@Setter
 	private Set<Material> illegalDupe;
-	@Setter
 	private Set<Material> illegalPlacements;
-	@Setter
+	private Set<Material> illegalBlocksMenu;
 	private RandomItemsData randomItemData;
 	@Setter
 	@Deprecated(forRemoval = true)
@@ -45,10 +42,11 @@ public class GDSettings {
 	private AllowedUsers globalChatMuteAllowedUsers = AllowedUsers.ALL;
 	private List<String> uwuString;
 
-	public GDSettings(Set<Material> illegalDupeCombat, Set<Material> illegalDupe, Set<Material> illegalPlacements, RandomItemsData randomItemData, List<String> uwuString) {
+	public GDSettings(Set<Material> illegalDupeCombat, Set<Material> illegalDupe, Set<Material> illegalPlacements, Set<Material> illegalBlocksMenu, RandomItemsData randomItemData, List<String> uwuString) {
 		this.illegalDupeCombat = illegalDupeCombat;
 		this.illegalDupe = illegalDupe;
 		this.illegalPlacements = illegalPlacements;
+		this.illegalBlocksMenu = illegalBlocksMenu;
 		this.randomItemData = randomItemData;
 		this.uwuString = uwuString;
 	}

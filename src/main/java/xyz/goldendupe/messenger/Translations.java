@@ -22,6 +22,11 @@ public class Translations {
 	private static final Map<String, Translation> translation = new HashMap<>();
 	private static final Gson gson = new Gson();
 	private static final MiniMessage mm = MiniMessage.miniMessage();
+	public static final Translation COMMAND_MANAGER_INVALID_SYNTAX = new Translation("internal.command-manager.invalid-syntax").add(ComponentType.CHAT, text("<red>Invalid Command Syntax. %value%"));
+	public static final Translation COMMAND_MANAGER_INVALID_SENDER = new Translation("internal.command-manager.invalid-sender").add(ComponentType.CHAT, text("<red>You are not allowed to use this command!"));
+	public static final Translation COMMAND_MANAGER_INVALID_PERMISSION = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>You are not allowed to use this command!"));
+	public static final Translation COMMAND_MANAGER_INVALID_ARGUMENT = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>Invalid argument. <white>%value%"));
+	public static final Translation COMMAND_MANAGER_INTERNAL_EXCEPTION = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>An internal error has happened while executing this command! Report this to an admin!"));
 	// DELETE SPAWN
 	public static final Translation SPAWN_ALREADY_REMOVED = new Translation("commands.removespawn.already-removed").add(ComponentType.CHAT, text("<red>Couldn't remove spawn <white>%spawn%<red>, as it doesn't exist."));
 	public static final Translation SPAWN_REMOVED = new Translation("commands.removespawn.removed").add(ComponentType.CHAT, text("<green>Removed spawn <white>%spawn%<green> from the server."));
@@ -52,20 +57,20 @@ public class Translations {
 	// gamemode
 	public static final Translation COMMAND_GMC_ALREADY_SAME = new Translation("commands.gmc.already-same").add(ComponentType.CHAT, text("<green>Your gamemode is already creative."));
 	public static final Translation COMMAND_GMC_ALREADY_SAME_ADMIN = new Translation("commands.gmc.already-same-admin").add(ComponentType.CHAT, text("<white>%player%<green>'s gamemode is already creative."));
-	public static final Translation COMMAND_GMC_ENABLED = new Translation("commands.gmc.already-same").add(ComponentType.CHAT, text("<green>Switched your gamemode to creative."));
-	public static final Translation COMMAND_GMC_ENABLED_ADMIN = new Translation("commands.gmc.already-same").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to creative."));
+	public static final Translation COMMAND_GMC_ENABLED = new Translation("commands.gmc.enabled").add(ComponentType.CHAT, text("<green>Switched your gamemode to creative."));
+	public static final Translation COMMAND_GMC_ENABLED_ADMIN = new Translation("commands.gmc.enabled-admin").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to creative."));
 	public static final Translation COMMAND_GMS_ALREADY_SAME = new Translation("commands.gms.already-same").add(ComponentType.CHAT, text("<green>Your gamemode is already survival."));
 	public static final Translation COMMAND_GMS_ALREADY_SAME_ADMIN = new Translation("commands.gms.already-same-admin").add(ComponentType.CHAT, text("<white>%player%<green>'s gamemode is already survival."));
-	public static final Translation COMMAND_GMS_ENABLED = new Translation("commands.gms.already-same").add(ComponentType.CHAT, text("<green>Switched your gamemode to survival."));
-	public static final Translation COMMAND_GMS_ENABLED_ADMIN = new Translation("commands.gms.already-same").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to survival."));
+	public static final Translation COMMAND_GMS_ENABLED = new Translation("commands.gms.enabled").add(ComponentType.CHAT, text("<green>Switched your gamemode to survival."));
+	public static final Translation COMMAND_GMS_ENABLED_ADMIN = new Translation("commands.gms.enabled-admin").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to survival."));
 	public static final Translation COMMAND_GMSP_ALREADY_SAME = new Translation("commands.gmsp.already-same").add(ComponentType.CHAT, text("<green>Your gamemode is already spectator."));
 	public static final Translation COMMAND_GMSP_ALREADY_SAME_ADMIN = new Translation("commands.gmsp.already-same-admin").add(ComponentType.CHAT, text("<white>%player%<green>'s gamemode is already spectator."));
-	public static final Translation COMMAND_GMSP_ENABLED = new Translation("commands.gmsp.already-same").add(ComponentType.CHAT, text("<green>Switched your gamemode to spectator."));
-	public static final Translation COMMAND_GMSP_ENABLED_ADMIN = new Translation("commands.gmsp.already-same").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to spectator."));
+	public static final Translation COMMAND_GMSP_ENABLED = new Translation("commands.gmsp.enabled").add(ComponentType.CHAT, text("<green>Switched your gamemode to spectator."));
+	public static final Translation COMMAND_GMSP_ENABLED_ADMIN = new Translation("commands.gmsp.enabled-admin").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to spectator."));
 	public static final Translation COMMAND_GMA_ALREADY_SAME = new Translation("commands.gma.already-same").add(ComponentType.CHAT, text("<green>Your gamemode is already adventure."));
 	public static final Translation COMMAND_GMA_ALREADY_SAME_ADMIN = new Translation("commands.gma.already-same-admin").add(ComponentType.CHAT, text("<white>%player%<green>'s gamemode is already adventure."));
-	public static final Translation COMMAND_GMA_ENABLED = new Translation("commands.gma.already-same").add(ComponentType.CHAT, text("<green>Switched your gamemode to adventure."));
-	public static final Translation COMMAND_GMA_ENABLED_ADMIN = new Translation("commands.gma.already-same").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to adventure."));
+	public static final Translation COMMAND_GMA_ENABLED = new Translation("commands.gma.enabled").add(ComponentType.CHAT, text("<green>Switched your gamemode to adventure."));
+	public static final Translation COMMAND_GMA_ENABLED_ADMIN = new Translation("commands.gma.enabled-admin").add(ComponentType.CHAT, text("<green>Switched <white>%player%<green> gamemode to adventure."));
 	// Heal
 	public static final Translation COMMAND_HEAL_OTHER = new Translation("commands.heal.other").add(ComponentType.CHAT, text("<green>Healed <white>%player%<green>."));
 	public static final Translation COMMAND_HEAL_SELF = new Translation("commands.heal.self").add(ComponentType.CHAT, text("<green>Healed yourself."));
@@ -112,7 +117,7 @@ public class Translations {
 	public static final Translation COMMAND_DUPE_BUNDLE = new Translation("commands.dupe.bundle").add(ComponentType.CHAT, text("<red>You cannot dupe your bundle as it contains undupable items."));
 	public static final Translation COMMAND_DUPE_SHULKER = new Translation("commands.dupe.shulker").add(ComponentType.CHAT, text("<red>You cannot dupe your item as it's undupable."));
 	public static final Translation COMMAND_DUPE_COMBAT = new Translation("commands.dupe.combat").add(ComponentType.CHAT, text("<red>You cannot dupe your item while in combat."));
-	public static final Translation COMMAND_DUPE_SUPER_DUPER = new Translation("commands.dupe.multi").add(ComponentType.CHAT, text("<aqua><bold>SUPER DUPER<!bold> <white>Duped your item %super-duper% times."));
+	public static final Translation COMMAND_DUPE_SUPER_DUPER = new Translation("commands.dupe.multi").add(ComponentType.CHAT, text("<gold><bold>SUPER <white><bold>DUPER<!bold> <white>Duped your item %super-duper% times."));
 	// Mending
 	public static final Translation COMMAND_MENDING_AIR = new Translation("commands.mending.cannot-enchant-air").add(ComponentType.CHAT, text("<red>Cannot enchant air with mending."));
 	public static final Translation COMMAND_MENDING_CANNOT_ENCHANT = new Translation("commands.mending.cannot-enchant-item").add(ComponentType.CHAT, text("<red>Your item does not support mending."));
@@ -148,10 +153,10 @@ public class Translations {
 	public static final Translation COMMAND_TOGGLE_POTION_BOTTLES_FALSE = new Translation("commands.toggle-bottles.disabled").add(ComponentType.CHAT, text("<green>You will now receive potion bottles."));
 	// Toggle dropping
 	public static final Translation COMMAND_TOGGLE_DROPPING_TRUE = new Translation("commands.toggle-drop.enabled").add(ComponentType.CHAT, text("<green>You will no longer be able to drop items."));
-	public static final Translation COMMAND_TOGGLE_DROPPING_FALSE = new Translation("commands.toggle-drop.disabled").add(ComponentType.CHAT, text("<green>You will now be able to drop items."));
+	public static final Translation COMMAND_TOGGLE_DROPPING_FALSE = new Translation("commands.toggle-drop.disabled").add(ComponentType.CHAT, text("<green>You can drop items again."));
 	// Toggle pickup
 	public static final Translation COMMAND_TOGGLE_PICKUP_TRUE = new Translation("commands.toggle-pickup.enabled").add(ComponentType.CHAT, text("<green>You will no longer be able to pickup items."));
-	public static final Translation COMMAND_TOGGLE_PICKUP_FALSE = new Translation("commands.toggle-pickup.disabled").add(ComponentType.CHAT, text("<green>You will now be able to pickup items."));
+	public static final Translation COMMAND_TOGGLE_PICKUP_FALSE = new Translation("commands.toggle-pickup.disabled").add(ComponentType.CHAT, text("<green>You can pickup items again."));
 	// Flight
 	public static final Translation COMMAND_FLY_TRUE = new Translation("commands.fly.enabled").add(ComponentType.CHAT, text("<green>You can now fly."));
 	public static final Translation COMMAND_FLY_FALSE = new Translation("commands.fly.disabled").add(ComponentType.CHAT, text("<green>You can no longer fly."));
@@ -187,15 +192,15 @@ public class Translations {
 	public static final Translation COMMAND_MUTECHAT_MUTED = new Translation("commands.mutechat.muted").add(ComponentType.CHAT, text("<red>The chat has been muted!"));
 	public static final Translation COMMAND_MUTECHAT_BYPASS = new Translation("commands.mutechat.bypass").add(ComponentType.CHAT, text("<yellow>You have permission to bypass chat mute."));
 	public static final Translation LISTENER_MUTECHAT_MUTED = new Translation("listener.mutechat.muted").add(ComponentType.CHAT, text("<yellow>The chat is currently muted!."));
-	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("timed.mutechat.second").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!"));
+	public static final Translation TIMED_MUTECHAT_REMINDER_1 = new Translation("timed.mutechat.second").add(ComponentType.ACTION_BAR, text("<red>The chat is currently muted!")).add(ComponentType.CHAT, text("Should work"));
 	public static final Translation TIMED_MUTECHAT_REMINDER_30 = new Translation("timed.mutechat.half_minute").add(ComponentType.CHAT, text("<red>The chat is currently muted!"));
 
 	// Creative GUI
-	public static final Translation GUI_CREATIVE_TITLE = new Translation("gui.creative_blocks.title").add(ComponentType.CHAT, text("Blocks <yellow>%page%<dark_gray>/<red>%page_max%<"));
-	public static final Translation GUI_CREATIVE_ITEM_NAME = new Translation("gui.creative_blocks.block_name").add(ComponentType.CHAT, text("<yellow>%block%"));
-	public static final Translation GUI_CREATIVE_BACK = new Translation("gui.creative_blocks.back").add(ComponentType.CHAT, text("<green>Previous Page"));
-	public static final Translation GUI_CREATIVE_CLOSE = new Translation("gui.creative_blocks.close").add(ComponentType.CHAT, text("<red>Close"));
-	public static final Translation GUI_CREATIVE_NEXT = new Translation("gui.creative_blocks.next").add(ComponentType.CHAT, text("<green>Next Page"));
+	public static final Translation GUI_CREATIVE_TITLE = new Translation("gui.creative_blocks.title").add(ComponentType.CHAT, text("<!italic>Blocks <yellow>%page%<dark_gray>/<red>%max_page%"));
+	public static final Translation GUI_CREATIVE_ITEM_NAME = new Translation("gui.creative_blocks.block_name").add(ComponentType.CHAT, text("<!italic><yellow>%block%"));
+	public static final Translation GUI_CREATIVE_BACK = new Translation("gui.creative_blocks.back").add(ComponentType.CHAT, text("<!italic><green>Previous Page"));
+	public static final Translation GUI_CREATIVE_CLOSE = new Translation("gui.creative_blocks.close").add(ComponentType.CHAT, text("<!italic><red>Close"));
+	public static final Translation GUI_CREATIVE_NEXT = new Translation("gui.creative_blocks.next").add(ComponentType.CHAT, text("<!italic><green>Next Page"));
 
 	private static Component text(@NotNull String val){
 		return MiniMessage.miniMessage().deserialize(val);
@@ -219,13 +224,14 @@ public class Translations {
 				if (object instanceof Translation translation){
 					Message message = translation.messages;
 					JsonElement element = null;
-					if (message.componentPart.size() > 1 || message.componentPart.get(ComponentType.CHAT) == null) {
+					// TODO fix this so it saves messages properly and allows other messages than CHAT being stored only
+					if (translation.messages.useObject()) {
 						JsonObject current = new JsonObject();
 						for (Map.Entry<ComponentType, ComponentPart> entry : message.componentPart.entrySet()) {
 							ComponentType type = entry.getKey();
 							ComponentPart part = entry.getValue();
 
-							if (part instanceof TitleComponentPart title){
+							if (part instanceof TitleComponentPart title) {
 								JsonObject titleObj = new JsonObject();
 								titleObj.addProperty("in", title.getFadeIn().toMillis());
 								titleObj.addProperty("stay", title.getStay().toMillis());
@@ -236,6 +242,7 @@ public class Translations {
 								current.addProperty(type.getName(), mm.serialize(part.getTextComponent()));
 							}
 						}
+						element = current;
 					} else {
 						element = gson.toJsonTree(mm.serialize(((ComponentPart) (List.of(message.componentPart.values().toArray()).getFirst())).getTextComponent()));
 					}
@@ -260,6 +267,10 @@ public class Translations {
 		public Message add(ComponentType componentType, Component component, Title.Times times){
 			componentPart.put(componentType, ComponentPart.of(component, times));
 			return this;
+		}
+
+		boolean useObject(){
+			return componentPart.size()>1 || componentPart.get(ComponentType.CHAT)==null;
 		}
 
 		public Translation asTranslation(){

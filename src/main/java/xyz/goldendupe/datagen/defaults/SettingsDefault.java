@@ -1,4 +1,4 @@
-package xyz.goldendupe.datagen;
+package xyz.goldendupe.datagen.defaults;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -7,9 +7,9 @@ import xyz.goldendupe.models.GDSettings;
 
 import java.util.*;
 
-public class SettingsData extends GDSettings {
-	public SettingsData() {
-		super(null, null, null, null, null);
+public class SettingsDefault extends GDSettings {
+	public SettingsDefault() {
+		super(null, null, null, null, null, null);
 	}
 
 	@Override
@@ -151,9 +151,24 @@ public class SettingsData extends GDSettings {
 		materials.add(Material.END_PORTAL_FRAME);
 		materials.add(Material.LIGHT);
 		materials.add(Material.DRAGON_EGG);
-		materials.add(Material.SPAWNER);
 		materials.add(Material.TRIAL_SPAWNER);
 		materials.add(Material.VAULT);
+		return materials;
+	}
+
+	@Override
+	public Set<Material> getIllegalBlocksMenu() {
+		Set<Material> materials = new HashSet<>(getIllegalPlacements());
+		materials.add(Material.SPAWNER);
+		materials.add(Material.DIAMOND_BLOCK);
+		materials.add(Material.DIAMOND_ORE);
+		materials.add(Material.DEEPSLATE_DIAMOND_ORE);
+		materials.add(Material.NETHERITE_BLOCK);
+		materials.add(Material.ANCIENT_DEBRIS);
+		materials.add(Material.ENCHANTING_TABLE);
+		materials.add(Material.BOOKSHELF);
+		materials.add(Material.TURTLE_EGG);
+		materials.add(Material.SNIFFER_EGG);
 		return materials;
 	}
 

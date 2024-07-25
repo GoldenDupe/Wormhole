@@ -26,7 +26,8 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 		return new GDSettings(
 				loadMaterials(dupe.getAsJsonArray("combat")),
 				loadMaterials(dupe.getAsJsonArray("global")),
-				loadMaterials(object.getAsJsonArray("placement_illegals")),
+				loadMaterials(object.getAsJsonArray("placement-illegals")),
+				loadMaterials(object.getAsJsonArray("blocks-gui-illegals")),
 				new GDSettings.RandomItemsData(
 						loadMaterials(itemData.getAsJsonArray("illegals")),
 						loadNamespacedKeys(enchant.getAsJsonArray("illegal")),
@@ -58,14 +59,15 @@ public class SettingsSerializer implements JsonSerializer<GDSettings>, JsonDeser
 			JsonObject dev = new JsonObject();
 			dev.addProperty("development", true);
 			dev.addProperty("debug", goldenDupe.isDebug());
-			dev.addProperty("plugin_version", goldenDupe.getPluginMeta().getVersion());
-			dev.addProperty("minecraft_version", ServerBuildInfo.buildInfo().minecraftVersionId());
-			dev.addProperty("server_commit_version", ServerBuildInfo.buildInfo().gitCommit().orElse("UNKNOWN"));
-			object.add("development_server", dev);
+			dev.addProperty("plugin-version", goldenDupe.getPluginMeta().getVersion());
+			dev.addProperty("minecraft-version", ServerBuildInfo.buildInfo().minecraftVersionId());
+			dev.addProperty("server-commit-version", ServerBuildInfo.buildInfo().gitCommit().orElse("UNKNOWN"));
+			object.add("development-server", dev);
 		} else {
-			object.addProperty("development_server", false);
+			object.addProperty("development-server", false);
 		}
-		object.add("placement_illegals", saveMaterials(illegalPlacement));
+		object.add("placement-illegals", saveMaterials(illegalPlacement));
+		object.add("blocks-gui-illegals", saveMaterials(src.getIllegalBlocksMenu()));
 		JsonObject dupeIllegals = new JsonObject();
 		dupeIllegals.add("combat", saveMaterials(illegalDupeCombat));
 		dupeIllegals.add("global", saveMaterials(illegalDupe));

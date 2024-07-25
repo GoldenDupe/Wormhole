@@ -2,12 +2,13 @@ package xyz.goldendupe.command.staff;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.permission.Permission;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -22,13 +23,14 @@ public class MuteChatCommand extends GDCloudCommand {
 				.permission(MemberType.MODERATOR.permissionOf("mutechat"))
 				.handler(context->{
 					GDSettings data = goldenDupe().getSettings();
+					Bukkit.broadcast(Component.text(data.isGlobalChatMute()));
+					data.setGlobalChatMute(!data.isGlobalChatMute());
+					Bukkit.broadcast(Component.text(data.isGlobalChatMute()));
 					if (data.isGlobalChatMute()){
-						data.setGlobalChatMute(false);
 						data.setGlobalChatMuteAllowedUsers(GDSettings.AllowedUsers.ALL);
 						messenger.broadcast(Translations.COMMAND_MUTECHAT_UNMUTED);
 					} else {
 						GDSettings.AllowedUsers users = GDSettings.AllowedUsers.STAFF;
-						data.setGlobalChatMute(false);
 						data.setGlobalChatMuteAllowedUsers(users);
 						messenger.broadcast(Translations.COMMAND_MUTECHAT_MUTED);
 						messenger.broadcast(Permission.of(users.getBypass()), Translations.COMMAND_MUTECHAT_BYPASS);
@@ -52,7 +54,7 @@ public class MuteChatCommand extends GDCloudCommand {
 						data.setGlobalChatMuteAllowedUsers(GDSettings.AllowedUsers.ALL);
 						messenger.broadcast(Translations.COMMAND_MUTECHAT_UNMUTED);
 					} else {
-						data.setGlobalChatMute(false);
+						data.setGlobalChatMute(true);
 						data.setGlobalChatMuteAllowedUsers(users);
 						messenger.broadcast(Translations.COMMAND_MUTECHAT_MUTED);
 						messenger.broadcast(Permission.of(users.getBypass()), Translations.COMMAND_MUTECHAT_BYPASS);
