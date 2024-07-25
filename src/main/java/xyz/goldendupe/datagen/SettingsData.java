@@ -169,7 +169,10 @@ public class SettingsData extends GDSettings {
 				true,
 				3,
 				true,
-				true
+				true,
+				true,
+				true,
+				5
 		);
 	}
 

@@ -147,6 +147,15 @@ public class GDSettings {
 			PotionType type = types.get(random.nextInt(0, types.size()-1));
 			potionMeta.setBasePotionType(type);
 			potionMeta.setColor(Registry.POTION_EFFECT_TYPE.get(type.getKey()).getColor());
+		} else if (randomItemData.allowUpdatedPotions && meta instanceof PotionMeta potionMeta) {
+			List<PotionType> types = new ArrayList<>(Registry.POTION.stream().toList());
+			types.removeAll(List.of(PotionType.MUNDANE, PotionType.LUCK, PotionType.THICK, PotionType.WATER));
+			PotionType type = types.get(random.nextInt(0, types.size()-1));
+			potionMeta.setBasePotionType(type);
+			potionMeta.setColor(Registry.POTION_EFFECT_TYPE.get(type.getKey()).getColor());
+		} else if (randomItemData.allowUpdateOminousBottles && meta instanceof OminousBottleMeta ominousBottleMeta){
+			int tier = random.nextInt(1, randomItemData.getMaxOminousTier());
+			ominousBottleMeta.setAmplifier(tier);
 		}
 
 		itemStack.setItemMeta(meta);
@@ -182,8 +191,11 @@ public class GDSettings {
 		private final int maxFireworkBoost;
 		private final boolean allowUpdatedGoatHorns;
 		private final boolean allowUpdatedArrows;
+		private final boolean allowUpdatedPotions;
+		private final boolean allowUpdateOminousBottles;
+		private final int maxOminousTier;
 
-		public RandomItemsData(Set<Material> illegals, Set<NamespacedKey> illegalEnchants, boolean allowUpdatedSherds, boolean allowUpdatedBooks, boolean allowOnlyVanillaEnchants, boolean allowUpdatedFireworks, int maxFireworkBoost, boolean allowUpdatedGoatHorns, boolean allowUpdatedArrows) {
+		public RandomItemsData(Set<Material> illegals, Set<NamespacedKey> illegalEnchants, boolean allowUpdatedSherds, boolean allowUpdatedBooks, boolean allowOnlyVanillaEnchants, boolean allowUpdatedFireworks, int maxFireworkBoost, boolean allowUpdatedGoatHorns, boolean allowUpdatedArrows, boolean allowUpdatedPotions, boolean allowUpdateOminousBottles, int maxOminousTier) {
 			this.illegalsItems = illegals;
 			this.illegalEnchants = illegalEnchants;
 			this.allowUpdatedDecoratedPots = allowUpdatedSherds;
@@ -193,6 +205,9 @@ public class GDSettings {
 			this.maxFireworkBoost = maxFireworkBoost;
 			this.allowUpdatedGoatHorns = allowUpdatedGoatHorns;
 			this.allowUpdatedArrows = allowUpdatedArrows;
+			this.allowUpdatedPotions = allowUpdatedPotions;
+			this.allowUpdateOminousBottles = allowUpdateOminousBottles;
+			this.maxOminousTier = maxOminousTier;
 
 
 			Registry<Material> materials = Registry.MATERIAL;
