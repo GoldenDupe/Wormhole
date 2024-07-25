@@ -4,7 +4,6 @@ import com.google.gson.*;
 import xyz.goldendupe.models.impl.GDSpawn;
 
 import java.lang.reflect.Type;
-import java.util.UUID;
 
 public class SpawnSerializer implements JsonSerializer<GDSpawn>, JsonDeserializer<GDSpawn> {
 	private final static Gson gson = new Gson();
