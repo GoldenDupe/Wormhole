@@ -99,14 +99,14 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
 							if (context.flags().isPresent("change-auto-confirm")) {
-								if (player.autoConfirmClearInv()) {
+								if (player.isToggleAutoConfirmClearInventory()) {
 									messenger.message(sender, Translations.COMMAND_CLEAR_INVENTORY_TOGGLE_TRUE);
 								} else {
 									messenger.message(sender, Translations.COMMAND_CLEAR_INVENTORY_TOGGLE_FALSE);
 								}
-								player.setAutoConfirmClearInv(!player.autoConfirmClearInv());
+								player.setToggleAutoConfirmClearInventory(!player.isToggleAutoConfirmClearInventory());
 							} else {
-								if (player.autoConfirmClearInv()) {
+								if (player.isToggleAutoConfirmClearInventory()) {
 									sender.getInventory().clear();
 									sender.getInventory().setHelmet(null);
 									sender.getInventory().setChestplate(null);
