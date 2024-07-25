@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -27,8 +26,8 @@ public class ToggleItemsCommand extends GDCloudCommand {
 						.handler(context->{
 							Player sender = context.sender();
 							GDPlayer player = goldenDupe().playerDatabase().fromPlayer(sender);
-							boolean toggle = player.isToggled();
-							player.setToggled(!toggle);
+							boolean toggle = player.isToggleRandomItems();
+							player.setToggleRandomItems(!toggle);
 
 							if (!toggle){
 								messenger.message(sender, Translations.COMMAND_TOGGLE_ITEMS_TRUE);
