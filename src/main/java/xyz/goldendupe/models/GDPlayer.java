@@ -1,6 +1,5 @@
 package xyz.goldendupe.models;
 
-import com.google.gson.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,32 +14,22 @@ import xyz.goldendupe.events.GDChatChangeEvent;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.models.impl.GDSpawn;
-import xyz.goldendupe.models.savable.Savable;
-import xyz.goldendupe.models.serializer.ChatColorSerializer;
-import xyz.goldendupe.models.serializer.HomeSerializer;
 import xyz.goldendupe.utils.flaggable.Flag;
 import xyz.goldendupe.utils.flaggable.FlagImpl;
 import xyz.goldendupe.utils.flaggable.Flaggable;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
-public class GDPlayer implements Flaggable, Savable<UUID> {
-	public static final Gson GSON = new GsonBuilder()
-			.registerTypeAdapter(GDChatColor.class, new ChatColorSerializer())
-			.registerTypeAdapter(GDHome.class, new HomeSerializer())
-			.create();
+@Getter
+@Setter
+public class GDPlayer implements Flaggable {
 	@NotNull private final GoldenDupe goldenDupe;
 	@NotNull private final UUID uniqueId;
 	private GDSpawn teleportingSpawn;
 	private GDChat chat;
-	private boolean autoConfirmClearInv;
+	private boolean isToggleAutoConfirmClearInventory;
 	private GDChatColor color = GDChatColor.DEFAULT;
-	private boolean vanished;
-	private boolean isToggled = true;
+	private boolean isToggleRandomItems = true;
 	private boolean isToggleDropItem = false;
 	private boolean isTogglePickupItem = false;
 	private boolean isToggleNightVision = true;
@@ -55,9 +44,8 @@ public class GDPlayer implements Flaggable, Savable<UUID> {
 	@Getter
 	@Setter
 	private int generatedRandomItems;
-	@Getter(AccessLevel.PUBLIC) private final Map<String, GDHome> homes = new HashMap<>();
-	@Getter
-	private final Map<UUID, GDMessageGroup> messagegroups = new HashMap<>();
+	@Getter(AccessLevel.PUBLIC)
+	private final Map<String, GDHome> homes = new HashMap<>();
 	@NotNull
 	private final Map<NamespacedKey, Flag<?>> flags = new HashMap<>();
 
@@ -66,10 +54,10 @@ public class GDPlayer implements Flaggable, Savable<UUID> {
 		this.uniqueId = player.getUniqueId();
 		this.chat = GDChat.GLOBAL;
 		this.teleportingSpawn = null;
-		this.autoConfirmClearInv = false;
+		this.isToggleAutoConfirmClearInventory = false;
 	}
 
-	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, int generatedRandomItems, boolean autoConfirmClearInv, boolean vanished, boolean isToggled, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, int generatedRandomItems, boolean isToggleAutoConfirmClearInventory, boolean isToggleRandomItems, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
 		this.goldenDupe = goldenDupe;
 		this.uniqueId = uniqueId;
 		this.chat = chat;
@@ -78,29 +66,18 @@ public class GDPlayer implements Flaggable, Savable<UUID> {
 				this.homes.put(home.getName().toLowerCase(), home);
 			});
 		}
-		this.autoConfirmClearInv = autoConfirmClearInv;
+		this.isToggleAutoConfirmClearInventory = isToggleAutoConfirmClearInventory;
 		this.color = color;
 		this.timesDuped = timesDuped;
 		this.itemsDuped = itemsDuped;
 		this.generatedRandomItems = generatedRandomItems;
-		this.vanished = vanished;
-		this.isToggled = isToggled;
+		this.isToggleRandomItems = isToggleRandomItems;
 		this.isToggleDropItem = isToggleDropItem;
 		this.isTogglePickupItem = isTogglePickupItem;
 		this.isToggleNightVision = isToggleNightVision;
 		this.isTogglePotionBottles = isTogglePotionBottles;
 		this.isToggleSpeed = isToggleSpeed;
 	}
-
-	public boolean isToggled() {
-		return isToggled;
-	}
-
-	public GDPlayer setToggled(boolean toggled) {
-		isToggled = toggled;
-		return this;
-	}
-
 
 	public GDSpawn teleportingSpawn() {
 		return teleportingSpawn;
@@ -122,76 +99,8 @@ public class GDPlayer implements Flaggable, Savable<UUID> {
 		return this;
 	}
 
-	public boolean autoConfirmClearInv() {
-		return autoConfirmClearInv;
-	}
-
-	public GDPlayer setAutoConfirmClearInv(boolean autoConfirmClearInv) {
-		this.autoConfirmClearInv = autoConfirmClearInv;
-		return this;
-	}
-
 	public GDChatColor color() {
 		return color;
-	}
-
-	public GDPlayer setColor(GDChatColor color) {
-		this.color = color;
-		return this;
-	}
-
-	public boolean vanished() {
-		return vanished;
-	}
-
-	public GDPlayer setVanished(boolean vanished) {
-		this.vanished = vanished;
-		return this;
-	}
-
-	public boolean isToggleDropItem() {
-		return isToggleDropItem;
-	}
-
-	public GDPlayer setToggleDropItem(boolean toggleDropItem) {
-		isToggleDropItem = toggleDropItem;
-		return this;
-	}
-
-	public boolean isTogglePickupItem() {
-		return isTogglePickupItem;
-	}
-
-	public GDPlayer setTogglePickupItem(boolean togglePickupItem) {
-		isTogglePickupItem = togglePickupItem;
-		return this;
-	}
-
-	public boolean isToggleNightVision() {
-		return isToggleNightVision;
-	}
-
-	public GDPlayer setToggleNightVision(boolean toggleNightVision) {
-		isToggleNightVision = toggleNightVision;
-		return this;
-	}
-
-	public boolean isTogglePotionBottles() {
-		return isTogglePotionBottles;
-	}
-
-	public GDPlayer setTogglePotionBottles(boolean togglePotionBottles) {
-		isTogglePotionBottles = togglePotionBottles;
-		return this;
-	}
-
-	public boolean isToggleSpeed() {
-		return isToggleSpeed;
-	}
-
-	public GDPlayer setToggleSpeed(boolean toggleSpeed) {
-		isToggleSpeed = toggleSpeed;
-		return this;
 	}
 
 	public int getMaxHomes() {
@@ -256,149 +165,4 @@ public class GDPlayer implements Flaggable, Savable<UUID> {
 	}
 
 
-	public static PreparedStatement createTable(Connection connection) throws SQLException {
-		return connection.prepareStatement("CREATE TABLE IF NOT EXISTS gd_players (uniqueId VARCHAR(36), " +
-				"chat VARCHAR(15), " +
-				"chatColor JSON, " +
-				"clearInvConfirm BOOLEAN, " +
-				"homes JSON, "+
-				"timesDuped INTEGER, " +
-				"itemsDuped INTEGER, " +
-				"randomItems INTEGER, " +
-				"vanished BOOLEAN," +
-				"toggleItems BOOLEAN, " +
-				"toggleDrop BOOLEAN, " +
-				"togglePickup BOOLEAN, " +
-				"toggleNightVision BOOLEAN, " +
-				"toggleBottles BOOLEAN, " +
-				"toggleSpeed BOOLEAN" +
-				"PRIMARY KEY (uniqueId));"
-		);
-	}
-	public static PreparedStatement fetch(Connection connection,  Object key) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement("GET * FROM gd_players WHERE uniqueId = ?");
-		statement.setString(1, key.toString());
-		return statement;
-	}
-	public static GDPlayer load(ResultSet resultSet) throws SQLException {
-		java.util.UUID uniqueId = java.util.UUID.fromString(resultSet.getString("uniqueId"));
-		GDChat chat = GDChat.valueOf(resultSet.getString("chat"));
-		GDChatColor color = GSON.fromJson(resultSet.getString("chatColor"), GDChatColor.class);
-		List<GDHome> homes = JsonParser.parseString(resultSet.getString("homes")).getAsJsonArray().asList().stream()
-				.filter(home->!home.isJsonNull())
-				.map(home->GSON.fromJson(home, GDHome.class))
-				.toList();
-
-		int itemsDuped = resultSet.getInt("timesDuped");
-		int timesDuped = resultSet.getInt("itemsDuped");
-		int receivedRandomItems = resultSet.getInt("randomItems");
-
-		boolean vanished = resultSet.getBoolean("vanished");
-		boolean invConfirm = resultSet.getBoolean("clearInvConfirm");
-		boolean toggleItems = resultSet.getBoolean("toggleItems");
-		boolean toggleDrop = resultSet.getBoolean("toggleDrop");
-		boolean togglePickup = resultSet.getBoolean("togglePickup");
-		boolean toggleNightVision = resultSet.getBoolean("toggleNightVision");
-		boolean toggleBottles = resultSet.getBoolean("toggleBottles");
-		boolean toggleSpeed = resultSet.getBoolean("toggleSpeed");
-
-		return new GDPlayer(
-				GoldenDupe.instance(),
-				uniqueId,
-				chat,
-				color,
-				homes,
-				itemsDuped,
-				timesDuped,
-				receivedRandomItems,
-				invConfirm,
-				vanished,
-				toggleItems,
-				toggleDrop,
-				togglePickup,
-				toggleNightVision,
-				toggleBottles,
-				toggleSpeed
-		);
-	}
-
-	@Override
-	public @NotNull PreparedStatement insertStatement(@NotNull Connection connection) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement("INSERT INTO gd_players (" +
-				"uniqueId," +
-				"chat," +
-				"chatColor," +
-				"homes, "+
-				"timesDuped, "+
-				"itemsDuped, "+
-				"randomItems, "+
-				"clearInvConfirm," +
-				"vanished," +
-				"toggleItems," +
-				"toggleDrop," +
-				"togglePickup," +
-				"toggleNightVision," +
-				"toggleBottles, " +
-				"toggleSpeed" +
-				") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-		);
-		statement.setString(1, uniqueId.toString());
-		statement.setString(2, chat.name());
-		statement.setString(3, GSON.toJson(color));
-		statement.setString(4, GSON.toJson(homes.values().stream().toList()));
-		statement.setInt(5, timesDuped);
-		statement.setInt(6, itemsDuped);
-		statement.setBoolean(7, autoConfirmClearInv);
-		statement.setBoolean(8, vanished);
-		statement.setBoolean(9, isToggled);
-		statement.setBoolean(10, isToggleDropItem);
-		statement.setBoolean(11, isTogglePickupItem);
-		statement.setBoolean(12, isToggleNightVision);
-		statement.setBoolean(13, isTogglePotionBottles);
-		statement.setBoolean(14, isToggleSpeed);
-		return statement;
-	}
-
-	@Override
-	public PreparedStatement updateStatement(@NotNull Connection connection) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement("UPDATE gd_players SET ("+
-				"chat = ?, " +
-				"chatColor = ?, " +
-				"homes = ?, " +
-				"itemsDuped = ?, "+
-				"timesDuped = ?, "+
-				"randomItems = ?, "+
-				"clearInvConfirm = ?, " +
-				"vanished = ?, " +
-				"toggleItems = ?, " +
-				"toggleDrop = ?, " +
-				"togglePickup = ?, " +
-				"toggleNightVision = ?, " +
-				"toggleBottles = ?, " +
-				"toggleSpeed = ?" +
-				") WHERE uniqueId = ?");
-
-		statement.setString(1, chat.name());
-		statement.setString(2, GSON.toJson(color));
-		statement.setString(3, GSON.toJson(homes.values().stream().toList()));
-		statement.setInt(4, timesDuped);
-		statement.setInt(5, itemsDuped);
-		statement.setBoolean(6, autoConfirmClearInv);
-		statement.setBoolean(7, vanished);
-		statement.setBoolean(8, isToggled);
-		statement.setBoolean(9, isToggleDropItem);
-		statement.setBoolean(10, isTogglePickupItem);
-		statement.setBoolean(11, isToggleNightVision);
-		statement.setBoolean(12, isTogglePotionBottles);
-		statement.setBoolean(13, isToggleSpeed);
-		statement.setString(14, uniqueId.toString());
-		return statement;
-	}
-
-	@Override
-	public PreparedStatement getStatement(@NotNull Connection connection, java.util.UUID uuid) throws SQLException {
-		PreparedStatement statement = connection.prepareStatement("SELECT * FROM gd_players WHERE uniqueId = ?");
-		statement.setString(1, uuid.toString());
-		return statement;
-	}
 }
