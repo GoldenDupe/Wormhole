@@ -7,7 +7,7 @@ plugins {
     //id 'com.github.johnrengelman.shadow' version '8.1.1'
     id("io.github.goooler.shadow") version "8.1.8"
     id 'io.freefair.lombok' version '8.6'
-    id("io.papermc.paperweight.userdev") version "1.7.1"
+    id("io.papermc.paperweight.userdev") version "1.7.4"
     id("xyz.jpenilla.run-paper") version "2.3.0"
 }
 
@@ -44,13 +44,10 @@ repositories {
 
 
 dependencies {
-    implementation 'bet.astral:messenger:2.0.0' // Messenger
-    implementation 'bet.astral:messenger-cloud:2.0.0' // Messenger
-    implementation 'bet.astral:messenger-paper:2.0.0' // Messenger
-    implementation 'bet.astral:tuples:1.0.0'
-    implementation 'bet.astral:cloudplusplus:1.2.5'
-    implementation 'bet.astral:cloudplusplus-paper:1.2.5'
-    implementation 'bet.astral:guiman:1.0.1'
+    implementation 'bet.astral:messenger:2.3.0' // Messenger
+    implementation 'bet.astral:cloudplusplus:1.3.0'
+    implementation("bet.astral:more4j:1.0.2")
+    implementation 'bet.astral:guiman:1.2.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'
@@ -70,7 +67,8 @@ dependencies {
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"  // Vault
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
-    paperweight.paperDevBundle("1.21-R0.1-SNAPSHOT")
+    // Other Dependencies
+    paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
 }
 
 // Some shit is importing 1.13 bukkit api and not 1.20.1 api
@@ -81,7 +79,7 @@ configurations.compileOnly {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(22))
 }
 
 processResources {
