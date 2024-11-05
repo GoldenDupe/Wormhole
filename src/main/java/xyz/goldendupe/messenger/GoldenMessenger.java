@@ -1,7 +1,7 @@
 package xyz.goldendupe.messenger;
 
 import bet.astral.messenger.v2.delay.Delay;
-import bet.astral.messenger.v2.paper.PaperMessenger;
+import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
 import bet.astral.messenger.v2.permission.Permission;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.translation.TranslationKey;

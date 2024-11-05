@@ -1,6 +1,6 @@
 package xyz.goldendupe.listeners;
 
-import bet.astral.messenger.v2.paper.receiver.PlayerReceiver;
+import bet.astral.messenger.v3.minecraft.paper.receiver.PlayerReceiver;
 import bet.astral.messenger.v2.permission.PredicatePermission;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import io.papermc.paper.event.player.PlayerSignCommandPreprocessEvent;

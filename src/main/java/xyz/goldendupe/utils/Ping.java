@@ -1,6 +1,6 @@
 package xyz.goldendupe.utils;
 
-import bet.astral.tuples.Triplet;
+import bet.astral.more4j.tuples.Triplet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

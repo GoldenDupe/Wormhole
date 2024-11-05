@@ -1,6 +1,6 @@
 package xyz.goldendupe;
 
-import bet.astral.cloudplusplus.paper.PaperCommandRegisterer;
+import bet.astral.cloudplusplus.minecraft.paper.PaperCommandRegisterer;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.receiver.Receiver;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;

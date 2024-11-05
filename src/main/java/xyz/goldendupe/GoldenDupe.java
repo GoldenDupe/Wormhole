@@ -1,19 +1,17 @@
 package xyz.goldendupe;
 
 import bet.astral.fusionflare.FusionFlare;
-import bet.astral.guiman.GUI;
-import bet.astral.guiman.InventoryListener;
+import bet.astral.guiman.GUIMan;
 import bet.astral.messenger.v2.locale.LanguageTable;
-import bet.astral.messenger.v2.locale.source.FileLanguageSource;
 import bet.astral.messenger.v2.locale.source.LanguageSource;
-import bet.astral.messenger.v2.paper.PaperMessenger;
+import bet.astral.messenger.v2.translation.TranslationKeyRegistry;
+import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
 import bet.astral.messenger.v2.permission.Permission;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import org.bukkit.Bukkit;
@@ -116,7 +114,7 @@ public final class GoldenDupe extends JavaPlugin {
     public void onEnable() {
         instance = this;
         PaperMessenger.init(this);
-        GUI.init(this);
+        GUIMan.init(this);
 
         GenerateFiles generateFiles = new GenerateFiles();
         getLogger().info("Patching settings and global data...");
@@ -174,7 +172,6 @@ public final class GoldenDupe extends JavaPlugin {
         settings.reload();
         // listeners (Reflected)
         loadListeners();
-        registerListener(new InventoryListener());
 
         playerDatabase = new PlayerDatabase(this);
         commandSpyDatabase = new CommandSpyDatabase(this);
@@ -490,14 +487,46 @@ public final class GoldenDupe extends JavaPlugin {
 
 
     public void reloadMessengers() {
-	    try {
-		    LanguageSource source = FileLanguageSource.gson(messenger, Locale.US, new File(getDataFolder(), "messages.json"), MiniMessage.miniMessage());
-            LanguageTable table = LanguageTable.of(source);
-            messenger.registerLanguageTable(Locale.US, table);
-            messenger.setDefaultLocale(source);
-            messenger.loadTranslations(List.copyOf(Translations.translations()));
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
+        TranslationKeyRegistry translationRegistry = messenger.getTranslationKeyRegistry();
+        for (Map.Entry<Locale, LanguageTable> entry : messenger.getLanguages().entrySet()){
+            LanguageTable languageTable = entry.getValue();
+            LanguageSource source = languageTable.getLanguageSource();
+
+            source.loadAllComponents(translationRegistry.getTranslationKeys())
+                    .thenAccept((map)->{
+                        if (!map.isEmpty()){
+                            map.forEach((key, component)->{
+                                if (component != null){
+                                    languageTable.addComponentBase(key, component);
+                                }
+                            });
+                        }
+                    });
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
