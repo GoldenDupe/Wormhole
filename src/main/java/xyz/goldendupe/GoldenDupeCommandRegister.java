@@ -1,6 +1,7 @@
 package xyz.goldendupe;
 
 import bet.astral.cloudplusplus.minecraft.paper.PaperCommandRegisterer;
+import bet.astral.cloudplusplus.minecraft.paper.mapper.CommandSourceStackToCommandSenderMapper;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.receiver.Receiver;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
@@ -10,7 +11,6 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.goldendupe.command.cloud.SenderMapper;
 
 public class GoldenDupeCommandRegister implements PaperCommandRegisterer<CommandSender> {
 	private final PaperCommandManager.Bootstrapped<CommandSender> commandManager;
@@ -19,7 +19,7 @@ public class GoldenDupeCommandRegister implements PaperCommandRegisterer<Command
 	public final GoldenDupeBootstrap bootstrap;
 
 	public GoldenDupeCommandRegister(Messenger messenger, BootstrapContext context, GoldenDupeBootstrap bootstrap) {
-		commandManager = PaperCommandManager.builder(new SenderMapper())
+		commandManager = PaperCommandManager.builder(new CommandSourceStackToCommandSenderMapper())
 				.executionCoordinator(ExecutionCoordinator.asyncCoordinator())
 				.buildBootstrapped(context);
 		this.messenger = messenger;
