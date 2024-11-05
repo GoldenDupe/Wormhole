@@ -1,9 +1,9 @@
 package xyz.goldendupe.command.defaults;
 
-import bet.astral.guiman.Clickable;
-import bet.astral.guiman.ClickableBuilder;
-import bet.astral.guiman.GUI;
-import bet.astral.guiman.GUIBuilder;
+import bet.astral.guiman.clickable.Clickable;
+import bet.astral.guiman.gui.InventoryGUI;
+import bet.astral.guiman.gui.builders.InventoryGUIBuilder;
+import bet.astral.guiman.utils.ChestRows;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -30,7 +30,7 @@ import java.util.List;
 @Cloud
 public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBootstrap {
 
-	public static GUI clearMenu;
+	public static InventoryGUI clearMenu;
 
 	public void init() {
 
@@ -51,7 +51,8 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 					.decoration(TextDecoration.ITALIC, false)));
 		});
 
-		Clickable conf = new ClickableBuilder(itemStackConf).setAction(clickTypes, (clickable, i, player) -> {
+		Clickable conf = Clickable.builder(itemStackConf).actionGeneral((action) -> {
+			Player player = action.getWho();
 					player.getInventory().clear();
 					player.getInventory().setHelmet(null);
 					player.getInventory().setChestplate(null);
@@ -62,26 +63,25 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 					GoldenDupe.instance().messenger().message(player, Translations.COMMAND_CLEAR_INVENTORY_CLEARED);
 				}).build();
 
-		Clickable deny = new ClickableBuilder(itemStackDeny).setAction(clickTypes, (clickable, i, player) -> {
+		Clickable deny = Clickable.builder(itemStackDeny).actionGeneral((action) -> {
+			Player player = action.getWho();
 			player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
 			GoldenDupe.getPlugin(GoldenDupe.class).messenger().message(player, Translations.COMMAND_CLEAR_INVENTORY_CANCEL);
 		}).build();
 
-		GUIBuilder builder = new GUIBuilder(3).name(Component.text("Clear Inventory Confirmation"));
+		InventoryGUIBuilder builder = InventoryGUI.builder(ChestRows.THREE).title(Component.text("Clear Inventory Confirmation"));
 		List<Integer> slotsConf = List.of(0, 1, 2, 3, 9, 10, 11, 12, 18, 19, 20, 21);
 		List<Integer> slotsDeny = List.of(5, 6, 7, 8, 14, 15, 16, 17, 23, 24, 25, 26);
 
 		for (Integer i : slotsConf) {
-			builder.addSlotClickable(i, conf);
+			builder.addClickable(i, conf);
 		}
 
 		for (Integer i : slotsDeny) {
-			builder.addSlotClickable(i, deny);
+			builder.addClickable(i, deny);
 		}
 
 		clearMenu = builder.build();
-		clearMenu.shared = true;
-
 	}
 
 	public ClearInventoryCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
@@ -117,9 +117,7 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 									return;
 								}
 
-								goldenDupe().getServer().getScheduler().runTask(goldenDupe(), ()->{
-									clearMenu.generateInventory(sender);
-								});
+								clearMenu.open(sender);
 							}
 						})
 		);

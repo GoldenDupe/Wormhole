@@ -1,6 +1,6 @@
 package xyz.goldendupe.anti.crash;
 
-import bet.astral.tuples.Pair;
+import bet.astral.more4j.tuples.Pair;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import lombok.Getter;
 import org.bukkit.Chunk;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@Deprecated(forRemoval = true)
 public class CrashNotifier implements Listener {
 	private final GoldenDupe goldenDupe;
 	private final Notifier notifier;

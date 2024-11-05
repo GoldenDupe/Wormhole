@@ -12,6 +12,7 @@ import xyz.goldendupe.utils.MemberType;
 
 import java.util.Objects;
 
+@Deprecated(forRemoval = true)
 public class Notifier {
 	public void notifyStaff(Notification notification) {
 		Bukkit.broadcast(

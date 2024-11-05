@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.Nullable;
 
 @Getter
+@Deprecated(forRemoval = true)
 public class Notification {
 	private final long issued;
 	private final int id;
