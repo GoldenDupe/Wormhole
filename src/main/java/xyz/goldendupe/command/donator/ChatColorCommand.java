@@ -1,10 +1,14 @@
 package xyz.goldendupe.command.donator;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.guiman.Clickable;
-import bet.astral.guiman.ClickableBuilder;
-import bet.astral.guiman.GUI;
-import bet.astral.guiman.GUIBuilder;
+import bet.astral.guiman.background.Background;
+import bet.astral.guiman.clickable.Clickable;
+import bet.astral.guiman.clickable.ClickableBuilder;
+import bet.astral.guiman.clickable.ClickableProvider;
+import bet.astral.guiman.gui.InventoryGUI;
+import bet.astral.guiman.gui.builders.InventoryGUIBuilder;
+import bet.astral.guiman.permission.Permission;
+import bet.astral.guiman.utils.ChestRows;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import net.kyori.adventure.text.Component;
@@ -38,8 +42,8 @@ import static xyz.goldendupe.models.chatcolor.Color.MINECOIN;
 
 @Cloud
 public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstrap {
-	private GUI mainMenu;
-	private Clickable background;
+	private InventoryGUI mainMenu;
+	private Background background;
 	private final Map<UUID, MenuProfile> profiles = new HashMap<>();
 	private final List<ClickableBuilder> preGeneratedButtons = new ArrayList<>();
 	private final Map<Color, ClickableBuilder> generatedButtonsByColor = new HashMap<>();
@@ -58,7 +62,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 	private static ItemStack LEFT;
 	private static ItemStack RIGHT;
 
-	public void init(){
+	public void init() {
 		ONE = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDliMzAzMDNmOTRlN2M3ODVhMzFlNTcyN2E5MzgxNTM1ZGFmNDc1MzQ0OWVhNDFkYjc0NmUxMjM0ZTlkZDJiNSJ9fX0=");
 		TWO = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTNjYTdkN2MxNTM0ZGM2YjllZDE2NDdmOTAyNWRkZjI0NGUwMTA3ZGM4ZGQ0ZjRmMDg1MmM4MjA4MWQ2MzUwZSJ9fX0=");
 		THREE = skull("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTk1ZTFlMmZiMmRlN2U2Mjk5YTBmNjFkZGY3ZDlhNmQxMDFmOGQ2NjRmMTk1OWQzYjY3ZGNlOGIwNDlhOGFlMSJ9fX0=");
@@ -76,7 +80,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 			meta.displayName(Component.text(""));
 			meta.addItemFlags(ItemFlag.values());
 		});
-		background = new ClickableBuilder(backgroundItem).setPriority(0).build();
+		background = Background.noTooltip(backgroundItem);
 
 		Class<?> colorClazz = Color.class;
 		for (Field field : colorClazz.getFields()) {
@@ -95,9 +99,9 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					itemStack.setItemMeta(meta);
 
 					ClickableBuilder clickable = new ClickableBuilder(itemStack)
-							.setData("color", color)
-							.setData("slot", chatColor.slot())
-							.setData("name", displayname);
+							.data("color", color)
+							.data("slot", chatColor.slot())
+							.data("name", displayname);
 
 					preGeneratedButtons.add(clickable);
 					generatedButtonsByColor.put(color, clickable);
@@ -138,11 +142,11 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 	}
 
 	private static class MenuProfile {
-		GUI gradientPositionMenu;
-		GUI singleMenu;
-		GUI rainbowMenu;
-		GUI formatMenu;
-		Map<Integer, GUI> gradientMenus = new HashMap<>();
+		InventoryGUI gradientPositionMenu;
+		InventoryGUI singleMenu;
+		InventoryGUI rainbowMenu;
+		InventoryGUI formatMenu;
+		Map<Integer, InventoryGUI> gradientMenus = new HashMap<>();
 
 		public MenuProfile() {
 
@@ -164,96 +168,88 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				meta.addItemFlags(ItemFlag.values());
 			});
 
-			List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-			Clickable gradientBuilder = new ClickableBuilder(gradient).setAction(clickTypes, (clickable, item, playerCon) -> createGradientMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient")).build();
-			Clickable singleBuilder = new ClickableBuilder(single).setAction(clickTypes, (clickable, item, playerCon) -> createSingleMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.color")).build();
-			Clickable rainbowBuilder = new ClickableBuilder(rainbow).setAction(clickTypes, (clickable, item, playerCon) -> createRainbowMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow")).build();
-			Clickable formatBuilder = new ClickableBuilder(format).setAction(clickTypes, (clickable, item, playerCon) -> createFormatMenu(playerCon)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.format")).build();
+			Clickable gradientBuilder = Clickable.builder(gradient).actionGeneral((action) -> createGradientMenu(action.getWho())).permission(MemberType.DONATOR.permissionOf("chatcolor.gradient")).build();
+			Clickable singleBuilder = Clickable.builder(single).actionGeneral((action) -> createSingleMenu(action.getWho())).permission(MemberType.DONATOR.permissionOf("chatcolor.color")).build();
+			Clickable rainbowBuilder = Clickable.builder(rainbow).actionGeneral((action) -> createRainbowMenu(action.getWho())).permission(MemberType.DONATOR.permissionOf("chatcolor.rainbow")).build();
+			Clickable formatBuilder = Clickable.builder(format).actionGeneral((action) -> createFormatMenu(action.getWho())).permission(MemberType.DONATOR.permissionOf("chatcolor.format")).build();
 
-			mainMenu = new GUIBuilder(2)
-					.name(Component.text("Chat Color"))
-					.addSlotClickable(1, gradientBuilder)
-					.addSlotClickable(3, singleBuilder)
-					.addSlotClickable(5, rainbowBuilder)
-					.addSlotClickable(7, formatBuilder)
-					.addSlotClickable(13, new ClickableBuilder(Material.BARRIER, (meta) -> {
-								meta.displayName(Component.text("Reset Everything", Color.DARK_RED).decoration(TextDecoration.ITALIC, false));
-							})
-									.setAction(clickTypes, (clickable, item, p) -> {
-										GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
+			mainMenu = InventoryGUI.builder(ChestRows.TWO)
+					.title(Component.text("Chat Color"))
+					.addClickable(1, gradientBuilder)
+					.addClickable(3, singleBuilder)
+					.addClickable(5, rainbowBuilder)
+					.addClickable(7, formatBuilder)
+					.addClickable(13, Clickable.builder(Material.BARRIER, (meta) -> {
+										meta.displayName(Component.text("Reset Everything", Color.DARK_RED).decoration(TextDecoration.ITALIC, false));
+									})
+									.actionGeneral((action) -> {
+										GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 										GDChatColor chatColor = gdPlayer.color();
 										chatColor.setColors(null);
 										chatColor.reset();
-										p.closeInventory();
+										action.getWho().closeInventory();
 									})
 					)
-					.setBackground(background)
+					.background(background)
 					.build();
-
-			mainMenu.shared = false;
 		}
-		mainMenu.generateInventory(player);
+		mainMenu.open(player);
 	}
 
 	private void createGradientMenu(Player player) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
 		if (profile.gradientPositionMenu != null) {
-			profile.gradientPositionMenu.generateInventory(player);
+			profile.gradientPositionMenu.open(player);
 			return;
 		}
 
 
-		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-		GUIBuilder builder = new GUIBuilder(3)
-				.name(Component.text("Chat Color > Gradient"));
+		InventoryGUIBuilder builder = InventoryGUI.builder(ChestRows.THREE)
+				.title(Component.text("Chat Color > Gradient"));
 		for (int i = 0; i < 9; i++) {
 			int finalI = i;
 			ItemStack item = new ItemStack(Material.PAPER);
 			item.editMeta(meta -> meta.displayName(Component.text("Set gradient position " + finalI + " color", MINECOIN).decoration(TextDecoration.ITALIC, false).compact()));
 
-			Clickable clickable = new ClickableBuilder(item).setAction(clickTypes, (cl, itemStack, p) -> createGradientSelect(player, finalI)).setPermission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position." + (i + 1))).build();
-			builder.setSlotClickable(i, clickable);
-
-
+			Clickable clickable = new ClickableBuilder(item).actionGeneral((action) -> createGradientSelect(action.getWho(), finalI)).permission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position." + (i + 1))).build();
+			builder.clickable(i, clickable);
 		}
 		profile.gradientPositionMenu = builder
-				.addSlotClickable(13, new ClickableBuilder(Material.BARRIER, (meta) -> {
-							meta.displayName(Component.text("Reset Positions", Color.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
-						})
-								.setAction(clickTypes, (clickable, item, p) -> {
-									GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
+				.addClickable(13, Clickable.builder(Material.BARRIER, (meta) -> {
+									meta.displayName(Component.text("Reset Positions", Color.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
+								})
+								.actionGeneral((action) -> {
+									GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 									gdPlayer.color().setColors(null);
 									gdPlayer.color().setMode(GDChatColor.Mode.SINGLE);
-									p.sendMessage(Component.text("Reset your gradient color selections!", Color.RED));
+									action.getWho().sendMessage(Component.text("Reset your gradient color selections!", Color.RED));
 								})
 				)
-
-				.setBackground(background)
+				.background(background)
 				.build();
 
-		profile.gradientPositionMenu.shared = false;
-		profile.gradientPositionMenu.generateInventory(player);
+		profile.gradientPositionMenu.open(player);
 	}
 
 	private void createSingleMenu(Player player) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
 		if (profile.singleMenu != null) {
-			profile.singleMenu.generateInventory(player);
+			profile.singleMenu.open(player);
 			return;
 		}
 
-		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-
-		GUIBuilder guiBuilder = new GUIBuilder(4).name(Component.text("Chat Color > Single").decoration(TextDecoration.ITALIC, false).compact());
+		InventoryGUIBuilder guiBuilder = InventoryGUI.builder(ChestRows.FOUR)
+				.title(Component.text("Chat Color > Single").decoration(TextDecoration.ITALIC, false).compact());
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
-			slotBuilder.setAction(clickTypes, (clickable, item, p) -> {
-				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
+			slotBuilder.actionGeneral((action) -> {
+				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+				Clickable clickable = action.getClickable();
 
 				Color color = (Color) clickable.getData("color");
 
 				Component name = (Component) clickable.getData("name");
-				p.sendMessage(Component.text("Set your chat color to ", MINECOIN).append(name).decoration(TextDecoration.ITALIC, false).compact());
+				action.getWho().sendMessage(Component.text("Set your chat color to ", MINECOIN).append(name).decoration(TextDecoration.ITALIC, false).compact());
 
 				GDChatColor chatColor = gdPlayer.color();
 				if (chatColor.equals(GDChatColor.DEFAULT)) {
@@ -265,46 +261,43 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				player.closeInventory();
 			});
 			@SuppressWarnings("DataFlowIssue") int slot = (int) slotBuilder.getData("slot");
-			guiBuilder.setSlotClickable(slot, slotBuilder.build());
+			guiBuilder.clickable(slot, slotBuilder.build());
 		}
-		guiBuilder.setBackground(background);
+		guiBuilder.background(background);
 
-		profile.singleMenu = guiBuilder.createGUI();
-		profile.singleMenu.shared = false;
-		profile.singleMenu.generateInventory(player);
+		profile.singleMenu = guiBuilder.build();
+		profile.singleMenu.open(player);
 	}
 
 	private void createRainbowMenu(Player player) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
 		if (profile.rainbowMenu != null) {
-			profile.rainbowMenu.generateInventory(player);
+			profile.rainbowMenu.open(player);
 			return;
 		}
 
-		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-		profile.rainbowMenu = new GUIBuilder(2).name(Component.text("Chat Color > Rainbow"))
-				.addSlotClickable(0, rainbowButton(0, ONE))
-				.addSlotClickable(1, rainbowButton(1, TWO))
-				.addSlotClickable(2, rainbowButton(2, THREE))
-				.addSlotClickable(3, rainbowButton(3, FOUR))
-				.addSlotClickable(4, rainbowButton(4, FIVE))
-				.addSlotClickable(5, rainbowButton(5, SIX))
-				.addSlotClickable(6, rainbowButton(6, SEVEN))
-				.addSlotClickable(7, rainbowButton(7, EIGHT))
-				.addSlotClickable(8, rainbowButton(8, NINE))
-				.addSlotClickable(11, rainbowReverse(true, LEFT))
-				.addSlotClickable(15, rainbowReverse(false, RIGHT))
-				.addSlotClickable(13, new ClickableBuilder(Material.BARRIER, (meta)->meta.displayName(Component.text("Reset Rainbow Settings")))
-						.setAction(clickTypes, (clickable, item, p)->{
-							GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
+		profile.rainbowMenu = InventoryGUI.builder(ChestRows.TWO).title(Component.text("Chat Color > Rainbow"))
+				.addClickable(0, rainbowButton(0, ONE))
+				.addClickable(1, rainbowButton(1, TWO))
+				.addClickable(2, rainbowButton(2, THREE))
+				.addClickable(3, rainbowButton(3, FOUR))
+				.addClickable(4, rainbowButton(4, FIVE))
+				.addClickable(5, rainbowButton(5, SIX))
+				.addClickable(6, rainbowButton(6, SEVEN))
+				.addClickable(7, rainbowButton(7, EIGHT))
+				.addClickable(8, rainbowButton(8, NINE))
+				.addClickable(11, rainbowReverse(true, LEFT))
+				.addClickable(15, rainbowReverse(false, RIGHT))
+				.addClickable(13, Clickable.builder(Material.BARRIER, (meta) -> meta.displayName(Component.text("Reset Rainbow Settings")))
+						.actionGeneral((action) -> {
+							GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 							gdPlayer.color().setRainbowMode(0).setRainbowReversed(false);
-							p.sendMessage(Component.text("Reset your settings for your rainbow chat color.", Color.GREEN));
+							action.getWho().sendMessage(Component.text("Reset your settings for your rainbow chat color.", Color.GREEN));
 						})
 				)
-				.setBackground(background)
+				.background(background)
 				.build();
-		profile.rainbowMenu.shared = false;
-		profile.rainbowMenu.generateInventory(player);
+		profile.rainbowMenu.open(player);
 	}
 
 	private Clickable rainbowButton(int slot, ItemStack itemStack) {
@@ -318,7 +311,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 			list.add(mm.deserialize("<!italic>Reversed: <rainbow:!" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
 			meta.lore(list);
 		});
-		return new ClickableBuilder(item).setAction(clickTypes, (clickable, i, player) -> {
+		return new ClickableBuilder(item).actionGeneral((action) -> {
+					Player player = action.getWho();
 					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 					GDChatColor chatColor = gdPlayer.color();
 					if (chatColor.equals(GDChatColor.DEFAULT)) {
@@ -331,13 +325,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					chatColor.setRainbowMode(slot);
 					gdPlayer.setColor(chatColor);
 					player.sendMessage(Component.text("Set rainbow start position to " + slot, MINECOIN));
-				}).setDisplayIfNoPermissions(true)
-				.setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow.position." + slot))
+				}).displayIfNoPermissions()
+				.permission(MemberType.DONATOR.permissionOf("chatcolor.rainbow.position." + slot))
 				.build();
 	}
 
 	private Clickable rainbowReverse(boolean reverse, ItemStack itemStack) {
-		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
 		MiniMessage mm = MiniMessage.miniMessage();
 		ItemStack item = itemStack.clone();
 		item.editMeta(meta -> {
@@ -347,7 +340,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 			list.add(mm.deserialize((!reverse ? "<gray>" : "<green>") + "<!italic>Reversed: <rainbow:!>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"));
 			meta.lore(list);
 		});
-		return new ClickableBuilder(item).setAction(clickTypes, (clickable, i, player) -> {
+		return new ClickableBuilder(item).actionGeneral((action) -> {
+					Player player = action.getWho();
 					GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 					GDChatColor chatColor = gdPlayer.color();
 					if (chatColor.equals(GDChatColor.DEFAULT)) {
@@ -361,24 +355,27 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					gdPlayer.setColor(chatColor);
 					player.sendMessage(Component.text("Set rainbow type to " + (reverse ? "reserved" : "forward"), MINECOIN));
 				})
-				.setDisplayIfNoPermissions(true)
-				.setPermission(MemberType.DONATOR.permissionOf("chatcolor.rainbow." + (reverse ? "reverse" : "forward")))
+				.displayIfNoPermissions()
+				.permission(MemberType.DONATOR.permissionOf("chatcolor.rainbow." + (reverse ? "reverse" : "forward")))
 				.build();
 	}
 
 	private void createGradientSelect(Player player, int data) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
 		if (profile.gradientMenus.get(data) != null) {
-			profile.gradientMenus.get(data).generateInventory(player);
+			profile.gradientMenus.get(data).open(player);
 			return;
 		}
 
 		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
 
-		GUIBuilder guiBuilder = new GUIBuilder(4).name(Component.text("... > Gradient > " + (data + 1) + " Color").decoration(TextDecoration.ITALIC, false).compact());
+		InventoryGUIBuilder guiBuilder = InventoryGUI.builder(ChestRows.FOUR).title(Component.text("... > Gradient > " + (data + 1) + " Color").decoration(TextDecoration.ITALIC, false).compact());
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
-			slotBuilder.setAction(clickTypes, (clickable, item, p) -> {
+			slotBuilder.actionGeneral((action) -> {
+				Player p = action.getWho();
+				Clickable clickable = action.getClickable();
+
 				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 
 				Color color = (Color) clickable.getData("color");
@@ -397,158 +394,141 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				chatColor.setMode(GDChatColor.Mode.GRADIENT);
 				gdPlayer.setColor(chatColor);
 
-				profile.gradientPositionMenu.generateInventory(player);
+				profile.gradientPositionMenu.open(player);
 			});
 			@SuppressWarnings("DataFlowIssue") int slot = (int) slotBuilder.getData("slot");
-			guiBuilder.setSlotClickable(slot, slotBuilder.build());
+			guiBuilder.clickable(slot, slotBuilder.build());
 		}
 
 		ItemStack reset = new ItemStack(Material.PAPER);
 		reset.editMeta(meta -> {
 			meta.displayName(Component.text("RESET", NamedTextColor.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
 		});
-		guiBuilder.addSlotClickable(35, new ClickableBuilder(reset).setAction(clickTypes, (clickable, item, p) -> {
+		guiBuilder.addClickable(35, new ClickableBuilder(reset).actionGeneral((action) -> {
+			Player p = action.getWho();
 			GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 			gdPlayer.color().colors().put(data, null);
 			player.sendMessage(Component.text("Removed your gradient position " + (data + 1) + ".", MINECOIN));
-			profile.gradientPositionMenu.generateInventory(player);
+			profile.gradientPositionMenu.open(player);
 		}).build());
-		guiBuilder.setBackground(background);
+		guiBuilder.background(background);
 
-		GUI gui = guiBuilder.createGUI();
-		gui.shared = false;
-		gui.generateInventory(player);
+		InventoryGUI gui = guiBuilder.build();
+		gui.open(player);
 		profile.gradientMenus.put(data, gui);
 	}
 
 	private void createFormatMenu(Player player) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
 		if (profile.formatMenu != null) {
-			profile.formatMenu.generateInventory(player);
+			profile.formatMenu.open(player);
 			return;
 		}
 		GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
-		List<ClickType> clickTypes = List.of(ClickType.SHIFT_LEFT, ClickType.SHIFT_RIGHT, ClickType.RIGHT, ClickType.LEFT);
+		ClickableProvider underlined = (p) -> Clickable.builder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, meta -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
+					meta.displayName(Component.text("Underlined", MINECOIN, TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " underlined messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+				}).actionGeneral(action -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+					GDChatColor chatColor = playerProfile.color();
+					if (chatColor.equals(GDChatColor.DEFAULT)) {
+						chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
+					}
+					boolean enabled = chatColor.underlined();
+					chatColor.setUnderlined(!enabled);
 
-		ItemStack underlined = new ItemStack(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
-		underlined.editMeta(meta -> {
-			meta.displayName(Component.text("Underlined", MINECOIN, TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false));
-			meta.lore(List.of(Component.text("Click to " + ((gdPlayer.color().underlined()) ? "disable" : "enable") + " underlined messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-		});
-		ItemStack strike = new ItemStack(Material.CHAIN);
-		strike.editMeta(meta -> {
-			meta.displayName(Component.text("Strikethrough", MINECOIN, TextDecoration.STRIKETHROUGH).decoration(TextDecoration.ITALIC, false));
-			meta.lore(List.of(Component.text("Click to " + ((gdPlayer.color().underlined()) ? "disable" : "enable") + " strikethrough messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-		});
-		ItemStack italic = new ItemStack(Material.STICK);
-		italic.editMeta(meta -> {
-			meta.displayName(Component.text("Italic", MINECOIN, TextDecoration.ITALIC));
-			meta.lore(List.of(Component.text("Click to " + ((gdPlayer.color().underlined()) ? "disable" : "enable") + " italic messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-		});
-		ItemStack bold = new ItemStack(Material.MAP);
-		bold.editMeta(meta -> {
-			meta.displayName(Component.text("Bold", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-			meta.lore(List.of(Component.text("Click to " + ((gdPlayer.color().underlined()) ? "disable" : "enable") + " bold messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-		});
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " underlined formatting in chat messages.", MINECOIN));
+					createFormatMenu(action.getWho());
+				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
+				.build();
 
-		ItemStack reset = new ItemStack(Material.BARRIER);
-		reset.editMeta(meta -> {
-			meta.displayName(Component.text("Reset", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-			meta.lore(List.of(Component.text("Click to reset select formatting styles", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-		});
+		ClickableProvider strikethrough = (p) -> Clickable.builder(Material.CHAIN, meta -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
+					meta.displayName(Component.text("Strikethrough", MINECOIN, TextDecoration.STRIKETHROUGH).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " strikethrough messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+				}).actionGeneral(action -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+					GDChatColor chatColor = playerProfile.color();
+					if (chatColor.equals(GDChatColor.DEFAULT)) {
+						chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
+					}
+					boolean enabled = chatColor.underlined();
+					chatColor.setStrikethrough(!enabled);
 
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " strikethrough formatting in chat messages.", MINECOIN));
+					createFormatMenu(action.getWho());
+				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
+				.build();
 
-		profile.formatMenu = new GUIBuilder(1)
-				.name(Component.text("Chat Color > Format"))
-				.addSlotClickable(0, new ClickableBuilder(underlined).setAction(clickTypes, (clickable, item, p) -> {
-							GDChatColor chatColor = gdPlayer.color();
-							if (chatColor.equals(GDChatColor.DEFAULT)) {
-								chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
-							}
-							boolean enabled = chatColor.underlined();
-							chatColor.setUnderlined(!enabled);
+		ClickableProvider reset = (p) -> Clickable.builder(Material.BARRIER, meta -> {
+					meta.displayName(Component.text("Reset", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to reset select formatting styles", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+				}).actionGeneral(action -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+					GDChatColor chatColor = playerProfile.color();
+					if (chatColor.equals(GDChatColor.DEFAULT)) {
+						chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
+					}
+					chatColor.setBold(false);
+					chatColor.setItalic(false);
+					chatColor.setUnderlined(false);
+					chatColor.setStrikethrough(false);
 
-							clickable.getItemStack().editMeta(meta -> {
-								meta.lore(List.of(Component.text("Click to " + (!enabled ? "disable" : "enable") + " underlined messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-							});
-							player.sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " underlined messages in chat messages.", MINECOIN));
-							createFormatMenu(player);
-						})
-						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.underlined"))
-						.build())
-				.addSlotClickable(2, new ClickableBuilder(strike).setAction(clickTypes, (clickable, item, p) -> {
-							GDChatColor chatColor = gdPlayer.color();
-							if (chatColor.equals(GDChatColor.DEFAULT)) {
-								chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
-							}
-							boolean enabled = chatColor.strikethrough();
-							chatColor.setStrikethrough(!enabled);
-							gdPlayer.setColor(chatColor);
+					playerProfile.setColor(chatColor);
 
-							clickable.getItemStack().editMeta(meta -> {
-								meta.lore(List.of(Component.text("Click to " + (!enabled ? "disable" : "enable") + " strikethrough messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-							});
-							player.sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " strikethrough messages in chat messages.", MINECOIN));
-							createFormatMenu(player);
-						})
-						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
-						.build())
-				.addSlotClickable(6, new ClickableBuilder(italic).setAction(clickTypes, (clickable, item, p) -> {
-							GDChatColor chatColor = gdPlayer.color();
-							if (chatColor.equals(GDChatColor.DEFAULT)) {
-								chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
-							}
-							boolean enabled = chatColor.italic();
-							chatColor.setItalic(!enabled);
-							gdPlayer.setColor(chatColor);
+					action.getWho().sendMessage(Component.text("Reset all chat formatting choices.", MINECOIN));
+					createFormatMenu(action.getWho());
+				}).permission(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
+						.or(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.underlined")))
+						.or(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.bold")))
+						.or(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.italic"))))
+				.build();
 
-							clickable.getItemStack().editMeta(meta -> {
-								meta.lore(List.of(Component.text("Click to " + (!enabled ? "disable" : "enable") + " italic messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-							});
-							player.sendMessage(Component.text(((enabled) ? "Disabled" : "Enabled") + " italic messages in chat messages.", MINECOIN));
-							createFormatMenu(player);
-						})
-						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"))
-						.build())
-				.addSlotClickable(8, new ClickableBuilder(bold).setAction(clickTypes, (clickable, item, p) -> {
-							GDChatColor chatColor = gdPlayer.color();
-							if (chatColor.equals(GDChatColor.DEFAULT)) {
-								chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
-							}
-							boolean enabled = chatColor.bold();
-							chatColor.setBold(!enabled);
-							gdPlayer.setColor(chatColor);
+		ClickableProvider italic = (p) -> Clickable.builder(Material.STICK, meta -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
+					meta.displayName(Component.text("Italic", MINECOIN, TextDecoration.ITALIC));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " italic formatting", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+				}).actionGeneral(action -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+					GDChatColor chatColor = playerProfile.color();
+					if (chatColor.equals(GDChatColor.DEFAULT)) {
+						chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
+					}
+					boolean enabled = chatColor.underlined();
+					chatColor.setItalic(!enabled);
 
-							clickable.getItemStack().editMeta(meta -> {
-								meta.lore(List.of(Component.text("Click to " + ((!enabled) ? "disable" : "enable") + " bold messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
-							});
-							player.sendMessage(Component.text(((enabled) ? "Disabled" : "Enabled") + " bold messages in chat messages.", MINECOIN));
-							createFormatMenu(player);
-						}).setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"))
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " italic formatting in your chat messages.", MINECOIN));
+					createFormatMenu(action.getWho());
+				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"))
+				.build();
+		ClickableProvider bold = (p) -> Clickable.builder(Material.MAP, meta -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
+					meta.displayName(Component.text("Bold", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " bold formatting", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+				}).actionGeneral(action -> {
+					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
+					GDChatColor chatColor = playerProfile.color();
+					if (chatColor.equals(GDChatColor.DEFAULT)) {
+						chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
+					}
+					boolean enabled = chatColor.underlined();
+					chatColor.setBold(!enabled);
 
-						.build())
-				.addSlotClickable(4, new ClickableBuilder(reset)
-						.setAction(clickTypes, (clickable, item, p) -> {
-							GDChatColor chatColor = gdPlayer.color();
-							if (chatColor.equals(GDChatColor.DEFAULT)) {
-								chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, chatColor.colors().get(0));
-							}
-							chatColor.setBold(false);
-							chatColor.setItalic(false);
-							chatColor.setUnderlined(false);
-							chatColor.setStrikethrough(false);
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " bold formatting in your chat messages.", MINECOIN));
+					createFormatMenu(action.getWho());
+				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"))
+				.build();
 
-							gdPlayer.setColor(chatColor);
-
-							player.sendMessage(Component.text("Reset all chat formatting choices.", MINECOIN));
-							createFormatMenu(player);
-						})
-						.setPermission(MemberType.DONATOR.permissionOf("chatcolor.format.reset"))
-						.build()
-				)
-
-				.replaceItemsEachOpen(true)
-				.setBackground(background)
+		profile.formatMenu = InventoryGUI.builder(ChestRows.ONE)
+				.title(Component.text("Chat Color > Format"))
+				.addClickable(0, underlined)
+				.addClickable(2, strikethrough)
+				.addClickable(4, reset)
+				.addClickable(6, italic)
+				.addClickable(8, bold)
+				.replaceItemsEachOpen()
+				.background(background)
 				.build();
 
 	}
