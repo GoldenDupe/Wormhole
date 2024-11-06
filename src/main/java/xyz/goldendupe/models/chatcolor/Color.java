@@ -5,7 +5,6 @@ import org.bukkit.Material;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.regex.Pattern;
 
 public class Color implements Cloneable, TextColor {
 	public static Color CLAN_RED = Color.ofHex("#de434f");
