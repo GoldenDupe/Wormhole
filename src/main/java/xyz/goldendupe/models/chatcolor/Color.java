@@ -29,6 +29,7 @@ public class Color implements Cloneable, TextColor {
 	@ChatColor(slot = 5, material = Material.YELLOW_DYE, formattedName = "<yellow>Yellow")
 	public static Color YELLOW = Color.ofHex("#FFFF55");
 	@ChatColor(slot = 6, material = Material.GOLD_INGOT, formattedName = "<color:#DDD605>Yellow (Minecoin)")
+	@Deprecated(forRemoval = true)
 	public static Color MINECOIN = Color.ofHex("#DDD605");
 	/*
 	 * GREEN
