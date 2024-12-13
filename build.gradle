@@ -68,7 +68,7 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
     // Other Dependencies
-    paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
 
 // Some shit is importing 1.13 bukkit api and not 1.20.1 api

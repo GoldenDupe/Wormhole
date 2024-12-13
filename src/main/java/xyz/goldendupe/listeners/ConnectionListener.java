@@ -45,7 +45,7 @@ public class ConnectionListener implements GDListener {
 							.appendSpace().append(GoldenPlaceholderManager.prefixName(player)));
 				/*
 								.appendNewline().append(
-										Component.text("Click to send a welcome message for ", Color.MINECOIN).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
+										Component.text("Click to send a welcome message for ", Color.YELLOW).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
 												.hoverEvent(HoverEvent.showText(Component.text("Click here to send a welcome to ", Color.GRAY).append(player.name())))
 												.clickEvent(ClickEvent.runCommand("/welcome "+player.getName()))
 										)

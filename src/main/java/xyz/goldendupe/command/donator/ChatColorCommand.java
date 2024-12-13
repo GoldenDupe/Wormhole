@@ -38,7 +38,7 @@ import xyz.goldendupe.utils.MemberType;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static xyz.goldendupe.models.chatcolor.Color.MINECOIN;
+import static xyz.goldendupe.models.chatcolor.Color.YELLOW;
 
 @Cloud
 public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstrap {
@@ -209,7 +209,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 		for (int i = 0; i < 9; i++) {
 			int finalI = i;
 			ItemStack item = new ItemStack(Material.PAPER);
-			item.editMeta(meta -> meta.displayName(Component.text("Set gradient position " + finalI + " color", MINECOIN).decoration(TextDecoration.ITALIC, false).compact()));
+			item.editMeta(meta -> meta.displayName(Component.text("Set gradient position " + finalI + " color", YELLOW).decoration(TextDecoration.ITALIC, false).compact()));
 
 			Clickable clickable = new ClickableBuilder(item).actionGeneral((action) -> createGradientSelect(action.getWho(), finalI)).permission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position." + (i + 1))).build();
 			builder.clickable(i, clickable);
@@ -249,7 +249,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				Color color = (Color) clickable.getData("color");
 
 				Component name = (Component) clickable.getData("name");
-				action.getWho().sendMessage(Component.text("Set your chat color to ", MINECOIN).append(name).decoration(TextDecoration.ITALIC, false).compact());
+				action.getWho().sendMessage(Component.text("Set your chat color to ", YELLOW).append(name).decoration(TextDecoration.ITALIC, false).compact());
 
 				GDChatColor chatColor = gdPlayer.color();
 				if (chatColor.equals(GDChatColor.DEFAULT)) {
@@ -305,7 +305,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 		MiniMessage mm = MiniMessage.miniMessage();
 		ItemStack item = itemStack.clone();
 		item.editMeta(meta -> {
-			meta.displayName(Component.text("Rainbow start position " + (slot + 1), MINECOIN).decoration(TextDecoration.ITALIC, false));
+			meta.displayName(Component.text("Rainbow start position " + (slot + 1), YELLOW).decoration(TextDecoration.ITALIC, false));
 			List<Component> list = new ArrayList<>();
 			list.add(mm.deserialize("<!italic>Forward: <rainbow:" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
 			list.add(mm.deserialize("<!italic>Reversed: <rainbow:!" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
@@ -319,12 +319,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 						chatColor = new GDChatColor(GDChatColor.Mode.RAINBOW, GDChatColor.DEFAULT.colors().get(0));
 					}
 					if (chatColor.mode() != GDChatColor.Mode.RAINBOW) {
-						player.sendMessage(Component.text("Enabled rainbow chat color", MINECOIN));
+						player.sendMessage(Component.text("Enabled rainbow chat color", YELLOW));
 					}
 					chatColor.setMode(GDChatColor.Mode.RAINBOW);
 					chatColor.setRainbowMode(slot);
 					gdPlayer.setColor(chatColor);
-					player.sendMessage(Component.text("Set rainbow start position to " + slot, MINECOIN));
+					player.sendMessage(Component.text("Set rainbow start position to " + slot, YELLOW));
 				}).displayIfNoPermissions()
 				.permission(MemberType.DONATOR.permissionOf("chatcolor.rainbow.position." + slot))
 				.build();
@@ -334,7 +334,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 		MiniMessage mm = MiniMessage.miniMessage();
 		ItemStack item = itemStack.clone();
 		item.editMeta(meta -> {
-			meta.displayName(Component.text("Set the rainbow to " + (reverse ? "reversed" : "forward"), MINECOIN).decoration(TextDecoration.ITALIC, false).compact());
+			meta.displayName(Component.text("Set the rainbow to " + (reverse ? "reversed" : "forward"), YELLOW).decoration(TextDecoration.ITALIC, false).compact());
 			List<Component> list = new ArrayList<>();
 			list.add(mm.deserialize((reverse ? "<gray>" : "<green>") + "<!italic>Forward: <rainbow:>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"));
 			list.add(mm.deserialize((!reverse ? "<gray>" : "<green>") + "<!italic>Reversed: <rainbow:!>|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"));
@@ -348,12 +348,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 						chatColor = new GDChatColor(GDChatColor.Mode.RAINBOW, GDChatColor.DEFAULT.colors().get(0));
 					}
 					if (chatColor.mode() != GDChatColor.Mode.RAINBOW) {
-						player.sendMessage(Component.text("Enabled rainbow chat color", Color.MINECOIN));
+						player.sendMessage(Component.text("Enabled rainbow chat color", Color.YELLOW));
 					}
 					chatColor.setMode(GDChatColor.Mode.RAINBOW);
 					chatColor.setRainbowReversed(reverse);
 					gdPlayer.setColor(chatColor);
-					player.sendMessage(Component.text("Set rainbow type to " + (reverse ? "reserved" : "forward"), MINECOIN));
+					player.sendMessage(Component.text("Set rainbow type to " + (reverse ? "reserved" : "forward"), YELLOW));
 				})
 				.displayIfNoPermissions()
 				.permission(MemberType.DONATOR.permissionOf("chatcolor.rainbow." + (reverse ? "reverse" : "forward")))
@@ -381,14 +381,14 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				Color color = (Color) clickable.getData("color");
 
 				Component name = (Component) clickable.getData("name");
-				p.sendMessage(Component.text("Set your gradient position " + (data + 1) + " color to ", MINECOIN).append(name).decoration(TextDecoration.ITALIC, false).compact());
+				p.sendMessage(Component.text("Set your gradient position " + (data + 1) + " color to ", YELLOW).append(name).decoration(TextDecoration.ITALIC, false).compact());
 
 				GDChatColor chatColor = gdPlayer.color();
 				if (chatColor.equals(GDChatColor.DEFAULT)) {
 					chatColor = new GDChatColor(GDChatColor.Mode.SINGLE, color);
 				}
 				if (chatColor.mode() != GDChatColor.Mode.GRADIENT) {
-					p.sendMessage(Component.text("Enabled gradient chat color", MINECOIN));
+					p.sendMessage(Component.text("Enabled gradient chat color", YELLOW));
 				}
 				chatColor.colors().put(data, color);
 				chatColor.setMode(GDChatColor.Mode.GRADIENT);
@@ -408,7 +408,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 			Player p = action.getWho();
 			GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 			gdPlayer.color().colors().put(data, null);
-			player.sendMessage(Component.text("Removed your gradient position " + (data + 1) + ".", MINECOIN));
+			player.sendMessage(Component.text("Removed your gradient position " + (data + 1) + ".", YELLOW));
 			profile.gradientPositionMenu.open(player);
 		}).build());
 		guiBuilder.background(background);
@@ -427,8 +427,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 		GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
 		ClickableProvider underlined = (p) -> Clickable.builder(Material.LIGHT_WEIGHTED_PRESSURE_PLATE, meta -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
-					meta.displayName(Component.text("Underlined", MINECOIN, TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false));
-					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " underlined messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+					meta.displayName(Component.text("Underlined", YELLOW, TextDecoration.UNDERLINED).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " underlined messages", YELLOW).decoration(TextDecoration.ITALIC, false)));
 				}).actionGeneral(action -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 					GDChatColor chatColor = playerProfile.color();
@@ -438,15 +438,15 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					boolean enabled = chatColor.underlined();
 					chatColor.setUnderlined(!enabled);
 
-					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " underlined formatting in chat messages.", MINECOIN));
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " underlined formatting in chat messages.", YELLOW));
 					createFormatMenu(action.getWho());
 				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
 				.build();
 
 		ClickableProvider strikethrough = (p) -> Clickable.builder(Material.CHAIN, meta -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
-					meta.displayName(Component.text("Strikethrough", MINECOIN, TextDecoration.STRIKETHROUGH).decoration(TextDecoration.ITALIC, false));
-					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " strikethrough messages", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+					meta.displayName(Component.text("Strikethrough", YELLOW, TextDecoration.STRIKETHROUGH).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " strikethrough messages", YELLOW).decoration(TextDecoration.ITALIC, false)));
 				}).actionGeneral(action -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 					GDChatColor chatColor = playerProfile.color();
@@ -456,14 +456,14 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					boolean enabled = chatColor.underlined();
 					chatColor.setStrikethrough(!enabled);
 
-					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " strikethrough formatting in chat messages.", MINECOIN));
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " strikethrough formatting in chat messages.", YELLOW));
 					createFormatMenu(action.getWho());
 				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
 				.build();
 
 		ClickableProvider reset = (p) -> Clickable.builder(Material.BARRIER, meta -> {
-					meta.displayName(Component.text("Reset", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-					meta.lore(List.of(Component.text("Click to reset select formatting styles", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+					meta.displayName(Component.text("Reset", YELLOW, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to reset select formatting styles", YELLOW).decoration(TextDecoration.ITALIC, false)));
 				}).actionGeneral(action -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 					GDChatColor chatColor = playerProfile.color();
@@ -477,7 +477,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 
 					playerProfile.setColor(chatColor);
 
-					action.getWho().sendMessage(Component.text("Reset all chat formatting choices.", MINECOIN));
+					action.getWho().sendMessage(Component.text("Reset all chat formatting choices.", YELLOW));
 					createFormatMenu(action.getWho());
 				}).permission(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.strikethrough"))
 						.or(Permission.of(MemberType.DONATOR.permissionOf("chatcolor.format.underlined")))
@@ -487,8 +487,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 
 		ClickableProvider italic = (p) -> Clickable.builder(Material.STICK, meta -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
-					meta.displayName(Component.text("Italic", MINECOIN, TextDecoration.ITALIC));
-					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " italic formatting", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+					meta.displayName(Component.text("Italic", YELLOW, TextDecoration.ITALIC));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " italic formatting", YELLOW).decoration(TextDecoration.ITALIC, false)));
 				}).actionGeneral(action -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 					GDChatColor chatColor = playerProfile.color();
@@ -498,14 +498,14 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					boolean enabled = chatColor.underlined();
 					chatColor.setItalic(!enabled);
 
-					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " italic formatting in your chat messages.", MINECOIN));
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " italic formatting in your chat messages.", YELLOW));
 					createFormatMenu(action.getWho());
 				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.italic"))
 				.build();
 		ClickableProvider bold = (p) -> Clickable.builder(Material.MAP, meta -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(p);
-					meta.displayName(Component.text("Bold", MINECOIN, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
-					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " bold formatting", MINECOIN).decoration(TextDecoration.ITALIC, false)));
+					meta.displayName(Component.text("Bold", YELLOW, TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false));
+					meta.lore(List.of(Component.text("Click to " + ((playerProfile.color().underlined()) ? "disable" : "enable") + " bold formatting", YELLOW).decoration(TextDecoration.ITALIC, false)));
 				}).actionGeneral(action -> {
 					GDPlayer playerProfile = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 					GDChatColor chatColor = playerProfile.color();
@@ -515,7 +515,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					boolean enabled = chatColor.underlined();
 					chatColor.setBold(!enabled);
 
-					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " bold formatting in your chat messages.", MINECOIN));
+					action.getWho().sendMessage(Component.text((enabled ? "Disabled" : "Enabled") + " bold formatting in your chat messages.", YELLOW));
 					createFormatMenu(action.getWho());
 				}).permission(MemberType.DONATOR.permissionOf("chatcolor.format.bold"))
 				.build();

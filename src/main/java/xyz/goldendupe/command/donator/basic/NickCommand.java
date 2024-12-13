@@ -2,7 +2,7 @@ package xyz.goldendupe.command.donator.basic;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.Placeholder;
-import bet.astral.messenger.v2.placeholder.PlaceholderList;
+import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;

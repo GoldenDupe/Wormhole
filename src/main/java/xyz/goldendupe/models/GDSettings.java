@@ -209,8 +209,9 @@ public class GDSettings {
 
 
 			Registry<Material> materials = Registry.MATERIAL;
-			World world = Bukkit.getWorlds().get(0);
-			List<ItemStack> items = materials.stream().filter(material-> !illegalsItems.contains(material)).filter(material->material.isEnabledByFeature(world)).filter(Material::isItem).map(ItemStack::new).toList();
+			World world = Bukkit.getWorlds().getFirst();
+			@SuppressWarnings("removal")
+            List<ItemStack> items = materials.stream().filter(material-> !illegalsItems.contains(material)).filter(material->material.isEnabledByFeature(world)).filter(Material::isItem).map(ItemStack::new).toList();
 			allowedItems = ImmutableList.copyOf(items);
 		}
 

@@ -34,8 +34,6 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import xyz.goldendupe.anti.crash.CrashNotifier;
-import xyz.goldendupe.anti.crash.Notifier;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
@@ -178,8 +176,6 @@ public final class GoldenDupe extends JavaPlugin {
 
         spawnDatabase = new SpawnDatabase(this);
         spawnDatabase.load();
-
-        registerListener(new CrashNotifier(this, new Notifier()));
 
         getServer().getScheduler().runTaskTimer(this, ()->{
             PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false);

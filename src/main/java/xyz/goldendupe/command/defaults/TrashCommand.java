@@ -52,11 +52,11 @@ public class TrashCommand extends GDCloudCommand implements InitAfterBootstrap {
 		ItemStack clear = new ItemStack(Material.BARRIER);
 		ItemStack voidItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 		before.editMeta(meta->{
-			meta.displayName(Component.text("Last Page", Color.MINECOIN).decoration(TextDecoration.ITALIC, false));
+			meta.displayName(Component.text("Last Page", Color.YELLOW).decoration(TextDecoration.ITALIC, false));
 			meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "z");
 		});
 		after.editMeta(meta-> {
-			meta.displayName(Component.text("Next Page", Color.MINECOIN).decoration(TextDecoration.ITALIC, false));
+			meta.displayName(Component.text("Next Page", Color.YELLOW).decoration(TextDecoration.ITALIC, false));
 			meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "z");
 		});
 		voidItem.editMeta(meta->{
