@@ -38,6 +38,7 @@ import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
+import xyz.goldendupe.database.sqlite.SQLitePlayerDatabase;
 import xyz.goldendupe.datagen.GenerateFiles;
 import xyz.goldendupe.listeners.GDListener;
 import xyz.goldendupe.messenger.Translations;
@@ -171,7 +172,7 @@ public final class GoldenDupe extends JavaPlugin {
         // listeners (Reflected)
         loadListeners();
 
-        playerDatabase = new PlayerDatabase(this);
+        playerDatabase = new SQLitePlayerDatabase(this);
         commandSpyDatabase = new CommandSpyDatabase(this);
 
         spawnDatabase = new SpawnDatabase(this);

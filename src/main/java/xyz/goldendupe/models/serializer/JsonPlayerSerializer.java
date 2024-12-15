@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerSerializer implements JsonSerializer<GDPlayer>, JsonDeserializer<GDPlayer> {
+public class JsonPlayerSerializer implements JsonSerializer<GDPlayer>, JsonDeserializer<GDPlayer> {
 	private final Gson gson = new GsonBuilder()
 			.registerTypeAdapter(GDChatColor.class, new ChatColorSerializer())
 			.registerTypeAdapter(GDHome.class, new HomeSerializer())
@@ -30,9 +30,9 @@ public class PlayerSerializer implements JsonSerializer<GDPlayer>, JsonDeseriali
 			homes.add(gson.fromJson(element, GDHome.class));
 		}
 		JsonObject counter = object.getAsJsonObject("counter");
-		int itemsGenerated = counter.get("items-generated").getAsInt();
-		int itemsDuped = counter.get("items-duped").getAsInt();
-		int timesDuped = counter.get("times-duped").getAsInt();
+		long itemsGenerated = counter.get("items-generated").getAsLong();
+		long itemsDuped = counter.get("items-duped").getAsLong();
+		long timesDuped = counter.get("times-duped").getAsLong();
 
 		JsonObject toggle = object.getAsJsonObject("toggles");
 		boolean randomItems = toggle.get("random-items").getAsBoolean();

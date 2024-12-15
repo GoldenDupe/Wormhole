@@ -35,15 +35,9 @@ public class GDPlayer implements Flaggable {
 	private boolean isToggleNightVision = true;
 	private boolean isTogglePotionBottles = false;
 	private boolean isToggleSpeed = false;
-	@Getter
-	@Setter
-	private int timesDuped;
-	@Getter
-	@Setter
-	private int itemsDuped;
-	@Getter
-	@Setter
-	private int generatedRandomItems;
+	private long timesDuped;
+	private long itemsDuped;
+	private long generatedRandomItems;
 	@Getter(AccessLevel.PUBLIC)
 	private final Map<String, GDHome> homes = new HashMap<>();
 	@NotNull
@@ -57,7 +51,7 @@ public class GDPlayer implements Flaggable {
 		this.isToggleAutoConfirmClearInventory = false;
 	}
 
-	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, int itemsDuped, int timesDuped, int generatedRandomItems, boolean isToggleAutoConfirmClearInventory, boolean isToggleRandomItems, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
+	public GDPlayer(@NotNull GoldenDupe goldenDupe, java.util.@NotNull UUID uniqueId, GDChat chat, GDChatColor color, List<GDHome> homes, long itemsDuped, long timesDuped, long generatedRandomItems, boolean isToggleAutoConfirmClearInventory, boolean isToggleRandomItems, boolean isToggleDropItem, boolean isTogglePickupItem, boolean isToggleNightVision, boolean isTogglePotionBottles, boolean isToggleSpeed) {
 		this.goldenDupe = goldenDupe;
 		this.uniqueId = uniqueId;
 		this.chat = chat;

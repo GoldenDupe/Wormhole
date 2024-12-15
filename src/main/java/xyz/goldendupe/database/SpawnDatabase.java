@@ -1,6 +1,5 @@
 package xyz.goldendupe.database;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.models.impl.GDSpawn;
