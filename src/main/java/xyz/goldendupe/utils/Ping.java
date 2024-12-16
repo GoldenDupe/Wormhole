@@ -5,29 +5,38 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class Ping {
+	public static Ping tps = new Ping(
+			Component.text("Fetching...", NamedTextColor.RED),
+			Triplet.immutable(0D, 7D, NamedTextColor.DARK_RED),
+			Triplet.immutable(7D, 10D, NamedTextColor.RED),
+			Triplet.immutable(10D, 14.0D, NamedTextColor.YELLOW),
+			Triplet.immutable(14.0D, 17.0D, NamedTextColor.GREEN),
+			NamedTextColor.DARK_GREEN,
+			false
+	);
 	public static Ping defaultPing = new Ping(
 			Component.text("Loading...", NamedTextColor.RED),
-			Triplet.immutable(0, 75, NamedTextColor.DARK_GREEN),
-			Triplet.immutable(76, 110, NamedTextColor.GREEN),
-			Triplet.immutable(111, 160, NamedTextColor.YELLOW),
-			Triplet.immutable(161, 220, NamedTextColor.RED),
+			Triplet.immutable(0D, 75D, NamedTextColor.DARK_GREEN),
+			Triplet.immutable(76D, 110D, NamedTextColor.GREEN),
+			Triplet.immutable(111D, 160D, NamedTextColor.YELLOW),
+			Triplet.immutable(161D, 220D, NamedTextColor.RED),
 			NamedTextColor.DARK_RED,
 			true
 			);
 	private final Component loading;
-	private final Triplet<Integer, Integer, NamedTextColor> bestValue;
-	private final Triplet<Integer, Integer, NamedTextColor> goodValue;
-	private final Triplet<Integer, Integer, NamedTextColor> okValue;
-	private final Triplet<Integer, Integer, NamedTextColor> worseValue;
+	private final Triplet<Double, Double, NamedTextColor> bestValue;
+	private final Triplet<Double, Double, NamedTextColor> goodValue;
+	private final Triplet<Double, Double, NamedTextColor> okValue;
+	private final Triplet<Double, Double, NamedTextColor> worseValue;
 	private final NamedTextColor worstValue;
 	private final boolean showMS;
 
 	public Ping(
 			Component loading,
-			Triplet<Integer, Integer, NamedTextColor> bestValue,
-			Triplet<Integer, Integer, NamedTextColor> goodValue,
-			Triplet<Integer, Integer, NamedTextColor> okValue,
-			Triplet<Integer, Integer, NamedTextColor> worseValue,
+			Triplet<Double, Double, NamedTextColor> bestValue,
+			Triplet<Double, Double, NamedTextColor> goodValue,
+			Triplet<Double, Double, NamedTextColor> okValue,
+			Triplet<Double, Double, NamedTextColor> worseValue,
 			NamedTextColor worstValue,
 			boolean showMS
 			) {
@@ -41,19 +50,19 @@ public class Ping {
 	}
 
 
-	public Triplet<Integer, Integer, NamedTextColor> bestValue() {
+	public Triplet<Double, Double, NamedTextColor> bestValue() {
 		return bestValue;
 	}
 
-	public Triplet<Integer, Integer, NamedTextColor> goodValue() {
+	public Triplet<Double, Double, NamedTextColor> goodValue() {
 		return goodValue;
 	}
 
-	public Triplet<Integer, Integer, NamedTextColor> okValue() {
+	public Triplet<Double, Double, NamedTextColor> okValue() {
 		return okValue;
 	}
 
-	public Triplet<Integer, Integer, NamedTextColor> worseValue() {
+	public Triplet<Double, Double, NamedTextColor> worseValue() {
 		return worseValue;
 	}
 
@@ -66,24 +75,32 @@ public class Ping {
 	}
 
 	public Component format(int ping){
-		if (ping <= 0){
-			return Component.text("Loading...", NamedTextColor.RED);
-		}
-		NamedTextColor color = NamedTextColor.DARK_RED;
-		if (ping>=bestValue.getFirst() && ping <= bestValue.getSecond()) {
-			color = bestValue.getThird();
-		} else if (ping>=goodValue.getFirst() && ping <= goodValue.getSecond()) {
-			color = goodValue.getThird();
-		} else if (ping>=okValue.getFirst() && ping <= okValue.getSecond()) {
-			color = okValue.getThird();
-		} else if (ping>=worseValue.getFirst() && ping <= worseValue.getSecond()) {
-			color = worseValue.getThird();
-		} else {
-			color = worstValue;
-		}
-		if (showMS) {
-			return Component.text(ping, color).append(Component.text("ms", color));
-		}
-		return Component.text(ping, color);
+		return format(ping, true);
 	}
+	public Component format(double ping) {
+		return format(ping, false);
+	}
+	public Component format(double ping, boolean integer) {
+		if (ping < 0) {
+			return loading; // Use the predefined loading message.
+		}
+
+		NamedTextColor color = worstValue; // Default worst case.
+		if (ping >= bestValue.getFirst() && ping <= bestValue.getSecond()) {
+			color = bestValue.getThird();
+		} else if (ping >= goodValue.getFirst() && ping <= goodValue.getSecond()) {
+			color = goodValue.getThird();
+		} else if (ping >= okValue.getFirst() && ping <= okValue.getSecond()) {
+			color = okValue.getThird();
+		} else if (ping >= worseValue.getFirst() && ping <= worseValue.getSecond()) {
+			color = worseValue.getThird();
+		}
+
+		Component result = Component.text((!integer) ? ping : (int) ping, color);
+		if (showMS) {
+			result = result.append(Component.text("ms", color));
+		}
+		return result;
+	}
+
 }

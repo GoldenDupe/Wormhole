@@ -11,9 +11,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.AccessLevel;
 import lombok.Getter;
+import me.lucko.spark.api.Spark;
 import net.kyori.adventure.text.Component;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.megavex.scoreboardlibrary.api.ScoreboardLibrary;
+import net.megavex.scoreboardlibrary.api.exception.NoPacketAdapterAvailableException;
+import net.megavex.scoreboardlibrary.api.noop.NoopScoreboardLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.Configuration;
@@ -48,6 +52,7 @@ import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.models.serializer.GlobalSaveSerializer;
 import xyz.goldendupe.models.serializer.SettingsSerializer;
+import xyz.goldendupe.scoreboard.Scoreboard;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.Seasons;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
@@ -64,11 +69,14 @@ import static xyz.goldendupe.utils.Resource.loadResourceAsTemp;
 import static xyz.goldendupe.utils.Resource.loadResourceToFile;
 
 public final class GoldenDupe extends JavaPlugin {
+    @Getter
+    private ScoreboardLibrary scoreboardLibrary;
+    public static Spark spark;
     public static final String DISCORD = "https://discord.gg/DabTg3wVGQ";
     private static GoldenDupe instance;
     public static final Random random = new Random(System.nanoTime());
     public static Seasons SEASON = Seasons.SEASON_1;
-    private boolean isDebug = false;
+    private boolean isDebug = true;
     @Getter
     private boolean isDevelopmentServer;
     public final NamespacedKey KEY_UNDUPABLE = new NamespacedKey(this, "undupable");
@@ -114,6 +122,11 @@ public final class GoldenDupe extends JavaPlugin {
         instance = this;
         PaperMessenger.init(this);
         GUIMan.init(this);
+        try {
+            scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(this);
+        } catch (NoPacketAdapterAvailableException e) {
+            scoreboardLibrary = new NoopScoreboardLibrary();
+        }
 
         GenerateFiles generateFiles = new GenerateFiles();
         getLogger().info("Patching settings and global data...");
@@ -233,7 +246,9 @@ public final class GoldenDupe extends JavaPlugin {
                 messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_30);
             }
         }, 100, 30, TimeUnit.SECONDS);
-
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
+            Scoreboard.tickGlobal();
+        }, 100, 50, TimeUnit.MILLISECONDS);
 
 
         fusionFlare.ready();
@@ -253,6 +268,7 @@ public final class GoldenDupe extends JavaPlugin {
                         .setPrettyPrinting().create();
         write(new File(getDataFolder(), "config.json"), settings, gson);
         write(new File(getDataFolder(), "global-data.json"), savedData, gson);
+        scoreboardLibrary.close();
 
         Bukkit.getOnlinePlayers().forEach(player-> playerDatabase.save(playerDatabase.fromPlayer(player)).thenRun(()->playerDatabase.unload(player)));
         getComponentLogger().info("GoldenDupe has disabled!");

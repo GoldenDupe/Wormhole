@@ -15,6 +15,9 @@ public class GoldenPlaceholderManager {
 		vaultExists = gd.vaultChat() != null;
 		luckPermsExists = gd.luckPerms() != null;
 	}
+	public static Component prefixComp(Player player){
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(prefix(player));
+	}
 	public static String prefix(Player player){
 		if (vaultExists && !luckPermsExists){
 			return gd.vaultChat().getPlayerPrefix(player);

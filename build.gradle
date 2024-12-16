@@ -67,6 +67,14 @@ dependencies {
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"  // Vault
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
+    // Scoreboard
+    var scoreboardLibraryVersion = "2.2.2"
+    implementation("net.megavex:scoreboard-library-api:$scoreboardLibraryVersion")
+    runtimeOnly("net.megavex:scoreboard-library-implementation:$scoreboardLibraryVersion")
+
+    // Add packet adapter implementations you want:
+    runtimeOnly("net.megavex:scoreboard-library-modern:$scoreboardLibraryVersion:mojmap") // Mojang mapped variant (only use if you know what you're doing!)
+
     // Other Dependencies
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
@@ -102,6 +110,7 @@ shadowJar {
     relocate 'bet.astral.cloudplusplus', 'xyz.goldendupe.libs.cloudplusplus'
     relocate 'bet.astral.tuples', 'xyz.goldendupe.libs.tuples'
     relocate 'org.incendo.cloud', 'xyz.goldendupe.libs.org.incendo.cloud'
+    relocate 'net.magavex', "xyz.goldendupe.libs.net.megavex"
 }
 
 tasks {

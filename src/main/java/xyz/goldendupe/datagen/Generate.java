@@ -2,6 +2,7 @@ package xyz.goldendupe.datagen;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,14 @@ public interface Generate {
 	default void write(@NotNull JsonObject json, File file){
 		try {
 			FileReader reader = new FileReader(file);
-			JsonObject current = getGson().fromJson(reader, JsonObject.class);
+			JsonElement element = getGson().fromJson(reader, JsonElement.class);
+			JsonObject current;
+			if (element instanceof JsonNull || element == null){
+				current = null;
+			} else {
+				current = getGson().fromJson(reader, JsonObject.class);
+			}
+
 			if (current != null) {
 				current = checkUntilJsonEnd(json, current);
 			} else {

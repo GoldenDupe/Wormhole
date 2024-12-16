@@ -2,7 +2,6 @@ package xyz.goldendupe.listeners;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,6 +15,9 @@ import xyz.goldendupe.command.defaults.SpawnCommand;
 import xyz.goldendupe.events.PlayerFirstJoinEvent;
 import xyz.goldendupe.messenger.GoldenPlaceholderManager;
 import xyz.goldendupe.models.chatcolor.Color;
+import xyz.goldendupe.scoreboard.Scoreboard;
+import xyz.goldendupe.scoreboard.scoreboard.DefaultScoreboard;
+
 
 public class ConnectionListener implements GDListener {
 	private final GoldenDupe goldenDupe;
@@ -30,10 +32,16 @@ public class ConnectionListener implements GDListener {
 		goldenDupe.playerDatabase().load(event.getPlayer()).thenAccept(player -> {
 			goldenDupe.playerDatabase().keepLoaded(player);
 		});
+
 		Player player = event.getPlayer();
 		Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, () -> {
 			goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("Joined using ").append(Component.text(player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"))), "goldendupe.staff.client");
 		}, 25);
+
+		Bukkit.getScheduler().runTaskLater(goldenDupe,
+				()->{
+					Scoreboard.apply(player, new DefaultScoreboard(player));
+				}, 5);
 
 		event.joinMessage(
 				Component.text("+", Color.EMERALD, TextDecoration.BOLD).appendSpace().append(
@@ -53,13 +61,15 @@ public class ConnectionListener implements GDListener {
 								)
 				);
 				 */
+			goldenDupe.getSavedData().setTotalJoins(goldenDupe.getSavedData().getTotalJoins()+1);
+
 			PlayerFirstJoinEvent playerFirstJoinEvent = new PlayerFirstJoinEvent(player, event.joinMessage());
 			playerFirstJoinEvent.callEvent();
 			event.joinMessage(playerFirstJoinEvent.joinMessage());
 
 			Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, () -> {
 				event.getPlayer().teleportAsync(goldenDupe.getSpawnDatabase().get(SpawnCommand.Spawn.OVERWORLD.getName()).asLocation());
-			}, 7);
+			}, 5);
 		}
 	}
 

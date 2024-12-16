@@ -1,18 +1,16 @@
 package xyz.goldendupe.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class GDSavedData {
 	private long timesDuped;
 	private long itemsDuped;
 	private long itemsGenerated;
-
-	public GDSavedData(long timesDuped, long itemsDuped, long itemsGenerated) {
-		this.timesDuped = timesDuped;
-		this.itemsDuped = itemsDuped;
-		this.itemsGenerated = itemsGenerated;
-	}
+	private int totalJoins;
 }
