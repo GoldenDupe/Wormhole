@@ -59,17 +59,17 @@ public class PlayerDefault extends GDPlayer {
 	}
 
 	@Override
-	public int getTimesDuped() {
+	public long getTimesDuped() {
 		return 0;
 	}
 
 	@Override
-	public int getItemsDuped() {
+	public long getItemsDuped() {
 		return 0;
 	}
 
 	@Override
-	public int getGeneratedRandomItems() {
+	public long getGeneratedRandomItems() {
 		return 0;
 	}
 

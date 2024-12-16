@@ -81,6 +81,7 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 			builder.addClickable(i, deny);
 		}
 
+		builder.messenger(goldenDupe().messenger());
 		clearMenu = builder.build();
 	}
 

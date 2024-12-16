@@ -2,6 +2,7 @@ package xyz.goldendupe.listeners;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -31,18 +32,18 @@ public class ConnectionListener implements GDListener {
 		});
 		Player player = event.getPlayer();
 		Bukkit.getScheduler().runTaskLaterAsynchronously(goldenDupe, () -> {
-			goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("Joined using ").append(Component.text(player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"))));
+			goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("Joined using ").append(Component.text(player.getClientBrandName() != null ? player.getClientBrandName() : "Unknown Client Brand"))), "goldendupe.staff.client");
 		}, 25);
 
 		event.joinMessage(
-				Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-						.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(player))
-		);
+				Component.text("+", Color.EMERALD, TextDecoration.BOLD).appendSpace().append(
+						Component.text().color(Color.WHITE).append(
+								GoldenPlaceholderManager.prefixName(player)).decoration(TextDecoration.BOLD, false)));
 		if (!event.getPlayer().hasPlayedBefore()) {
 			event.joinMessage(
-					Component.text("+", Color.EMERALD, TextDecoration.BOLD)
-							.append(Component.empty().decoration(TextDecoration.BOLD, false))
-							.appendSpace().append(GoldenPlaceholderManager.prefixName(player)));
+					Component.text("+", Color.EMERALD, TextDecoration.BOLD).appendSpace().append(
+							Component.text().color(Color.WHITE).append(
+							GoldenPlaceholderManager.prefixName(player)).decoration(TextDecoration.BOLD, false)));
 				/*
 								.appendNewline().append(
 										Component.text("Click to send a welcome message for ", Color.YELLOW).append(Component.text(player.getName(), Color.EMERALD)).append(Component.text("!")
@@ -64,18 +65,17 @@ public class ConnectionListener implements GDListener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		goldenDupe.playerDatabase().save(goldenDupe.playerDatabase().fromPlayer(event.getPlayer())).thenRun(() -> {
-			goldenDupe.playerDatabase().unload(event.getPlayer());
-		});
+		goldenDupe.playerDatabase().unload(event.getPlayer());
 		event.quitMessage(
-				Component.text("-", Color.RED, TextDecoration.BOLD)
-						.appendSpace().append(Component.empty().decoration(TextDecoration.BOLD, false)).append(GoldenPlaceholderManager.prefixName(event.getPlayer()))
-		);
+				Component.text("-", Color.RED, TextDecoration.BOLD).appendSpace().append(
+						Component.text().color(Color.WHITE).append(
+								GoldenPlaceholderManager.prefixName(event.getPlayer())).decoration(TextDecoration.BOLD, false)));
+
 	}
 
 	@EventHandler
 	private void onKick(PlayerKickEvent event) {
-		goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("was kicked for ").append(event.reason())).append(Component.text(" (" + event.getCause().name() + ")", NamedTextColor.DARK_RED)));
+		goldenDupe.getServer().broadcast(event.getPlayer().name().appendSpace().append(Component.text("was kicked for ").append(event.reason())).append(Component.text(" (" + event.getCause().name() + ")", NamedTextColor.DARK_RED)), "goldendupe.admin.kicked");
 	}
 
 	@Override

@@ -51,6 +51,11 @@ public class GDSettings {
 		this.uwuString = uwuString;
 	}
 
+	public GoldenDupe getGoldenDupe(){
+		fetchGoldenDupe();
+		return goldenDupe;
+	}
+
 	public void fetchGoldenDupe(){
 		if (goldenDupe==null){
 			goldenDupe = GoldenDupe.instance();
@@ -110,7 +115,7 @@ public class GDSettings {
 			}
 		}
 		if (randomItemData.allowUpdatedDecoratedPots && meta instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof DecoratedPot decoratedPot){
-			List<Material> materials = Tag.ITEMS_BREAKS_DECORATED_POTS.getValues().stream().toList();
+			List<Material> materials = Tag.ITEMS_DECORATED_POT_INGREDIENTS.getValues().stream().toList();
 			for (DecoratedPot.Side side : DecoratedPot.Side.values()) {
 				if (random.nextDouble() > 0.45) {
 					Material material = materials.get(random.nextInt(0, materials.size()));

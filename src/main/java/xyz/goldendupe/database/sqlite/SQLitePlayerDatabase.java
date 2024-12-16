@@ -2,6 +2,7 @@ package xyz.goldendupe.database.sqlite;
 
 import bet.astral.data.helper.PackedPreparedStatement;
 import bet.astral.data.helper.PackedResultSet;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import xyz.goldendupe.GoldenDupe;
@@ -54,31 +55,32 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
             statement.execute();
             statement.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            goldenDupe.getSLF4JLogger().error("Error while trying to create players table!", e);
         }
     }
     @Override
     public CompletableFuture<GDPlayer> load(Player player) {
-        return CompletableFuture.supplyAsync(()->{
+        return CompletableFuture.supplyAsync(()-> {
             try {
-                PackedPreparedStatement preparedStatement = new PackedPreparedStatement(
-                        connection.prepareStatement("SELECT * FROM users WHERE uniqueId = ?"));
+                List<GDHome> homes = homeDatabase.loadHomes(player);
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uniqueId = ?");
+                PackedPreparedStatement preparedStatement = new PackedPreparedStatement(statement);
                 preparedStatement.setUUID(1, player.getUniqueId());
                 PackedResultSet resultSet = new PackedResultSet(
                         preparedStatement.executeQuery());
 
-                if (!resultSet.isClosed() && resultSet.next()){
+                if (!resultSet.isClosed() && resultSet.next()) {
                     return new GDPlayer(
                             goldenDupe,
                             player.getUniqueId(),
-                            resultSet.getEnum("chat_mode", GDChat.class),
+                            resultSet.getEnum("chatMode", GDChat.class),
                             resultSet.getJson("chatFormat", GDChatColor.class),
-                            homeDatabase.loadHomes(player),
+                            homes,
                             resultSet.getLong("itemsDuped"),
                             resultSet.getLong("timesDuped"),
                             resultSet.getLong("itemsGenerated"),
                             resultSet.getBoolean("toggleAutoClearInventory"),
-                            resultSet.getBoolean("toggleRandomItems"),
+                            resultSet.getBoolean("toggleRandomItem"),
                             resultSet.getBoolean("toggleDrop"),
                             resultSet.getBoolean("togglePickup"),
                             resultSet.getBoolean("toggleNightVision"),
@@ -86,9 +88,19 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                             resultSet.getBoolean("toggleSpeed")
                     );
                 }
+
+                if (!resultSet.isClosed()){
+                    resultSet.close();
+                }
+                preparedStatement.close();
+
                 return new GDPlayer(goldenDupe, player.getUniqueId());
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                goldenDupe.getSLF4JLogger().error("Error while trying to load " + player.getUniqueId(), e);
+                if (Bukkit.getPlayer(player.getUniqueId()) != null) {
+                    Bukkit.getPlayer(player.getUniqueId()).kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! " + GoldenDupe.DISCORD));
+                }
+                return null;
             }
         });
     }
@@ -102,7 +114,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 if (resultSet != null && resultSet.next()){
                     PackedPreparedStatement updateStatement = new PackedPreparedStatement(
                             connection.prepareStatement("UPDATE users SET chatMode = ?, chatFormat = ?, itemsDuped = ?, timesDuped = ?, itemsGenerated = ?, toggleAutoClearInventory = ?," +
-                                    "toggleRandomItems = ?, toggleDrop = ?, togglePickup = ?, toggleNightVision = ?, toggleBottles = ?, toggleSpeed = ? WHERE uniqueId = ?"),
+                                    "toggleRandomItem = ?, toggleDrop = ?, togglePickup = ?, toggleNightVision = ?, toggleBottles = ?, toggleSpeed = ? WHERE uniqueId = ?"),
                             getGson()
                     );
                     updateStatement.setEnum(1, player.getChat());
@@ -122,7 +134,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 } else {
                     PackedPreparedStatement insertStatement = new PackedPreparedStatement(
                             connection.prepareStatement("INSERT INTO users (uniqueId, chatMode, chatFormat, itemsDuped, timesDuped, " +
-                                    "itemsGenerated, toggleAutoClearInventory, toggleRandomItems, toggleDrop, togglePickup," +
+                                    "itemsGenerated, toggleAutoClearInventory, toggleRandomItem, toggleDrop, togglePickup," +
                                     "toggleNightVision, toggleBottles, toggleSpeed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
                     );
                     insertStatement.setUUID(1, player.getUniqueId());
@@ -148,9 +160,26 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                     getStatement.close();
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                goldenDupe.getSLF4JLogger().error("Error while trying to save "+player.getUniqueId(), e);
+                if (Bukkit.getPlayer(player.getUniqueId())!= null){
+                    Bukkit.getPlayer(player.getUniqueId()).kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! "+ GoldenDupe.DISCORD));
+                }
             }
         });
+    }
+
+    @Override
+    public void saveHome(GDPlayer player, GDHome home) {
+        homeDatabase.saveHome(player, home);
+    }
+
+    @Override
+    public void deleteHome(GDPlayer player, GDHome home){
+        homeDatabase.deleteHome(player, home.getName());
+    }
+    @Override
+    public void deleteHome(GDPlayer player, String home){
+        homeDatabase.deleteHome(player, home);
     }
 
     public static class HomeDatabase {
@@ -177,8 +206,9 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 statement.execute();
                 statement.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                goldenDupe.getSLF4JLogger().error("Error while trying to create table", e);
             }
+
         }
 
         public List<GDHome> loadHomes(Player player){
@@ -195,6 +225,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 while (!resultSet.isClosed() && resultSet.next()){
                     GDHome home = new GDHome(
                             resultSet.getString("name"),
+                            resultSet.getUUID("uniqueId"),
                             resultSet.getDouble("x"),
                             resultSet.getDouble("y"),
                             resultSet.getDouble("z"),
@@ -207,10 +238,72 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 if (!resultSet.isClosed()){
                     resultSet.close();
                 }
-                connection.close();
+                statement.close();
                 return homes;
             } catch (SQLException e) {
+                goldenDupe.getSLF4JLogger().error("Error while trying to load homes of "+player.getUniqueId(), e);
+                player.kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! "+ GoldenDupe.DISCORD));
+                return null;
+            }
+        }
+
+        public void deleteHome(GDPlayer player, String name){
+            try {
+                PackedPreparedStatement statement = new PackedPreparedStatement(
+                        connection.prepareStatement("DELETE FROM homes WHERE name = ? AND ownerId = ?")
+                );
+                statement.setString(1, name);
+                statement.setUUID(2, player.getUniqueId());
+                statement.executeUpdate();
+                statement.close();
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
+            }
+        }
+
+        public void saveHome(GDPlayer player, GDHome home){
+            try {
+                PackedPreparedStatement getStatement = new PackedPreparedStatement(
+                        connection.prepareStatement("SELECT * FROM homes WHERE uniqueId = ?")
+                );
+                getStatement.setUUID(1, home.getUniqueId());
+                ResultSet set = getStatement.executeQuery();
+                if (set == null || !set.next()) {
+                    PackedPreparedStatement insertStatement = new PackedPreparedStatement(
+                            connection.prepareStatement("INSERT INTO homes (ownerId, uniqueId, name, x, y, z, yaw, world) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"));
+                    insertStatement.setUUID(1, player.getUniqueId());
+                    insertStatement.setUUID(2, home.getUniqueId());
+                    insertStatement.setString(3, home.getName());
+                    insertStatement.setDouble(4, home.getX());
+                    insertStatement.setDouble(5, home.getY());
+                    insertStatement.setDouble(6, home.getZ());
+                    insertStatement.setFloat(7, home.getYaw());
+                    insertStatement.setUUID(8, home.getWorld().getUID());
+                    insertStatement.executeUpdate();
+                    insertStatement.close();
+                } else {
+                    PackedPreparedStatement updateStatement = new PackedPreparedStatement(
+                            connection.prepareStatement("UPDATE homes ownerId = ?, name = ?, x = ?, y = ?, z = ?, yaw = ?, world = ? where uniqueId = ?"));
+                    updateStatement.setUUID(1, player.getUniqueId());
+                    updateStatement.setString(2, home.getName());
+                    updateStatement.setDouble(3, home.getX());
+                    updateStatement.setDouble(4, home.getY());
+                    updateStatement.setDouble(5, home.getZ());
+                    updateStatement.setFloat(6, home.getYaw());
+                    updateStatement.setUUID(7, home.getWorld().getUID());
+                    updateStatement.setUUID(8, home.getUniqueId());
+                    updateStatement.executeUpdate();
+                    updateStatement.close();
+                }
+
+                if (set != null && !set.isClosed()){
+                    set.close();
+                }
+                getStatement.close();
+
+            } catch (SQLException e) {
+                goldenDupe.getSLF4JLogger().error("Error while trying to save home of "+player.getUniqueId(), e);
+                Bukkit.getPlayer(player.getUniqueId()).kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! "+ GoldenDupe.DISCORD));
             }
         }
     }

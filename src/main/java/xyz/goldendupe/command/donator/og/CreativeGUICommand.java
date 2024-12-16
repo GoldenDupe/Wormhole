@@ -78,7 +78,7 @@ public class CreativeGUICommand extends GDCloudCommand implements InitAfterBoots
 				action.getWho().closeInventory(InventoryCloseEvent.Reason.PLAYER)));
 		builder.title(Translations.GUI_CREATIVE_TITLE);
 		builder.placeholderGenerator(_ -> PlaceholderCollection.list(Placeholder.of("page", page+1), Placeholder.of("max_page", maxPages)));
-        return builder.build();
+        return builder.messenger(goldenDupe().messenger()).build();
 	}
 
 	public Component getComponent(Translations.Translation translation, Placeholder... placeholders) {

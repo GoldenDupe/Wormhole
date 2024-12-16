@@ -287,10 +287,12 @@ public final class GoldenDupe extends JavaPlugin {
 
     public void requestSaveHome(GDPlayer player, GDHome home) {
         getHomes(player).put(home.getName().toLowerCase(), home);
+        playerDatabase.saveHome(player, home);
     }
 
     public void requestDeleteHome(GDPlayer player, String homeName) {
         getHomes(player).remove(homeName.toLowerCase());
+        playerDatabase.deleteHome(player, homeName);
     }
 
     public Map<String, GDHome> getHomes(GDPlayer player) {

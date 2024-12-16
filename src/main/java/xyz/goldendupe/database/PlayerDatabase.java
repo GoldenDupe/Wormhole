@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import xyz.goldendupe.GoldenDupe;
 import xyz.goldendupe.datagen.Generate;
 import xyz.goldendupe.models.GDPlayer;
+import xyz.goldendupe.models.impl.GDHome;
 import xyz.goldendupe.models.serializer.JsonPlayerSerializer;
 
 import java.util.HashMap;
@@ -46,11 +47,15 @@ public abstract class PlayerDatabase implements Generate {
 		}, null);
 	}
 
+	public void saveHome(GDPlayer player, GDHome home){
+		save(player);
+	}
+
 	public void unload(Player player){
-		players.remove(player.getUniqueId());
+		unload(player.getUniqueId());
 	}
 	public void unload(UUID uuid){
-		players.remove(uuid);
+		save(players.remove(uuid));
 	}
 
 	public void keepLoaded(GDPlayer player){
@@ -66,5 +71,13 @@ public abstract class PlayerDatabase implements Generate {
 	@Override
 	public Gson getGson() {
 		return gson;
+	}
+
+	public void deleteHome(GDPlayer player, GDHome home) {
+		save(player);
+	}
+
+	public void deleteHome(GDPlayer player, String home) {
+		save(player);
 	}
 }
