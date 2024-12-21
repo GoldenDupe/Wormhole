@@ -1,9 +1,6 @@
 package xyz.goldendupe.datagen;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +35,35 @@ public interface Generate {
 			throw new RuntimeException(e);
 		}
 	}
+	default void write(@NotNull JsonArray json, File file){
+		try {
+			FileReader reader = new FileReader(file);
+			JsonElement element = getGson().fromJson(reader, JsonElement.class);
+			JsonArray current;
+			if (element instanceof JsonNull || element == null){
+				current = null;
+			} else {
+				current = getGson().fromJson(reader, JsonArray.class);
+			}
 
+			if (current != null) {
+				if (!current.isEmpty()){
+					reader.close();
+					return;
+				}
+			} else {
+				current = json;
+			}
+
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			writer.write(getGson().toJson(current));
+			writer.flush();
+			writer.close();
+			reader.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 	default JsonObject checkUntilJsonEnd(@Nullable JsonObject json, JsonObject saving){
 		if (json==null){
 			return null;
@@ -62,7 +87,7 @@ public interface Generate {
 
 	default File getOrCreate(@NotNull File file) throws IOException {
 		if (!file.exists()){
-			if (!file.getParentFile().exists()){
+			if (file.getParentFile() != null && !file.getParentFile().exists()){
 				file.getParentFile().mkdirs();
 			}
 			file.createNewFile();

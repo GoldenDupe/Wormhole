@@ -9,6 +9,7 @@ import bet.astral.guiman.utils.ChestRows;
 import bet.astral.messenger.v2.component.ComponentType;
 import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.placeholder.collection.PlaceholderCollection;
+import bet.astral.messenger.v2.translation.Translation;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Registry;
@@ -81,7 +82,7 @@ public class CreativeGUICommand extends GDCloudCommand implements InitAfterBoots
         return builder.messenger(goldenDupe().messenger()).build();
 	}
 
-	public Component getComponent(Translations.Translation translation, Placeholder... placeholders) {
+	public Component getComponent(Translation translation, Placeholder... placeholders) {
 		GoldenMessenger messenger = goldenDupe().messenger();
 		return messenger.disablePrefixForNextParse().parseComponent(translation, Locale.US, ComponentType.CHAT, placeholders);
 	}

@@ -7,12 +7,14 @@ import org.bukkit.command.CommandSender;
 import org.incendo.cloud.Command;
 import org.incendo.cloud.description.Description;
 import org.incendo.cloud.paper.PaperCommandManager;
+import org.jetbrains.annotations.ApiStatus;
 import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.utils.MemberType;
 
 @Cloud
+@ApiStatus.Internal
 public class GoldenDupeCommand extends GDCloudCommand {
 	public GoldenDupeCommand(GoldenDupeCommandRegister register, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
 		super(register, commandManager);

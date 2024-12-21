@@ -30,61 +30,61 @@ public class Color implements Cloneable, TextColor {
 	/*
 	 * GREEN
 	 */
-	@ChatColor(slot = 7, material = Material.GREEN_DYE, formattedName = "<dark_green>Dark Green")
+	@ChatColor(slot = 6, material = Material.GREEN_DYE, formattedName = "<dark_green>Dark Green")
 	public static Color DARK_GREEN = Color.ofHex("#00AA00");
-	@ChatColor(slot = 8, material = Material.EMERALD, formattedName = "<color:#47A036>Emerald")
+	@ChatColor(slot = 7, material = Material.EMERALD, formattedName = "<color:#47A036>Emerald")
 	public static Color EMERALD = Color.ofHex("#47A036");
-	@ChatColor(slot = 9, material = Material.LIME_DYE, formattedName = "<green>Green")
+	@ChatColor(slot = 8, material = Material.LIME_DYE, formattedName = "<green>Green")
 	public static Color GREEN = Color.ofHex("#55FF55");
 	/*
 	 * BLUE
 	 */
 
-	@ChatColor(slot = 10, material = Material.LIGHT_BLUE_DYE, formattedName = "<aqua>Aqua")
+	@ChatColor(slot = 9, material = Material.LIGHT_BLUE_DYE, formattedName = "<aqua>Aqua")
 	public static Color AQUA = Color.ofHex("#55FFFF");
-	@ChatColor(slot = 11, material = Material.DIAMOND, formattedName = "<color:#2CBAA8>Diamond")
+	@ChatColor(slot = 10, material = Material.DIAMOND, formattedName = "<color:#2CBAA8>Diamond")
 	public static Color DIAMOND = Color.ofHex("#2CBAA8");
-	@ChatColor(slot = 12, material = Material.HEART_OF_THE_SEA, formattedName = "<dark_aqua>Dark Aqua")
+	@ChatColor(slot = 11, material = Material.HEART_OF_THE_SEA, formattedName = "<dark_aqua>Dark Aqua")
 	public static Color DARK_AQUA = Color.ofHex("#00AAAA");
-	@ChatColor(slot = 13, material = Material.CYAN_DYE, formattedName = "<blue>Blue")
+	@ChatColor(slot = 12, material = Material.CYAN_DYE, formattedName = "<blue>Blue")
 	public static Color BLUE = Color.ofHex("#5555FF");
-	@ChatColor(slot = 14, material = Material.LAPIS_LAZULI, formattedName = "<color:#21497B>Lapis")
+	@ChatColor(slot = 13, material = Material.LAPIS_LAZULI, formattedName = "<color:#21497B>Lapis")
 	public static Color LAPIS = Color.ofHex("#21497B");
-	@ChatColor(slot = 15, material = Material.BLUE_DYE, formattedName = "<dark_blue>Dark Blue")
+	@ChatColor(slot = 14, material = Material.BLUE_DYE, formattedName = "<dark_blue>Dark Blue")
 	public static Color DARK_BLUE = Color.ofHex("#0000AA");
 	/*
 	 * PURPLE
 	 */
-	@ChatColor(slot = 16, material = Material.PINK_DYE, formattedName = "<light_purple>Light Purple")
+	@ChatColor(slot = 15, material = Material.PINK_DYE, formattedName = "<light_purple>Light Purple")
 	public static Color LIGHT_PURPLE = Color.ofHex("#FF55FF");
-	@ChatColor(slot = 17, material = Material.AMETHYST_SHARD, formattedName = "<color:#9A5CC6>Amethyst")
+	@ChatColor(slot = 16, material = Material.AMETHYST_SHARD, formattedName = "<color:#9A5CC6>Amethyst")
 	public static Color AMETHYST = Color.ofHex("#9A5CC6");
-	@ChatColor(slot = 18, material = Material.PURPLE_DYE, formattedName = "<dark_purple>Purple")
+	@ChatColor(slot = 17, material = Material.PURPLE_DYE, formattedName = "<dark_purple>Purple")
 	public static Color DARK_PURPLE = Color.ofHex("#AA00AA");
 
 	/*
 	 * BLACK - WHITE
 	 */
 
-	@ChatColor(slot = 19, material = Material.BLACK_DYE, formattedName = "<black>Black")
+	@ChatColor(slot = 18, material = Material.BLACK_DYE, formattedName = "<black>Black")
 	public static Color BLACK = Color.ofHex("#000000");
-	@ChatColor(slot = 20, material = Material.NETHERITE_INGOT, formattedName = "<color:#443A3B>Netherite")
+	@ChatColor(slot = 19, material = Material.NETHERITE_INGOT, formattedName = "<color:#443A3B>Netherite")
 	public static Color NETHERITE = Color.ofHex("#443A3B");
-	@ChatColor(slot = 21, material = Material.GRAY_DYE, formattedName = "<dark_gray>Dark Gray")
+	@ChatColor(slot = 20, material = Material.GRAY_DYE, formattedName = "<dark_gray>Dark Gray")
 	public static Color DARK_GRAY = Color.ofHex("#555555");
-	@ChatColor(slot = 22, material = Material.LIGHT_GRAY_DYE, formattedName = "<gray>Gray")
+	@ChatColor(slot = 21, material = Material.LIGHT_GRAY_DYE, formattedName = "<gray>Gray")
 	public static Color GRAY = Color.ofHex("#AAAAAA");
-	@ChatColor(slot = 23, material = Material.QUARTZ, formattedName = "<color:#E3D4D1>Quartz")
+	@ChatColor(slot = 22, material = Material.QUARTZ, formattedName = "<color:#E3D4D1>Quartz")
 	public static Color QUARTZ = Color.ofHex("#E3D4D1");
-	@ChatColor(slot = 24, material = Material.IRON_INGOT, formattedName = "<color:#CECACA>Iron")
+	@ChatColor(slot = 23, material = Material.IRON_INGOT, formattedName = "<color:#CECACA>Iron")
 	public static Color IRON = Color.ofHex("#CECACA");
-	@ChatColor(slot = 25, material = Material.WHITE_DYE, formattedName = "<white>White")
+	@ChatColor(slot = 24, material = Material.WHITE_DYE, formattedName = "<white>White")
 	public static Color WHITE = Color.ofHex("#FFFFFF");
 	/*
 	 * Shit colors
 	 */
-	@ChatColor(slot = 26, material = Material.COPPER_INGOT, formattedName = "<color:#>Copper")
-	public static Color COPPER = Color.ofHex("#FFFFFF");
+	@ChatColor(slot = 25, material = Material.COPPER_INGOT, formattedName = "<color:#B4684D>Copper")
+	public static Color COPPER = Color.ofHex("#B4684D");
 	@ChatColor(slot = 26, material = Material.BROWN_DYE, formattedName = "<color:#6F4E37>Brown")
 	public static Color BROWN = Color.ofHex("#6F4E37");
 	@ChatColor(slot = 27, material = Material.COCOA_BEANS, formattedName = "<color:#7F7A00>Shit")

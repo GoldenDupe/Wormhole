@@ -24,6 +24,7 @@ import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.utils.MemberType;
+import xyz.goldendupe.utils.RunSync;
 
 import java.util.List;
 
@@ -59,8 +60,8 @@ public class ClearInventoryCommand extends GDCloudCommand implements InitAfterBo
 					player.getInventory().setLeggings(null);
 					player.getInventory().setBoots(null);
 					player.getInventory().setItemInOffHand(null);
-					player.closeInventory(InventoryCloseEvent.Reason.CANT_USE);
 					GoldenDupe.instance().messenger().message(player, Translations.COMMAND_CLEAR_INVENTORY_CLEARED);
+					RunSync.runSync(player::closeInventory); // Run on bukkit thread to remove async catcher exception
 				}).build();
 
 		Clickable deny = Clickable.builder(itemStackDeny).actionGeneral((action) -> {

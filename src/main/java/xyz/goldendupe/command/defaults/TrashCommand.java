@@ -106,7 +106,7 @@ public class TrashCommand extends GDCloudCommand implements InitAfterBootstrap {
 				.senderType(Player.class)
 				.handler(context -> {
 					goldenDupe().getServer().getScheduler().runTask(goldenDupe(), () -> {
-						context.sender().openInventory(trashCans.get(0).inventory);
+						context.sender().openInventory(trashCans.getFirst().inventory);
 					});
 				})
 		);

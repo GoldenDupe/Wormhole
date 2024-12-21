@@ -13,7 +13,7 @@ public class CSPYUser {
 	private CommandSpyDatabase database;
 	private final Set<UUID> blockedUsers = new HashSet<>();
 	private final Set<String> blockedCommands = new HashSet<>();
-	private boolean isCommandSpyToggled;
+	private boolean isCommandSpyToggled = false;
 
 	public CSPYUser(CommandSpyDatabase database,  UUID uniqueId) {
 		this.uniqueId = uniqueId;

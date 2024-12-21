@@ -34,6 +34,7 @@ import xyz.goldendupe.models.GDPlayer;
 import xyz.goldendupe.models.chatcolor.Color;
 import xyz.goldendupe.models.chatcolor.GDChatColor;
 import xyz.goldendupe.utils.MemberType;
+import xyz.goldendupe.utils.RunSync;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -49,7 +50,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 	private final Map<Color, ClickableBuilder> generatedButtonsByColor = new HashMap<>();
 
 	// https://minecraft-heads.com/custom-heads/alphabet?page=36
-	// Declaring them here means the server will lag during players are online
+	// Declaring them here means the server will lag __not__ during players are online
 	private static ItemStack ONE;
 	private static ItemStack TWO;
 	private static ItemStack THREE;
@@ -99,9 +100,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 					itemStack.setItemMeta(meta);
 
 					ClickableBuilder clickable = new ClickableBuilder(itemStack)
+							.data("material", chatColor.material())
 							.data("color", color)
 							.data("slot", chatColor.slot())
-							.data("name", displayname);
+							.data("name", displayname)
+							.data("permission", name)
+							;
 
 					preGeneratedButtons.add(clickable);
 					generatedButtonsByColor.put(color, clickable);
@@ -142,11 +146,9 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 	}
 
 	private static class MenuProfile {
-		InventoryGUI gradientPositionMenu;
 		InventoryGUI singleMenu;
 		InventoryGUI rainbowMenu;
 		InventoryGUI formatMenu;
-		Map<Integer, InventoryGUI> gradientMenus = new HashMap<>();
 
 		public MenuProfile() {
 
@@ -187,10 +189,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 										GDChatColor chatColor = gdPlayer.color();
 										chatColor.setColors(null);
 										chatColor.reset();
-										action.getWho().closeInventory();
+										RunSync.runSync(()->action.getWho().closeInventory());
 									})
 					)
 					.background(background)
+					.messenger(messenger)
+					.replaceItemsEachOpen()
 					.build();
 		}
 		mainMenu.open(player);
@@ -198,37 +202,49 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 
 	private void createGradientMenu(Player player) {
 		MenuProfile profile = profiles.get(player.getUniqueId());
-		if (profile.gradientPositionMenu != null) {
-			profile.gradientPositionMenu.open(player);
-			return;
-		}
+		GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(player);
+		GDChatColor chatColor = gdPlayer.getColor();
 
-
-		InventoryGUIBuilder builder = InventoryGUI.builder(ChestRows.THREE)
+		InventoryGUIBuilder builder = InventoryGUI.builder(ChestRows.TWO)
 				.title(Component.text("Chat Color > Gradient"));
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 8; i++) {
 			int finalI = i;
 			ItemStack item = new ItemStack(Material.PAPER);
-			item.editMeta(meta -> meta.displayName(Component.text("Set gradient position " + finalI + " color", YELLOW).decoration(TextDecoration.ITALIC, false).compact()));
+			item.editMeta(meta -> meta.displayName(Component.text("Set gradient position " + (finalI+1) + " color", YELLOW).decoration(TextDecoration.ITALIC, false).compact()));
 
-			Clickable clickable = new ClickableBuilder(item).actionGeneral((action) -> createGradientSelect(action.getWho(), finalI)).permission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position." + (i + 1))).build();
+
+			Clickable clickable =
+					new ClickableBuilder(item).actionGeneral((action) -> createGradientSelect(action.getWho(), finalI))
+							.permission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position." + (i + 1))).build();
 			builder.clickable(i, clickable);
+
+			Color color = chatColor.colors().get(i);
+			if (color != null){
+				ClickableBuilder bldr = generatedButtonsByColor.get(color);
+				Component name = (Component) bldr.getData("name");
+				Material material = (Material) bldr.getData("material");
+                assert material != null;
+                builder.clickable(i+9, Clickable.builder(material, meta->{
+					meta.displayName(Component.text("Position "+(finalI+1)+" color: ").decoration(TextDecoration.ITALIC, false).append(name));
+				}).permission(MemberType.DONATOR.permissionOf("chatcolor.gradient.position."+(i+1))));
+			}
 		}
-		profile.gradientPositionMenu = builder
-				.addClickable(13, Clickable.builder(Material.BARRIER, (meta) -> {
+		builder
+				.addClickable(17, Clickable.builder(Material.BARRIER, (meta) -> {
 									meta.displayName(Component.text("Reset Positions", Color.RED).decoration(TextDecoration.BOLD, true).decoration(TextDecoration.ITALIC, false));
 								})
 								.actionGeneral((action) -> {
-									GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 									gdPlayer.color().setColors(null);
 									gdPlayer.color().setMode(GDChatColor.Mode.SINGLE);
 									action.getWho().sendMessage(Component.text("Reset your gradient color selections!", Color.RED));
+
+									createGradientMenu(player); // Open new inventory to ensure the gradient selections are saved.
 								})
 				)
 				.background(background)
-				.build();
-
-		profile.gradientPositionMenu.open(player);
+				.messenger(messenger)
+				.replaceItemsEachOpen()
+				.build().open(player);
 	}
 
 	private void createSingleMenu(Player player) {
@@ -242,6 +258,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				.title(Component.text("Chat Color > Single").decoration(TextDecoration.ITALIC, false).compact());
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
+			slotBuilder.permission(MemberType.DONATOR.permissionOf("chatcolor.single."+builder.getData("permission")));
 			slotBuilder.actionGeneral((action) -> {
 				GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(action.getWho());
 				Clickable clickable = action.getClickable();
@@ -258,14 +275,15 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				chatColor.colors().put(0, color);
 				chatColor.setMode(GDChatColor.Mode.SINGLE);
 				gdPlayer.setColor(chatColor);
-				player.closeInventory();
+
+				RunSync.runSync(player::closeInventory);
 			});
 			@SuppressWarnings("DataFlowIssue") int slot = (int) slotBuilder.getData("slot");
 			guiBuilder.clickable(slot, slotBuilder.build());
 		}
 		guiBuilder.background(background);
 
-		profile.singleMenu = guiBuilder.build();
+		profile.singleMenu = guiBuilder.messenger(messenger).replaceItemsEachOpen().build();
 		profile.singleMenu.open(player);
 	}
 
@@ -296,7 +314,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 						})
 				)
 				.background(background)
-				.build();
+				.messenger(messenger).replaceItemsEachOpen().build();
 		profile.rainbowMenu.open(player);
 	}
 
@@ -307,8 +325,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 		item.editMeta(meta -> {
 			meta.displayName(Component.text("Rainbow start position " + (slot + 1), YELLOW).decoration(TextDecoration.ITALIC, false));
 			List<Component> list = new ArrayList<>();
-			list.add(mm.deserialize("<!italic>Forward: <rainbow:" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
-			list.add(mm.deserialize("<!italic>Reversed: <rainbow:!" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
+			list.add(mm.deserialize("<!italic><gray>Forward: <rainbow:" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
+			list.add(mm.deserialize("<!italic><gray>Reversed: <rainbow:!" + slot + ">|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||").compact());
 			meta.lore(list);
 		});
 		return new ClickableBuilder(item).actionGeneral((action) -> {
@@ -361,17 +379,10 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 	}
 
 	private void createGradientSelect(Player player, int data) {
-		MenuProfile profile = profiles.get(player.getUniqueId());
-		if (profile.gradientMenus.get(data) != null) {
-			profile.gradientMenus.get(data).open(player);
-			return;
-		}
-
-		List<ClickType> clickTypes = List.of(ClickType.RIGHT, ClickType.LEFT, ClickType.SHIFT_RIGHT, ClickType.SHIFT_LEFT);
-
 		InventoryGUIBuilder guiBuilder = InventoryGUI.builder(ChestRows.FOUR).title(Component.text("... > Gradient > " + (data + 1) + " Color").decoration(TextDecoration.ITALIC, false).compact());
 		for (ClickableBuilder builder : this.preGeneratedButtons) {
 			ClickableBuilder slotBuilder = builder.clone();
+			slotBuilder.permission(MemberType.DONATOR.permissionOf("chatcolor.single."+builder.getData("permission")));
 			slotBuilder.actionGeneral((action) -> {
 				Player p = action.getWho();
 				Clickable clickable = action.getClickable();
@@ -393,8 +404,7 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				chatColor.colors().put(data, color);
 				chatColor.setMode(GDChatColor.Mode.GRADIENT);
 				gdPlayer.setColor(chatColor);
-
-				profile.gradientPositionMenu.open(player);
+				createGradientMenu(player);
 			});
 			@SuppressWarnings("DataFlowIssue") int slot = (int) slotBuilder.getData("slot");
 			guiBuilder.clickable(slot, slotBuilder.build());
@@ -409,13 +419,12 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 			GDPlayer gdPlayer = goldenDupe().playerDatabase().fromPlayer(p);
 			gdPlayer.color().colors().put(data, null);
 			player.sendMessage(Component.text("Removed your gradient position " + (data + 1) + ".", YELLOW));
-			profile.gradientPositionMenu.open(player);
+			createGradientMenu(player);
 		}).build());
 		guiBuilder.background(background);
 
-		InventoryGUI gui = guiBuilder.build();
+		InventoryGUI gui = guiBuilder.messenger(messenger).replaceItemsEachOpen().build();
 		gui.open(player);
-		profile.gradientMenus.put(data, gui);
 	}
 
 	private void createFormatMenu(Player player) {
@@ -529,7 +538,8 @@ public class ChatColorCommand extends GDCloudCommand implements InitAfterBootstr
 				.addClickable(8, bold)
 				.replaceItemsEachOpen()
 				.background(background)
-				.build();
+				.replaceItemsEachOpen()
+				.messenger(messenger).build();
 
 	}
 

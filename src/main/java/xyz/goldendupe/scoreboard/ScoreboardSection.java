@@ -10,7 +10,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public interface ScoreboardSection {
-    DecimalFormat format = new DecimalFormat(".##");
+    DecimalFormat format = new DecimalFormat("0.#");
 
     default String format(double value){
         return format.format(value);

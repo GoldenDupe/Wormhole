@@ -18,11 +18,11 @@ public final class ContainerUtils {
 
 
 	public static boolean isShulkerBox(ItemStack itemStack){
-		return itemStack.getType().name().endsWith("_SHULKER_BOX");
+		return itemStack.getType() == Material.SHULKER_BOX || itemStack.getType().name().endsWith("_SHULKER_BOX");
 	}
 
 	public static boolean isBundle(ItemStack itemStack){
-		return itemStack.getType()== Material.BUNDLE;
+		return itemStack.getType() == Material.BUNDLE || itemStack.getType().name().endsWith("_BUNDLE");
 	}
 
 	public static boolean isCarryableContainer(ItemStack itemStack){

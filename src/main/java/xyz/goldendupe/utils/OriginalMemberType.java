@@ -22,10 +22,13 @@ public enum OriginalMemberType {
 		this.prefix = LegacyComponentSerializer.legacyAmpersand().deserialize(serializedPrefix);
 		this.serializedPrefix = serializedPrefix;
 	}
-
-	public Component displayname(Player player){
+	public Component name(Player player){
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(
 				serializedPrefix+" "+player.getName());
+	}
+	public Component displayname(Player player){
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(
+				serializedPrefix+" "+LegacyComponentSerializer.legacyAmpersand().serialize(player.displayName()));
 	}
 
 	public String displaynameLegacy(Player player){

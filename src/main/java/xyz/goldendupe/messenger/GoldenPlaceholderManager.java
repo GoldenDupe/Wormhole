@@ -43,7 +43,9 @@ public class GoldenPlaceholderManager {
 	public static Component prefixNameSuffix(Player player) {
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(prefix(player) + player.getName()+suffix(player));
 	}
-	public static String suffix(Player player){
+	public static Component prefixDisplaynameSuffix(Player player) {
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(prefix(player) + LegacyComponentSerializer.legacyAmpersand().serialize(player.displayName())+suffix(player));
+	}	public static String suffix(Player player){
 		if (vaultExists && !luckPermsExists){
 			return gd.vaultChat().getPlayerPrefix(player);
 		} else if (luckPermsExists){

@@ -80,10 +80,14 @@ public class DupeCommand extends GDCloudCommand implements InitAfterBootstrap {
 				.argument(
 						IntegerParser.integerComponent()
 								.name("amount")
-								.parser(IntegerParser.integerParser(2, 10)))
+								.parser(IntegerParser.integerParser(2, 20)))
 				.handler(context->{
 					Player sender = context.sender();
 					int times = context.get("amount");
+					if (times > 6 && !sender.hasPermission(MemberType.DONATOR.permissionOf("dupe.extended"))){
+						messenger.message(sender, Translations.COMMAND_DUPE_HIGH_DUPE_AMOUNT, Placeholder.of("amount", times), Placeholder.of("max_amount", 6), Placeholder.of("donator_max_amount", 20));
+						return;
+					}
 					ItemStack itemStack = sender.getInventory().getItemInMainHand();
 
 					if (!canDupe(itemStack)){

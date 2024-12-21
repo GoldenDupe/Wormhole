@@ -2,6 +2,7 @@ package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.Placeholder;
+import bet.astral.messenger.v2.translation.Translation;
 import io.papermc.paper.adventure.AdventureComponent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -19,7 +20,6 @@ import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.EnumParser;
 import org.incendo.cloud.suggestion.Suggestion;
 import org.incendo.cloud.suggestion.SuggestionProvider;
-import xyz.goldendupe.GoldenDupeBootstrap;
 import xyz.goldendupe.GoldenDupeCommandRegister;
 import xyz.goldendupe.command.cloud.GDCloudCommand;
 import xyz.goldendupe.messenger.Translations;
@@ -160,7 +160,7 @@ public class GamemodeCommand extends GDCloudCommand {
 		return null;
 	}
 
-	private Translations.Translation alreadySame(GameMode gm){
+	private Translation alreadySame(GameMode gm){
 		switch (gm){
 			case CREATIVE -> {
 				return Translations.COMMAND_GMC_ALREADY_SAME;
@@ -178,7 +178,7 @@ public class GamemodeCommand extends GDCloudCommand {
 		return null;
 	}
 
-	private Translations.Translation alreadySameAdmin(GameMode gm){
+	private Translation alreadySameAdmin(GameMode gm){
 		switch (gm){
 			case CREATIVE -> {
 				return Translations.COMMAND_GMC_ALREADY_SAME_ADMIN;
@@ -195,7 +195,7 @@ public class GamemodeCommand extends GDCloudCommand {
 		}
 		return null;
 	}
-	private Translations.Translation enabled(GameMode gm){
+	private Translation enabled(GameMode gm){
 		switch (gm){
 			case CREATIVE -> {
 				return Translations.COMMAND_GMC_ENABLED;
@@ -212,7 +212,7 @@ public class GamemodeCommand extends GDCloudCommand {
 		}
 		return null;
 	}
-	private Translations.Translation enabledAdmin(GameMode gm){
+	private Translation enabledAdmin(GameMode gm){
 		switch (gm){
 			case CREATIVE -> {
 				return Translations.COMMAND_GMC_ENABLED_ADMIN;

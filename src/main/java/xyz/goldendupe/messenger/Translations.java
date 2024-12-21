@@ -2,31 +2,30 @@ package xyz.goldendupe.messenger;
 
 import bet.astral.messenger.v2.component.ComponentPart;
 import bet.astral.messenger.v2.component.ComponentType;
-import bet.astral.messenger.v2.component.TitleComponentPart;
 import bet.astral.messenger.v2.translation.TranslationKey;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Translations {
 	private static final Map<String, Translation> translation = new HashMap<>();
 	private static final Gson gson = new Gson();
 	private static final MiniMessage mm = MiniMessage.miniMessage();
+	public static final Translation MESSENGER_TEST = new Translation("messenger.test").add(ComponentType.CHAT, text("<rainbow>Messenger</rainbow> <red><bold><underlined>test<reset> <gradient:red:black:red:blue>message string!"));
 	public static final Translation COMMAND_MANAGER_INVALID_SYNTAX = new Translation("internal.command-manager.invalid-syntax").add(ComponentType.CHAT, text("<red>Invalid Command Syntax. %value%"));
 	public static final Translation COMMAND_MANAGER_INVALID_SENDER = new Translation("internal.command-manager.invalid-sender").add(ComponentType.CHAT, text("<red>You are not allowed to use this command!"));
 	public static final Translation COMMAND_MANAGER_INVALID_PERMISSION = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>You are not allowed to use this command!"));
 	public static final Translation COMMAND_MANAGER_INVALID_ARGUMENT = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>Invalid argument. <white>%value%"));
 	public static final Translation COMMAND_MANAGER_INTERNAL_EXCEPTION = new Translation("internal.command-manager.invalid-permission").add(ComponentType.CHAT, text("<red>An internal error has happened while executing this command! Report this to an admin!"));
+	// CHATGAME
+	public static final Translation CHATGAME_DESCRIPTION = new Translation("commands.chatgame.description").add(ComponentType.CHAT, text("Allows usage of chat events"));
+
 	// DELETE SPAWN
 	public static final Translation SPAWN_ALREADY_REMOVED = new Translation("commands.removespawn.already-removed").add(ComponentType.CHAT, text("<red>Couldn't remove spawn <white>%spawn%<red>, as it doesn't exist."));
 	public static final Translation SPAWN_REMOVED = new Translation("commands.removespawn.removed").add(ComponentType.CHAT, text("<green>Removed spawn <white>%spawn%<green> from the server."));
@@ -46,7 +45,7 @@ public class Translations {
 	public static final Translation COMMAND_SPY_COMMAND_ALREADY_UNBLOCKED = new Translation("commands.commandspy.command-already-unblocked").add(ComponentType.CHAT, text("<white>%command% <red>already has been unblocked."));
 	public static final Translation COMMAND_SPY_COMMAND_UNBLOCKED = new Translation("commands.commandspy.command-unblocked").add(ComponentType.CHAT, text("<white>%command% <green>is now unblocked from your command spy."));
 	public static final Translation LISTENER_COMMAND_SPY_EXECUTED = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY]<!bold> <yellow>%player% <white>executed command <yellow>%command_suggest%"));
-	public static final Translation LISTENER_COMMAND_SPY_EXECUTED_SIGN = new Translation("listeners.commandsspy.executed").add(ComponentType.CHAT, text("<gold><bold>[CSPY]<!bold> <yellow>%player% <white>executed sign command (%x%, %y%, %z%, %world%) <yellow>%command_suggest%"));
+	public static final Translation LISTENER_COMMAND_SPY_EXECUTED_SIGN = new Translation("listeners.commandsspy.executed-sign").add(ComponentType.CHAT, text("<gold><bold>[CSPY]<!bold> <yellow>%player% <white>executed sign command (%x%, %y%, %z%, %world%) <yellow>%command_suggest%"));
 	// Dupable modification
 	public static final Translation COMMAND_DUPABLE_AIR = new Translation("commands.dupable.air").add(ComponentType.CHAT, text("<red>You cannot change if air is dupable or undupable."));
 	public static final Translation COMMAND_DUPABLE_MADE_DUPABLE = new Translation("commands.dupable.made-dupable").add(ComponentType.CHAT, text("<red>Made your item dupable."));
@@ -113,6 +112,7 @@ public class Translations {
 	// Clear my own chat
 	public static final Translation COMMAND_CHAT_CLEAR_SELF = new Translation("commands.clear-my-chat.success").add(ComponentType.CHAT, text("<green>Cleared your chat!"));
 	// Dupe
+	public static final Translation COMMAND_DUPE_HIGH_DUPE_AMOUNT = new Translation("commands.dupe.donator-amount").add(ComponentType.CHAT, text("<red>You can only dupe up to <white>%max_amount%<white>! Purchase a rank to dupe up to <white>%donator_max_amount%</white>"));
 	public static final Translation COMMAND_DUPE_UNDUPABLE = new Translation("commands.dupe.undupable").add(ComponentType.CHAT, text("<red>You cannot dupe your item as it's undupable."));
 	public static final Translation COMMAND_DUPE_BUNDLE = new Translation("commands.dupe.bundle").add(ComponentType.CHAT, text("<red>You cannot dupe your bundle as it contains undupable items."));
 	public static final Translation COMMAND_DUPE_SHULKER = new Translation("commands.dupe.shulker").add(ComponentType.CHAT, text("<red>You cannot dupe your item as it's undupable."));
@@ -214,50 +214,12 @@ public class Translations {
 		return translation.values();
 	}
 
-	public static JsonObject createDefaults() throws IllegalAccessException {
-		JsonObject fullObject = new JsonObject();
-		Class<Translations> translationsClass = Translations.class;
-		Field[] fields = translationsClass.getFields();
-		for (Field field : fields){
-			if (field.canAccess(null)){
-				Object object = field.get(null);
-				if (object instanceof Translation translation){
-					Message message = translation.messages;
-					JsonElement element = null;
-					// TODO fix this so it saves messages properly and allows other messages than CHAT being stored only
-					if (translation.messages.useObject()) {
-						JsonObject current = new JsonObject();
-						for (Map.Entry<ComponentType, ComponentPart> entry : message.componentPart.entrySet()) {
-							ComponentType type = entry.getKey();
-							ComponentPart part = entry.getValue();
-
-							if (part instanceof TitleComponentPart title) {
-								JsonObject titleObj = new JsonObject();
-								titleObj.addProperty("in", title.getFadeIn().toMillis());
-								titleObj.addProperty("stay", title.getStay().toMillis());
-								titleObj.addProperty("out", title.getFadeOut().toMillis());
-								titleObj.addProperty("value", mm.serialize(part.getTextComponent()));
-								current.add(type.getName(), titleObj);
-							} else {
-								current.addProperty(type.getName(), mm.serialize(part.getTextComponent()));
-							}
-						}
-						element = current;
-					} else {
-						element = gson.toJsonTree(mm.serialize(((ComponentPart) (List.of(message.componentPart.values().toArray()).getFirst())).getTextComponent()));
-					}
-					fullObject.add(translation.key, element);
-				}
-			}
-		}
-		return fullObject;
-	}
-
-	public static class Message {
+	public static class Message extends bet.astral.messenger.v2.translation.Translation.Message {
 		private final Map<ComponentType, ComponentPart> componentPart = new HashMap<>();
 		private final Translation translation;
 		public Message(Translation translation){
-			this.translation = translation;
+            super(translation);
+            this.translation = translation;
 		}
 
 		public Message add(ComponentType componentType, Component component){
@@ -265,11 +227,11 @@ public class Translations {
 			return this;
 		}
 		public Message add(ComponentType componentType, Component component, Title.Times times){
-			componentPart.put(componentType, ComponentPart.of(component, times));
+			componentPart.put(componentType, ComponentPart.title(component, times));
 			return this;
 		}
 
-		boolean useObject(){
+		public boolean useObject(){
 			return componentPart.size()>1 || componentPart.get(ComponentType.CHAT)==null;
 		}
 
@@ -278,12 +240,13 @@ public class Translations {
 		}
 	}
 
-	public static class Translation implements TranslationKey{
+	public static class Translation extends bet.astral.messenger.v2.translation.Translation implements TranslationKey{
 		private final String key;
 		private final Message messages;
 
 		public Translation(String key) {
-			translation.put(key, this);
+            super(key);
+            translation.put(key, this);
 			this.key = key;
 			this.messages = new Message(this);
 		}
@@ -298,7 +261,7 @@ public class Translations {
 			return this;
 		}
 		public Translation add(ComponentType componentType, Component component, Title.Times times){
-			messages.add(componentType, component, times);
+			messages.add(componentType, times, component);
 			return this;
 		}
 	}

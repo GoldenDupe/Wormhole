@@ -44,10 +44,11 @@ repositories {
 
 
 dependencies {
-    implementation 'bet.astral:messenger:2.3.0' // Messenger
+    implementation 'bet.astral:messenger:2.3.2' // Messenger
     implementation 'bet.astral:cloudplusplus:1.3.0'
     implementation("bet.astral:more4j:1.0.2")
-    implementation 'bet.astral:guiman:1.2.0'
+    implementation 'bet.astral:guiman:1.2.1'
+    implementation 'bet.astral:chatgamecore:1.0.0'
 
     //compileOnly 'org.reflections:reflections:0.10.2' // Reflections - Use classgraph for faster reflections
     compileOnly 'io.github.classgraph:classgraph:4.8.165'

@@ -1,9 +1,10 @@
 package xyz.goldendupe;
 
+import bet.astral.chatgamecore.dispatcher.ChatEventDispatcher;
 import bet.astral.fusionflare.FusionFlare;
 import bet.astral.guiman.GUIMan;
-import bet.astral.messenger.v2.locale.LanguageTable;
-import bet.astral.messenger.v2.locale.source.LanguageSource;
+import bet.astral.messenger.v2.source.LanguageTable;
+import bet.astral.messenger.v2.source.source.LanguageSource;
 import bet.astral.messenger.v2.translation.TranslationKeyRegistry;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
 import bet.astral.messenger.v2.permission.Permission;
@@ -38,13 +39,19 @@ import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import xyz.goldendupe.chat.games.CopyFastestChatGame;
+import xyz.goldendupe.chat.games.MathChatGame;
+import xyz.goldendupe.chat.games.TrueFalseChatGame;
+import xyz.goldendupe.chat.games.UnscrambleChatGame;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
+import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.database.PlayerDatabase;
 import xyz.goldendupe.database.SpawnDatabase;
 import xyz.goldendupe.database.astronauts.CommandSpyDatabase;
 import xyz.goldendupe.database.sqlite.SQLitePlayerDatabase;
 import xyz.goldendupe.datagen.GenerateFiles;
 import xyz.goldendupe.listeners.GDListener;
+import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.messenger.Translations;
 import xyz.goldendupe.models.GDSavedData;
 import xyz.goldendupe.models.GDSettings;
@@ -55,8 +62,6 @@ import xyz.goldendupe.models.serializer.SettingsSerializer;
 import xyz.goldendupe.scoreboard.Scoreboard;
 import xyz.goldendupe.utils.MemberType;
 import xyz.goldendupe.utils.Seasons;
-import xyz.goldendupe.command.defaults.ToggleItemsCommand;
-import xyz.goldendupe.messenger.GoldenMessenger;
 import xyz.goldendupe.utils.Timer;
 
 import java.io.*;
@@ -96,6 +101,8 @@ public final class GoldenDupe extends JavaPlugin {
     private Chat vaultChat = null;
     private Economy vaultEconomy = null;
     private LuckPerms luckPerms = null;
+    @Getter
+    private ChatEventDispatcher chatEventDispatcher = new ChatEventDispatcher();
     // Do NOT reset
     @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
     private List<InitAfterBootstrap> initAfterBootstraps;
@@ -122,6 +129,11 @@ public final class GoldenDupe extends JavaPlugin {
         instance = this;
         PaperMessenger.init(this);
         GUIMan.init(this);
+        chatEventDispatcher.registerListeners(this);
+        CopyFastestChatGame.register(chatEventDispatcher);
+        MathChatGame.register(chatEventDispatcher);
+        TrueFalseChatGame.register(chatEventDispatcher);
+        UnscrambleChatGame.register(chatEventDispatcher);
         try {
             scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(this);
         } catch (NoPacketAdapterAvailableException e) {

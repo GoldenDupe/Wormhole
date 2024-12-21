@@ -23,7 +23,7 @@ public class CommandSpyListener implements GDListener {
 		this.goldenDupe = goldenDupe;
 	}
 
-	@EventHandler
+//	@EventHandler
 	public void onCommandPreprocess(PlayerCommandPreprocessEvent event){
 		Player whoExecuted = event.getPlayer();
 		String command = event.getMessage();
@@ -32,7 +32,7 @@ public class CommandSpyListener implements GDListener {
 						PredicatePermission.of(sender -> {
 							if (sender instanceof PlayerReceiver player) {
 								CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player.getPlayer());
-								if (user.isCommandSpyToggled()) {
+								if (user.isCommandSpyToggled() && player.hasPermission("goldendupe.admin.cspy")) {
 									if (user.blockedUsers().contains(whoExecuted.getUniqueId())) {
 										return false;
 									}
@@ -52,7 +52,7 @@ public class CommandSpyListener implements GDListener {
 						Placeholder.of("command_suggest", Component.text(command).clickEvent(ClickEvent.suggestCommand(command)).hoverEvent(HoverEvent.showText(Component.text("Click to suggest this command to your chat box."))))
 				);
 	}
-	@EventHandler
+	//	@EventHandler
 	public void onCommandSignPreprocess(PlayerSignCommandPreprocessEvent event){
 		Player whoExecuted = event.getPlayer();
 		String command = event.getMessage();
@@ -61,7 +61,7 @@ public class CommandSpyListener implements GDListener {
 						PredicatePermission.of(sender -> {
 							if (sender instanceof PlayerReceiver player) {
 								CSPYUser user = goldenDupe.commandSpyDatabase().fromPlayer(player.getPlayer());
-								if (user.isCommandSpyToggled()) {
+								if (user.isCommandSpyToggled() && player.hasPermission("goldendupe.admin.cspy")) {
 									if (user.blockedUsers().contains(whoExecuted.getUniqueId())) {
 										return false;
 									}

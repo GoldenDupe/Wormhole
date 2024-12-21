@@ -39,7 +39,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
     private void createTable() {
         try {
             PreparedStatement statement = connection.
-                    prepareStatement("CREATE TABLE IF NOT EXISTS users (uniqueId VARCHAR(36), " +
+                    prepareStatement("CREATE TABLE IF NOT EXISTS users (uniqueId VARCHAR(36) PRIMARY KEY, " +
                             "chatMode VARCHAR(15), " +
                             "chatFormat TEXT, " +
                             "itemsGenerated INTEGER, " +
@@ -60,58 +60,59 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
     }
     @Override
     public CompletableFuture<GDPlayer> load(Player player) {
-        return CompletableFuture.supplyAsync(()-> {
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 List<GDHome> homes = homeDatabase.loadHomes(player);
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE uniqueId = ?");
-                PackedPreparedStatement preparedStatement = new PackedPreparedStatement(statement);
-                preparedStatement.setUUID(1, player.getUniqueId());
-                PackedResultSet resultSet = new PackedResultSet(
-                        preparedStatement.executeQuery());
 
-                if (!resultSet.isClosed() && resultSet.next()) {
-                    return new GDPlayer(
-                            goldenDupe,
-                            player.getUniqueId(),
-                            resultSet.getEnum("chatMode", GDChat.class),
-                            resultSet.getJson("chatFormat", GDChatColor.class),
-                            homes,
-                            resultSet.getLong("itemsDuped"),
-                            resultSet.getLong("timesDuped"),
-                            resultSet.getLong("itemsGenerated"),
-                            resultSet.getBoolean("toggleAutoClearInventory"),
-                            resultSet.getBoolean("toggleRandomItem"),
-                            resultSet.getBoolean("toggleDrop"),
-                            resultSet.getBoolean("togglePickup"),
-                            resultSet.getBoolean("toggleNightVision"),
-                            resultSet.getBoolean("toggleBottles"),
-                            resultSet.getBoolean("toggleSpeed")
-                    );
+                String query = "SELECT * FROM users WHERE uniqueId = ?";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    statement.setString(1, player.getUniqueId().toString());
+                    try (ResultSet resultSet = statement.executeQuery()) {
+                        if (resultSet.next()) {
+                            PackedResultSet packedResultSet = new PackedResultSet(resultSet);
+                            return new GDPlayer(
+                                    goldenDupe,
+                                    player.getUniqueId(),
+                                    packedResultSet.getEnum("chatMode", GDChat.class),
+                                    packedResultSet.getJson("chatFormat", GDChatColor.class),
+                                    homes,
+                                    resultSet.getLong("itemsDuped"),
+                                    resultSet.getLong("timesDuped"),
+                                    resultSet.getLong("itemsGenerated"),
+                                    resultSet.getBoolean("toggleAutoClearInventory"),
+                                    resultSet.getBoolean("toggleRandomItem"),
+                                    resultSet.getBoolean("toggleDrop"),
+                                    resultSet.getBoolean("togglePickup"),
+                                    resultSet.getBoolean("toggleNightVision"),
+                                    resultSet.getBoolean("toggleBottles"),
+                                    resultSet.getBoolean("toggleSpeed")
+                            );
+                        }
+                    }
                 }
-
-                if (!resultSet.isClosed()){
-                    resultSet.close();
-                }
-                preparedStatement.close();
-
+                // If no result, create a new player instance
                 return new GDPlayer(goldenDupe, player.getUniqueId());
             } catch (SQLException e) {
                 goldenDupe.getSLF4JLogger().error("Error while trying to load " + player.getUniqueId(), e);
-                if (Bukkit.getPlayer(player.getUniqueId()) != null) {
-                    Bukkit.getPlayer(player.getUniqueId()).kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! " + GoldenDupe.DISCORD));
+                Player targetPlayer = Bukkit.getPlayer(player.getUniqueId());
+                if (targetPlayer != null) {
+                    targetPlayer.kick(Component.text("INTERNAL ERROR RETRY TO JOIN AND CREATE A TICKET! " + GoldenDupe.DISCORD));
                 }
                 return null;
             }
         });
     }
 
+
     @Override
     public CompletableFuture<Void> save(GDPlayer player) {
         return CompletableFuture.runAsync(()->{
             try {
                 PackedPreparedStatement getStatement = new PackedPreparedStatement(connection.prepareStatement("SELECT * FROM users WHERE uniqueId = ?"));
+                getStatement.setUUID(1, player.getUniqueId());
                 ResultSet resultSet = getStatement.executeQuery();
                 if (resultSet != null && resultSet.next()){
+                    System.out.println("UPDATE");
                     PackedPreparedStatement updateStatement = new PackedPreparedStatement(
                             connection.prepareStatement("UPDATE users SET chatMode = ?, chatFormat = ?, itemsDuped = ?, timesDuped = ?, itemsGenerated = ?, toggleAutoClearInventory = ?," +
                                     "toggleRandomItem = ?, toggleDrop = ?, togglePickup = ?, toggleNightVision = ?, toggleBottles = ?, toggleSpeed = ? WHERE uniqueId = ?"),
@@ -126,12 +127,14 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                     updateStatement.setBoolean(7, player.isToggleRandomItems());
                     updateStatement.setBoolean(8, player.isToggleDropItem());
                     updateStatement.setBoolean(9, player.isTogglePickupItem());
-                    updateStatement.setBoolean(10, player.isTogglePotionBottles());
-                    updateStatement.setBoolean(11, player.isToggleSpeed());
-                    updateStatement.setUUID(12, player.getUniqueId());
+                    updateStatement.setBoolean(10, player.isToggleNightVision());
+                    updateStatement.setBoolean(11, player.isTogglePotionBottles());
+                    updateStatement.setBoolean(12, player.isToggleSpeed());
+                    updateStatement.setUUID(13, player.getUniqueId());
                     updateStatement.executeUpdate();
                     updateStatement.close();
                 } else {
+                    System.out.println("INSERT");
                     PackedPreparedStatement insertStatement = new PackedPreparedStatement(
                             connection.prepareStatement("INSERT INTO users (uniqueId, chatMode, chatFormat, itemsDuped, timesDuped, " +
                                     "itemsGenerated, toggleAutoClearInventory, toggleRandomItem, toggleDrop, togglePickup," +
@@ -147,8 +150,9 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                     insertStatement.setBoolean(8, player.isToggleRandomItems());
                     insertStatement.setBoolean(9, player.isToggleDropItem());
                     insertStatement.setBoolean(10, player.isTogglePickupItem());
-                    insertStatement.setBoolean(11, player.isTogglePotionBottles());
-                    insertStatement.setBoolean(12, player.isToggleSpeed());
+                    insertStatement.setBoolean(11, player.isToggleNightVision());
+                    insertStatement.setBoolean(12, player.isTogglePotionBottles());
+                    insertStatement.setBoolean(13, player.isToggleSpeed());
                     insertStatement.executeUpdate();
                     insertStatement.close();
                 }
@@ -196,7 +200,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
             try {
                 PreparedStatement statement = connection
                         .prepareStatement("CREATE TABLE IF NOT EXISTS homes (ownerId VARCHAR(36), " +
-                                "uniqueId VARCHAR(36), " +
+                                "uniqueId VARCHAR(36) PRIMARY KEY, " +
                                 "name VARCHAR(20), " +
                                 "world VARCHAR(36)," +
                                 "x DOUBLE," +
@@ -257,7 +261,7 @@ public class SQLitePlayerDatabase extends PlayerDatabase {
                 statement.executeUpdate();
                 statement.close();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                goldenDupe.getSLF4JLogger().error("Couldn't delete home ", e);
             }
         }
 

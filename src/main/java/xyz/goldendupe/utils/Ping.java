@@ -6,7 +6,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public class Ping {
 	public static Ping tps = new Ping(
-			Component.text("Fetching...", NamedTextColor.RED),
+			Component.text("Uh Oh...", NamedTextColor.RED),
 			Triplet.immutable(0D, 7D, NamedTextColor.DARK_RED),
 			Triplet.immutable(7D, 10D, NamedTextColor.RED),
 			Triplet.immutable(10D, 14.0D, NamedTextColor.YELLOW),
@@ -74,11 +74,30 @@ public class Ping {
 		return showMS;
 	}
 
-	public Component format(int ping){
-		return format(ping, true);
-	}
 	public Component format(double ping) {
 		return format(ping, false);
+	}
+	public Component format(int ping) {
+		if (ping < 0) {
+			return loading; // Use the predefined loading message.
+		}
+
+		NamedTextColor color = worstValue; // Default worst case.
+		if (ping >= bestValue.getFirst() && ping <= bestValue.getSecond()) {
+			color = bestValue.getThird();
+		} else if (ping >= goodValue.getFirst() && ping <= goodValue.getSecond()) {
+			color = goodValue.getThird();
+		} else if (ping >= okValue.getFirst() && ping <= okValue.getSecond()) {
+			color = okValue.getThird();
+		} else if (ping >= worseValue.getFirst() && ping <= worseValue.getSecond()) {
+			color = worseValue.getThird();
+		}
+
+		Component result = Component.text(ping, color);
+		if (showMS) {
+			result = result.append(Component.text("ms", color));
+		}
+		return result;
 	}
 	public Component format(double ping, boolean integer) {
 		if (ping < 0) {

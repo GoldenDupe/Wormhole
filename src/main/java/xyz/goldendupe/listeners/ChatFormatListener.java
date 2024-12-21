@@ -9,6 +9,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;
 import net.luckperms.api.model.user.User;
@@ -25,6 +27,9 @@ import xyz.goldendupe.utils.OriginalMemberType;
 
 import java.util.Optional;
 
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.TextDecoration.BOLD;
+
 public class ChatFormatListener implements GDListener {
 	private static GoldenDupe goldenDupe;
 
@@ -32,7 +37,7 @@ public class ChatFormatListener implements GDListener {
 		return format(player, player, GDChat.GLOBAL, component);
 	}
 	public static @NotNull Component format(Player player, Audience whoSees, GDChat chat, Component message) {
-		Component name = GoldenPlaceholderManager.prefixNameSuffix(player);
+		Component name = GoldenPlaceholderManager.prefixDisplaynameSuffix(player);
 
 		LuckPerms luckPerms = goldenDupe.luckPerms();
 		User user = luckPerms.getPlayerAdapter(Player.class).getUser(player);
@@ -40,16 +45,10 @@ public class ChatFormatListener implements GDListener {
 		Optional<OriginalMemberType> roleOptional = originalRoleNode.getMetaValue(MarkAsOGCommand.OG_ROLE_KEY, OriginalMemberType::valueOf);
 		if (roleOptional.isPresent()) {
 			OriginalMemberType originalMemberType = roleOptional.get();
-			name = name.hoverEvent(HoverEvent.showText(Component
-					.text("OG Player", NamedTextColor.GOLD, TextDecoration.BOLD)
-					.appendSpace()
-					.append(Component.text("|", Color.DARK_GRAY, TextDecoration.BOLD))
-					.appendSpace()
-					.append(Component
-							.text("Previous rank ", Color.WHITE)
-							.append(Component.text(":", Color.GRAY))
-							.append(originalMemberType.displayname(player))
-					).decoration(TextDecoration.ITALIC, false)));
+			name = name.hoverEvent(HoverEvent.showText(
+					MiniMessage.miniMessage()
+									.deserialize("<gold><bold>O<white><bold>G<reset><white> Player\n<gray>Previously ranked as <white><rank><reset>",
+											net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component("rank", originalMemberType.name(player)))));
 		}
 
 		Component format = Component.empty();
@@ -77,7 +76,7 @@ public class ChatFormatListener implements GDListener {
 		//noinspection UnnecessaryUnicodeEscape
 		format = format.append(name)
 				.appendSpace()
-				.append(Component.text("\u00BB", NamedTextColor.GRAY))
+				.append(text("\u00BB", NamedTextColor.GRAY))
 				.appendSpace()
 				.append(message);
 		return format;

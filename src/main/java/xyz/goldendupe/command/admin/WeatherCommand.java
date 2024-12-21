@@ -1,6 +1,7 @@
 package xyz.goldendupe.command.admin;
 
 import bet.astral.cloudplusplus.annotations.Cloud;
+import bet.astral.messenger.v2.translation.Translation;
 import org.bukkit.Bukkit;
 import org.bukkit.WeatherType;
 import org.bukkit.World;
@@ -62,8 +63,8 @@ public class WeatherCommand extends GDCloudCommand {
 		},
 		;
 		private final WeatherType type;
-		private final Translations.Translation translation;
-		Weather(WeatherType type, Translations.Translation translation) {
+		private final Translation translation;
+		Weather(WeatherType type, Translation translation) {
 			this.type = type;
 			this.translation = translation;
 		}
