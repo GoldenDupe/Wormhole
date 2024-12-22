@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class TrueFalseChatGame extends TrueOrFalseChatGame {
     @GameData.DefaultData
-    public static GameData GAME_DATA = new GameData(new Random(System.currentTimeMillis()), true, 600);
+    public static GameData GAME_DATA = new GameData(new Random(System.currentTimeMillis()), true, 30);
     @Create(name="truefalse")
     public static TrueFalseChatGame create(GameData gameData, RunData runData){
         Statement word = statements.get(gameData.getRandom().nextInt(0, statements.size()-1));

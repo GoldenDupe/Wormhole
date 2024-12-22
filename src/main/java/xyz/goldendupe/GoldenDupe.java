@@ -33,16 +33,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-import xyz.goldendupe.chat.games.CopyFastestChatGame;
-import xyz.goldendupe.chat.games.MathChatGame;
-import xyz.goldendupe.chat.games.TrueFalseChatGame;
-import xyz.goldendupe.chat.games.UnscrambleChatGame;
+
+import xyz.goldendupe.chat.games.*;
 import xyz.goldendupe.command.bootstrap.InitAfterBootstrap;
 import xyz.goldendupe.command.defaults.ToggleItemsCommand;
 import xyz.goldendupe.database.PlayerDatabase;
@@ -79,7 +76,9 @@ public final class GoldenDupe extends JavaPlugin {
     public static Spark spark;
     public static final String DISCORD = "https://discord.gg/DabTg3wVGQ";
     private static GoldenDupe instance;
-    public static final Random random = new Random(System.nanoTime());
+    public static final Random RANDOM = new Random(System.nanoTime());
+    @Deprecated(forRemoval = true)
+    public static final Random random = RANDOM;
     public static Seasons SEASON = Seasons.SEASON_1;
     private boolean isDebug = true;
     @Getter
@@ -104,15 +103,17 @@ public final class GoldenDupe extends JavaPlugin {
     @Getter
     private ChatEventDispatcher chatEventDispatcher = new ChatEventDispatcher();
     // Do NOT reset
-    @Getter(AccessLevel.PUBLIC) private final Timer startTimer = new Timer();
+    @Getter(AccessLevel.PUBLIC)
+    private final Timer startTimer = new Timer();
     private List<InitAfterBootstrap> initAfterBootstraps;
 
-    public GoldenDupe(GoldenDupeBootstrap boostrap){
+    public GoldenDupe(GoldenDupeBootstrap boostrap) {
         this.isDevelopmentServer = boostrap.getCommandRegister().isDebug();
         initAfterBootstraps = boostrap.initAfterBootstraps;
         messenger = boostrap.messenger;
         isDebug = boostrap.isDev();
     }
+
     private GoldenDupe() {
         throw new IllegalStateException("GoldenDupe cannot be used in non Paper (or forks) of it. Please update to latest Paper!");
     }
@@ -132,8 +133,11 @@ public final class GoldenDupe extends JavaPlugin {
         chatEventDispatcher.registerListeners(this);
         CopyFastestChatGame.register(chatEventDispatcher);
         MathChatGame.register(chatEventDispatcher);
-        TrueFalseChatGame.register(chatEventDispatcher);
+        // TODO fix issues with true/false game in chat game core
+//        TrueFalseChatGame.register(chatEventDispatcher);
         UnscrambleChatGame.register(chatEventDispatcher);
+        new GameScheduler(this).run();
+
         try {
             scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(this);
         } catch (NoPacketAdapterAvailableException e) {
@@ -142,13 +146,13 @@ public final class GoldenDupe extends JavaPlugin {
 
         GenerateFiles generateFiles = new GenerateFiles();
         getLogger().info("Patching settings and global data...");
-	    try {
-		    generateFiles.generate(getDataFolder());
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
+        try {
+            generateFiles.generate(getDataFolder());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         getLogger().info("Loading settings and global data...");
-	    try {
+        try {
             this.settings = getJson(generateFiles.gson, new File(getDataFolder(), "config.json"), GDSettings.class);
             this.savedData = getJson(generateFiles.gson, new File(getDataFolder(), "global-data.json"), GDSavedData.class);
 
@@ -172,20 +176,20 @@ public final class GoldenDupe extends JavaPlugin {
         initAfterBootstraps.forEach(InitAfterBootstrap::init);
 
         getLogger().info("Trying to find Vault");
-        if (getServer().getPluginManager().getPlugin("Vault") != null){
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
 
             RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(Chat.class);
-            if (chatProvider != null){
+            if (chatProvider != null) {
                 vaultChat = chatProvider.getProvider();
             }
             RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
-            if (economyProvider != null){
+            if (economyProvider != null) {
                 vaultEconomy = economyProvider.getProvider();
             }
         }
 
         getLogger().info("Trying to find LuckPerms");
-        if (getServer().getPluginManager().getPlugin("LuckPerms") != null){
+        if (getServer().getPluginManager().getPlugin("LuckPerms") != null) {
             luckPerms = LuckPermsProvider.get();
         }
 
@@ -203,13 +207,13 @@ public final class GoldenDupe extends JavaPlugin {
         spawnDatabase = new SpawnDatabase(this);
         spawnDatabase.load();
 
-        getServer().getScheduler().runTaskTimer(this, ()->{
-            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 0, true, false, false);
-            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS*2, 1, true, false, false);
-            for (Player player : getServer().getOnlinePlayers()){
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            PotionEffect speedEffect = new PotionEffect(PotionEffectType.SPEED, ToggleItemsCommand.RANDOM_ITEM_TICKS * 2, 0, true, false, false);
+            PotionEffect nightVisionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, ToggleItemsCommand.RANDOM_ITEM_TICKS * 2, 1, true, false, false);
+            for (Player player : getServer().getOnlinePlayers()) {
                 GDPlayer gdPlayer = playerDatabase.fromPlayer(player);
-                if (gdPlayer==null){
-                    getLogger().severe("NPE while trying to fetch user for "+ player.getUniqueId() + " ("+player.getName()+")");
+                if (gdPlayer == null) {
+                    getLogger().severe("NPE while trying to fetch user for " + player.getUniqueId() + " (" + player.getName() + ")");
                     continue;
                 }
                 if (gdPlayer.isToggleRandomItems()) {
@@ -221,44 +225,44 @@ public final class GoldenDupe extends JavaPlugin {
                     // Adding the items to a map allows checking if player could actually hold the item
                     Map<Integer, ItemStack> items = player.getInventory().addItem(itemStack);
                     // If the map is not empty, the player couldn't hold the item
-                    if (!items.isEmpty()){
-                        for (Map.Entry<Integer, ItemStack> entry : items.entrySet()){
+                    if (!items.isEmpty()) {
+                        for (Map.Entry<Integer, ItemStack> entry : items.entrySet()) {
                             // Spawning the item as a dropped item and making the player who dropped it
                             // The player will have pickup priority for the item
-                            player.getWorld().dropItem(player.getLocation(), entry.getValue(), (item)->{
+                            player.getWorld().dropItem(player.getLocation(), entry.getValue(), (item) -> {
                                 item.setThrower(player.getUniqueId());
                             });
                         }
                     }
-                    gdPlayer.setGeneratedRandomItems(gdPlayer.getGeneratedRandomItems()+1);
-                    savedData.setItemsGenerated(savedData.getItemsGenerated()+1);
+                    gdPlayer.setGeneratedRandomItems(gdPlayer.getGeneratedRandomItems() + 1);
+                    savedData.setItemsGenerated(savedData.getItemsGenerated() + 1);
                 }
 
 
-                if (gdPlayer.isToggleSpeed()){
-                    if (!player.hasPotionEffect(PotionEffectType.SPEED) || player.hasPotionEffect(PotionEffectType.SPEED) && player.getPotionEffect(PotionEffectType.SPEED).getAmplifier()<2){
+                if (gdPlayer.isToggleSpeed()) {
+                    if (!player.hasPotionEffect(PotionEffectType.SPEED) || player.hasPotionEffect(PotionEffectType.SPEED) && player.getPotionEffect(PotionEffectType.SPEED).getAmplifier() < 2) {
                         player.removePotionEffect(PotionEffectType.SPEED);
                         speedEffect.apply(player);
                     }
                 }
-                if (gdPlayer.isToggleNightVision()){
+                if (gdPlayer.isToggleNightVision()) {
                     player.removePotionEffect(PotionEffectType.NIGHT_VISION);
                     nightVisionEffect.apply(player);
                 }
             }
         }, 20, ToggleItemsCommand.RANDOM_ITEM_TICKS);
-        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
-            if (getSettings().isGlobalChatMute()){
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t) -> {
+            if (getSettings().isGlobalChatMute()) {
                 messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_1);
                 Bukkit.broadcast(Component.text("True"));
             }
         }, 100, 1, TimeUnit.SECONDS);
-        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t) -> {
             if (getSettings().isGlobalChatMute()) {
                 messenger().broadcast(Permission.of(MemberType.MODERATOR.permissionOf("mutechat")), Translations.TIMED_MUTECHAT_REMINDER_30);
             }
         }, 100, 30, TimeUnit.SECONDS);
-        getServer().getAsyncScheduler().runAtFixedRate(this, (t)->{
+        getServer().getAsyncScheduler().runAtFixedRate(this, (t) -> {
             Scoreboard.tickGlobal();
         }, 100, 50, TimeUnit.MILLISECONDS);
 
@@ -277,35 +281,35 @@ public final class GoldenDupe extends JavaPlugin {
                 .registerTypeAdapter(GDSettings.class, new SettingsSerializer())
                 .registerTypeAdapter(GDSavedData.class, new GlobalSaveSerializer())
                 .disableHtmlEscaping()
-                        .setPrettyPrinting().create();
+                .setPrettyPrinting().create();
         write(new File(getDataFolder(), "config.json"), settings, gson);
         write(new File(getDataFolder(), "global-data.json"), savedData, gson);
         scoreboardLibrary.close();
 
-        Bukkit.getOnlinePlayers().forEach(player-> playerDatabase.save(playerDatabase.fromPlayer(player)).thenRun(()->playerDatabase.unload(player)));
+        Bukkit.getOnlinePlayers().forEach(player -> playerDatabase.save(playerDatabase.fromPlayer(player)).thenRun(() -> playerDatabase.unload(player)));
         getComponentLogger().info("GoldenDupe has disabled!");
     }
 
-    <T> void write(File file, T value, Gson gson){
-        if (!file.exists()){
-            if (!file.getParentFile().exists()){
+    <T> void write(File file, T value, Gson gson) {
+        if (!file.exists()) {
+            if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
-	        try {
-		        file.createNewFile();
-	        } catch (IOException e) {
-		        throw new RuntimeException(e);
-	        }
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-	    try {
-		    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write(gson.toJson(value));
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(gson.toJson(value));
             writer.flush();
             writer.close();
-	    } catch (IOException e) {
-		    throw new RuntimeException(e);
-	    }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Updated it with fewer reflections
@@ -343,10 +347,10 @@ public final class GoldenDupe extends JavaPlugin {
         return config;
     }
 
-    public void setIfNotSet(Configuration configuration, String key, Object defaultValue, Class<?>... allowedTypes){
-        if (configuration.get(key) != null){
-            for (Class<?> clazz : allowedTypes){
-                if (clazz.isInstance(configuration.get(key))){
+    public void setIfNotSet(Configuration configuration, String key, Object defaultValue, Class<?>... allowedTypes) {
+        if (configuration.get(key) != null) {
+            for (Class<?> clazz : allowedTypes) {
+                if (clazz.isInstance(configuration.get(key))) {
                     return;
                 }
             }
@@ -354,7 +358,7 @@ public final class GoldenDupe extends JavaPlugin {
         configuration.set(key, defaultValue);
     }
 
-    private void loadListeners(){
+    private void loadListeners() {
         Class<?> command = GDListener.class;
         String pkg = command.getPackage().getName();
         try (ScanResult scanResult = new ClassGraph()
@@ -368,11 +372,11 @@ public final class GoldenDupe extends JavaPlugin {
     }
 
 
-    public void registerListener(Listener listener){
+    public void registerListener(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
     }
 
-    public void registerListener(Class<?> listener){
+    public void registerListener(Class<?> listener) {
         if (listener.isInterface()) {
             return;
         }
@@ -383,64 +387,64 @@ public final class GoldenDupe extends JavaPlugin {
                 constructor.setAccessible(true);
                 Listener eventListener = (Listener) constructor.newInstance(this);
                 if (isDebug)
-                    getLogger().info("Registering listener: "+ listener.getName());
+                    getLogger().info("Registering listener: " + listener.getName());
 
                 getServer().getPluginManager().registerEvents(eventListener, this);
                 if (isDebug)
-                    getLogger().info("Registered listener: "+ listener.getName());
+                    getLogger().info("Registered listener: " + listener.getName());
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                 throw new RuntimeException("Failed to initialize event constructor with params GoldenDupe.class", e);
             }
         } catch (NoSuchMethodException ignore) {
-	        try {
+            try {
                 constructor = getConstructor(listener);
                 try {
                     constructor.setAccessible(true);
                     Listener eventListener = (Listener) constructor.newInstance();
                     if (isDebug)
-                        getLogger().info("Registering listener: "+ listener.getName());
+                        getLogger().info("Registering listener: " + listener.getName());
                     getServer().getPluginManager().registerEvents(eventListener, this);
                     if (isDebug)
-                        getLogger().info("Registered listener: "+ listener.getName());
+                        getLogger().info("Registered listener: " + listener.getName());
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException("Failed to initialize event constructor no params", e);
                 }
-	        } catch (NoSuchMethodException e) {
-		        throw new RuntimeException("Failed to find correct constructor for class: "+ listener.getName(), e);
-	        }
+            } catch (NoSuchMethodException e) {
+                throw new RuntimeException("Failed to find correct constructor for class: " + listener.getName(), e);
+            }
         }
     }
 
     public void registerPermission(String name) {
         org.bukkit.permissions.Permission bukkitPermission = new org.bukkit.permissions.Permission(name);
-        if (getServer().getPluginManager().getPermission(name)==null) {
+        if (getServer().getPluginManager().getPermission(name) == null) {
             getServer().getPluginManager().addPermission(bukkitPermission);
         }
     }
 
-    private void uploadUploads(){
+    private void uploadUploads() {
         String[] files = new String[]{
                 "config|yml",
                 "illegals|yml",
                 "messages|yml",
         };
-        for (String name : files){
+        for (String name : files) {
             name = name.replace("dm/", "discord-messages/");
 
             String[] split = name.split("\\|");
             String fileName = split[0];
             String ending = split[1];
-            File fileTemp = loadResourceAsTemp("/upload/"+fileName, ending);
-            File file = loadResourceToFile("/upload/"+fileName, ending, new File(getDataFolder(), fileName+"."+ending), true);
-            if (ending.matches("(?i)yml") || ending.matches("(?i)yaml")){
+            File fileTemp = loadResourceAsTemp("/upload/" + fileName, ending);
+            File file = loadResourceToFile("/upload/" + fileName, ending, new File(getDataFolder(), fileName + "." + ending), true);
+            if (ending.matches("(?i)yml") || ending.matches("(?i)yaml")) {
                 loadConfig(getConfig(fileTemp), getConfig(file), file);
             }
         }
     }
 
-    private void loadConfig(FileConfiguration tempConfig, FileConfiguration config, File file){
+    private void loadConfig(FileConfiguration tempConfig, FileConfiguration config, File file) {
         Set<String> keys = tempConfig.getKeys(false);
-        for (String key : keys){
+        for (String key : keys) {
             addDefaults(key, tempConfig, config);
         }
         try {
@@ -475,11 +479,11 @@ public final class GoldenDupe extends JavaPlugin {
         }
     }
 
-    private FileConfiguration getConfig(File file){
+    private FileConfiguration getConfig(File file) {
         return YamlConfiguration.loadConfiguration(file);
     }
 
-    public void setDebug(boolean debug){
+    public void setDebug(boolean debug) {
         this.isDebug = debug;
     }
 
@@ -515,15 +519,15 @@ public final class GoldenDupe extends JavaPlugin {
 
     public void reloadMessengers() {
         TranslationKeyRegistry translationRegistry = messenger.getTranslationKeyRegistry();
-        for (Map.Entry<Locale, LanguageTable> entry : messenger.getLanguages().entrySet()){
+        for (Map.Entry<Locale, LanguageTable> entry : messenger.getLanguages().entrySet()) {
             LanguageTable languageTable = entry.getValue();
             LanguageSource source = languageTable.getLanguageSource();
 
             source.loadAllComponents(translationRegistry.getTranslationKeys())
-                    .thenAccept((map)->{
-                        if (!map.isEmpty()){
-                            map.forEach((key, component)->{
-                                if (component != null){
+                    .thenAccept((map) -> {
+                        if (!map.isEmpty()) {
+                            map.forEach((key, component) -> {
+                                if (component != null) {
                                     languageTable.addComponentBase(key, component);
                                 }
                             });

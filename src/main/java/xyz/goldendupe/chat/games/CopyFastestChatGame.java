@@ -22,7 +22,7 @@ import java.util.Random;
 public class CopyFastestChatGame extends CopyTheWordChatGame {
     private static final List<String> possibleStrings = new LinkedList<>();
     @GameData.DefaultData
-    public static GameData GAME_DATA = new GameData(new Random((long) (System.currentTimeMillis()*2.5)), true, 600);
+    public static GameData GAME_DATA = new GameData(new Random((long) (System.currentTimeMillis()*2.5)), true, 100);
     @Create(name="copy")
     public static CopyFastestChatGame create(GameData gameData, RunData runData){
         if (runData instanceof CopyRunData copyRunData){

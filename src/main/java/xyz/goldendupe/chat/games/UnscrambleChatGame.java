@@ -21,7 +21,7 @@ import java.util.Random;
 public class UnscrambleChatGame extends UnscrambleWordChatGame {
     public static final List<String> possibleStrings = new LinkedList<>();
     @GameData.DefaultData
-    public static GameData GAME_DATA = new GameData(new Random(System.currentTimeMillis()), false, 600);
+    public static GameData GAME_DATA = new GameData(new Random(System.currentTimeMillis()), false, 100);
     @Create(name="unscramble")
     public static UnscrambleChatGame create(GameData gameData, RunData runData){
         String word = possibleStrings.get(gameData.getRandom().nextInt(0, possibleStrings.size()-1));

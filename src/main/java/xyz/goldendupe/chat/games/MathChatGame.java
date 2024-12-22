@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 
 public class MathChatGame extends bet.astral.chatgamecore.game.builtin.math.MathChatGame {
     @GameData.DefaultData
-    public static final GameData GAME_DATA = new GameData(new Random(System.nanoTime()), false, 800);
+    public static final GameData GAME_DATA = new GameData(new Random(System.nanoTime()), false, 200);
     @Create(name="math")
     public static MathChatGame create(GameData gameData, RunData runData){
         if (runData instanceof MathChatGame.MathRunData mathRunData){
@@ -38,19 +38,19 @@ public class MathChatGame extends bet.astral.chatgamecore.game.builtin.math.Math
                     // 3 value
                     return new Parentheses(
                             random,
-                            valueFirst(variables, random),
-                            MathEquationType.random(random),
-                            valueFirst(variables, random),
-                            MathEquationType.random(random),
-                            valueFirst(variables, random)
+                            valueThird(variables, random),
+                            MathEquationType.randomSimple(random),
+                            valueThird(variables, random),
+                            MathEquationType.randomSimple(random),
+                            valueThird(variables, random)
                     );
         } else {
             // 2 value
             return new Parentheses(
                     random,
-                    valueFirst(variables, random),
+                    valueThird(variables, random),
                     MathEquationType.random(random),
-                    valueFirst(variables, random)
+                    valueThird(variables, random)
             );
         }
     }
@@ -88,9 +88,9 @@ public class MathChatGame extends bet.astral.chatgamecore.game.builtin.math.Math
     }
 
     public static Object valueSecond(List<Variable> variables, Random random){
-        if (random.nextDouble()>0.8){
+        if (random.nextDouble()>0.99){
             return parentheses(variables, random);
-        } else if (random.nextDouble()>0.7){
+        } else if (random.nextDouble()>0.99){
             if (variables.isEmpty()){
                 return HardMathArguments.assignValue(variables, random, -50, 50, ValueType.VARIABLE);
             }

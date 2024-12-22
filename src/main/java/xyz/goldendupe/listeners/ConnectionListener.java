@@ -71,6 +71,9 @@ public class ConnectionListener implements GDListener {
 				event.getPlayer().teleportAsync(goldenDupe.getSpawnDatabase().get(SpawnCommand.Spawn.OVERWORLD.getName()).asLocation());
 			}, 5);
 		}
+
+
+		goldenDupe.getChatEventDispatcher().onJoin(player);
 	}
 
 	@EventHandler
