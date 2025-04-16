@@ -1,5 +1,4 @@
 plugins {
-    // Main java library
     id 'java'
 
     // Shadow jar to relocate jars
