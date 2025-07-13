@@ -6,11 +6,12 @@ plugins {
     //id 'com.github.johnrengelman.shadow' version '8.1.1'
     id("io.github.goooler.shadow") version "8.1.8"
     id 'io.freefair.lombok' version '8.6'
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
-    id("xyz.jpenilla.run-paper") version "2.3.0"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
-var minecraftServerVersion = '1.21.4'
+def minecraftServerVersion = '1.21.5'
+def groupProject = 'xyz.goldendupe.pluginsetup'
 group = 'xyz.goldendupe'
 version = '1.0'
 
@@ -45,7 +46,7 @@ repositories {
 dependencies {
     implementation 'com.github.AstralLiteratureClub:MoreForJava:-SNAPSHOT'
     implementation 'com.github.AstralLiteratureClub:MessageManager:-SNAPSHOT'
-    implementation 'com.github.AstralLiteratureClub:GUIMan:-SNAPSHOT'
+//    implementation 'com.github.AstralLiteratureClub:GUIMan:-SNAPSHOT'
     implementation 'com.github.AstralLiteratureClub:ChatGameCore:-SNAPSHOT'
     implementation 'com.github.AstralLiteratureClub:CloudPlusPlus:-SNAPSHOT'
 
@@ -75,7 +76,7 @@ dependencies {
     // Add packet adapter implementations you want:
     runtimeOnly("net.megavex:scoreboard-library-modern:$scoreboardLibraryVersion:mojmap") // Mojang mapped variant (only use if you know what you're doing!)
 
-    // Other Dependencies
+    paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")
     paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")
 }
 
@@ -106,11 +107,11 @@ jar {
 
 shadowJar {
     archiveClassifier = null
-    relocate 'bet.astral.messenger', 'xyz.goldendupe.libs.messenger'
-    relocate 'bet.astral.cloudplusplus', 'xyz.goldendupe.libs.cloudplusplus'
-    relocate 'bet.astral.tuples', 'xyz.goldendupe.libs.tuples'
-    relocate 'org.incendo.cloud', 'xyz.goldendupe.libs.org.incendo.cloud'
-    relocate 'net.magavex', "xyz.goldendupe.libs.net.megavex"
+    relocate 'bet.astral.messenger', groupProject+'.libs.messenger'
+    relocate 'bet.astral.cloudplusplus', groupProject+'.libs.cloudplusplus'
+    relocate 'bet.astral.tuples', groupProject+'.libs.tuples'
+    relocate 'org.incendo.cloud', groupProject+'.libs.org.incendo.cloud'
+    relocate 'net.magavex', groupProject+".libs.net.megavex"
 }
 
 tasks {
