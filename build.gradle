@@ -11,8 +11,8 @@ plugins {
 }
 
 def minecraftServerVersion = '1.21.5'
-def groupProject = 'xyz.goldendupe.pluginsetup'
-group = 'xyz.goldendupe'
+def groupProject = 'bet.astral.wormhole'
+group = 'bet.astral'
 version = '1.0'
 
 repositories {

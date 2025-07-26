@@ -1,4 +1,4 @@
-package bet.astral.pluginsetup.command;
+package bet.astral.wormhole.command;
 
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.BootstrapCommandRegisterer;
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.BootstrapHandler;

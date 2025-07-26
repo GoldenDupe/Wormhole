@@ -1,4 +1,4 @@
-package bet.astral.pluginsetup.plugin;
+package bet.astral.wormhole.plugin;
 
 import io.papermc.paper.plugin.loader.PluginClasspathBuilder;
 import io.papermc.paper.plugin.loader.PluginLoader;

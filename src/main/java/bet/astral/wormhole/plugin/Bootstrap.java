@@ -1,12 +1,11 @@
-package bet.astral.pluginsetup.plugin;
+package bet.astral.wormhole.plugin;
 
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.BootstrapHandler;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.source.LanguageTable;
 import bet.astral.messenger.v2.source.source.gson.GsonLanguageSource;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
-import bet.astral.pluginsetup.command.ExampleCommand;
-import bet.astral.pluginsetup.command.PluginCommandManager;
+import bet.astral.wormhole.command.PluginCommandManager;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;

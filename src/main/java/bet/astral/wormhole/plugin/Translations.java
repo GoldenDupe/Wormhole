@@ -1,4 +1,4 @@
-package bet.astral.pluginsetup.plugin;
+package bet.astral.wormhole.plugin;
 
 import bet.astral.messenger.v2.translation.TranslationKey;
 
