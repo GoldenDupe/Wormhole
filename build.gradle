@@ -68,7 +68,6 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4' // Luckperms
 
     paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")
-    paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")
 }
 
 // Some shit is importing 1.13 bukkit api and not 1.20.1 api

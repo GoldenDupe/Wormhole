@@ -1,9 +1,9 @@
 package bet.astral.wormhole.command.arguments;
 
 import bet.astral.wormhole.managers.PlayerCacheManager;
-import bet.astral.wormhole.objects.PlayerData;
-import bet.astral.wormhole.objects.PlayerHome;
-import bet.astral.wormhole.objects.PlayerWarp;
+import bet.astral.wormhole.objects.data.PlayerData;
+import bet.astral.wormhole.objects.data.PlayerHome;
+import bet.astral.wormhole.objects.data.PlayerWarp;
 import bet.astral.wormhole.plugin.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import net.kyori.adventure.text.Component;

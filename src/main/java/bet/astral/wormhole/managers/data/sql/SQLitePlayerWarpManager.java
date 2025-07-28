@@ -1,8 +1,8 @@
 package bet.astral.wormhole.managers.data.sql;
 
 import bet.astral.wormhole.managers.data.PlayerWarpDataManager;
-import bet.astral.wormhole.objects.PlayerHome;
-import bet.astral.wormhole.objects.PlayerWarp;
+import bet.astral.wormhole.objects.data.PlayerHome;
+import bet.astral.wormhole.objects.data.PlayerWarp;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.jetbrains.annotations.NotNull;

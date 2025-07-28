@@ -3,6 +3,8 @@ package bet.astral.wormhole.plugin;
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.BootstrapHandler;
 import bet.astral.cloudplusplus.minecraft.paper.mapper.CommandSourceStackToCommandSenderMapper;
 import bet.astral.messenger.v2.Messenger;
+import bet.astral.messenger.v2.receiver.Receiver;
+import bet.astral.messenger.v2.receiver.ReceiverConverter;
 import bet.astral.messenger.v2.source.LanguageTable;
 import bet.astral.messenger.v2.source.source.gson.GsonLanguageSource;
 import bet.astral.messenger.v3.minecraft.paper.cloud.PaperCaptionMessenger;
@@ -14,7 +16,9 @@ import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import lombok.Getter;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.translations.LocaleExtractor;
@@ -57,6 +61,14 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
         ));
         messenger.setDefaultLocale(messenger.getLanguageTable(Locale.US).getLanguageSource());
         messenger.loadTranslations(Locale.US, Translations.class);
+
+        // Make sure no message is sent to an offline player
+        messenger.registerReceiverConverter((ReceiverConverter) o -> {
+            if (o instanceof OfflinePlayer && !(o instanceof Player)) {
+                return Receiver.empty();
+            }
+            return null;
+        });
          return messenger;
     }
     private File loadLanguageFile(BootstrapContext bootstrapContext, Locale locale) {

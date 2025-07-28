@@ -13,4 +13,6 @@
   "commands.relocateplayerwarp.description": "Allows player to relocate their player warp.",
 
 
+  "command.argument.home.parse-exception": "You do not have a home named <white>%input%</white>",
+  "command.argument.player.parse-exception": "You cannot select yourself."
 }

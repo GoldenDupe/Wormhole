@@ -1,11 +1,10 @@
 package bet.astral.wormhole.managers;
 
 import bet.astral.wormhole.managers.data.PlayerWarpDataManager;
-import bet.astral.wormhole.objects.PlayerData;
-import bet.astral.wormhole.objects.PlayerHome;
-import bet.astral.wormhole.objects.PlayerWarp;
+import bet.astral.wormhole.objects.data.PlayerData;
+import bet.astral.wormhole.objects.data.PlayerHome;
 import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCacheManager {
     private PlayerWarpDataManager<PlayerHome> warpDataManager;
@@ -18,10 +17,9 @@ public class PlayerCacheManager {
         return null;
     }
 
-    public void save(PlayerData playerData) {
+    public void save(@NotNull PlayerData playerData) {
         playerData.getDeletedWarpsAndHomes().forEach(warpDataManager::deleteWarp);
-        playerData.getNewWarpsAndHomes().forEach(warpDataManager::saveWarp);
-
+        playerData.getNewWarpsAndHomes().stream().map(playerData::getHome).forEach(warpDataManager::saveWarp);
     }
 
 }

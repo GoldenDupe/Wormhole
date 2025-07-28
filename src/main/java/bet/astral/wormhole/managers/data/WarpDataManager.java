@@ -1,6 +1,6 @@
 package bet.astral.wormhole.managers.data;
 
-import bet.astral.wormhole.objects.Warp;
+import bet.astral.wormhole.objects.data.Warp;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;

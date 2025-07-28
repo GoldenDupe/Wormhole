@@ -5,13 +5,7 @@ package bet.astral.wormhole.managers;
  */
 public interface TickableManager {
     /**
-     * Starts the manager to tick.
-     * @throws IllegalStateException if the manager is already ticking
+     * Ticks the manager a single time.
      */
-    void startTicking() throws IllegalStateException;
-
-    /**
-     * Stops the manager from ticking
-     */
-    void stopTicking();
+    void tick();
 }

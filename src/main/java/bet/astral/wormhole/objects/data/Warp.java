@@ -1,4 +1,4 @@
-package bet.astral.wormhole.objects;
+package bet.astral.wormhole.objects.data;
 
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.permission.Permission;

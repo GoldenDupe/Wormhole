@@ -2,6 +2,7 @@ package bet.astral.wormhole.plugin;
 
 import bet.astral.messenger.v2.translation.TranslationKey;
 import bet.astral.messenger.v3.cloud.translation.CaptionTranslationKey;
+import org.jetbrains.annotations.NotNull;
 
 public final class Translations {
     public static final TranslationKey M_WARP_NO_PERMISSION = TranslationKey.of("warp.teleport.no-permissions");
@@ -32,5 +33,33 @@ public final class Translations {
     public static final TranslationKey M_DEL_HOME_LIST_WARP = TranslationKey.of("message.delhome.list.entry.warp");
     public static final TranslationKey M_DEL_HOME_SUCCESS = TranslationKey.of("message.delhome.success");
 
-    public static final CaptionTranslationKey C_HOME_PARSE_EXCEPTION = CaptionTranslationKey.of("command.home.parse-exception");
+    public static final TranslationKey D_TPA_CMD = TranslationKey.of("commands.tpa.description");
+    public static final TranslationKey M_TPA_CANNOT_TELEPORT = TranslationKey.of("message.tpa.cannot-teleport");
+    public static final TranslationKey M_TPA_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpa.requested-offline");
+    public static final TranslationKey M_TPA_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpa.self-offline");
+    public static final TranslationKey M_TPA_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpa.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPA_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpa.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPA_SENT_REQUEST = TranslationKey.of("message.tpa.sent-request");
+    public static final TranslationKey M_TPA_RECEIVED_REQUEST = TranslationKey.of("message.tpa.received-request");
+
+    public static final TranslationKey D_TPAHERE_CMD = TranslationKey.of("commands.tpahere.description");
+    public static final TranslationKey M_TPAHERE_CANNOT_TELEPORT = TranslationKey.of("message.tpahere.cannot-teleport-here");
+    public static final TranslationKey M_TPAHERE_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpahere.requested-offline");
+    public static final TranslationKey M_TPAHERE_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpahere.self-offline");
+    public static final TranslationKey M_TPAHERE_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpahere.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAHERE_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpahere.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAHERE_SENT_REQUEST = TranslationKey.of("message.tpahere.sent-request");
+    public static final TranslationKey M_TPAHERE_RECEIVED_REQUEST = TranslationKey.of("message.tpahere.received-request");
+
+    public static final TranslationKey D_TPAMYHOME_CMD = TranslationKey.of("commands.tpmyhome.description");
+    public static final TranslationKey M_TPAMYHOME_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpmyhome.requested-offline");
+    public static final TranslationKey M_TPAMYHOME_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpmyhome.self-offline");
+    public static final TranslationKey M_TPAMYHOME_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpmyhome.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAMYHOME_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpmyhome.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAMYHOME_SENT_REQUEST = TranslationKey.of("message.tpmyhome.sent-request");
+    public static final TranslationKey M_TPAMYHOME_RECEIVED_REQUEST = TranslationKey.of("message.tpmyhome.received-request");
+
+    public static final CaptionTranslationKey C_HOME_PARSE_EXCEPTION = CaptionTranslationKey.of("command.argument.home.parse-exception");
+    public static final CaptionTranslationKey C_PLAYER_SELF_PARSE_EXCEPTION = CaptionTranslationKey.of("command.argument.player-self.parse-exception");
+    public static final CaptionTranslationKey C_PLAYER_ALREADY_REQUESTED_PARSE_EXCEPTION = CaptionTranslationKey.of("command.argument.player-requested.parse-exception");
 }

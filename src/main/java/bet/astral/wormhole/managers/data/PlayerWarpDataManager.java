@@ -1,6 +1,6 @@
 package bet.astral.wormhole.managers.data;
 
-import bet.astral.wormhole.objects.PlayerHome;
+import bet.astral.wormhole.objects.data.PlayerHome;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

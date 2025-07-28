@@ -7,7 +7,12 @@ public interface Integration {
     boolean canTeleportToWarp(Player player);
     boolean canTeleportToPlayerWarp(Player player);
     boolean canTeleportToSpawn(Player player);
+
+    boolean canTeleportToPlayer(Player player);
     boolean canTeleportPlayersHere(Player player);
+
+    boolean canAcceptPlayerTeleportTo(Player player);
+    boolean canAcceptPlayerTeleportHere(Player player);
 
     boolean canSetHome(Player player);
     boolean canSetPlayerWarp(Player player);

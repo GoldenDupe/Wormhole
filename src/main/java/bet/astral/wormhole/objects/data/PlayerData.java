@@ -1,4 +1,4 @@
-package bet.astral.wormhole.objects;
+package bet.astral.wormhole.objects.data;
 
 import lombok.AccessLevel;
 import lombok.Getter;
