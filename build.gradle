@@ -1,9 +1,6 @@
 plugins {
     id 'java'
 
-    // Shadow jar to relocate jars
-    // Shadow gradle is broken currently so using googler's one works for now.
-    //id 'com.github.johnrengelman.shadow' version '8.1.1'
     id("io.github.goooler.shadow") version "8.1.8"
     id 'io.freefair.lombok' version '8.6'
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.17"
@@ -55,10 +52,12 @@ dependencies {
 
     // Cloud and brigadier for commands
     compileOnly 'com.mojang:brigadier:1.0.18'
-    var cloudMineccraft = "2.0.0-beta.10";
-    implementation 'org.incendo:cloud-paper:' + cloudMineccraft
-    implementation 'org.incendo:cloud-brigadier:' + cloudMineccraft
-    implementation 'org.incendo:cloud-minecraft-extras:' + cloudMineccraft
+    var cloudMinecraft = "2.0.0-beta.10";
+    implementation 'org.incendo:cloud-paper:' + cloudMinecraft
+    implementation 'org.incendo:cloud-brigadier:' + cloudMinecraft
+    implementation 'org.incendo:cloud-minecraft-extras:' + cloudMinecraft
+    compileOnly("org.incendo:cloud-translations-core:1.0.0-beta.2")
+    compileOnly("org.incendo:cloud-translations-bukkit:1.0.0-beta.2")
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -67,14 +66,6 @@ dependencies {
 
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"  // Vault
     compileOnly 'net.luckperms:api:5.4' // Luckperms
-
-    // Scoreboard
-    var scoreboardLibraryVersion = "2.2.2"
-    implementation("net.megavex:scoreboard-library-api:$scoreboardLibraryVersion")
-    runtimeOnly("net.megavex:scoreboard-library-implementation:$scoreboardLibraryVersion")
-
-    // Add packet adapter implementations you want:
-    runtimeOnly("net.megavex:scoreboard-library-modern:$scoreboardLibraryVersion:mojmap") // Mojang mapped variant (only use if you know what you're doing!)
 
     paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")
     paperweight.paperDevBundle(minecraftServerVersion+"-R0.1-SNAPSHOT")

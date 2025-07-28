@@ -1,0 +1,20 @@
+{
+  "teleport_cooldown": {
+    "tpa": {
+      "default": 5,
+      "basic": 4,
+      "legend": 3,
+      "moderator": 3,
+      "superior": 3,
+      "admin": 0
+    },
+    "tpahere": {
+      "default": 5,
+      "basic": 4,
+      "legend": 3,
+      "moderator": 3,
+      "superior": 3,
+      "admin": 0
+    }
+  }
+}

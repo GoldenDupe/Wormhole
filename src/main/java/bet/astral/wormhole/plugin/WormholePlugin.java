@@ -2,6 +2,8 @@ package bet.astral.wormhole.plugin;
 
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.InitAfterBootstrap;
 import bet.astral.messenger.v2.Messenger;
+import bet.astral.wormhole.integration.MasterIntegration;
+import bet.astral.wormhole.managers.PlayerCacheManager;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -9,13 +11,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 
 @Getter
-public class Plugin extends JavaPlugin {
-    private Messenger messenger;
+public class WormholePlugin extends JavaPlugin {
+    public Messenger messenger;
     @Getter(AccessLevel.NONE)
     private List<InitAfterBootstrap> initAfterBootstrapList;
+    private MasterIntegration masterIntegration = new MasterIntegration();
 
-    public Plugin(Bootstrap bootstrapHandler) {
-        this.messenger = bootstrapHandler.getMessenger();
+    public WormholePlugin(Bootstrap bootstrapHandler) {
+        messenger = bootstrapHandler.getMessenger();
         for (InitAfterBootstrap initAfterBootstrap : bootstrapHandler) {
             initAfterBootstrapList.add(initAfterBootstrap);
         }
@@ -32,5 +35,9 @@ public class Plugin extends JavaPlugin {
     @Override
     public void onLoad() {
 
+    }
+
+    public PlayerCacheManager getPlayerCache() {
+        return null;
     }
 }
