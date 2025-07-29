@@ -63,4 +63,14 @@ public class MasterIntegration implements Integration {
     public boolean canCreatePlayerWarp(Player player, String name, Location location) {
         return integrations.stream().allMatch(integration -> integration.canCreatePlayerHome(player, name, location));
     }
+
+    @Override
+    public boolean canRenamePlayerHome(Player player, String oldName, String newName) {
+        return integrations.stream().allMatch(integration -> integration.canRenamePlayerHome(player, oldName, newName));
+    }
+
+    @Override
+    public boolean canRenamePlayerWarp(Player player, String oldName, String newName) {
+        return integrations.stream().allMatch(integration -> integration.canRenamePlayerWarp(player, oldName, newName));
+    }
 }

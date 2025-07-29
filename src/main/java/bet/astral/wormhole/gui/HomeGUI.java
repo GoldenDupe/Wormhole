@@ -112,7 +112,14 @@ public class HomeGUI {
 
 
     public void clickableHome(@NotNull InventoryGUIBuilder builder, @NotNull PlayerHome home, int slot) {
-        ItemStack icon = home.getIconOrDefault();
+        Player player = Bukkit.getPlayer(home.getOwnerId());
+        PlayerData data = plugin.getPlayerCacheManager().getCache(player);
+        ItemStack icon = home.getIconOrDefault().clone();
+        if (data.getPrimaryHome() != null && data.getPrimaryHome() == home.getUniqueId()) {
+            icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        } else {
+            icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
+        }
 
         builder.clickable(slot,
                 Clickable.builder(icon)
@@ -169,7 +176,14 @@ public class HomeGUI {
                 .actionGeneral(action -> openTeleportHomeRequestMenu(player, homeId, 0))
                 .placeholderGenerator(placeholderGenerator);
 
-        ItemStack icon = home.getIconOrDefault();
+        PlayerData data = plugin.getPlayerCacheManager().getCache(player);
+        ItemStack icon = home.getIconOrDefault().clone();
+        if (data.getPrimaryHome() != null && data.getPrimaryHome() == home.getUniqueId()) {
+            icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        } else {
+            icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
+        }
+
         InventoryGUIBuilder builder = InventoryGUI.builder(3)
                 .title(Translations.G_HOME_TITLE)
                 .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
@@ -178,6 +192,17 @@ public class HomeGUI {
                 .clickable(4, Clickable.builder(icon)
                         .title(Translations.G_HOME_OVERVIEW_NAME)
                         .description(Translations.G_HOME_OVERVIEW_DESCRIPTION)
+                        .actionGeneral(context -> {
+                            PlayerData playerData = plugin.getPlayerCacheManager().getCache(player);
+                            if (playerData.getPrimaryHome() == null || playerData.getPrimaryHome() != homeId) {
+                                playerData.setPrimaryHome(home.getUniqueId());
+                            } else {
+                                playerData.setPrimaryHome(null);
+                            }
+
+                            plugin.getPlayerCacheManager().save(playerData);
+                            openHomeMenu(player, homeId);
+                        })
                         .placeholderGenerator(placeholderGenerator))
 
                 // Teleport
@@ -207,8 +232,7 @@ public class HomeGUI {
                         .displayIfNoPermissions()
                         .title(Translations.G_HOME_RELOCATE_NAME)
                         .description(Translations.G_HOME_RELOCATE_DESCRIPTION)
-                        .actionGeneral(action -> {
-                        })
+                        .actionGeneral(action -> openConfirmRelocateMenu(player, homeId))
                         .placeholderGenerator(placeholderGenerator))
                 // Delete
                 .clickable(16, Clickable.builder(Material.FLINT_AND_STEEL)

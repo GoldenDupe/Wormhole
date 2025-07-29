@@ -4,6 +4,7 @@ import bet.astral.cloudplusplus.minecraft.paper.bootstrap.InitAfterBootstrap;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.wormhole.gui.HomeGUI;
 import bet.astral.wormhole.integration.MasterIntegration;
+import bet.astral.wormhole.listeners.RespawnLocationListener;
 import bet.astral.wormhole.managers.PlayerCacheManager;
 import bet.astral.wormhole.managers.RequestManager;
 import bet.astral.wormhole.managers.TeleportManager;
@@ -56,6 +57,8 @@ public class WormholePlugin extends JavaPlugin {
         requestManager = new RequestManager(this);
         teleportManager = new TeleportManager(this);
         homeGUI = new HomeGUI(this);
+
+        getServer().getPluginManager().registerEvents(new RespawnLocationListener(this), this);
 
         getServer().getAsyncScheduler().runAtFixedRate(this, task->{
             requestManager.tick();

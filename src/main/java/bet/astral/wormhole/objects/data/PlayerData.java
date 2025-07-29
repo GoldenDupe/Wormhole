@@ -2,7 +2,9 @@ package bet.astral.wormhole.objects.data;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -13,11 +15,16 @@ public class PlayerData {
     private Map<String, PlayerHome> homes = new HashMap<>();
     @Getter(AccessLevel.NONE)
     private Map<String, PlayerWarp> warps = new HashMap<>();
+    @Setter
     private int maxHomes = 5;
+    @Setter
     private int maxWarps = 5;
     private Set<PlayerHome> deletedWarpsAndHomes = new HashSet<>();
     private Set<String> newWarpsAndHomes = new HashSet<>();
     private Set<UUID> updatedWarpsAndHomes = new HashSet<>();
+    @Nullable
+    @Setter()
+    private UUID primaryHome = null;
 
     public PlayerData(UUID uniqueId) {
         this.uniqueId = uniqueId;
