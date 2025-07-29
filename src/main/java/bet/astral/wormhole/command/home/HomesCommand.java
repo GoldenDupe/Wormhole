@@ -85,6 +85,12 @@ public class HomesCommand extends PluginCommand {
         PlayerCacheManager playerCacheManager = getWormhole().getPlayerCache();
         PlayerData playerData = playerCacheManager.getCache(player);
 
+        HomeType type = context.command().commandMeta().optional(CloudKey.of("home-type", HomeType.class)).orElse(HomeType.PLAYER_HOME);
+        if (type == HomeType.PLAYER_HOME){
+            getWormhole().getHomeGUI().openHomes(player, 0);
+            return;
+        }
+
         PlaceholderList placeholders = new PlaceholderList();
 
         // TODO THIS

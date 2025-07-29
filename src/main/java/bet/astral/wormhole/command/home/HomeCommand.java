@@ -47,9 +47,14 @@ public class HomeCommand extends PluginCommand {
         final HomeType homeType = context.command().commandMeta().optional(CloudKey.of("home-type", HomeType.class)).orElse(HomeType.PLAYER_HOME);
 
         if (homeDefault == null) {
+
+            if (homeType == HomeType.PLAYER_HOME){
+                getWormhole().getHomeGUI().openHomes(player, 0);
+                return;
+            }
             messenger.message(player, switch (homeType) {
-                case PLAYER_HOME -> Translations.M_HOME_NO_HOMES;
                 case PLAYER_WARP -> Translations.M_PLAYER_WARP_NO_WARPS;
+                default -> throw new IllegalStateException("Unexpected value: " + homeType);
             });
             return;
         }
