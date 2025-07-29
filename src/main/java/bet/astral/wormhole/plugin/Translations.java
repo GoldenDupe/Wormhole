@@ -107,4 +107,52 @@ public final class Translations {
     public static final CaptionTranslationKey C_PLAYER_ALREADY_REQUESTED_PARSE_EXCEPTION = CaptionTranslationKey.of("command.argument.player-requested.parse-exception");
     public static final CaptionTranslationKey C_PLAYER_HAS_NOT_SENT_REQUEST_EXCEPTION = CaptionTranslationKey.of("command.argument.acceptable-player.parse-exception");
     public static final CaptionTranslationKey C_PLAYER_HAS_NOT_RECEIVED_REQUEST_EXCEPTION = CaptionTranslationKey.of("command.argument.cancellable-player.parse-exception");
+
+
+    // Home (edit/teleport) menu
+    public static final TranslationKey G_HOME_TITLE = TranslationKey.of("gui.home.title");
+    public static final TranslationKey G_HOME_OVERVIEW_NAME = TranslationKey.of("gui.home.button.overview.displayname");
+    public static final TranslationKey G_HOME_OVERVIEW_DESCRIPTION = TranslationKey.of("gui.home.button.overview.description");
+    public static final TranslationKey G_HOME_RETURN_NAME = TranslationKey.of("gui.home.button.return.displayname");
+    public static final TranslationKey G_HOME_RETURN_DESCRIPTION = TranslationKey.of("gui.home.button.return.description");
+    public static final TranslationKey G_HOME_TELEPORT_NAME = TranslationKey.of("gui.home.button.teleport.displayname");
+    public static final TranslationKey G_HOME_TELEPORT_DESCRIPTION = TranslationKey.of("gui.home.button.teleport.lore");
+    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_NAME = TranslationKey.of("gui.home.button.teleport.displayname");
+    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_DESCRIPTION = TranslationKey.of("gui.home.button.teleport.lore");
+    public static final TranslationKey G_HOME_RENAME_NAME = TranslationKey.of("gui.home.button.rename.displayname");
+    public static final TranslationKey G_HOME_RENAME_DESCRIPTION = TranslationKey.of("gui.home.button.rename.lore");
+    public static final TranslationKey M_HOME_RENAME_NO_PERMISSION = TranslationKey.of("message.home.relocate.no-permission");
+    public static final TranslationKey G_HOME_RELOCATE_NAME = TranslationKey.of("gui.home.button.relocate.displayname");
+    public static final TranslationKey G_HOME_RELOCATE_DESCRIPTION = TranslationKey.of("gui.home.button.relocate.lore");
+    public static final TranslationKey M_HOME_RELOCATE_NO_PERMISSION = TranslationKey.of("message.home.relocate.no-permission");
+    public static final TranslationKey G_HOME_DELETE_NAME = TranslationKey.of("gui.home.button.delete.displayname");
+    public static final TranslationKey G_HOME_DELETE_DESCRIPTION = TranslationKey.of("gui.home.button.delete.lore");
+    public static final TranslationKey M_HOME_DELETE_NO_PERMISSION = TranslationKey.of("message.home.delete.no-permission");
+
+    // Homes menu
+    public static final TranslationKey G_HOMES_TITLE = TranslationKey.of("gui.homes.title");
+    public static final TranslationKey G_HOMES_NO_ENTRIES_NAME = TranslationKey.of("gui.homes.no-entries.displayname");
+    public static final TranslationKey G_HOMES_NO_ENTRIES_DESCRIPTION = TranslationKey.of("gui.homes.no-entries.description");
+    public static final TranslationKey G_HOMES_ENTRY_NAME = TranslationKey.of("gui.homes.entry.displayname");
+    public static final TranslationKey G_HOMES_ENTRY_DESCRIPTION = TranslationKey.of("gui.homes.entry.description");
+    public static final TranslationKey G_HOMES_NEXT_PAGE_NAME = TranslationKey.of("gui.homes.next-page.displayname");
+    public static final TranslationKey G_HOMES_NEXT_PAGE_DESCRIPTION = TranslationKey.of("gui.homes.next-page.description");
+    public static final TranslationKey G_HOMES_PREVIOUS_PAGE_NAME = TranslationKey.of("gui.homes.previous-page.displayname");
+    public static final TranslationKey G_HOMES_PREVIOUS_PAGE_DESCRIPTION = TranslationKey.of("gui.homes.previous-page.description");
+
+
+    // Delete home menu
+    public static final TranslationKey G_DELETE_HOME_TITLE =  TranslationKey.of("gui.delete-home.title");
+    public static final TranslationKey G_DELETE_HOME_CONFIRM_NAME = TranslationKey.of("gui.delete-home.confirm.displayname");
+    public static final TranslationKey G_DELETE_HOME_CONFIRM_DESCRIPTION = TranslationKey.of("gui.delete-home.confirm.description");
+    public static final TranslationKey G_DELETE_HOME_CANCEL_NAME = TranslationKey.of("gui.delete-home.cancel.displayname");
+    public static final TranslationKey G_DELETE_HOME_CANCEL_DESCRIPTION = TranslationKey.of("gui.delete-home.cancel.description");
+
+    // Rename menu
+    public static final TranslationKey SG_RENAME_HOME_LINE_2 = TranslationKey.of("sign-gui.rename-home.line.2");
+    public static final TranslationKey SG_RENAME_HOME_LINE_3 = TranslationKey.of("sign-gui.rename-home.line.3");
+    public static final TranslationKey SG_RENAME_HOME_LINE_4 = TranslationKey.of("sign-gui.rename-home.line.4");
+    public static final TranslationKey M_RENAME_HOME_BLANK = TranslationKey.of("message.rename-home.action.blank");
+    public static final TranslationKey M_RENAME_HOME_EXISTS = TranslationKey.of("message.rename-home.action.already-exists");
+    public static final TranslationKey M_RENAME_HOME_RENAMED = TranslationKey.of("message.rename-home.action.already-exists");
 }

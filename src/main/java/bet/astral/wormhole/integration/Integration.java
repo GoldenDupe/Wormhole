@@ -18,4 +18,6 @@ public interface Integration {
 
     boolean canCreatePlayerHome(Player player, String name, Location location);
     boolean canCreatePlayerWarp(Player player, String name, Location location);
+    boolean canRenamePlayerHome(Player player, String oldName, String newName);
+    boolean canRenamePlayerWarp(Player player, String oldName, String newName);
 }

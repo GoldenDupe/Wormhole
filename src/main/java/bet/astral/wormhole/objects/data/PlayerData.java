@@ -43,8 +43,10 @@ public class PlayerData {
     public PlayerHome getHome(String name) {
         return homes.get(name.toLowerCase());
     }
-
-    public void addHome(PlayerHome home) {
+    public PlayerHome getHome(UUID homeId) {
+        return homes.values().stream().filter(home->home.getUniqueId().equals(homeId)).findFirst().orElse(null);
+    }
+    public void addHome(@NotNull PlayerHome home) {
         homes.put(home.getName().toLowerCase(), home);
         newWarpsAndHomes.add(home.getName());
         deletedWarpsAndHomes.remove(home);
@@ -72,6 +74,9 @@ public class PlayerData {
     public PlayerWarp getWarp(@NotNull String name) {
         return warps.get(name.toLowerCase());
     }
+    public PlayerHome getWarp(@NotNull UUID homeId) {
+        return warps.values().stream().filter(warp->warp.getUniqueId().equals(homeId)).findFirst().orElse(null);
+    }
 
     public void addWarp(PlayerWarp warp) {
         warps.put(warp.getName().toLowerCase(), warp);
@@ -91,5 +96,21 @@ public class PlayerData {
         deletedWarpsAndHomes.remove(home);
         newWarpsAndHomes.remove(name);
         updatedWarpsAndHomes.remove(home.getUniqueId());
+    }
+
+    public void renameHome(PlayerHome home, String name) {
+        final String old = home.getName().toLowerCase();
+        home.setName(name);
+        final String newName = name.toLowerCase();
+
+        warps.remove(old);
+        homes.remove(old);
+        deletedWarpsAndHomes.remove(home);
+        updatedWarpsAndHomes.add(home.getUniqueId());
+
+        if (home instanceof PlayerWarp playerWarp) {
+            warps.put(newName, playerWarp);
+        }
+        homes.put(newName, home);
     }
 }
