@@ -2,7 +2,6 @@ package bet.astral.wormhole.command.teleport;
 
 import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.Cloud;
-import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.command.PluginCommand;
 import bet.astral.wormhole.command.arguments.PlayerHomeParser;
 import bet.astral.wormhole.command.arguments.RequestPlayerParser;
@@ -33,13 +32,8 @@ public class TPAMyHomeCommand extends PluginCommand {
                                     Player other = context.get("player");
                                     PlayerHome home = context.get("home");
 
-                                    PlaceholderList placeholders = new PlaceholderList();
-                                    placeholders.add("player", player.getName());
-                                    placeholders.add("other", other.getName());
-
                                     Integration integration = getWormhole().getMasterIntegration();
-                                    if (!integration.canTeleportToPlayer(player)) {
-                                        messenger.message(player, Translations.M_TPAHERE_CANNOT_TELEPORT, placeholders);
+                                    if (!integration.canTeleportPlayerToHome(player, other)) {
                                         return;
                                     }
 

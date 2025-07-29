@@ -6,6 +6,9 @@ import bet.astral.messenger.v2.placeholder.Placeholder;
 import bet.astral.messenger.v2.placeholder.Placeholderable;
 import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
+import bet.astral.wormhole.managers.TeleportManager;
+import bet.astral.wormhole.objects.Teleport;
+import bet.astral.wormhole.plugin.Configuration;
 import bet.astral.wormhole.plugin.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import lombok.AccessLevel;
@@ -54,6 +57,7 @@ public class Warp implements Placeholderable {
     private ItemStack icon = null;
     private Map<UUID, Long> cooldowns = new HashMap<>();
     private long cooldown;
+    private boolean exists = true;
 
     public Warp(UUID uniqueId, String name, long created, UUID worldId, String worldName, double x, double y, double z, float yaw, float pitch) {
         this.uniqueId = uniqueId;
@@ -196,7 +200,27 @@ public class Warp implements Placeholderable {
                 messenger.message(player, Translations.M_WARP_COOLDOWN, placeholders);
             }
             case ALLOWED -> {
-                // TODO
+
+                TeleportManager teleportManager = wormholePlugin.getTeleportManager();
+                int ticksDelay = wormholePlugin.getConfiguration().getTeleportDelay(player, Configuration.TeleportType.TELEPORT_TO_HOME);
+                teleportManager.addTeleport(
+                        new Teleport(
+                                wormholePlugin,
+                                player,
+                                null,
+                                ticksDelay,
+                                _-> getLocation(),
+                                _ -> isExists(),
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                        )
+                );
             }
             case BANNED -> {
                 messenger.message(player, Translations.M_WARP_BANNED, placeholders);
@@ -205,6 +229,10 @@ public class Warp implements Placeholderable {
                 messenger.message(player, Translations.M_WARP_NO_PERMISSION, placeholders);
             }
         }
+    }
+
+    public Location getLocation() {
+        return new Location(Bukkit.getWorld(worldId), x, y, z, yaw, pitch);
     }
 
     enum PlayerWarpState {

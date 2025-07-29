@@ -14,5 +14,7 @@
 
 
   "command.argument.home.parse-exception": "You do not have a home named <white>%input%</white>",
-  "command.argument.player.parse-exception": "You cannot select yourself."
+  "command.argument.player.parse-exception": "You cannot select yourself.",
+  "command.argument.player-already-requested.parse-exception": "You cannot select yourself.",
+  "command.argument.player-not-requested.parse-exception": "You cannot select yourself."
 }

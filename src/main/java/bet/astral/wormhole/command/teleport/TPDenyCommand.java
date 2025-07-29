@@ -5,7 +5,6 @@ import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.command.PluginCommand;
 import bet.astral.wormhole.command.arguments.RequestParser;
-import bet.astral.wormhole.integration.Integration;
 import bet.astral.wormhole.managers.RequestManager;
 import bet.astral.wormhole.objects.Request;
 import bet.astral.wormhole.plugin.Translations;
@@ -20,30 +19,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 @Cloud
-public class TPAcceptCommand extends PluginCommand {
-    public TPAcceptCommand(CommandRegisterer<CommandSender> registerer, CommandManager<CommandSender> commandManager) {
+public class TPDenyCommand extends PluginCommand {
+    public TPDenyCommand(CommandRegisterer<CommandSender> registerer, CommandManager<CommandSender> commandManager) {
         super(registerer, commandManager);
 
-        command("tpaccept", Translations.D_TPACCEPT_CMD,
+        command("tpdeny", Translations.D_TPA_CMD,
                 b ->
-                        b.permission("wormhole.tpa")
+                        b.permission("wormhole.tpdeny")
                                 .senderType(Player.class)
                                 .meta(CloudKey.of("teleport-type", Request.Type.class), Request.Type.TO_PLAYER)
                                 .meta(CloudKey.of("request-type", RequestParser.Type.class), RequestParser.Type.RECEIVED)
                                 .optional(RequestParser.requestComponent().name("request"))
                                 .handler(this::handle)).register();
 
-        command("tphereaccept", Translations.D_TPHEREACCEPT_CMD,
+        command("tpheredeny", Translations.D_TPA_CMD,
                 b ->
-                        b.permission("wormhole.tphereaccept")
+                        b.permission("wormhole.tpheredeny")
                                 .senderType(Player.class)
                                 .meta(CloudKey.of("teleport-type", Request.Type.class), Request.Type.PLAYER_HERE)
                                 .meta(CloudKey.of("request-type", RequestParser.Type.class), RequestParser.Type.RECEIVED)
                                 .optional(RequestParser.requestComponent().name("request"))
                                 .handler(this::handle)).register();
-        command("tphomeaccept", Translations.D_TPHOMEACCEPT_CMD,
+        command("tphomedeny", Translations.D_TPA_CMD,
                 b ->
-                        b.permission("wormhole.tphomeaccept")
+                        b.permission("wormhole.tphomedeny")
                                 .senderType(Player.class)
                                 .meta(CloudKey.of("teleport-type", Request.Type.class), Request.Type.TO_OWN_HOME)
                                 .meta(CloudKey.of("request-type", RequestParser.Type.class), RequestParser.Type.RECEIVED)
@@ -64,16 +63,9 @@ public class TPAcceptCommand extends PluginCommand {
         PlaceholderList placeholders = new PlaceholderList();
 
         if (request == null) {
-            messenger.message(player, Translations.M_TPACCEPT_NO_TELEPORT_REQUESTS, placeholders);
+            messenger.message(player, Translations.M_TPDENY_NO_TELEPORT_REQUESTS, placeholders);
             return;
         }
-
-        placeholders.addAll(request.toPlaceholders());
-
-        Integration integration = getWormhole().getMasterIntegration();
-        if (!integration.canAcceptTeleportRequest(player, request.getType(), request)) {
-            return;
-        }
-        requestManager.accept(request);
+        requestManager.deny(request);
     }
 }

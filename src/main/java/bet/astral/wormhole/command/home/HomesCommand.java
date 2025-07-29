@@ -18,12 +18,15 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.context.CommandContext;
+import org.incendo.cloud.key.CloudKey;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @Cloud
 public class HomesCommand extends PluginCommand {
-    public static Component warpsToList(Messenger messenger, Player receiver, List<? extends Warp> warps, TranslationKey commaKey, TranslationKey homeKey, TranslationKey warpKey) {
+    public static Component warpsToList(@NotNull Messenger messenger, Player receiver, List<? extends Warp> warps, TranslationKey commaKey, TranslationKey homeKey, TranslationKey warpKey) {
         // Parse comma or other formatting at end of each value
         Component comma = messenger.parseComponent(new MessageInfoBuilder(commaKey).withReceiver(receiver).build(), ComponentType.CHAT);
         if (comma == null){
@@ -64,19 +67,31 @@ public class HomesCommand extends PluginCommand {
                         b.permission("wormhole.home")
                                 .senderType(Player.class)
                                 .optional(PlayerHomeParser.PlayerHomeComponent().name("home"))
-                                .handler(context->{
-                                    Player player = context.sender();
-                                    PlayerCacheManager playerCacheManager = getWormhole().getPlayerCache();
-                                    PlayerData playerData = playerCacheManager.getCache(player);
-
-                                    PlaceholderList placeholders = new PlaceholderList();
-
-
-                                    Component warpsInList = warpsToList(messenger, player, playerData.getHomesAndWarps(), Translations.M_HOMES_LIST_COMMA, Translations.M_HOMES_LIST_HOME, Translations.M_HOMES_LIST_WARP);
-                                    placeholders.add("homes", warpsInList);
-
-                                    messenger.message(player, Translations.M_HOMES, placeholders);
-                                })
+                                .meta(CloudKey.of("home-type", HomeType.class), HomeType.PLAYER_HOME)
+                                .handler(this::handle)
                 , "bases").register();
+        command("playerwarps", Translations.D_HOME_CMD,
+                b->
+                        b.permission("wormhole.home")
+                                .senderType(Player.class)
+                                .optional(PlayerHomeParser.PlayerHomeComponent().name("home"))
+                                .meta(CloudKey.of("home-type", HomeType.class), HomeType.PLAYER_WARP)
+                                .handler(this::handle)
+                , "pws").register();
+    }
+
+    public <C> void handle(CommandContext<C> context){
+        Player player = (Player) context.sender();
+        PlayerCacheManager playerCacheManager = getWormhole().getPlayerCache();
+        PlayerData playerData = playerCacheManager.getCache(player);
+
+        PlaceholderList placeholders = new PlaceholderList();
+
+        // TODO THIS
+
+        Component warpsInList = warpsToList(messenger, player, playerData.getHomesAndWarps(), Translations.M_HOMES_LIST_COMMA, Translations.M_HOMES_LIST_HOME, Translations.M_HOMES_LIST_WARP);
+        placeholders.add("homes", warpsInList);
+
+        messenger.message(player, Translations.M_HOMES, placeholders);
     }
 }

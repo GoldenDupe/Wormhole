@@ -19,7 +19,7 @@ public class PlayerCacheManager {
 
     public void save(@NotNull PlayerData playerData) {
         playerData.getDeletedWarpsAndHomes().forEach(warpDataManager::deleteWarp);
-        playerData.getNewWarpsAndHomes().stream().map(playerData::getHome).forEach(warpDataManager::saveWarp);
+        playerData.getNewWarpsAndHomes().stream().map(playerData::getHomeOrWarp).forEach(warpDataManager::saveWarp);
     }
 
 }

@@ -31,13 +31,13 @@ public class SetHomeCommand extends PluginCommand {
                                     PlaceholderList placeholders = new PlaceholderList();
                                     placeholders.add("home", homeName);
 
-                                    if (!integration.canSetHome(player)) {
+                                    if (!integration.canCreatePlayerHome(player, homeName, player.getLocation())) {
                                         messenger.message(player, Translations.M_SET_HOME_CANNOT_SET_CANCELLED, placeholders);
                                         return;
                                     }
 
 
-                                    PlayerHome home = playerData.getHome(homeName);
+                                    PlayerHome home = playerData.getHomeOrWarp(homeName);
                                     if (home != null){
                                         placeholders.add("%relocate%", "/relocate "+homeName);
                                         messenger.message(player, Translations.M_SET_HOME_RELOCATE, placeholders);

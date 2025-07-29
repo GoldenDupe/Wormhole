@@ -23,7 +23,7 @@ import java.util.UUID;
 @Setter
 public class Request implements Placeholderable {
     @NotNull
-    private Type type;
+    private final Type type;
     @NotNull
     private final UUID player;
     @NotNull
@@ -34,6 +34,7 @@ public class Request implements Placeholderable {
     private int ticksLeft;
     private boolean accepted = false;
     private boolean denied = false;
+    private final long timeSent = System.currentTimeMillis();
 
     public Request(@NotNull Type type, @NotNull UUID player, @NotNull UUID requested, @Nullable Object extraInfo, int ticksLeft) {
         this.type = type;

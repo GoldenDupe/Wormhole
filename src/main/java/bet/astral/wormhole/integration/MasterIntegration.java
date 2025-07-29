@@ -1,5 +1,8 @@
 package bet.astral.wormhole.integration;
 
+import bet.astral.wormhole.objects.Request;
+import bet.astral.wormhole.objects.data.PlayerHome;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -17,13 +20,8 @@ public class MasterIntegration implements Integration {
     }
 
     @Override
-    public boolean canTeleportToHome(Player player) {
-        return integrations.stream().allMatch(integration -> integration.canTeleportToHome(player));
-    }
-
-    @Override
-    public boolean canTeleportToWarp(Player player) {
-        return integrations.stream().allMatch(integration -> integration.canTeleportToWarp(player));
+    public boolean canTeleportToHomeOrWarp(Player player, PlayerHome playerHome) {
+        return integrations.stream().allMatch(integration -> integration.canTeleportToHomeOrWarp(player, playerHome));
     }
 
     @Override
@@ -37,7 +35,32 @@ public class MasterIntegration implements Integration {
     }
 
     @Override
-    public boolean canTeleportPlayersHere(Player player) {
-        return integrations.stream().allMatch(integration -> integration.canTeleportPlayersHere(player));
+    public boolean canTeleportToPlayer(Player player, Player other) {
+        return integrations.stream().allMatch(integration -> integration.canTeleportToPlayer(player, other));
+    }
+
+    @Override
+    public boolean canTeleportPlayerHere(Player player, Player other) {
+        return integrations.stream().allMatch(integration -> integration.canTeleportPlayerHere(player, other));
+    }
+
+    @Override
+    public boolean canTeleportPlayerToHome(Player player, Player other) {
+        return integrations.stream().allMatch(integration -> integration.canTeleportPlayerToHome(player, other));
+    }
+
+    @Override
+    public boolean canAcceptTeleportRequest(Player player, Request.Type type, Request request) {
+        return integrations.stream().allMatch(integration -> integration.canAcceptTeleportRequest(player, type, request));
+    }
+
+    @Override
+    public boolean canCreatePlayerHome(Player player, String name, Location location) {
+        return integrations.stream().allMatch(integration -> integration.canCreatePlayerHome(player, name, location));
+    }
+
+    @Override
+    public boolean canCreatePlayerWarp(Player player, String name, Location location) {
+        return integrations.stream().allMatch(integration -> integration.canCreatePlayerHome(player, name, location));
     }
 }

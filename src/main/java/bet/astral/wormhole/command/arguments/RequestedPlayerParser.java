@@ -6,6 +6,7 @@ import bet.astral.wormhole.plugin.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import org.apiguardian.api.API;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, BlockingSuggestionProvider<C> {
+public class RequestedPlayerParser<C> implements ArgumentParser<C, Player>, BlockingSuggestionProvider<C> {
 
     public WormholePlugin getWormholePlugin() {
         return (WormholePlugin) WormholePlugin.getProvidingPlugin(WormholePlugin.class);
@@ -42,7 +43,7 @@ public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, Blocki
      */
     @API(status = API.Status.STABLE, since = "2.0.0")
     public static <C> @NonNull ParserDescriptor<C, Player> playerParser() {
-        return ParserDescriptor.of(new RequestPlayerParser<>(), Player.class);
+        return ParserDescriptor.of(new RequestedPlayerParser<>(), Player.class);
     }
 
     /**
@@ -71,7 +72,7 @@ public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, Blocki
         }
 
         if (commandContext.sender() instanceof Player self && self.getUniqueId().equals(player.getUniqueId())) {
-            return ArgumentParseResult.failure(new PlayerParseSelfException(input, commandContext));
+            return ArgumentParseResult.failure(new RequestPlayerParser.PlayerParseSelfException(input, commandContext));
         }
 
         final Player bukkit = (Player) commandContext.get(BukkitCommandContextKeys.BUKKIT_COMMAND_SENDER);
@@ -81,12 +82,13 @@ public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, Blocki
         Map<UUID, List<Request>> requestMap = requestManager.getSentRequests(type);
         if (requestMap.containsKey(bukkit.getUniqueId())) {
             List<Request> requests = requestMap.get(bukkit.getUniqueId());
-            if (requests.stream().anyMatch(request->request.getRequested().getUniqueId().equals(player.getUniqueId()))) {
-                return  ArgumentParseResult.failure(new PlayerParseSelfException(input, commandContext));
+            OfflinePlayer firstMatch = requests.stream().map(Request::getRequested).filter(requested -> requested.getUniqueId().equals(player.getUniqueId())).findAny().orElse(null);
+            if (firstMatch != null && firstMatch.isOnline()) {
+                return ArgumentParseResult.success(player);
             }
         }
 
-        return ArgumentParseResult.success(player);
+        return ArgumentParseResult.failure(new PlayerParseNotRequestedException(input, commandContext));
     }
 
     @Override
@@ -95,31 +97,23 @@ public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, Blocki
             final @NonNull CommandInput input
     ) {
         final CommandSender bukkit = commandContext.get(BukkitCommandContextKeys.BUKKIT_COMMAND_SENDER);
-        return Bukkit.getOnlinePlayers().stream()
-                .filter(player -> !(bukkit instanceof Player && !((Player) bukkit).canSee(player)))
-                .filter(player -> player != bukkit)
-                .filter(player -> {
-                    final Player bukkitPlayer = (Player) bukkit;
-                    final Request.Type type = commandContext.command().commandMeta().optional(CloudKey.of("teleport-type", Request.Type.class)).orElse(Request.Type.TO_PLAYER);
-                    WormholePlugin plugin = getWormholePlugin();
-                    RequestManager requestManager = plugin.getRequestManager();
-                    Map<UUID, List<Request>> requestMap = requestManager.getSentRequests(type);
-                    if (requestMap.containsKey(bukkitPlayer.getUniqueId())) {
-                        List<Request> requests = requestMap.get(bukkitPlayer.getUniqueId());
-                        return requests.stream().noneMatch(request -> request.getRequested().getUniqueId().equals(player.getUniqueId()));
-                    }
-                    return true;
-                })
-                .map(Player::getName)
-                .map(Suggestion::suggestion)
-                .collect(Collectors.toList());
-    }
 
+        final Player bukkitPlayer = (Player) bukkit;
+        final Request.Type type = commandContext.command().commandMeta().optional(CloudKey.of("teleport-type", Request.Type.class)).orElse(Request.Type.TO_PLAYER);
+        WormholePlugin plugin = getWormholePlugin();
+        RequestManager requestManager = plugin.getRequestManager();
+        Map<UUID, List<Request>> requestMap = requestManager.getSentRequests(type);
+        if (requestMap.containsKey(bukkitPlayer.getUniqueId())) {
+            List<Request> requests = requestMap.get(bukkitPlayer.getUniqueId());
+            return requests.stream().filter(player->player.getRequested().isOnline()).map(player->player.getRequested().getName()).map(Suggestion::suggestion).collect(Collectors.toList());
+        }
+        return List.of();
+    }
 
     /**
      * Player parse exception
      */
-    public static final class PlayerParseSelfException extends ParserException {
+    public static final class PlayerParseNotRequestedException extends ParserException {
 
         private final String input;
 
@@ -129,42 +123,7 @@ public class RequestPlayerParser<C> implements ArgumentParser<C, Player>, Blocki
          * @param input   String input
          * @param context Command context
          */
-        public PlayerParseSelfException(
-                final @NonNull String input,
-                final @NonNull CommandContext<?> context
-        ) {
-            super(
-                    org.incendo.cloud.bukkit.parser.PlayerParser.class,
-                    context,
-                    Translations.C_PLAYER_SELF_PARSE_EXCEPTION,
-                    CaptionVariable.of("input", input)
-            );
-            this.input = input;
-        }
-
-        /**
-         * Get the supplied input
-         *
-         * @return String value
-         */
-        public @NonNull String input() {
-            return this.input;
-        }
-    }
-    /**
-     * Player parse exception
-     */
-    public static final class PlayerParseAlreadyRequestedException extends ParserException {
-
-        private final String input;
-
-        /**
-         * Construct a new Player parse exception
-         *
-         * @param input   String input
-         * @param context Command context
-         */
-        public PlayerParseAlreadyRequestedException(
+        public PlayerParseNotRequestedException(
                 final @NonNull String input,
                 final @NonNull CommandContext<?> context
         ) {

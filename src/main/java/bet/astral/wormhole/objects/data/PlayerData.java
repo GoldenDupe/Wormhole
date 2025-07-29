@@ -32,12 +32,16 @@ public class PlayerData {
         return new ArrayList<>(homes.values());
     }
 
-    public PlayerHome getHome(@NotNull String name) {
+    public PlayerHome getHomeOrWarp(@NotNull String name) {
         PlayerHome home = homes.get(name.toLowerCase());
         if (home == null) {
             home = getWarp(name.toLowerCase());
         }
         return home;
+    }
+
+    public PlayerHome getHome(String name) {
+        return homes.get(name.toLowerCase());
     }
 
     public void addHome(PlayerHome home) {
