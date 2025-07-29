@@ -26,6 +26,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +37,8 @@ public class HomeGUI {
     private final WormholePlugin plugin;
     private final Messenger messenger;
 
-    public HomeGUI(WormholePlugin plugin) {
+    @Contract(pure = true)
+    public HomeGUI(@NotNull WormholePlugin plugin) {
         this.plugin = plugin;
         this.messenger = plugin.getMessenger();
     }
@@ -54,7 +57,7 @@ public class HomeGUI {
         builder.build().open(player);
     }
 
-    public void formatHomesMenu(InventoryGUIBuilder builder, List<PlayerHome> homes, int page) {
+    public void formatHomesMenu(InventoryGUIBuilder builder, @NotNull List<PlayerHome> homes, int page) {
         if (homes.isEmpty()) {
             builder.clickable(13, Clickable.builder(Material.OAK_SIGN)
                     .title(Translations.G_HOMES_NO_ENTRIES_NAME)
@@ -96,34 +99,33 @@ public class HomeGUI {
             builder.clickable(45, Clickable.builder(Material.ARROW)
                     .title(Translations.G_HOMES_PREVIOUS_PAGE_NAME)
                     .description(Translations.G_HOMES_PREVIOUS_PAGE_DESCRIPTION)
-                    .actionGeneral(context->openHomes(context.getWho(), finalPage - 1)));
+                    .actionGeneral(context -> openHomes(context.getWho(), finalPage - 1)));
         }
 
         if (page < totalPages - 1) {
             builder.clickable(53, Clickable.builder(Material.ARROW)
-                            .title(Translations.G_HOMES_NEXT_PAGE_NAME)
-                            .description(Translations.G_HOMES_NEXT_PAGE_DESCRIPTION)
-                            .actionGeneral(context->openHomes(context.getWho(), finalPage +1)));
+                    .title(Translations.G_HOMES_NEXT_PAGE_NAME)
+                    .description(Translations.G_HOMES_NEXT_PAGE_DESCRIPTION)
+                    .actionGeneral(context -> openHomes(context.getWho(), finalPage + 1)));
         }
     }
 
 
-
-    public void clickableHome(InventoryGUIBuilder builder, PlayerHome home, int slot) {
+    public void clickableHome(@NotNull InventoryGUIBuilder builder, @NotNull PlayerHome home, int slot) {
         ItemStack icon = home.getIconOrDefault();
 
         builder.clickable(slot,
                 Clickable.builder(icon)
                         .title(Translations.G_HOMES_ENTRY_NAME)
                         .description(Translations.G_HOMES_ENTRY_DESCRIPTION)
-                        .placeholderGenerator(_->new PlaceholderList(home.toPlaceholders()))
+                        .placeholderGenerator(_ -> new PlaceholderList(home.toPlaceholders()))
                         .hideItemFlags()
                         .data("home", home.getUniqueId())
                         .data("owner", home.getOwnerId())
                         .actionGeneral(this::handleHomeClick));
     }
 
-    public void handleHomeClick(ClickContext context) {
+    public void handleHomeClick(@NotNull ClickContext context) {
         Player player = context.getWho();
         UUID home = (UUID) context.getClickable().getData().get("home");
         openHomeMenu(player, home);
@@ -142,6 +144,7 @@ public class HomeGUI {
 
     /**
      * Opens the main overview of a home. Allows managing of the home and teleporting to the home via GUI based buttohns
+     *
      * @param player player
      * @param homeId home id
      */
@@ -156,13 +159,14 @@ public class HomeGUI {
         ClickableBuilder teleport = Clickable.builder(Material.LIME_WOOL)
                 .title(Translations.G_HOME_TELEPORT_NAME)
                 .description(Translations.G_HOME_TELEPORT_DESCRIPTION)
-                .actionGeneral(context->{}).placeholderGenerator(placeholderGenerator);
+                .actionGeneral(context -> {
+                }).placeholderGenerator(placeholderGenerator);
         ClickableBuilder tpaMyHome = Clickable.builder(Material.ANVIL).hideItemFlags()
                 .permission("wormhole.tpamyhome")
                 .priority(10)
                 .title(Translations.G_HOME_REQUEST_OTHER_TELEPORT_NAME)
                 .description(Translations.G_HOME_REQUEST_OTHER_TELEPORT_DESCRIPTION)
-                .actionGeneral(action->openTeleportHomeRequestMenu(player, homeId, 0))
+                .actionGeneral(action -> openTeleportHomeRequestMenu(player, homeId, 0))
                 .placeholderGenerator(placeholderGenerator);
 
         ItemStack icon = home.getIconOrDefault();
@@ -193,7 +197,7 @@ public class HomeGUI {
                         .displayIfNoPermissions()
                         .title(Translations.G_HOME_RENAME_NAME)
                         .description(Translations.G_HOME_RENAME_DESCRIPTION)
-                        .actionGeneral(action->openHomeRenameMenu(action.getWho(), homeId))
+                        .actionGeneral(action -> openHomeRenameMenu(action.getWho(), homeId))
                         .placeholderGenerator(placeholderGenerator))
                 // Relocate
                 .clickable(15, Clickable.builder(Material.IRON_HOE)
@@ -203,7 +207,8 @@ public class HomeGUI {
                         .displayIfNoPermissions()
                         .title(Translations.G_HOME_RELOCATE_NAME)
                         .description(Translations.G_HOME_RELOCATE_DESCRIPTION)
-                        .actionGeneral(action->{})
+                        .actionGeneral(action -> {
+                        })
                         .placeholderGenerator(placeholderGenerator))
                 // Delete
                 .clickable(16, Clickable.builder(Material.FLINT_AND_STEEL)
@@ -213,15 +218,70 @@ public class HomeGUI {
                         .displayIfNoPermissions()
                         .title(Translations.G_HOME_DELETE_NAME)
                         .description(Translations.G_HOME_DELETE_DESCRIPTION)
-                        .actionGeneral(action->openHomeDeleteMenu(action.getWho(), homeId))
+                        .actionGeneral(action -> openHomeDeleteMenu(action.getWho(), homeId))
                         .placeholderGenerator(placeholderGenerator))
                 // Return
                 .clickable(22, Clickable.builder(Material.BARRIER)
                         .title(Translations.G_HOME_RETURN_NAME)
                         .description(Translations.G_HOME_RETURN_DESCRIPTION)
                         .hideItemFlags()
-                        .actionGeneral(action->openHomes(action.getWho(), 0)))
-                ;
+                        .actionGeneral(action -> openHomes(action.getWho(), 0)));
+
+        builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
+    }
+
+    public void openConfirmRelocateMenu(Player player, UUID homeId) {
+        PlayerHome home = makeSureHomeExists(player, homeId);
+        if (home == null) {
+            return;
+        }
+
+        if (!player.hasPermission("wormhole.home.relocate")) {
+            openHomes(player, 0);
+            return;
+        }
+
+        Function<Player, PlaceholderCollection> placeholderGenerator = _ -> new PlaceholderList(home.toPlaceholders());
+
+        ClickableBuilder confirm = Clickable.builder(Material.LIME_WOOL)
+                .title(Translations.G_RELOCATE_HOME_CONFIRM_NAME)
+                .description(Translations.G_RELOCATE_HOME_CONFIRM_DESCRIPTION)
+                .hideItemFlags()
+                .actionGeneral(context -> {
+
+                    // Update the location and directly update the database
+                    home.relocate(player.getLocation());
+                    plugin.getPlayerWarpDataManager().saveWarp(home);
+                    messenger.message(player, Translations.M_RELOCATE_HOME_RELOCATED, placeholderGenerator.apply(player));
+
+                    // Open the new updated info
+                    openHomeMenu(player, homeId);
+
+                }).placeholderGenerator(placeholderGenerator);
+        ClickableBuilder cancel = Clickable.builder(Material.RED_WOOL)
+                .title(Translations.G_RELOCATE_HOME_CANCEL_NAME)
+                .description(Translations.G_RELOCATE_HOME_CANCEL_DESCRIPTION)
+                .hideItemFlags()
+                .actionGeneral(context -> {
+                    openHomeMenu(player, homeId);
+                }).placeholderGenerator(placeholderGenerator);
+
+        InventoryGUIBuilder builder = InventoryGUI.builder(3)
+                .title(Translations.G_RELOCATE_HOME_TITLE)
+                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
+                // Return
+                .clickable(22, Clickable.builder(Material.BARRIER).hideItemFlags().actionGeneral(action -> openHomeMenu(player, homeId)))
+                // CONFIRM
+                .clickable(10, confirm)
+                .clickable(11, confirm)
+                .clickable(12, confirm)
+                .clickable(13, confirm)
+
+                // CANCEL
+                .clickable(15, cancel)
+                .clickable(16, cancel)
+                .clickable(17, cancel)
+                .clickable(18, cancel);
 
         builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
     }
@@ -296,23 +356,23 @@ public class HomeGUI {
         final int finalPage = page;
         if (page > 0) {
             builder.clickable(45, Clickable.builder(Material.ARROW)
-                    .title(Translations.G_HOMES_PREVIOUS_PAGE_NAME)
-                    .description(Translations.G_HOMES_PREVIOUS_PAGE_DESCRIPTION)
+                    .title(Translations.G_HOME_INVITE_PREVIOUS_PAGE_NAME)
+                    .description(Translations.G_HOME_INVITE_PREVIOUS_PAGE_DESCRIPTION)
                     .actionGeneral(context -> openHomes(context.getWho(), finalPage - 1)));
         }
 
         if (page < totalPages - 1) {
             builder.clickable(53, Clickable.builder(Material.ARROW)
-                    .title(Translations.G_HOMES_NEXT_PAGE_NAME)
-                    .description(Translations.G_HOMES_NEXT_PAGE_DESCRIPTION)
+                    .title(Translations.G_HOME_INVITE_NEXT_PAGE_NAME)
+                    .description(Translations.G_HOME_INVITE_NEXT_PAGE_DESCRIPTION)
                     .actionGeneral(context -> openHomes(context.getWho(), finalPage + 1)));
         }
-
         builder.build().open(player);
     }
 
     /**
      * Opens a sign which allows renaming of a home with the given home id
+     *
      * @param player player
      * @param homeId players home id
      */
@@ -352,7 +412,7 @@ public class HomeGUI {
                             }
 
                             Integration integration = plugin.getMasterIntegration();
-                            if (!integration.canRenamePlayerHome(player, home.getName(), plain)){
+                            if (!integration.canRenamePlayerHome(player, home.getName(), plain)) {
                                 return;
                             }
 
@@ -365,12 +425,13 @@ public class HomeGUI {
                 ));
 
         builder.setMessenger(messenger)
-                .setPlaceholderGenerator(_->new PlaceholderList(home.toPlaceholders()))
+                .setPlaceholderGenerator(_ -> new PlaceholderList(home.toPlaceholders()))
                 .build().open(player);
     }
 
     /**
      * Opens a delete menu which has a confirm and cancel buttons.
+     *
      * @param player player
      * @param homeId own home id
      */
@@ -392,19 +453,27 @@ public class HomeGUI {
                 .description(Translations.G_DELETE_HOME_CONFIRM_DESCRIPTION)
                 .hideItemFlags()
                 .actionGeneral(context -> {
+                    // Delete the data from cache and database
+                    home.setExists(false);
+                    PlayerData playerData = plugin.getPlayerCache().getCache(player);
+                    playerData.removeHome(home);
+                    plugin.getPlayerWarpDataManager().deleteWarp(home);
+                    // Message about the removal
+                    messenger.message(player, Translations.M_DELETE_HOME_DELETED,  placeholderGenerator.apply(player));
                 }).placeholderGenerator(placeholderGenerator);
         ClickableBuilder cancel = Clickable.builder(Material.RED_WOOL)
                 .title(Translations.G_DELETE_HOME_CANCEL_NAME)
                 .description(Translations.G_DELETE_HOME_CANCEL_DESCRIPTION)
                 .hideItemFlags()
                 .actionGeneral(context -> {
+                    openHomeMenu(player, homeId);
                 }).placeholderGenerator(placeholderGenerator);
 
         InventoryGUIBuilder builder = InventoryGUI.builder(3)
                 .title(Translations.G_DELETE_HOME_TITLE)
                 .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
                 // Return
-                .clickable(22, Clickable.builder(Material.BARRIER).hideItemFlags().actionGeneral(action -> openHomes(action.getWho(), 0)))
+                .clickable(22, Clickable.builder(Material.BARRIER).hideItemFlags().actionGeneral(action -> openHomeMenu(player, homeId)))
                 // CONFIRM
                 .clickable(10, confirm)
                 .clickable(11, confirm)
@@ -415,8 +484,7 @@ public class HomeGUI {
                 .clickable(15, cancel)
                 .clickable(16, cancel)
                 .clickable(17, cancel)
-                .clickable(18, cancel)
-                ;
+                .clickable(18, cancel);
 
         builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
     }

@@ -13,7 +13,8 @@ public class PlayerData {
     private Map<String, PlayerHome> homes = new HashMap<>();
     @Getter(AccessLevel.NONE)
     private Map<String, PlayerWarp> warps = new HashMap<>();
-    private int maxHomes = 10;
+    private int maxHomes = 5;
+    private int maxWarps = 5;
     private Set<PlayerHome> deletedWarpsAndHomes = new HashSet<>();
     private Set<String> newWarpsAndHomes = new HashSet<>();
     private Set<UUID> updatedWarpsAndHomes = new HashSet<>();
@@ -99,14 +100,8 @@ public class PlayerData {
     }
 
     public void renameHome(PlayerHome home, String name) {
-        final String old = home.getName().toLowerCase();
         home.setName(name);
         final String newName = name.toLowerCase();
-
-        warps.remove(old);
-        homes.remove(old);
-        deletedWarpsAndHomes.remove(home);
-        updatedWarpsAndHomes.add(home.getUniqueId());
 
         if (home instanceof PlayerWarp playerWarp) {
             warps.put(newName, playerWarp);

@@ -2,6 +2,7 @@ package bet.astral.wormhole.plugin;
 
 import bet.astral.cloudplusplus.minecraft.paper.bootstrap.InitAfterBootstrap;
 import bet.astral.messenger.v2.Messenger;
+import bet.astral.wormhole.gui.HomeGUI;
 import bet.astral.wormhole.integration.MasterIntegration;
 import bet.astral.wormhole.managers.PlayerCacheManager;
 import bet.astral.wormhole.managers.RequestManager;
@@ -29,6 +30,7 @@ public class WormholePlugin extends JavaPlugin {
     private PlayerCacheManager playerCacheManager;
     private PlayerWarpDataManager<PlayerHome> playerWarpDataManager;
     private Configuration configuration;
+    private HomeGUI homeGUI;
 
     public WormholePlugin(Bootstrap bootstrapHandler) {
         messenger = bootstrapHandler.getMessenger();
@@ -53,6 +55,7 @@ public class WormholePlugin extends JavaPlugin {
 
         requestManager = new RequestManager(this);
         teleportManager = new TeleportManager(this);
+        homeGUI = new HomeGUI(this);
 
         getServer().getAsyncScheduler().runAtFixedRate(this, task->{
             requestManager.tick();

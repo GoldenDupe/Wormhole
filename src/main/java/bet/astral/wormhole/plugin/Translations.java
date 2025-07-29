@@ -23,10 +23,14 @@ public final class Translations {
     public static final TranslationKey M_HOMES = TranslationKey.of("message.homes");
 
     public static final TranslationKey D_SET_HOME_CMD = TranslationKey.of("commands.sethome.description");
-    public static final TranslationKey M_SET_HOME_CANNOT_SET_CANCELLED = TranslationKey.of("message.sethome.cannot-set");
     public static final TranslationKey M_SET_HOME_RELOCATE = TranslationKey.of("message.sethome.relocate");
     public static final TranslationKey M_SET_HOME_CANNOT_SET_MAX_HOMES = TranslationKey.of("message.sethome.max-homes-and-warps");
     public static final TranslationKey M_SET_HOME_SUCCESS = TranslationKey.of("message.sethome.success");
+
+    public static final TranslationKey D_SET_PLAYER_WARP_CMD = TranslationKey.of("commands.setplayerwarp.description");
+    public static final TranslationKey M_SET_PLAYER_WARP_RELOCATE = TranslationKey.of("message.setplayerwarp.relocate");
+    public static final TranslationKey M_SET_PLAYER_WARP_CANNOT_SET_MAX_WARPS = TranslationKey.of("message.setplayerwarp.max-homes-and-warps");
+    public static final TranslationKey M_SET_PLAYER_WARP_SUCCESS = TranslationKey.of("message.setplayerwarp.success");
 
     public static final TranslationKey D_DEL_HOME_CMD = TranslationKey.of("commands.delhome.description");
     public static final TranslationKey M_DEL_HOME_SELECT_HOME_TO_DELETE =  TranslationKey.of("commands.delhome.select-home-to-delete");
@@ -144,6 +148,10 @@ public final class Translations {
     public static final TranslationKey M_HOME_INVITE_TITLE = TranslationKey.of("gui.invite-player.title");
     public static final TranslationKey M_HOME_INVITE_PLAYER_NAME = TranslationKey.of("gui.invite-player.button.invite.displayname");
     public static final TranslationKey M_HOME_INVITE_PLAYER_DESCRIPTION = TranslationKey.of("gui.invite-player.button.invite.description");
+    public static final TranslationKey G_HOME_INVITE_NEXT_PAGE_NAME = TranslationKey.of("gui.invite-player.next-page.displayname");
+    public static final TranslationKey G_HOME_INVITE_NEXT_PAGE_DESCRIPTION = TranslationKey.of("gui.invite-player.next-page.description");
+    public static final TranslationKey G_HOME_INVITE_PREVIOUS_PAGE_NAME = TranslationKey.of("gui.invite-player.previous-page.displayname");
+    public static final TranslationKey G_HOME_INVITE_PREVIOUS_PAGE_DESCRIPTION = TranslationKey.of("gui.invite-player.previous-page.description");
 
     // Delete home menu
     public static final TranslationKey G_DELETE_HOME_TITLE =  TranslationKey.of("gui.delete-home.title");
@@ -151,6 +159,15 @@ public final class Translations {
     public static final TranslationKey G_DELETE_HOME_CONFIRM_DESCRIPTION = TranslationKey.of("gui.delete-home.confirm.description");
     public static final TranslationKey G_DELETE_HOME_CANCEL_NAME = TranslationKey.of("gui.delete-home.cancel.displayname");
     public static final TranslationKey G_DELETE_HOME_CANCEL_DESCRIPTION = TranslationKey.of("gui.delete-home.cancel.description");
+    public static final TranslationKey M_DELETE_HOME_DELETED =  TranslationKey.of("gui.delete-home.deletion-success");
+
+    // Relocate home menu
+    public static final TranslationKey G_RELOCATE_HOME_TITLE =  TranslationKey.of("gui.relocate-home.title");
+    public static final TranslationKey G_RELOCATE_HOME_CONFIRM_NAME = TranslationKey.of("gui.relocate-home.confirm.displayname");
+    public static final TranslationKey G_RELOCATE_HOME_CONFIRM_DESCRIPTION = TranslationKey.of("gui.relocate-home.confirm.description");
+    public static final TranslationKey G_RELOCATE_HOME_CANCEL_NAME = TranslationKey.of("gui.relocate-home.cancel.displayname");
+    public static final TranslationKey G_RELOCATE_HOME_CANCEL_DESCRIPTION = TranslationKey.of("gui.relocate-home.cancel.description");
+    public static final TranslationKey M_RELOCATE_HOME_RELOCATED =  TranslationKey.of("gui.relocate-home.relocation-success");
 
     // Rename menu
     public static final TranslationKey SG_RENAME_HOME_LINE_2 = TranslationKey.of("sign-gui.rename-home.line.2");

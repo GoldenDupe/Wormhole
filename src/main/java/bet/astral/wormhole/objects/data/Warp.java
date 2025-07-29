@@ -235,6 +235,16 @@ public class Warp implements Placeholderable {
         return new Location(Bukkit.getWorld(worldId), x, y, z, yaw, pitch);
     }
 
+    public void relocate(@NotNull Location location) {
+        this.worldId = location.getWorld().getUID();
+        this.worldName = location.getWorld().getName();
+        this.x = location.getX();
+        this.y = location.getY();
+        this.z = location.getZ();
+        this.yaw = location.getYaw();
+        this.pitch = location.getPitch();
+    }
+
     enum PlayerWarpState {
         COOLDOWN,
         NO_PERMISSION,
