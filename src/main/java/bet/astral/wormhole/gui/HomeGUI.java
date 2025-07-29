@@ -13,11 +13,16 @@ import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.signman.SignGUIBuilder;
 import bet.astral.wormhole.integration.Integration;
 import bet.astral.wormhole.managers.PlayerCacheManager;
+import bet.astral.wormhole.managers.RequestManager;
+import bet.astral.wormhole.objects.Request;
 import bet.astral.wormhole.objects.data.PlayerData;
 import bet.astral.wormhole.objects.data.PlayerHome;
 import bet.astral.wormhole.plugin.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -157,7 +162,7 @@ public class HomeGUI {
                 .priority(10)
                 .title(Translations.G_HOME_REQUEST_OTHER_TELEPORT_NAME)
                 .description(Translations.G_HOME_REQUEST_OTHER_TELEPORT_DESCRIPTION)
-                .actionGeneral(action->{})
+                .actionGeneral(action->openTeleportHomeRequestMenu(player, homeId, 0))
                 .placeholderGenerator(placeholderGenerator);
 
         ItemStack icon = home.getIconOrDefault();
@@ -219,6 +224,91 @@ public class HomeGUI {
                 ;
 
         builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
+    }
+
+    public void openTeleportHomeRequestMenu(Player player, UUID homeId, int page) {
+        PlayerCacheManager playerCacheManager = plugin.getPlayerCacheManager();
+        PlayerData data = playerCacheManager.getCache(player);
+        PlayerHome home = data.getHome(homeId);
+
+        InventoryGUIBuilder builder = InventoryGUI.builder(ChestRows.SIX)
+                .messenger(messenger)
+                .title(Translations.M_HOME_INVITE_TITLE)
+                .background(Background.border(ChestRows.SIX, Clickable.noTooltip(Material.BLACK_STAINED_GLASS_PANE), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS_PANE)));
+
+        final int homesPerRow = 7;
+        final int maxRows = 4;
+        final int homesPerPage = homesPerRow * maxRows;
+        final int[] baseSlots = {10, 11, 12, 13, 14, 15, 16};
+
+        RequestManager requestManager = plugin.getRequestManager();
+
+        List<Player> players = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().toList());
+        players.remove(player);
+        players.removeIf(p -> requestManager.getSentRequests(Request.Type.TO_OWN_HOME).get(player.getUniqueId()).stream().anyMatch(r -> r.getRequested().equals(p)));
+
+        int totalPages = (int) Math.ceil((double) players.size() / homesPerPage);
+        page = Math.max(0, Math.min(page, totalPages - 1));
+
+        int startIndex = page * homesPerPage;
+        int endIndex = Math.min(startIndex + homesPerPage, players.size());
+        List<Player> pagePlayers = players.subList(startIndex, endIndex);
+
+        for (int row = 0; row < maxRows; row++) {
+            int rowStart = row * homesPerRow;
+            int rowEnd = Math.min(rowStart + homesPerRow, pagePlayers.size());
+
+            if (rowStart >= pagePlayers.size()) break;
+
+            List<Player> rowPlayers = pagePlayers.subList(rowStart, rowEnd);
+            int offset = row * 9;
+
+            int startSlotIndex = (homesPerRow - rowPlayers.size()) / 2;
+
+            for (int i = 0; i < rowPlayers.size(); i++) {
+                int slot = baseSlots[startSlotIndex + i] + offset;
+                Player currentPlayer = players.get(slot);
+                ItemStack head = ItemStack.of(Material.PLAYER_HEAD);
+                head.setData(DataComponentTypes.PROFILE, ResolvableProfile.resolvableProfile(currentPlayer.getPlayerProfile()));
+                builder.clickable(slot, Clickable.builder(head).title(Translations.M_HOME_INVITE_PLAYER_NAME).description(Translations.M_HOME_INVITE_PLAYER_DESCRIPTION)
+                        .placeholderGenerator(player1 -> {
+                            PlaceholderList placeholders = new PlaceholderList();
+                            placeholders.add("name", player1.getName());
+                            placeholders.add("displayname", player1.getName());
+                            placeholders.add("uuid", player1.getName());
+                            return placeholders;
+                        })
+                        .data("who", currentPlayer.getUniqueId())
+                        .data("home", homeId)
+                        .actionGeneral(action -> {
+                            Player oPlayer = Bukkit.getPlayer((UUID) action.getClickable().getData("who"));
+                            if (oPlayer != null) {
+                                requestManager.request(Request.Type.TO_OWN_HOME, player, oPlayer, home);
+                            }
+                        })
+                )
+                ;
+            }
+        }
+
+        // TODO REPLACE TO CORRECT
+
+        final int finalPage = page;
+        if (page > 0) {
+            builder.clickable(45, Clickable.builder(Material.ARROW)
+                    .title(Translations.G_HOMES_PREVIOUS_PAGE_NAME)
+                    .description(Translations.G_HOMES_PREVIOUS_PAGE_DESCRIPTION)
+                    .actionGeneral(context -> openHomes(context.getWho(), finalPage - 1)));
+        }
+
+        if (page < totalPages - 1) {
+            builder.clickable(53, Clickable.builder(Material.ARROW)
+                    .title(Translations.G_HOMES_NEXT_PAGE_NAME)
+                    .description(Translations.G_HOMES_NEXT_PAGE_DESCRIPTION)
+                    .actionGeneral(context -> openHomes(context.getWho(), finalPage + 1)));
+        }
+
+        builder.build().open(player);
     }
 
     /**

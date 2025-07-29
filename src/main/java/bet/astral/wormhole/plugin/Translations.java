@@ -140,6 +140,10 @@ public final class Translations {
     public static final TranslationKey G_HOMES_PREVIOUS_PAGE_NAME = TranslationKey.of("gui.homes.previous-page.displayname");
     public static final TranslationKey G_HOMES_PREVIOUS_PAGE_DESCRIPTION = TranslationKey.of("gui.homes.previous-page.description");
 
+    // Invite player to home
+    public static final TranslationKey M_HOME_INVITE_TITLE = TranslationKey.of("gui.invite-player.title");
+    public static final TranslationKey M_HOME_INVITE_PLAYER_NAME = TranslationKey.of("gui.invite-player.button.invite.displayname");
+    public static final TranslationKey M_HOME_INVITE_PLAYER_DESCRIPTION = TranslationKey.of("gui.invite-player.button.invite.description");
 
     // Delete home menu
     public static final TranslationKey G_DELETE_HOME_TITLE =  TranslationKey.of("gui.delete-home.title");
