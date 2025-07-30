@@ -12,6 +12,7 @@ import bet.astral.wormhole.managers.data.PlayerWarpDataManager;
 import bet.astral.wormhole.managers.data.sql.SQLDatabase;
 import bet.astral.wormhole.managers.data.sql.SQLitePlayerWarpManager;
 import bet.astral.wormhole.objects.data.PlayerHome;
+import bet.astral.wormhole.plugin.configuration.Configuration;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;

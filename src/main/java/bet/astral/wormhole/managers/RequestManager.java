@@ -5,9 +5,9 @@ import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.objects.Request;
 import bet.astral.wormhole.objects.Teleport;
 import bet.astral.wormhole.objects.data.Warp;
-import bet.astral.wormhole.plugin.Configuration;
 import bet.astral.wormhole.plugin.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
+import bet.astral.wormhole.plugin.configuration.Configuration;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-import static bet.astral.wormhole.plugin.Configuration.TeleportType.fromType;
+import static bet.astral.wormhole.plugin.configuration.Configuration.TeleportType.fromType;
 
 public class RequestManager implements TickableManager {
     private WormholePlugin wormholePlugin;
