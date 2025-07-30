@@ -10,21 +10,21 @@ import java.util.*;
 
 @Getter()
 public class PlayerData {
-    private final UUID uniqueId;
+    private final UUID uniqueId; // This
     @Getter(AccessLevel.NONE)
     private Map<String, PlayerHome> homes = new HashMap<>();
     @Getter(AccessLevel.NONE)
     private Map<String, PlayerWarp> warps = new HashMap<>();
     @Setter
-    private int maxHomes = 5;
+    private int extraHomes = 0; // This
     @Setter
-    private int maxWarps = 5;
+    private int extraWarps = 0; // This
     private Set<PlayerHome> deletedWarpsAndHomes = new HashSet<>();
     private Set<String> newWarpsAndHomes = new HashSet<>();
     private Set<UUID> updatedWarpsAndHomes = new HashSet<>();
     @Nullable
     @Setter()
-    private UUID primaryHome = null;
+    private UUID primaryHome = null; // This
 
     public PlayerData(UUID uniqueId) {
         this.uniqueId = uniqueId;

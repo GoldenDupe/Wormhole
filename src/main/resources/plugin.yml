@@ -1,6 +1,0 @@
-name: GoldenDupe
-main: xyz.goldendupe.GoldenDupe
-version: '${version}'
-api-version: '1.20'
-website: goldendupe.xyz
-authors: [Antritus, _Devourer]

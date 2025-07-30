@@ -1,25 +1,14 @@
-name: GoldenDupe
+name: Wormhole
 version: '${version}'
 api-version: '1.21'
-authors: [Antritus, _Devourer]
-description: GoldenDupe's new engine is here!
-website: goldendupe.xyz
+authors: [Antritus]
+description: Wormhole teleportation and home management system!
+website: astral.bet
 
 # The main plugin
-main: xyz.goldendupe.GoldenDupe
+main: bet.astral.wormhole.plugin.WormholePlugin
 # Makes sure the plugin is used by paper servers and not spigot servers
 # Loads commands
-bootstrapper: xyz.goldendupe.GoldenDupeBootstrap
+bootstrapper: bet.astral.wormhole.plugin.Bootstrap
 # Loads the libraries for the plugin
-loader: xyz.goldendupe.GoldenDupeLoader
-
-dependencies:
-  server:
-    LuckPerms:
-      load: BEFORE
-      required: false
-      join-classpath: true
-    Vault:
-      load: BEFORE
-      required: false
-      join-classpath: true
+loader: bet.astral.wormhole.plugin.Initialize

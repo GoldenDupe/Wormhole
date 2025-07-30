@@ -1,24 +1,24 @@
 package bet.astral.wormhole.command.home;
 
-import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.command.PluginCommand;
+import bet.astral.wormhole.command.PluginCommandManager;
 import bet.astral.wormhole.command.arguments.PlayerHomeParser;
 import bet.astral.wormhole.integration.Integration;
 import bet.astral.wormhole.objects.data.PlayerData;
 import bet.astral.wormhole.objects.data.PlayerHome;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.jetbrains.annotations.NotNull;
 
 @Cloud
 public class HomeCommand extends PluginCommand {
-    public HomeCommand(CommandRegisterer<CommandSender> registerer, CommandManager<CommandSender> commandManager) {
+    public HomeCommand(PluginCommandManager registerer, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(registerer, commandManager);
 
         command("home", Translations.D_HOMES_CMD,

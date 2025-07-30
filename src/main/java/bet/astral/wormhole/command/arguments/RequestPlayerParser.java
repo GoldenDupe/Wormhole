@@ -2,7 +2,7 @@ package bet.astral.wormhole.command.arguments;
 
 import bet.astral.wormhole.managers.RequestManager;
 import bet.astral.wormhole.objects.Request;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import org.apiguardian.api.API;
 import org.bukkit.Bukkit;

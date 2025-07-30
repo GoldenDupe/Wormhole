@@ -1,26 +1,26 @@
 package bet.astral.wormhole.command.home;
 
-import bet.astral.cloudplusplus.CommandRegisterer;
 import bet.astral.cloudplusplus.annotations.Cloud;
 import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.command.PluginCommand;
+import bet.astral.wormhole.command.PluginCommandManager;
 import bet.astral.wormhole.integration.Integration;
 import bet.astral.wormhole.objects.data.PlayerData;
 import bet.astral.wormhole.objects.data.PlayerHome;
 import bet.astral.wormhole.objects.data.PlayerWarp;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.context.CommandContext;
 import org.incendo.cloud.key.CloudKey;
+import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.parser.standard.StringParser;
 
 import java.util.List;
 
 @Cloud
 public class SetHomeCommand extends PluginCommand {
-    public SetHomeCommand(CommandRegisterer<CommandSender> registerer, CommandManager<CommandSender> commandManager) {
+    public SetHomeCommand(PluginCommandManager registerer, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
         super(registerer, commandManager);
         command("sethome", Translations.D_SET_HOME_CMD,
                 b ->
@@ -77,8 +77,8 @@ public class SetHomeCommand extends PluginCommand {
             return;
         }
         int maxHomes = switch (homeType) {
-            case PLAYER_HOME -> playerData.getMaxHomes();
-            case PLAYER_WARP -> playerData.getMaxWarps();
+            case PLAYER_HOME -> playerData.getExtraHomes()+getWormhole().getConfiguration().getMaxHomes(player);
+            case PLAYER_WARP -> playerData.getExtraWarps()+getWormhole().getConfiguration().getMaxPlayerWarps(player);
         };
         List<? extends PlayerHome> homes = switch (homeType) {
             case PLAYER_HOME -> playerData.getHomes();
@@ -89,7 +89,7 @@ public class SetHomeCommand extends PluginCommand {
         placeholders.add("current_homes", homes.size());
         placeholders.add("max_homes", maxHomes);
 
-        if (homesLeft <= 0 && playerData.getMaxHomes() != -1) {
+        if (homesLeft <= 0) {
             messenger.message(player, switch (homeType) {
                 case PLAYER_HOME -> Translations.M_SET_HOME_CANNOT_SET_MAX_HOMES;
                 case PLAYER_WARP -> Translations.M_SET_PLAYER_WARP_CANNOT_SET_MAX_WARPS;

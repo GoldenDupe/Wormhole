@@ -18,6 +18,11 @@ public class SQLitePlayerWarpManager implements PlayerWarpDataManager<PlayerHome
 
     public SQLitePlayerWarpManager(SQLDatabase database) {
         this.database = database;
+        try {
+            createTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void createTable() throws SQLException {

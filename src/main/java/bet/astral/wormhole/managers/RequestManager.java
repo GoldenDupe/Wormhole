@@ -5,7 +5,7 @@ import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.wormhole.objects.Request;
 import bet.astral.wormhole.objects.Teleport;
 import bet.astral.wormhole.objects.data.Warp;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import bet.astral.wormhole.plugin.configuration.Configuration;
 import lombok.Getter;

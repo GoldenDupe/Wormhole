@@ -17,7 +17,7 @@ import bet.astral.wormhole.managers.RequestManager;
 import bet.astral.wormhole.objects.Request;
 import bet.astral.wormhole.objects.data.PlayerData;
 import bet.astral.wormhole.objects.data.PlayerHome;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
@@ -44,7 +44,7 @@ public class HomeGUI {
     }
 
     public void openHomes(Player player, int page) {
-        PlayerCacheManager playerCacheManager = plugin.getPlayerCacheManager();
+        PlayerCacheManager playerCacheManager = plugin.getPlayerCache();
         PlayerData data = playerCacheManager.getCache(player);
         List<PlayerHome> homes = data.getHomes();
 
@@ -52,7 +52,6 @@ public class HomeGUI {
                 .messenger(messenger)
                 .title(Translations.G_HOMES_TITLE)
                 .background(Background.border(ChestRows.SIX, Clickable.noTooltip(Material.BLACK_STAINED_GLASS_PANE), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS_PANE)));
-
         formatHomesMenu(builder, homes, page);
         builder.build().open(player);
     }
@@ -113,7 +112,7 @@ public class HomeGUI {
 
     public void clickableHome(@NotNull InventoryGUIBuilder builder, @NotNull PlayerHome home, int slot) {
         Player player = Bukkit.getPlayer(home.getOwnerId());
-        PlayerData data = plugin.getPlayerCacheManager().getCache(player);
+        PlayerData data = plugin.getPlayerCache().getCache(player);
         ItemStack icon = home.getIconOrDefault().clone();
         if (data.getPrimaryHome() != null && data.getPrimaryHome() == home.getUniqueId()) {
             icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -139,7 +138,7 @@ public class HomeGUI {
     }
 
     public PlayerHome makeSureHomeExists(Player player, UUID homeId) {
-        PlayerCacheManager playerCacheManager = plugin.getPlayerCacheManager();
+        PlayerCacheManager playerCacheManager = plugin.getPlayerCache();
         PlayerData data = playerCacheManager.getCache(player);
         PlayerHome home = data.getHome(homeId);
         if (home == null) {
@@ -176,7 +175,7 @@ public class HomeGUI {
                 .actionGeneral(action -> openTeleportHomeRequestMenu(player, homeId, 0))
                 .placeholderGenerator(placeholderGenerator);
 
-        PlayerData data = plugin.getPlayerCacheManager().getCache(player);
+        PlayerData data = plugin.getPlayerCache().getCache(player);
         ItemStack icon = home.getIconOrDefault().clone();
         if (data.getPrimaryHome() != null && data.getPrimaryHome() == home.getUniqueId()) {
             icon.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
@@ -193,14 +192,14 @@ public class HomeGUI {
                         .title(Translations.G_HOME_OVERVIEW_NAME)
                         .description(Translations.G_HOME_OVERVIEW_DESCRIPTION)
                         .actionGeneral(context -> {
-                            PlayerData playerData = plugin.getPlayerCacheManager().getCache(player);
+                            PlayerData playerData = plugin.getPlayerCache().getCache(player);
                             if (playerData.getPrimaryHome() == null || playerData.getPrimaryHome() != homeId) {
                                 playerData.setPrimaryHome(home.getUniqueId());
                             } else {
                                 playerData.setPrimaryHome(null);
                             }
 
-                            plugin.getPlayerCacheManager().save(playerData);
+                            plugin.getPlayerCache().save(playerData);
                             openHomeMenu(player, homeId);
                         })
                         .placeholderGenerator(placeholderGenerator))
@@ -311,7 +310,7 @@ public class HomeGUI {
     }
 
     public void openTeleportHomeRequestMenu(Player player, UUID homeId, int page) {
-        PlayerCacheManager playerCacheManager = plugin.getPlayerCacheManager();
+        PlayerCacheManager playerCacheManager = plugin.getPlayerCache();
         PlayerData data = playerCacheManager.getCache(player);
         PlayerHome home = data.getHome(homeId);
 

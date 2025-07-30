@@ -1,4 +1,4 @@
-package bet.astral.wormhole.plugin;
+package bet.astral.wormhole.plugin.translation;
 
 import bet.astral.messenger.v2.translation.TranslationKey;
 import bet.astral.messenger.v3.cloud.translation.CaptionTranslationKey;
@@ -46,10 +46,9 @@ public final class Translations {
     public static final TranslationKey M_DEL_WARP_LIST_WARP = TranslationKey.of("message.delwarp.list.entry.warp");
 
     public static final TranslationKey D_TPA_CMD = TranslationKey.of("commands.tpa.description");
-    public static final TranslationKey M_TPA_CANNOT_TELEPORT = TranslationKey.of("message.tpa.cannot-teleport");
     public static final TranslationKey M_TPA_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpa.requested-offline");
     public static final TranslationKey M_TPA_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpa.self-offline");
-    public static final TranslationKey M_TPA_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpa.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPA_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpa.request-ran-out-of-time.player");
     public static final TranslationKey M_TPA_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpa.request-ran-out-of-time.requested");
     public static final TranslationKey M_TPA_SENT_REQUEST = TranslationKey.of("message.tpa.sent-request");
     public static final TranslationKey M_TPA_RECEIVED_REQUEST = TranslationKey.of("message.tpa.received-request");
@@ -62,15 +61,14 @@ public final class Translations {
     public static final TranslationKey M_TPA_OTHER_OFFLINE = TranslationKey.of("message.tpa.cancelled.other-offline");
 
     public static final TranslationKey D_TPAHERE_CMD = TranslationKey.of("commands.tpahere.description");
-    public static final TranslationKey M_TPAHERE_CANNOT_TELEPORT = TranslationKey.of("message.tpahere.cannot-teleport-here");
     public static final TranslationKey M_TPAHERE_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpahere.requested-offline");
     public static final TranslationKey M_TPAHERE_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpahere.self-offline");
-    public static final TranslationKey M_TPAHERE_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpahere.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAHERE_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpahere.request-ran-out-of-time.player");
     public static final TranslationKey M_TPAHERE_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpahere.request-ran-out-of-time.requested");
     public static final TranslationKey M_TPAHERE_SENT_REQUEST = TranslationKey.of("message.tpahere.sent-request");
     public static final TranslationKey M_TPAHERE_RECEIVED_REQUEST = TranslationKey.of("message.tpahere.received-request");
-    public static final TranslationKey M_TPAHERE_TELEPORTING_PLAYER = TranslationKey.of("message.tpa.teleporting.player");
-    public static final TranslationKey M_TPAHERE_TELEPORTING_OTHER = TranslationKey.of("message.tpa.teleporting.requested");
+    public static final TranslationKey M_TPAHERE_TELEPORTING_PLAYER = TranslationKey.of("message.tpahere.teleporting.player");
+    public static final TranslationKey M_TPAHERE_TELEPORTING_OTHER = TranslationKey.of("message.tpahere.teleporting.requested");
     public static final TranslationKey M_TPAHERE_TELEPORT_CANCELLED_MOVED_PLAYER = TranslationKey.of("message.tpahere.cancelled.moved.player");
     public static final TranslationKey M_TPAHERE_TELEPORT_CANCELLED_MOVED_OTHER = TranslationKey.of("message.tpahere.cancelled.moved.requested");
     public static final TranslationKey M_TPAHERE_TELEPORTING_IN_5_3_2_1_SECONDS = TranslationKey.of("message.tpahere.teleporting.in-5-3-2-1-seconds");
@@ -80,12 +78,12 @@ public final class Translations {
     public static final TranslationKey D_TPAMYHOME_CMD = TranslationKey.of("commands.tpmyhome.description");
     public static final TranslationKey M_TPAMYHOME_PLAYER_REQUESTED_OFFLINE =  TranslationKey.of("message.tpmyhome.requested-offline");
     public static final TranslationKey M_TPAMYHOME_PLAYER_SELF_OFFLINE =  TranslationKey.of("message.tpmyhome.self-offline");
-    public static final TranslationKey M_TPAMYHOME_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpmyhome.request-ran-out-of-time.requested");
+    public static final TranslationKey M_TPAMYHOME_REQUEST_RAN_OUT_OF_TIME_SELF =  TranslationKey.of("message.tpmyhome.request-ran-out-of-time.player");
     public static final TranslationKey M_TPAMYHOME_REQUEST_RAN_OUT_OF_TIME_REQUESTED =  TranslationKey.of("message.tpmyhome.request-ran-out-of-time.requested");
     public static final TranslationKey M_TPAMYHOME_SENT_REQUEST = TranslationKey.of("message.tpmyhome.sent-request");
     public static final TranslationKey M_TPAMYHOME_RECEIVED_REQUEST = TranslationKey.of("message.tpmyhome.received-request");
-    public static final TranslationKey M_TPAMYHOME_TELEPORTING_PLAYER = TranslationKey.of("message.tpa.teleporting.player");
-    public static final TranslationKey M_TPAMYHOME_TELEPORTING_OTHER = TranslationKey.of("message.tpa.teleporting.requested");
+    public static final TranslationKey M_TPAMYHOME_TELEPORTING_PLAYER = TranslationKey.of("message.tpmyhome.teleporting.player");
+    public static final TranslationKey M_TPAMYHOME_TELEPORTING_OTHER = TranslationKey.of("message.tpmyhome.teleporting.requested");
     public static final TranslationKey M_TPAMYHOME_TELEPORT_CANCELLED_MOVED_PLAYER = TranslationKey.of("message.tpamyhome.cancelled.moved.player");
     public static final TranslationKey M_TPAMYHOME_TELEPORT_CANCELLED_MOVED_OTHER = TranslationKey.of("message.tpamyhome.cancelled.moved.requested");
     public static final TranslationKey M_TPAMYHOME_TELEPORTING_IN_5_3_2_1_SECONDS = TranslationKey.of("message.tpamyhome.teleporting.in-5-3-2-1-seconds");
@@ -121,11 +119,11 @@ public final class Translations {
     public static final TranslationKey G_HOME_RETURN_DESCRIPTION = TranslationKey.of("gui.home.button.return.description");
     public static final TranslationKey G_HOME_TELEPORT_NAME = TranslationKey.of("gui.home.button.teleport.displayname");
     public static final TranslationKey G_HOME_TELEPORT_DESCRIPTION = TranslationKey.of("gui.home.button.teleport.lore");
-    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_NAME = TranslationKey.of("gui.home.button.teleport.displayname");
-    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_DESCRIPTION = TranslationKey.of("gui.home.button.teleport.lore");
+    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_NAME = TranslationKey.of("gui.home.button.invite-player.displayname");
+    public static final TranslationKey G_HOME_REQUEST_OTHER_TELEPORT_DESCRIPTION = TranslationKey.of("gui.home.button.invite-player.lore");
     public static final TranslationKey G_HOME_RENAME_NAME = TranslationKey.of("gui.home.button.rename.displayname");
     public static final TranslationKey G_HOME_RENAME_DESCRIPTION = TranslationKey.of("gui.home.button.rename.lore");
-    public static final TranslationKey M_HOME_RENAME_NO_PERMISSION = TranslationKey.of("message.home.relocate.no-permission");
+    public static final TranslationKey M_HOME_RENAME_NO_PERMISSION = TranslationKey.of("message.home.rename.no-permission");
     public static final TranslationKey G_HOME_RELOCATE_NAME = TranslationKey.of("gui.home.button.relocate.displayname");
     public static final TranslationKey G_HOME_RELOCATE_DESCRIPTION = TranslationKey.of("gui.home.button.relocate.lore");
     public static final TranslationKey M_HOME_RELOCATE_NO_PERMISSION = TranslationKey.of("message.home.relocate.no-permission");
@@ -175,5 +173,5 @@ public final class Translations {
     public static final TranslationKey SG_RENAME_HOME_LINE_4 = TranslationKey.of("sign-gui.rename-home.line.4");
     public static final TranslationKey M_RENAME_HOME_BLANK = TranslationKey.of("message.rename-home.action.blank");
     public static final TranslationKey M_RENAME_HOME_EXISTS = TranslationKey.of("message.rename-home.action.already-exists");
-    public static final TranslationKey M_RENAME_HOME_RENAMED = TranslationKey.of("message.rename-home.action.already-exists");
+    public static final TranslationKey M_RENAME_HOME_RENAMED = TranslationKey.of("message.rename-home.action.rename-success");
 }

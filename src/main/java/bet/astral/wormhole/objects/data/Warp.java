@@ -8,7 +8,7 @@ import bet.astral.messenger.v2.placeholder.collection.PlaceholderList;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
 import bet.astral.wormhole.managers.TeleportManager;
 import bet.astral.wormhole.objects.Teleport;
-import bet.astral.wormhole.plugin.Translations;
+import bet.astral.wormhole.plugin.translation.Translations;
 import bet.astral.wormhole.plugin.WormholePlugin;
 import bet.astral.wormhole.plugin.configuration.Configuration;
 import lombok.AccessLevel;

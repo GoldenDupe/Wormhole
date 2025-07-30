@@ -11,20 +11,27 @@ import bet.astral.messenger.v3.minecraft.paper.cloud.PaperCaptionMessenger;
 import bet.astral.messenger.v3.minecraft.paper.cloud.locale.CommandSenderLocaleExtractor;
 import bet.astral.wormhole.command.PluginCommand;
 import bet.astral.wormhole.command.PluginCommandManager;
+import bet.astral.wormhole.plugin.translation.TranslationFileWriter;
+import bet.astral.wormhole.plugin.translation.Translations;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import lombok.Getter;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.paper.PaperCommandManager;
 import org.incendo.cloud.translations.LocaleExtractor;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
@@ -44,13 +51,16 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
         commandManager.registerCommands(PluginCommand.class.getPackageName());
     }
     private Messenger initializeMessenger(BootstrapContext bootstrapContext) {
-        Messenger messenger = new PaperCaptionMessenger<CommandSender>(ComponentLogger.logger(NAME)) {
+        PaperCaptionMessenger<?> messenger = new PaperCaptionMessenger<CommandSender>(ComponentLogger.logger(NAME)) {
             @Override
             public @NotNull LocaleExtractor<CommandSender> getLocaleExtractor() {
                 return new CommandSenderLocaleExtractor();
             }
         };
         messenger.setSendTranslationKey(true);
+
+        TranslationFileWriter.ensureTranslationsExist(messenger, Translations.class, loadLanguageFile(bootstrapContext, Locale.US));
+
         messenger.registerLanguageTable(Locale.US,
                 LanguageTable.of(
                         new GsonLanguageSource(messenger,
@@ -61,6 +71,7 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
         ));
         messenger.setDefaultLocale(messenger.getLanguageTable(Locale.US).getLanguageSource());
         messenger.loadTranslations(Locale.US, Translations.class);
+        messenger.setSendTranslationKey(true);
 
         // Make sure no message is sent to an offline player
         messenger.registerReceiverConverter((ReceiverConverter) o -> {
@@ -71,14 +82,28 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
         });
          return messenger;
     }
-    private File loadLanguageFile(BootstrapContext bootstrapContext, Locale locale) {
-        File file = new File(bootstrapContext.getDataDirectory().toFile(), locale.toLanguageTag());
+    private @Nullable File loadLanguageFile(@NotNull BootstrapContext bootstrapContext, @NotNull Locale locale) {
+        File file = new File(bootstrapContext.getDataDirectory().toFile(), locale.toLanguageTag()+".json");
+        if (!file.exists()) {
+            file.getParentFile().mkdirs();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return file.exists() ? file : null;
     }
 
-    private PaperCommandManager.Bootstrapped<CommandSender> initializeCommandManager(BootstrapContext bootstrapContext) {
+    @Contract("_ -> new")
+    private PaperCommandManager.@NotNull Bootstrapped<CommandSender> initializeCommandManager(BootstrapContext bootstrapContext) {
         return PaperCommandManager.builder(new CommandSourceStackToCommandSenderMapper())
                 .executionCoordinator(ExecutionCoordinator.simpleCoordinator())
                 .buildBootstrapped(bootstrapContext);
+    }
+
+    @Override
+    public JavaPlugin createPlugin(PluginProviderContext context) {
+        return new WormholePlugin(this);
     }
 }

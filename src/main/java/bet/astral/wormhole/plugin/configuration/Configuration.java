@@ -29,7 +29,7 @@ public class Configuration {
             ConfigurationData defaultData;
 
             try (Reader reader = new InputStreamReader(
-                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("default_config.json")),
+                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("config.json")),
                     StandardCharsets.UTF_8)) {
                 defaultData = gson.fromJson(reader, ConfigurationData.class);
             }
