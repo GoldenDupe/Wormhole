@@ -162,12 +162,13 @@ public class HomeGUI {
 
         Function<Player, PlaceholderCollection> placeholderGenerator = _ -> new PlaceholderList(home.toPlaceholders());
 
-        ClickableBuilder teleport = Clickable.builder(Material.LIME_WOOL)
+        ClickableBuilder teleport = Clickable.builder(Material.ENDER_PEARL)
                 .title(Translations.G_HOME_TELEPORT_NAME)
                 .description(Translations.G_HOME_TELEPORT_DESCRIPTION)
                 .actionGeneral(context -> {
+                    home.warp(player);
                 }).placeholderGenerator(placeholderGenerator);
-        ClickableBuilder tpaMyHome = Clickable.builder(Material.ANVIL).hideItemFlags()
+        ClickableBuilder tpaMyHome = Clickable.builder(Material.ENDER_EYE).hideItemFlags()
                 .permission("wormhole.tpamyhome")
                 .priority(10)
                 .title(Translations.G_HOME_REQUEST_OTHER_TELEPORT_NAME)
@@ -185,7 +186,7 @@ public class HomeGUI {
 
         InventoryGUIBuilder builder = InventoryGUI.builder(3)
                 .title(Translations.G_HOME_TITLE)
-                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
+                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS_PANE), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS_PANE)))
 
                 // Description of the home
                 .clickable(4, Clickable.builder(icon)
@@ -208,13 +209,11 @@ public class HomeGUI {
                 .clickable(10, teleport)
                 .clickable(11, teleport)
                 .clickable(12, teleport)
-                .clickable(13, teleport)
                 // Teleport other players here, if the player has permission
                 .clickable(12, tpaMyHome)
-                .clickable(13, tpaMyHome)
 
                 // Rename
-                .clickable(14, Clickable.builder(Material.ANVIL)
+                .clickable(14, Clickable.builder(Material.NAME_TAG)
                         .hideItemFlags()
                         .permission("wormhole.home.rename")
                         .permissionMessage(Translations.M_HOME_RENAME_NO_PERMISSION)
@@ -291,20 +290,18 @@ public class HomeGUI {
 
         InventoryGUIBuilder builder = InventoryGUI.builder(3)
                 .title(Translations.G_RELOCATE_HOME_TITLE)
-                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
+                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS_PANE), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS_PANE)))
                 // Return
                 .clickable(22, Clickable.builder(Material.BARRIER).hideItemFlags().actionGeneral(action -> openHomeMenu(player, homeId)))
                 // CONFIRM
                 .clickable(10, confirm)
                 .clickable(11, confirm)
                 .clickable(12, confirm)
-                .clickable(13, confirm)
 
                 // CANCEL
+                .clickable(14, cancel)
                 .clickable(15, cancel)
-                .clickable(16, cancel)
-                .clickable(17, cancel)
-                .clickable(18, cancel);
+                .clickable(16, cancel);
 
         builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
     }
@@ -481,6 +478,7 @@ public class HomeGUI {
                     PlayerData playerData = plugin.getPlayerCache().getCache(player);
                     playerData.removeHome(home);
                     plugin.getPlayerWarpDataManager().deleteWarp(home);
+                    openHomes(player, 0);
                     // Message about the removal
                     messenger.message(player, Translations.M_DELETE_HOME_DELETED,  placeholderGenerator.apply(player));
                 }).placeholderGenerator(placeholderGenerator);
@@ -494,20 +492,18 @@ public class HomeGUI {
 
         InventoryGUIBuilder builder = InventoryGUI.builder(3)
                 .title(Translations.G_DELETE_HOME_TITLE)
-                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS)))
+                .background(Background.border(3, Clickable.noTooltip(Material.BLACK_STAINED_GLASS_PANE), Clickable.noTooltip(Material.LIGHT_GRAY_STAINED_GLASS_PANE)))
                 // Return
                 .clickable(22, Clickable.builder(Material.BARRIER).hideItemFlags().actionGeneral(action -> openHomeMenu(player, homeId)))
                 // CONFIRM
                 .clickable(10, confirm)
                 .clickable(11, confirm)
                 .clickable(12, confirm)
-                .clickable(13, confirm)
 
                 // CANCEL
+                .clickable(14, cancel)
                 .clickable(15, cancel)
-                .clickable(16, cancel)
-                .clickable(17, cancel)
-                .clickable(18, cancel);
+                .clickable(16, cancel);
 
         builder.messenger(messenger).placeholderGenerator(placeholderGenerator).build().open(player);
     }

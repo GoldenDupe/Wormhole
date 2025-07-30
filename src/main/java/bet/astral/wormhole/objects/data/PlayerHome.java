@@ -31,7 +31,7 @@ public class PlayerHome extends Warp {
                 player.getZ(),
                 player.getYaw(),
                 player.getPitch());
-
+        this.ownerId = player.getUniqueId();
     }
 
     public PlayerHome(UUID ownerId, UUID uniqueId, String name, long created, UUID worldId, String worldName, double x, double y, double z, float yaw, float pitch) {
@@ -58,7 +58,7 @@ public class PlayerHome extends Warp {
     public @NotNull PlaceholderList toPlaceholders(@Nullable String prefix) {
         PlaceholderList placeholderList = new PlaceholderList(super.toPlaceholders(prefix));
         placeholderList.add(Placeholder.of(prefix, "owner", Component.text(Objects.requireNonNull(Bukkit.getOfflinePlayer(ownerId).getName()))));
-        placeholderList.add(Placeholder.of(prefix, "name", Component.text(ownerId.toString())));
+        placeholderList.add(Placeholder.of(prefix, "owner_id", Component.text(ownerId.toString())));
         return placeholderList;
     }
 }

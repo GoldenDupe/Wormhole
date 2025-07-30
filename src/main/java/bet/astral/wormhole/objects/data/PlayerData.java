@@ -62,7 +62,7 @@ public class PlayerData {
     }
 
     public void removeHome(@NotNull PlayerHome home) {
-        warps.remove(home.getName().toLowerCase());
+        homes.remove(home.getName().toLowerCase());
         updatedWarpsAndHomes.remove(home.getUniqueId());
         deletedWarpsAndHomes.remove(home);
         newWarpsAndHomes.remove(home.getName());

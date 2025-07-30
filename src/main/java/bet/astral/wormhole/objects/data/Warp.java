@@ -85,6 +85,14 @@ public class Warp implements Placeholderable {
         this.pitch = location.getPitch();
     }
 
+    public Component getDisplayname() {
+        return displayname != null ? displayname : Component.text(name);
+    }
+
+    public Component getDescription() {
+        return description != null ? description : Component.text("");
+    }
+
     @Override
     public @NotNull Collection<@NotNull Placeholder> toPlaceholders(@Nullable String prefix) {
         return new PlaceholderList(List.of(
@@ -200,7 +208,9 @@ public class Warp implements Placeholderable {
                 messenger.message(player, Translations.M_WARP_COOLDOWN, placeholders);
             }
             case ALLOWED -> {
-
+                player.teleportAsync(getLocation());
+                if (true)
+                    return;
                 TeleportManager teleportManager = wormholePlugin.getTeleportManager();
                 int ticksDelay = wormholePlugin.getConfiguration().getTeleportDelay(player, Configuration.TeleportType.TELEPORT_TO_HOME);
                 teleportManager.addTeleport(

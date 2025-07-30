@@ -102,14 +102,18 @@ public class SetHomeCommand extends PluginCommand {
         switch (homeType) {
             case PLAYER_HOME -> {
                 home = new PlayerHome(player, homeName);
-                playerData.getHomesAndWarps().add(home);
+                playerData.addHome(home);
                 getWormhole().getPlayerCache().save(playerData);
+
+                placeholders.addAll(home.toPlaceholders());
                 messenger.message(player, Translations.M_SET_HOME_SUCCESS, placeholders);
             }
             case PLAYER_WARP -> {
                 PlayerWarp playerWarp = new PlayerWarp(player.getUniqueId(), homeName, player.getLocation());
-                playerData.getHomesAndWarps().add(playerWarp);
+                playerData.addWarp(playerWarp);
                 getWormhole().getPlayerCache().save(playerData);
+
+                placeholders.addAll(playerWarp.toPlaceholders());
                 messenger.message(player, Translations.M_SET_PLAYER_WARP_SUCCESS, placeholders);
             }
         }

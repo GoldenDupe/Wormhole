@@ -4,6 +4,7 @@ import bet.astral.cloudplusplus.minecraft.paper.bootstrap.InitAfterBootstrap;
 import bet.astral.guiman.GUIMan;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
+import bet.astral.signman.SignGUI;
 import bet.astral.wormhole.gui.HomeGUI;
 import bet.astral.wormhole.integration.MasterIntegration;
 import bet.astral.wormhole.listeners.ConnectionListener;
@@ -42,6 +43,8 @@ public class WormholePlugin extends JavaPlugin {
     private PlayerDataManager playerDataManager;
     private Configuration configuration;
     private HomeGUI homeGUI;
+    private final SQLDatabase sqlDatabase = new SQLDatabase();
+
 
     public WormholePlugin(Bootstrap bootstrapHandler) {
         messenger = bootstrapHandler.getMessenger();
@@ -55,11 +58,11 @@ public class WormholePlugin extends JavaPlugin {
     public void onEnable() {
         initAfterBootstrapList.forEach(InitAfterBootstrap::init);
         GUIMan.init(this);
+        SignGUI.init(this, true);
         PaperMessenger.init(this);
 
         configuration = new Configuration(new File(getDataFolder(), "config.json"));
 
-        SQLDatabase sqlDatabase = new SQLDatabase();
         try {
             sqlDatabase.connect();
         } catch (SQLException e) {
@@ -83,7 +86,11 @@ public class WormholePlugin extends JavaPlugin {
     }
     @Override
     public void onDisable() {
-
+        try {
+            sqlDatabase.disconnect();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     @Override
     public void onLoad() {
