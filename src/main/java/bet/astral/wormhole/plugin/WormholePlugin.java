@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +46,8 @@ public class WormholePlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         initAfterBootstrapList.forEach(InitAfterBootstrap::init);
+
+        configuration = new Configuration(new File(getDataFolder(), "config.json"));
 
         SQLDatabase sqlDatabase = new SQLDatabase();
         try {

@@ -10,11 +10,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Objects;
 
 public class Configuration {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -25,16 +24,64 @@ public class Configuration {
         this.file = file;
         load();
     }
+    private void ensureConfigExistsOrIsComplete() {
+        try {
+            ConfigurationData defaultData;
+
+            try (Reader reader = new InputStreamReader(
+                    Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("default_config.json")),
+                    StandardCharsets.UTF_8)) {
+                defaultData = gson.fromJson(reader, ConfigurationData.class);
+            }
+
+            if (!file.exists()) {
+                try (Writer writer = new FileWriter(file)) {
+                    gson.toJson(defaultData, writer);
+                }
+                return;
+            }
+
+            ConfigurationData existing;
+            try (Reader reader = new FileReader(file)) {
+                existing = gson.fromJson(reader, ConfigurationData.class);
+            }
+
+            boolean changed = false;
+
+            if (existing.teleport_delay == null) {
+                existing.teleport_delay = defaultData.teleport_delay;
+                changed = true;
+            }
+            if (existing.teleport_request_time == null) {
+                existing.teleport_request_time = defaultData.teleport_request_time;
+                changed = true;
+            }
+            if (existing.max_homes == null) {
+                existing.max_homes = defaultData.max_homes;
+                changed = true;
+            }
+            if (existing.max_player_warps == null) {
+                existing.max_player_warps = defaultData.max_player_warps;
+                changed = true;
+            }
+
+            if (changed) {
+                try (Writer writer = new FileWriter(file)) {
+                    gson.toJson(existing, writer);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void load() {
-        if (file.exists()) {
-            try (FileReader reader = new FileReader(file)) {
-                this.data = gson.fromJson(reader, ConfigurationData.class);
-            } catch (IOException e) {
-                e.printStackTrace();
-                this.data = new ConfigurationData(); // fallback
-            }
-        } else {
+        ensureConfigExistsOrIsComplete();
+        try (FileReader reader = new FileReader(file)) {
+            this.data = gson.fromJson(reader, ConfigurationData.class);
+        } catch (IOException e) {
+            e.printStackTrace();
             this.data = new ConfigurationData();
         }
     }
@@ -45,6 +92,31 @@ public class Configuration {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getMaxHomes(Player player) {
+        return getPermissionBasedValue(player, data.max_homes, "wormhole.home.limit", 1);
+    }
+
+    public int getMaxPlayerWarps(Player player) {
+        return getPermissionBasedValue(player, data.max_player_warps, "wormhole.playerwarp.limit", 1);
+    }
+
+    // Utility method
+    private int getPermissionBasedValue(Player player, Map<String, Integer> values, String permissionPrefix, int defaultValue) {
+        if (player.hasPermission(permissionPrefix+".no-limit")) {
+            return 9999;
+        }
+        MutablePair<String, Integer> best = Pair.mutable("default", values.getOrDefault("default", defaultValue));
+        for (Map.Entry<String, Integer> entry : values.entrySet()) {
+            if (entry.getValue() > best.getSecond()) {
+                if (player.hasPermission(permissionPrefix + "." + entry.getKey())) {
+                    best.setFirst(entry.getKey());
+                    best.setSecond(entry.getValue());
+                }
+            }
+        }
+        return best.getSecond();
     }
 
     public int getTeleportRequestTime(TeleportType teleportType) {
