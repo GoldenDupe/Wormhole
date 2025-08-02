@@ -43,15 +43,15 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
     @Override
     public void bootstrap(BootstrapContext bootstrapContext) {
         PaperCommandManager.Bootstrapped<CommandSender> commandManager = initializeCommandManager(bootstrapContext);
-        messenger = initializeMessenger(bootstrapContext);
+        messenger = initializeMessenger(bootstrapContext, commandManager);
         this.commandManager = new PluginCommandManager(this, messenger, commandManager);
         registerCommands();
     }
     private void registerCommands() {
         commandManager.registerCommands(PluginCommand.class.getPackageName());
     }
-    private Messenger initializeMessenger(BootstrapContext bootstrapContext) {
-        PaperCaptionMessenger<?> messenger = new PaperCaptionMessenger<CommandSender>(ComponentLogger.logger(NAME)) {
+    private Messenger initializeMessenger(BootstrapContext bootstrapContext, PaperCommandManager.Bootstrapped<CommandSender> commandManager) {
+        PaperCaptionMessenger<CommandSender> messenger = new PaperCaptionMessenger<CommandSender>(ComponentLogger.logger(NAME)) {
             @Override
             public @NotNull LocaleExtractor<CommandSender> getLocaleExtractor() {
                 return new CommandSenderLocaleExtractor();
@@ -72,6 +72,7 @@ public class Bootstrap extends BootstrapHandler implements PluginBootstrap {
         messenger.setDefaultLocale(messenger.getLanguageTable(Locale.US).getLanguageSource());
         messenger.loadTranslations(Locale.US, Translations.class);
         messenger.setSendTranslationKey(true);
+        messenger.registerTo(commandManager);
 
         // Make sure no message is sent to an offline player
         messenger.registerReceiverConverter((ReceiverConverter) o -> {
