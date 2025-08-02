@@ -5,7 +5,6 @@ import bet.astral.cloudplusplus.minecraft.paper.bootstrap.BootstrapHandler;
 import bet.astral.messenger.v2.Messenger;
 import bet.astral.messenger.v2.receiver.Receiver;
 import bet.astral.messenger.v3.minecraft.paper.PaperMessenger;
-import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.incendo.cloud.paper.PaperCommandManager;
