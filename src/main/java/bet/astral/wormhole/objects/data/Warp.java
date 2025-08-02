@@ -208,9 +208,6 @@ public class Warp implements Placeholderable {
                 messenger.message(player, Translations.M_WARP_COOLDOWN, placeholders);
             }
             case ALLOWED -> {
-                player.teleportAsync(getLocation());
-                if (true)
-                    return;
                 TeleportManager teleportManager = wormholePlugin.getTeleportManager();
                 int ticksDelay = wormholePlugin.getConfiguration().getTeleportDelay(player, Configuration.TeleportType.TELEPORT_TO_HOME);
                 teleportManager.addTeleport(

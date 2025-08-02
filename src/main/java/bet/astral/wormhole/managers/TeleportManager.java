@@ -37,6 +37,7 @@ public class TeleportManager implements TickableManager {
     }
 
     public void addTeleport(Teleport teleport) {
+        teleports.put(teleport.getPlayer().getUniqueId(), teleport);
     }
     public void removeTeleport(Teleport teleport) {
         if (this.teleports.get(teleport.getPlayer().getUniqueId()).equals(teleport)) {
